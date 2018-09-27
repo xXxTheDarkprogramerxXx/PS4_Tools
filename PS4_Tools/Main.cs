@@ -632,7 +632,7 @@ namespace PS4_Tools
             /// <param name="CustomGP4Location">Use a custom GP4 File For Repacking the ISO</param>
             public void Create_Multi_ISO_PKG(List<string> PS2_ISO_s, string SaveFileLOcation, string Icon0Location = "", string BackgroundLocation = "", string CustomGP4Location = "")
             {
-
+                throw new Exception("Function not built");
             }
         }
 
