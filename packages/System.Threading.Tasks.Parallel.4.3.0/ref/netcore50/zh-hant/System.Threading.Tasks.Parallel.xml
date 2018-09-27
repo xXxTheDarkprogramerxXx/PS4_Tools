@@ -1,0 +1,473 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.Threading.Tasks.Parallel</name>
+  </assembly>
+  <members>
+    <member name="T:System.Threading.Tasks.Parallel">
+      <summary>提供平行迴圈和區域的支援。</summary>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int32,System.Int32,System.Action{System.Int32})">
+      <summary>執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int32,System.Int32,System.Action{System.Int32,System.Threading.Tasks.ParallelLoopState})">
+      <summary>執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。 </summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For``1(System.Int32,System.Int32,System.Func{``0},System.Func{System.Int32,System.Threading.Tasks.ParallelLoopState,``0,``0},System.Action{``0})">
+      <summary>使用執行緒區域資料執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int32,System.Int32,System.Threading.Tasks.ParallelOptions,System.Action{System.Int32})">
+      <summary>執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目，還可以設定迴圈選項。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int32,System.Int32,System.Threading.Tasks.ParallelOptions,System.Action{System.Int32,System.Threading.Tasks.ParallelLoopState})">
+      <summary>執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For``1(System.Int32,System.Int32,System.Threading.Tasks.ParallelOptions,System.Func{``0},System.Func{System.Int32,System.Threading.Tasks.ParallelLoopState,``0,``0},System.Action{``0})">
+      <summary>使用執行緒區域資料執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int64,System.Int64,System.Action{System.Int64})">
+      <summary>使用 64 位元索引執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int64,System.Int64,System.Action{System.Int64,System.Threading.Tasks.ParallelLoopState})">
+      <summary>使用 64 位元索引執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.ParallelLoopResult" /> 結構，包含迴圈已完成部分的相關資訊。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For``1(System.Int64,System.Int64,System.Func{``0},System.Func{System.Int64,System.Threading.Tasks.ParallelLoopState,``0,``0},System.Action{``0})">
+      <summary>使用 64 位元索引和執行緒區域資料執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int64,System.Int64,System.Threading.Tasks.ParallelOptions,System.Action{System.Int64})">
+      <summary>使用 64 位元索引執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目，還可以設定迴圈選項。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int64,System.Int64,System.Threading.Tasks.ParallelOptions,System.Action{System.Int64,System.Threading.Tasks.ParallelLoopState})">
+      <summary>使用 64 位元索引執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For``1(System.Int64,System.Int64,System.Threading.Tasks.ParallelOptions,System.Func{``0},System.Func{System.Int64,System.Threading.Tasks.ParallelLoopState,``0,``0},System.Action{``0})">
+      <summary>使用 64 位元索引和執行緒區域資料執行 for (在 Visual Basic 中為 For) 迴圈，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="fromInclusive">起始索引 (含)。</param>
+      <param name="toExclusive">結束索引 (不含)。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="localInit">函式委派，會針對每個執行緒傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每個執行緒的本機狀態執行最終動作。</param>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.OrderablePartitioner{``0},System.Action{``0,System.Threading.Tasks.ParallelLoopState,System.Int64})">
+      <summary>在 <see cref="T:System.Collections.Concurrent.OrderablePartitioner`1" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的可排序 Partitioner。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> orderable partitioner returns false.-or-The <see cref="P:System.Collections.Concurrent.OrderablePartitioner`1.KeysNormalized" /> property in the source orderable partitioner returns false.-or-Any methods in the source orderable partitioner return null.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Concurrent.OrderablePartitioner{``0},System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,System.Int64,``1,``1},System.Action{``1})">
+      <summary>使用執行緒區域資料在 <see cref="T:System.Collections.Concurrent.OrderablePartitioner`1" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的可排序 Partitioner。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /><see cref="T:System.Collections.Concurrent.Partitioner" /> returns false or the partitioner returns null partitions.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.OrderablePartitioner{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0,System.Threading.Tasks.ParallelLoopState,System.Int64})">
+      <summary>在 <see cref="T:System.Collections.Concurrent.OrderablePartitioner`1" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的可排序 Partitioner。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is  null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> orderable partitioner returns false.-or-The <see cref="P:System.Collections.Concurrent.OrderablePartitioner`1.KeysNormalized" /> property in the <paramref name="source" /> orderable partitioner returns false.-or-The exception that is thrown when any methods in the <paramref name="source" /> orderable partitioner return null.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Concurrent.OrderablePartitioner{``0},System.Threading.Tasks.ParallelOptions,System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,System.Int64,``1,``1},System.Action{``1})">
+      <summary>使用 64 位元索引和執行緒區域資料在 <see cref="T:System.Collections.Concurrent.OrderablePartitioner`1" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的可排序 Partitioner。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> or <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /><see cref="T:System.Collections.Concurrent.Partitioner" /> returns false or the partitioner returns null  partitions.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Action{``0})">
+      <summary>在 <see cref="T:System.Collections.Concurrent.Partitioner" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的 Partitioner。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is  null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> partitioner returns false.-or-The exception that is thrown when any methods in the <paramref name="source" /> partitioner return null.-or-The <see cref="M:System.Collections.Concurrent.Partitioner`1.GetPartitions(System.Int32)" /> method in the <paramref name="source" /> partitioner does not return the correct number of partitions.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Action{``0,System.Threading.Tasks.ParallelLoopState})">
+      <summary>在 <see cref="T:System.Collections.Concurrent.Partitioner" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的 Partitioner。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> partitioner returns false.-or-A method in the <paramref name="source" /> partitioner returns null.-or-The <see cref="M:System.Collections.Concurrent.Partitioner`1.GetPartitions(System.Int32)" /> method in the <paramref name="source" /> partitioner does not return the correct number of partitions.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Concurrent.Partitioner{``0},System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,``1,``1},System.Action{``1})">
+      <summary>使用執行緒區域資料在 <see cref="T:System.Collections.Concurrent.Partitioner" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的 Partitioner。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /><see cref="T:System.Collections.Concurrent.Partitioner" /> returns false or the partitioner returns null partitions.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0})">
+      <summary>在 <see cref="T:System.Collections.Concurrent.Partitioner" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目，還可以設定迴圈選項。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的 Partitioner。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> partitioner returns false.-or-The exception that is thrown when any methods in the <paramref name="source" /> partitioner return null.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0,System.Threading.Tasks.ParallelLoopState})">
+      <summary>在 <see cref="T:System.Collections.Concurrent.Partitioner" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的 Partitioner。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> partitioner returns false.-or-The exception that is thrown when any methods in the <paramref name="source" /> partitioner return null.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Concurrent.Partitioner{``0},System.Threading.Tasks.ParallelOptions,System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,``1,``1},System.Action{``1})">
+      <summary>使用執行緒區域資料在 <see cref="T:System.Collections.Concurrent.Partitioner" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">包含原始資料來源的 Partitioner。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TSource">
+        <paramref name="source" /> 中的項目類型。</typeparam>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /><see cref="T:System.Collections.Concurrent.Partitioner" /> returns false or the partitioner returns null partitions.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+      <summary>在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0,System.Threading.Tasks.ParallelLoopState})">
+      <summary>在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0,System.Threading.Tasks.ParallelLoopState,System.Int64})">
+      <summary>使用 64 位元索引在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Generic.IEnumerable{``0},System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,``1,``1},System.Action{``1})">
+      <summary>使用執行緒區域資料在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Generic.IEnumerable{``0},System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,System.Int64,``1,``1},System.Action{``1})">
+      <summary>使用執行緒區域資料在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0})">
+      <summary>在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目，還可以設定迴圈選項。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0,System.Threading.Tasks.ParallelLoopState})">
+      <summary>在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0,System.Threading.Tasks.ParallelLoopState,System.Int64})">
+      <summary>使用 64 位元索引在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,``1,``1},System.Action{``1})">
+      <summary>使用執行緒區域資料在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,System.Int64,``1,``1},System.Action{``1})">
+      <summary>使用執行緒區域資料和 64 位元索引在 <see cref="T:System.Collections.IEnumerable" /> 上執行 foreach (在 Visual Basic 中為 For Each) 運算，其中可以平行執行反覆項目、可以設定迴圈選項，還可以監控和操作迴圈的狀態。</summary>
+      <returns>包含迴圈已完成部分之相關資訊的的結構。</returns>
+      <param name="source">可列舉的資料來源。</param>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="localInit">函式委派，會針對每項工作傳回本機資料的初始狀態。</param>
+      <param name="body">每個反覆項目都會叫用一次的委派。</param>
+      <param name="localFinally">委派，會針對每項工作的本機狀態執行最終動作。</param>
+      <typeparam name="TSource">來源中的資料類型。</typeparam>
+      <typeparam name="TLocal">執行緒區域資料的類型。</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.Invoke(System.Action[])">
+      <summary>執行每個提供的動作 (可能會平行執行)。</summary>
+      <param name="actions">要執行的 <see cref="T:System.Action" /> 陣列。</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="actions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that is thrown when any action in the <paramref name="actions" /> array throws an exception.</exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="actions" /> array contains a null element.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.Invoke(System.Threading.Tasks.ParallelOptions,System.Action[])">
+      <summary>除非使用者取消作業，否則執行每個提供的動作 (可能會平行執行)。</summary>
+      <param name="parallelOptions">物件，設定這個作業的行為。</param>
+      <param name="actions">要執行的動作陣列。</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> is set.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="actions" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that is thrown when any action in the <paramref name="actions" /> array throws an exception.</exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="actions" /> array contains a null element.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="T:System.Threading.Tasks.ParallelLoopResult">
+      <summary>提供 <see cref="T:System.Threading.Tasks.Parallel" /> 迴圈的執行完成狀態。</summary>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopResult.IsCompleted">
+      <summary>取得迴圈是否已徹底執行，即迴圈中的所有反覆項目都已執行，而且迴圈未收到任何不當結束的要求。</summary>
+      <returns>如果迴圈執行完成則為 true，否則為 false。</returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopResult.LowestBreakIteration">
+      <summary>取得呼叫 <see cref="M:System.Threading.Tasks.ParallelLoopState.Break" /> 之最低反覆項目的索引。</summary>
+      <returns>傳回整數，表示已呼叫 Break 陳述式的最低反覆項目。</returns>
+    </member>
+    <member name="T:System.Threading.Tasks.ParallelLoopState">
+      <summary>讓平行迴圈的反覆項目與其他反覆項目互動。<see cref="T:System.Threading.Tasks.Parallel" /> 類別會在每個迴圈中提供這個類別的執行個體，您不能在自己的程式碼中建立執行個體。</summary>
+    </member>
+    <member name="M:System.Threading.Tasks.ParallelLoopState.Break">
+      <summary>傳達 <see cref="T:System.Threading.Tasks.Parallel" /> 迴圈應該在過了目前的反覆項目之後，依系統的方便盡早停止執行反覆項目。</summary>
+      <exception cref="T:System.InvalidOperationException">先前已呼叫 <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" /> 方法。<see cref="M:System.Threading.Tasks.ParallelLoopState.Break" /> 和 <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" /> 可能無法由相同迴圈的反覆項目搭配使用。</exception>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopState.IsExceptional">
+      <summary>取得迴圈中是否有任何反覆項目已擲回該反覆項目未處理的例外狀況。</summary>
+      <returns>如果擲回未處理的例外狀況，則為 true，否則為 false。 </returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopState.IsStopped">
+      <summary>取得迴圈中是否有任何反覆項目已呼叫 <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" /> 方法。</summary>
+      <returns>如果有任何反覆項目藉由呼叫 <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" /> 方法而停止迴圈，則為 true，否則為 false。</returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopState.LowestBreakIteration">
+      <summary>取得迴圈中呼叫 <see cref="M:System.Threading.Tasks.ParallelLoopState.Break" /> 的最低反覆項目。</summary>
+      <returns>呼叫 <see cref="M:System.Threading.Tasks.ParallelLoopState.Break" /> 的最低反覆項目。在 <see cref="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Action{``0})" /> 迴圈的案例中，值是根據內部產生的索引。</returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopState.ShouldExitCurrentIteration">
+      <summary>取得是否應該根據迴圈中目前這個或其他反覆項目的要求，來結束目前這個反覆項目。</summary>
+      <returns>如果目前的反覆項目應該結束，則為 true，否則為 false。</returns>
+    </member>
+    <member name="M:System.Threading.Tasks.ParallelLoopState.Stop">
+      <summary>傳達 <see cref="T:System.Threading.Tasks.Parallel" /> 迴圈應該依系統的方便盡早停止執行。</summary>
+      <exception cref="T:System.InvalidOperationException">
+        <see cref="M:System.Threading.Tasks.ParallelLoopState.Break" /> 以前调用了方法。<see cref="M:System.Threading.Tasks.ParallelLoopState.Break" /> 和 <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" /> 可能無法由相同迴圈的反覆項目搭配使用。</exception>
+    </member>
+    <member name="T:System.Threading.Tasks.ParallelOptions">
+      <summary>儲存選項，這些選項設定 <see cref="T:System.Threading.Tasks.Parallel" /> 類別上之方法的作業。</summary>
+    </member>
+    <member name="M:System.Threading.Tasks.ParallelOptions.#ctor">
+      <summary>初始化 <see cref="T:System.Threading.Tasks.ParallelOptions" /> 類別的新執行個體。</summary>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelOptions.CancellationToken">
+      <summary>取得或設定與這個 <see cref="T:System.Threading.Tasks.ParallelOptions" /> 執行個體關聯的 <see cref="T:System.Threading.CancellationToken" />。</summary>
+      <returns>與這個執行個體相關聯的語彙基元。</returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelOptions.MaxDegreeOfParallelism">
+      <summary>取得或設定這個 <see cref="T:System.Threading.Tasks.ParallelOptions" /> 執行個體啟用的並行工作數目上限。</summary>
+      <returns>整數，表示平行處理原則的最大程度。</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">此屬性設定為零或小於 -1 的值。</exception>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelOptions.TaskScheduler">
+      <summary>取得或設定與這個 <see cref="T:System.Threading.Tasks.ParallelOptions" /> 執行個體關聯的 <see cref="T:System.Threading.Tasks.TaskScheduler" />。將這個屬性設為 null，表示應該使用目前的排程器。</summary>
+      <returns>與這個執行個體相關聯的工作排程器。</returns>
+    </member>
+  </members>
+</doc>

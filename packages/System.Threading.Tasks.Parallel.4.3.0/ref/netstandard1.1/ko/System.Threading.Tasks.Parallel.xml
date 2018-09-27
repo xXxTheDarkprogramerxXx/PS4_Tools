@@ -1,0 +1,480 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.Threading.Tasks.Parallel</name>
+  </assembly>
+  <members>
+    <member name="T:System.Threading.Tasks.Parallel">
+      <summary>병렬 루프 및 영역에 대한 지원을 제공합니다.</summary>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int32,System.Int32,System.Action{System.Int32})">
+      <summary>반복이 병렬로 실행될 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int32,System.Int32,System.Action{System.Int32,System.Threading.Tasks.ParallelLoopState})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.  </summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For``1(System.Int32,System.Int32,System.Func{``0},System.Func{System.Int32,System.Threading.Tasks.ParallelLoopState,``0,``0},System.Action{``0})">
+      <summary>스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int32,System.Int32,System.Threading.Tasks.ParallelOptions,System.Action{System.Int32})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있는 for(Visual Basic에서는 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int32,System.Int32,System.Threading.Tasks.ParallelOptions,System.Action{System.Int32,System.Threading.Tasks.ParallelLoopState})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 for(Visual Basic의 경우 For) 작업을 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For``1(System.Int32,System.Int32,System.Threading.Tasks.ParallelOptions,System.Func{``0},System.Func{System.Int32,System.Threading.Tasks.ParallelLoopState,``0,``0},System.Action{``0})">
+      <summary>스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int64,System.Int64,System.Action{System.Int64})">
+      <summary>64비트 인덱스를 사용하여 반복을 병렬로 실행할 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int64,System.Int64,System.Action{System.Int64,System.Threading.Tasks.ParallelLoopState})">
+      <summary>64비트 인덱스를 사용하여 반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 <see cref="T:System.Threading.Tasks.ParallelLoopResult" /> 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For``1(System.Int64,System.Int64,System.Func{``0},System.Func{System.Int64,System.Threading.Tasks.ParallelLoopState,``0,``0},System.Action{``0})">
+      <summary>64비트 인덱스와 스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int64,System.Int64,System.Threading.Tasks.ParallelOptions,System.Action{System.Int64})">
+      <summary>64비트 인덱스를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For(System.Int64,System.Int64,System.Threading.Tasks.ParallelOptions,System.Action{System.Int64,System.Threading.Tasks.ParallelLoopState})">
+      <summary>64비트 인덱스를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.For``1(System.Int64,System.Int64,System.Threading.Tasks.ParallelOptions,System.Func{``0},System.Func{System.Int64,System.Threading.Tasks.ParallelLoopState,``0,``0},System.Action{``0})">
+      <summary>64비트 인덱스와 스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 for(Visual Basic의 경우 For) 루프를 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="fromInclusive">시작 인덱스(포함)입니다.</param>
+      <param name="toExclusive">끝 인덱스(제외)입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="localInit">각 스레드에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 스레드의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.OrderablePartitioner{``0},System.Action{``0,System.Threading.Tasks.ParallelLoopState,System.Int64})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.OrderablePartitioner`1" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 정렬할 수 있는 파티셔너입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> orderable partitioner returns false.-or-The <see cref="P:System.Collections.Concurrent.OrderablePartitioner`1.KeysNormalized" /> property in the source orderable partitioner returns false.-or-Any methods in the source orderable partitioner return null.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Concurrent.OrderablePartitioner{``0},System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,System.Int64,``1,``1},System.Action{``1})">
+      <summary>스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.OrderablePartitioner`1" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 정렬할 수 있는 파티셔너입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /><see cref="T:System.Collections.Concurrent.Partitioner" /> returns false or the partitioner returns null partitions.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.OrderablePartitioner{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0,System.Threading.Tasks.ParallelLoopState,System.Int64})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.OrderablePartitioner`1" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 정렬할 수 있는 파티셔너입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is  null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> orderable partitioner returns false.-or-The <see cref="P:System.Collections.Concurrent.OrderablePartitioner`1.KeysNormalized" /> property in the <paramref name="source" /> orderable partitioner returns false.-or-The exception that is thrown when any methods in the <paramref name="source" /> orderable partitioner return null.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Concurrent.OrderablePartitioner{``0},System.Threading.Tasks.ParallelOptions,System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,System.Int64,``1,``1},System.Action{``1})">
+      <summary>64비트 인덱스와 스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.OrderablePartitioner`1" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 정렬할 수 있는 파티셔너입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> or <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /><see cref="T:System.Collections.Concurrent.Partitioner" /> returns false or the partitioner returns null  partitions.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Action{``0})">
+      <summary>반복이 병렬로 실행될 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.Partitioner" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 파티셔너입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is  null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> partitioner returns false.-or-The exception that is thrown when any methods in the <paramref name="source" /> partitioner return null.-or-The <see cref="M:System.Collections.Concurrent.Partitioner`1.GetPartitions(System.Int32)" /> method in the <paramref name="source" /> partitioner does not return the correct number of partitions.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Action{``0,System.Threading.Tasks.ParallelLoopState})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.Partitioner" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 파티셔너입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> partitioner returns false.-or-A method in the <paramref name="source" /> partitioner returns null.-or-The <see cref="M:System.Collections.Concurrent.Partitioner`1.GetPartitions(System.Int32)" /> method in the <paramref name="source" /> partitioner does not return the correct number of partitions.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Concurrent.Partitioner{``0},System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,``1,``1},System.Action{``1})">
+      <summary>스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.Partitioner" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 파티셔너입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /><see cref="T:System.Collections.Concurrent.Partitioner" /> returns false or the partitioner returns null partitions.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.Partitioner" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 파티셔너입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> partitioner returns false.-or-The exception that is thrown when any methods in the <paramref name="source" /> partitioner return null.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0,System.Threading.Tasks.ParallelLoopState})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.Partitioner" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 파티셔너입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /> partitioner returns false.-or-The exception that is thrown when any methods in the <paramref name="source" /> partitioner return null.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Concurrent.Partitioner{``0},System.Threading.Tasks.ParallelOptions,System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,``1,``1},System.Action{``1})">
+      <summary>스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.Concurrent.Partitioner" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">원래 데이터 소스가 포함된 파티셔너입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TSource">
+        <paramref name="source" />의 요소 형식입니다.</typeparam>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.InvalidOperationException">The <see cref="P:System.Collections.Concurrent.Partitioner`1.SupportsDynamicPartitions" /> property in the <paramref name="source" /><see cref="T:System.Collections.Concurrent.Partitioner" /> returns false or the partitioner returns null partitions.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+      <summary>반복이 병렬로 실행될 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0,System.Threading.Tasks.ParallelLoopState})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0,System.Threading.Tasks.ParallelLoopState,System.Int64})">
+      <summary>64비트 인덱스를 사용하여 반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Generic.IEnumerable{``0},System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,``1,``1},System.Action{``1})">
+      <summary>스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Generic.IEnumerable{``0},System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,System.Int64,``1,``1},System.Action{``1})">
+      <summary>스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0,System.Threading.Tasks.ParallelLoopState})">
+      <summary>반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Action{``0,System.Threading.Tasks.ParallelLoopState,System.Int64})">
+      <summary>64비트 인덱스를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,``1,``1},System.Action{``1})">
+      <summary>스레드 로컬 데이터를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.ForEach``2(System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.ParallelOptions,System.Func{``1},System.Func{``0,System.Threading.Tasks.ParallelLoopState,System.Int64,``1,``1},System.Action{``1})">
+      <summary>스레드 로컬 데이터와 64비트 인덱스를 사용하여 반복을 병렬로 실행할 수 있고 루프 옵션을 구성할 수 있으며 루프 상태를 모니터링 및 조작할 수 있는 foreach(Visual Basic의 경우 For Each) 작업을 <see cref="T:System.Collections.IEnumerable" />에 대해 실행합니다.</summary>
+      <returns>완료된 루프의 부분에 대한 정보가 포함된 구조체입니다.</returns>
+      <param name="source">열거 가능한 데이터 소스입니다.</param>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="localInit">각 작업에 대한 로컬 데이터의 초기 상태를 반환하는 함수 대리자입니다.</param>
+      <param name="body">반복당 한 번씩 호출되는 대리자입니다.</param>
+      <param name="localFinally">각 작업의 로컬 상태에 대해 최종 동작을 수행하는 대리자입니다.</param>
+      <typeparam name="TSource">소스의 데이터 형식입니다.</typeparam>
+      <typeparam name="TLocal">스레드 로컬 데이터의 형식입니다.</typeparam>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="source" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.-or-The <paramref name="body" /> argument is null.-or-The <paramref name="localInit" /> argument is null.-or-The <paramref name="localFinally" /> argument is null.</exception>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> argument is canceled.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+      <exception cref="T:System.AggregateException">The exception that contains all the individual exceptions thrown on all threads.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.Invoke(System.Action[])">
+      <summary>각각의 제공된 동작을 가능하면 병렬로 실행합니다.</summary>
+      <param name="actions">실행할 <see cref="T:System.Action" />의 배열입니다.</param>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="actions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that is thrown when any action in the <paramref name="actions" /> array throws an exception.</exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="actions" /> array contains a null element.</exception>
+    </member>
+    <member name="M:System.Threading.Tasks.Parallel.Invoke(System.Threading.Tasks.ParallelOptions,System.Action[])">
+      <summary>사용자가 작업을 취소하지 않는다면 제공된 각 작업을 가능한 한 병렬로 실행합니다.</summary>
+      <param name="parallelOptions">이 작업의 동작을 구성하는 개체입니다.</param>
+      <param name="actions">실행할 동작의 배열입니다.</param>
+      <exception cref="T:System.OperationCanceledException">The <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> is set.</exception>
+      <exception cref="T:System.ArgumentNullException">The <paramref name="actions" /> argument is null.-or-The <paramref name="parallelOptions" /> argument is null.</exception>
+      <exception cref="T:System.AggregateException">The exception that is thrown when any action in the <paramref name="actions" /> array throws an exception.</exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="actions" /> array contains a null element.</exception>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.Threading.CancellationTokenSource" /> associated with the <see cref="T:System.Threading.CancellationToken" /> in the <paramref name="parallelOptions" /> has been disposed.</exception>
+    </member>
+    <member name="T:System.Threading.Tasks.ParallelLoopResult">
+      <summary>
+        <see cref="T:System.Threading.Tasks.Parallel" /> 루프의 실행에 대한 완료 상태를 제공합니다.</summary>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopResult.IsCompleted">
+      <summary>루프 실행이 완료되어 루프의 모든 반복이 실행되었고 루프가 중간에 끝나도록 요청을 받지 않았는지 여부를 가져옵니다.</summary>
+      <returns>루프 실행이 완료되었으면 true이고, 그렇지 않으면 false입니다.</returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopResult.LowestBreakIteration">
+      <summary>
+        <see cref="M:System.Threading.Tasks.ParallelLoopState.Break" />가 호출된 가장 낮은 반복의 인덱스를 가져옵니다.</summary>
+      <returns>Break 문이 호출된 가장 낮은 반복을 나타내는 정수를 반환합니다.</returns>
+    </member>
+    <member name="T:System.Threading.Tasks.ParallelLoopState">
+      <summary>병렬 루프의 반복이 다른 반복과 상호 작용하도록 합니다.이 클래스의 인스턴스는 <see cref="T:System.Threading.Tasks.Parallel" /> 클래스에 의해 각 루프에 제공됩니다. 사용자 코드에 인스턴스를 만들 수는 없습니다.</summary>
+    </member>
+    <member name="M:System.Threading.Tasks.ParallelLoopState.Break">
+      <summary>현재 반복 이외에 시스템에서 편의상 빨리 수행하는 반복에서 <see cref="T:System.Threading.Tasks.Parallel" /> 루프의 반복 실행이 중단되도록 통신합니다. </summary>
+      <exception cref="T:System.InvalidOperationException">
+        <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" /> 메서드가 이미 호출된 경우<see cref="M:System.Threading.Tasks.ParallelLoopState.Break" /> 및 <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" />은 동일한 루프의 반복을 조합하여 사용할 수 없습니다.</exception>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopState.IsExceptional">
+      <summary>루프 반복이 해당 반복에서 처리되지 않은 예외를 throw했는지 여부를 가져옵니다. </summary>
+      <returns>처리되지 않은 예외를 throw했으면 true이고, 그렇지 않으면 false입니다.  </returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopState.IsStopped">
+      <summary>루프 반복에서 <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" /> 메서드를 호출했는지 여부를 가져옵니다. </summary>
+      <returns>
+        <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" /> 메서드를 호출하여 반복에서 루프를 중지했으면 true이고, 그렇지 않으면 false입니다. </returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopState.LowestBreakIteration">
+      <summary>
+        <see cref="M:System.Threading.Tasks.ParallelLoopState.Break" />이 호출된 루프의 가장 낮은 반복을 가져옵니다. </summary>
+      <returns>
+        <see cref="M:System.Threading.Tasks.ParallelLoopState.Break" />이 호출된 가장 낮은 반복입니다.<see cref="M:System.Threading.Tasks.Parallel.ForEach``1(System.Collections.Concurrent.Partitioner{``0},System.Action{``0})" /> 루프의 경우 값은 내부에서 생성된 인덱스를 기반으로 합니다.</returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelLoopState.ShouldExitCurrentIteration">
+      <summary>루프의 현재 반복이 해당 반복 또는 다른 반복에서 수행한 요청에 따라 종료되어야 하는지 여부를 가져옵니다.</summary>
+      <returns>현재 반복이 종료되어야 하면 true이고, 그렇지 않으면 false입니다. </returns>
+    </member>
+    <member name="M:System.Threading.Tasks.ParallelLoopState.Stop">
+      <summary>시스템에서 편의상 빨리 수행하는 반복에서 <see cref="T:System.Threading.Tasks.Parallel" /> 루프의 실행이 중단되도록 통신합니다.</summary>
+      <exception cref="T:System.InvalidOperationException">
+        <see cref="M:System.Threading.Tasks.ParallelLoopState.Break" /> 메서드가 이미 호출 되었습니다.<see cref="M:System.Threading.Tasks.ParallelLoopState.Break" /> 및 <see cref="M:System.Threading.Tasks.ParallelLoopState.Stop" />은 동일한 루프의 반복을 조합하여 사용할 수 없습니다.</exception>
+    </member>
+    <member name="T:System.Threading.Tasks.ParallelOptions">
+      <summary>
+        <see cref="T:System.Threading.Tasks.Parallel" /> 클래스의 메서드 작업을 구성하는 옵션을 저장합니다.</summary>
+    </member>
+    <member name="M:System.Threading.Tasks.ParallelOptions.#ctor">
+      <summary>
+        <see cref="T:System.Threading.Tasks.ParallelOptions" /> 클래스의 새 인스턴스를 초기화합니다.</summary>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelOptions.CancellationToken">
+      <summary>이 <see cref="T:System.Threading.Tasks.ParallelOptions" /> 인스턴스와 연결된 <see cref="T:System.Threading.CancellationToken" />를 가져오거나 설정합니다.</summary>
+      <returns>이 인스턴스에 연결된 토큰입니다.</returns>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelOptions.MaxDegreeOfParallelism">
+      <summary>이 <see cref="T:System.Threading.Tasks.ParallelOptions" /> 인스턴스에서 사용되는 동시 작업의 최대 수를 가져오거나 설정합니다.</summary>
+      <returns>병렬 처리의 최대 수준을 나타내는 정수입니다.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">속성을 0 또는 -1보다 작은 값으로 설정하는 경우 입니다.</exception>
+    </member>
+    <member name="P:System.Threading.Tasks.ParallelOptions.TaskScheduler">
+      <summary>이 <see cref="T:System.Threading.Tasks.ParallelOptions" /> 인스턴스와 연결된 <see cref="T:System.Threading.Tasks.TaskScheduler" />를 가져오거나 설정합니다.이 속성을 null로 설정하면 현재 스케줄러가 사용됨을 나타냅니다.</summary>
+      <returns>이 인스턴스에 연결된 작업 스케줄러입니다.</returns>
+    </member>
+  </members>
+</doc>
