@@ -13,7 +13,7 @@ namespace PS4_PKG_Tool
     public partial class Form1 : Form
     {
 
-        public static PS4_Tools.PKG.GP4.Psproject project = new PS4_Tools.PKG.GP4.Psproject();
+        public static PS4_Tools.PKG.SceneRelated.GP4.Psproject project = new PS4_Tools.PKG.SceneRelated.GP4.Psproject();
 
         public Form1()
         {
@@ -22,7 +22,7 @@ namespace PS4_PKG_Tool
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            project = new PS4_Tools.PKG.GP4.Psproject();//start a new project
+            project = new PS4_Tools.PKG.SceneRelated.GP4.Psproject();//start a new project
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -35,7 +35,7 @@ namespace PS4_PKG_Tool
             opendialog.Filter = "PS4 Project File (*.gp4) | *.gp4";
             if(opendialog.ShowDialog() == DialogResult.OK)
             {
-                project = PS4_Tools.PKG.GP4.ReadGP4(opendialog.FileName);
+                project = PS4_Tools.PKG.SceneRelated.GP4.ReadGP4(opendialog.FileName);
                 TreeNode mainnode = new TreeNode("root");
                 for (int i = 0; i < project.Rootdir.Dir.Count; i++)
                 {

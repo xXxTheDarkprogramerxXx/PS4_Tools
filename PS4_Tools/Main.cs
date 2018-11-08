@@ -1,4 +1,10 @@
-﻿using GameArchives;
+﻿/* Copyright (c)  2018 TheDarkporgramer
+*
+*
+* 
+*/
+
+using GameArchives;
 using LibArchiveExplorer;
 using System;
 using System.Collections.Generic;
@@ -14,6 +20,18 @@ using System.Xml;
 using System.Diagnostics;
 using System.IO.Compression;
 using DiscUtils.Iso9660;
+#region << VGAudio >>
+using VGAudio.Codecs.Atrac9;
+using VGAudio.Formats;
+using VGAudio.Formats.Atrac9;
+using VGAudio.Utilities.Riff;
+using VGAudio.Containers.At9;
+using System.Security.Cryptography;
+using System.Net;
+using System.Text.RegularExpressions;
+#endregion << VGAudio >>
+
+using Newtonsoft.Json;
 
 namespace PS4_Tools
 {
@@ -22,6 +40,36 @@ namespace PS4_Tools
         public static string AppCommonPath()
         {
             return System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("PS4_Tools.dll", "");
+        }
+
+        /// <summary>
+        /// Deletes all files within a Directory and also deletes a Directory
+        /// </summary>
+        /// <param name="target_dir"></param>
+        public static void DeleteDirectory(string target_dir)
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(target_dir);
+                string[] dirs = Directory.GetDirectories(target_dir);
+
+                foreach (string file in files)
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+
+                foreach (string dir in dirs)
+                {
+                    DeleteDirectory(dir);
+                }
+
+                Directory.Delete(target_dir, false);
+            }
+            catch (Exception ex)
+            {
+                //we dont log anything here it should be okay
+            }
         }
     }
 
@@ -32,7 +80,42 @@ namespace PS4_Tools
 
     public class Media
     { 
-        
+        public class Atrac9
+        {
+           
+            public static void LoadAt9(string at9file)
+            {
+                bool readAudioData = true;
+                byte[] configData = new byte[4] { 0xFE, 0x18, 0x28, 0x00 };                   
+
+                LibAtrac9.Atrac9Config config = new LibAtrac9.Atrac9Config(configData);
+
+                // Initialize the decoder
+                var decoder = new LibAtrac9.Atrac9Decoder();
+                decoder.Initialize(configData);
+
+                // Create a buffer for the output PCM
+                var pcmBuffer = new short[decoder.Config.ChannelCount][];
+                for (int i = 0; i < pcmBuffer.Length; i++)
+                {
+                    pcmBuffer[i] = new short[decoder.Config.SuperframeSamples];
+                }
+
+                // Decode each superframe
+                //for (int i = 0; i < atrac9Data.Length; i++)
+                //{
+                //    decoder.Decode(atrac9Data[i], pcmBuffer);
+
+                //    // Use the decoded audio in pcmBuffer however you want
+                //}
+
+                VGAudio.Containers.At9.At9Reader reader = new VGAudio.Containers.At9.At9Reader();
+                reader.Read(new System.IO.FileStream(at9file, FileMode.Open, FileAccess.Read));
+
+                reader.ReadWithConfig(new System.IO.FileStream(at9file, FileMode.Open, FileAccess.Read));
+
+            }
+        }
     }
 
     public class Image
@@ -192,11 +275,2177 @@ namespace PS4_Tools
             }
         }
 
+        /// <summary>
+        /// Gim File Handling (Haven't seen one inside PS4 but whatever)
+        /// </summary>
+        public class GIMImages
+        {
+            #region << Gim >>
+
+            public interface IPixelOrderIterator
+            {
+                int X { get; }
+                int Y { get; }
+                void Next();
+            }
+
+            public class TiledPixelOrderIterator : IPixelOrderIterator
+            {
+                int Width;
+                int Height;
+
+                int CurrentTileX;
+                int CurrentTileY;
+                int CounterInTile;
+
+                int TileWidth;
+                int TileHeight;
+
+                public TiledPixelOrderIterator(int width, int height, int tileWidth, int tileHeight)
+                {
+                    Width = width;
+                    Height = height;
+                    CurrentTileX = 0;
+                    CurrentTileY = 0;
+                    CounterInTile = 0;
+                    TileWidth = tileWidth;
+                    TileHeight = tileHeight;
+                }
+
+                public int X { get { return CurrentTileX + (CounterInTile % TileWidth); } }
+                public int Y { get { return CurrentTileY + (CounterInTile / TileWidth); } }
+
+                public void Next()
+                {
+                    ++CounterInTile;
+
+                    if (CounterInTile == TileWidth * TileHeight)
+                    {
+                        CounterInTile = 0;
+                        CurrentTileX += TileWidth;
+                        if (CurrentTileX >= Width)
+                        {
+                            CurrentTileX = 0;
+                            CurrentTileY += TileHeight;
+                        }
+                    }
+                }
+            }
+
+            public class LinearPixelOrderIterator : IPixelOrderIterator
+            {
+                int Width;
+                int Height;
+                int Counter;
+
+                public LinearPixelOrderIterator(int width, int height)
+                {
+                    Width = width;
+                    Height = height;
+                    Counter = 0;
+                }
+
+                public int X { get { return Counter % Width; } }
+                public int Y { get { return Counter / Width; } }
+
+                public void Next()
+                {
+                    ++Counter;
+                }
+            }
+
+            class Util
+            {
+                public static void CopyByteArrayPart(IList<byte> from, int locationFrom, IList<byte> to, int locationTo, int count)
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        to[locationTo + i] = from[locationFrom + i];
+                    }
+                }
+            }
+
+
+            class FileInfoSection : ISection
+            {
+                public ushort Type;
+                public ushort Unknown;
+                public uint PartSizeDuplicate;
+                public uint PartSize;
+                public uint Unknown2;
+
+                public byte[] FileInfo;
+
+                public FileInfoSection(byte[] File, int Offset)
+                {
+                    Type = BitConverter.ToUInt16(File, Offset);
+                    Unknown = BitConverter.ToUInt16(File, Offset + 0x02);
+                    PartSizeDuplicate = BitConverter.ToUInt32(File, Offset + 0x04);
+                    PartSize = BitConverter.ToUInt32(File, Offset + 0x08);
+                    Unknown2 = BitConverter.ToUInt32(File, Offset + 0x0C);
+
+                    uint size = PartSize - 0x10;
+                    FileInfo = new byte[size];
+                    Util.CopyByteArrayPart(File, Offset + 0x10, FileInfo, 0, (int)size);
+                }
+
+                public uint GetPartSize()
+                {
+                    return PartSize;
+                }
+
+
+                public void Recalculate(int NewFilesize)
+                {
+                    PartSize = (uint)FileInfo.Length + 0x10;
+                    PartSizeDuplicate = PartSize;
+                }
+
+
+                public byte[] Serialize()
+                {
+                    List<byte> serialized = new List<byte>((int)PartSize);
+                    serialized.AddRange(BitConverter.GetBytes(Type));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown));
+                    serialized.AddRange(BitConverter.GetBytes(PartSizeDuplicate));
+                    serialized.AddRange(BitConverter.GetBytes(PartSize));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown2));
+                    serialized.AddRange(FileInfo);
+                    return serialized.ToArray();
+                }
+            }
+
+            class Splitter
+            {
+                public static int Split(List<string> args)
+                {
+                    string Filename = args[0];
+                    GIM[] gims = new GIM[3];
+                    gims[0] = new GIM(Filename); ;
+                    gims[1] = new GIM(Filename); ;
+                    gims[2] = new GIM(Filename); ;
+                    System.IO.File.WriteAllBytes(
+                        System.IO.Path.GetDirectoryName(Filename) + System.IO.Path.DirectorySeparatorChar + System.IO.Path.GetFileNameWithoutExtension(Filename) + "_resave" + System.IO.Path.GetExtension(Filename),
+                        gims[0].Serialize());
+
+                    for (int i = 0; i < gims.Length; ++i)
+                    {
+                        GIM gim = gims[i];
+                        gim.ReduceToOneImage(i);
+                        System.IO.File.WriteAllBytes(
+                            System.IO.Path.GetDirectoryName(Filename) + System.IO.Path.DirectorySeparatorChar + System.IO.Path.GetFileNameWithoutExtension(Filename) + i.ToString() + System.IO.Path.GetExtension(Filename),
+                            gim.Serialize());
+                    }
+
+                    return 0;
+                }
+            }
+
+            class Program
+            {
+                public static int Homogenize(List<string> args)
+                {
+                    if (args.Count == 0)
+                    {
+                        Console.WriteLine("HomogenizePalette in.gim [out.gim]");
+                        Console.WriteLine("Overwrites in.gim when no out.gim is provided.");
+                    }
+
+                    string infilename = args[0];
+                    string outfilename = args.Count > 1 ? args[1] : args[0];
+
+                    GIM gim = new GIM(infilename);
+                    gim.HomogenizePalette();
+                    System.IO.File.WriteAllBytes(outfilename, gim.Serialize());
+
+
+                    return 0;
+                }
+            }
+
+            public class GimToPng
+            {
+                public static int Execute(List<string> args)
+                {
+                    if (args.Count == 0)
+                    {
+                        Console.WriteLine("Usage: GimToPng file.gim");
+                        return -1;
+                    }
+
+                    string filename = args[0];
+                    List<string> convertedFilenames = ConvertGimFileToPngFiles(filename);
+                    return (convertedFilenames != null && convertedFilenames.Count > 0) ? 0 : -1;
+                }
+
+                public static List<string> ConvertGimFileToPngFiles(string filename)
+                {
+                    GIM gim = new GIM(filename);
+                    int filenum = 0;
+                    List<string> names = new List<string>();
+                    foreach (Bitmap bmp in gim.ConvertToBitmaps())
+                    {
+                        string newname = filename + "." + filenum + ".png";
+                        bmp.Save(newname);
+                        names.Add(newname);
+                    }
+                    return names;
+                }
+            }
+
+            class EndOfImageSection : ISection
+            {
+                public ushort Type;
+                public ushort Unknown;
+                public uint EndOfImageAddress;
+                public uint PartSize;
+                public uint Unknown2;
+
+                public EndOfImageSection(byte[] File, int Offset)
+                {
+                    Type = BitConverter.ToUInt16(File, Offset);
+                    Unknown = BitConverter.ToUInt16(File, Offset + 0x02);
+                    EndOfImageAddress = BitConverter.ToUInt32(File, Offset + 0x04);
+                    PartSize = BitConverter.ToUInt32(File, Offset + 0x08);
+                    Unknown2 = BitConverter.ToUInt32(File, Offset + 0x0C);
+                }
+
+
+                public uint GetPartSize()
+                {
+                    return PartSize;
+                }
+
+
+                public void Recalculate(int NewFilesize)
+                {
+                    EndOfImageAddress = (uint)NewFilesize;
+                }
+
+
+                public byte[] Serialize()
+                {
+                    List<byte> serialized = new List<byte>((int)PartSize);
+                    serialized.AddRange(BitConverter.GetBytes(Type));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown));
+                    serialized.AddRange(BitConverter.GetBytes(EndOfImageAddress));
+                    serialized.AddRange(BitConverter.GetBytes(PartSize));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown2));
+                    return serialized.ToArray();
+                }
+            }
+
+
+            class EndOfFileSection : ISection
+            {
+
+                public ushort Type;
+                public ushort Unknown;
+                public uint EndOfFileAddress;
+                public uint PartSize;
+                public uint Unknown2;
+
+                public EndOfFileSection(byte[] File, int Offset)
+                {
+                    Type = BitConverter.ToUInt16(File, Offset);
+                    Unknown = BitConverter.ToUInt16(File, Offset + 0x02);
+                    EndOfFileAddress = BitConverter.ToUInt32(File, Offset + 0x04);
+                    PartSize = BitConverter.ToUInt32(File, Offset + 0x08);
+                    Unknown2 = BitConverter.ToUInt32(File, Offset + 0x0C);
+                }
+
+
+                public uint GetPartSize()
+                {
+                    return PartSize;
+                }
+
+
+                public void Recalculate(int NewFilesize)
+                {
+                    EndOfFileAddress = (uint)NewFilesize;
+                }
+
+
+                public byte[] Serialize()
+                {
+                    List<byte> serialized = new List<byte>((int)PartSize);
+                    serialized.AddRange(BitConverter.GetBytes(Type));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown));
+                    serialized.AddRange(BitConverter.GetBytes(EndOfFileAddress));
+                    serialized.AddRange(BitConverter.GetBytes(PartSize));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown2));
+                    return serialized.ToArray();
+                }
+            }
+
+            class HeaderSection : ISection
+            {
+                public byte[] Header;
+                public HeaderSection(byte[] File, int Offset)
+                {
+                    Header = new byte[0x10];
+
+                    Util.CopyByteArrayPart(File, Offset, Header, 0, 0x10);
+                }
+
+                public uint GetPartSize()
+                {
+                    return 0x10;
+                }
+
+                public void Recalculate(int NewFilesize)
+                {
+                    return;
+                }
+
+
+                public byte[] Serialize()
+                {
+                    return Header;
+                }
+            }
+
+            class PaletteSection : ISection
+            {
+                public int Offset;
+
+                public ushort Type;
+                public ushort Unknown;
+                public uint PartSizeDuplicate;
+                public uint PartSize;
+                public uint Unknown2;
+
+                public ushort DataOffset;
+                public ushort Unknown3;
+                public ImageFormat Format;
+                public ushort Unknown4;
+                public ushort ColorDepth;
+                public ushort Unknown5;
+                public ushort Unknown6;
+                public ushort Unknown7;
+
+                public ushort Unknown8;
+                public ushort Unknown9;
+                public ushort Unknown10;
+                public ushort Unknown11;
+                public uint Unknown12;
+                public uint Unknown13;
+
+                public uint PartSizeMinus0x10;
+                public uint Unknown14;
+                public ushort Unknown15;
+                public ushort LayerCount;
+                public ushort Unknown17;
+                public ushort FrameCount;
+
+                public uint[] PaletteOffsets;
+                public byte[][] PalettesRawBytes;
+                public List<List<uint>> Palettes;
+
+
+                public uint PaletteCount;
+
+                public PaletteSection(byte[] File, int Offset)
+                {
+                    this.Offset = Offset;
+
+
+                    Type = BitConverter.ToUInt16(File, Offset);
+                    Unknown = BitConverter.ToUInt16(File, Offset + 0x02);
+                    PartSizeDuplicate = BitConverter.ToUInt32(File, Offset + 0x04);
+                    PartSize = BitConverter.ToUInt32(File, Offset + 0x08);
+                    Unknown2 = BitConverter.ToUInt32(File, Offset + 0x0C);
+
+                    DataOffset = BitConverter.ToUInt16(File, Offset + 0x10);
+                    Unknown3 = BitConverter.ToUInt16(File, Offset + 0x12);
+                    Format = (ImageFormat)BitConverter.ToUInt16(File, Offset + 0x14);
+                    Unknown4 = BitConverter.ToUInt16(File, Offset + 0x16);
+                    ColorDepth = BitConverter.ToUInt16(File, Offset + 0x18);
+                    Unknown5 = BitConverter.ToUInt16(File, Offset + 0x1A);
+                    Unknown6 = BitConverter.ToUInt16(File, Offset + 0x1C);
+                    Unknown7 = BitConverter.ToUInt16(File, Offset + 0x1E);
+
+                    Unknown8 = BitConverter.ToUInt16(File, Offset + 0x20);
+                    Unknown9 = BitConverter.ToUInt16(File, Offset + 0x22);
+                    Unknown10 = BitConverter.ToUInt16(File, Offset + 0x24);
+                    Unknown11 = BitConverter.ToUInt16(File, Offset + 0x26);
+                    Unknown12 = BitConverter.ToUInt32(File, Offset + 0x28);
+                    Unknown13 = BitConverter.ToUInt32(File, Offset + 0x2C);
+
+                    PartSizeMinus0x10 = BitConverter.ToUInt32(File, Offset + 0x30);
+                    Unknown14 = BitConverter.ToUInt32(File, Offset + 0x34);
+                    Unknown15 = BitConverter.ToUInt16(File, Offset + 0x38);
+                    LayerCount = BitConverter.ToUInt16(File, Offset + 0x3A);
+                    Unknown17 = BitConverter.ToUInt16(File, Offset + 0x3C);
+                    FrameCount = BitConverter.ToUInt16(File, Offset + 0x3E);
+
+                    PaletteCount = Math.Max(LayerCount, FrameCount);
+                    PaletteOffsets = new uint[PaletteCount];
+                    for (int i = 0; i < PaletteCount; ++i)
+                    {
+                        PaletteOffsets[i] = BitConverter.ToUInt32(File, Offset + 0x40 + i * 0x04);
+                    }
+
+
+                    PalettesRawBytes = new byte[PaletteCount][];
+                    for (int i = 0; i < PaletteOffsets.Length; ++i)
+                    {
+                        uint poffs = PaletteOffsets[i];
+                        int size = ColorDepth * GetBytePerColor();
+                        PalettesRawBytes[i] = new byte[size];
+
+                        Util.CopyByteArrayPart(File, Offset + (int)poffs + 0x10, PalettesRawBytes[i], 0, size);
+                    }
+
+
+                    Palettes = new List<List<uint>>();
+                    foreach (byte[] pal in PalettesRawBytes)
+                    {
+                        int BytePerColor = GetBytePerColor();
+                        List<uint> IndividualPalette = new List<uint>();
+                        for (int i = 0; i < pal.Length; i += BytePerColor)
+                        {
+                            uint color = 0;
+                            if (BytePerColor == 4)
+                            {
+                                color = BitConverter.ToUInt32(pal, i);
+                            }
+                            else if (BytePerColor == 2)
+                            {
+                                color = BitConverter.ToUInt16(pal, i);
+                            }
+                            IndividualPalette.Add(color);
+                        }
+                        Palettes.Add(IndividualPalette);
+                    }
+
+
+                    return;
+                }
+
+                public int GetBytePerColor()
+                {
+                    if (Format == ImageFormat.RGBA4444)
+                    {
+                        return 2;
+                    }
+                    return 4;
+                }
+
+
+                public uint GetPartSize()
+                {
+                    return PartSize;
+                }
+                public void Recalculate(int NewFilesize)
+                {
+                    if (PaletteOffsets.Length != PalettesRawBytes.Length)
+                    {
+                        PaletteOffsets = new uint[PalettesRawBytes.Length];
+                    }
+                    uint totalLength = 0;
+                    for (int i = 0; i < PalettesRawBytes.Length; ++i)
+                    {
+                        PaletteOffsets[i] = totalLength + 0x40;
+                        totalLength += (uint)PalettesRawBytes[i].Length;
+                    }
+
+                    PartSize = totalLength + 0x50;
+                    PartSizeDuplicate = totalLength + 0x50;
+                    PartSizeMinus0x10 = totalLength + 0x40;
+                    LayerCount = 1;
+                    FrameCount = 1;
+                }
+
+
+                public byte[] Serialize()
+                {
+                    List<byte> serialized = new List<byte>((int)PartSize);
+                    serialized.AddRange(BitConverter.GetBytes(Type));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown));
+                    serialized.AddRange(BitConverter.GetBytes(PartSizeDuplicate));
+                    serialized.AddRange(BitConverter.GetBytes(PartSize));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown2));
+
+                    serialized.AddRange(BitConverter.GetBytes(DataOffset));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown3));
+                    serialized.AddRange(BitConverter.GetBytes((ushort)Format));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown4));
+                    serialized.AddRange(BitConverter.GetBytes(ColorDepth));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown5));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown6));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown7));
+
+                    serialized.AddRange(BitConverter.GetBytes(Unknown8));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown9));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown10));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown11));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown12));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown13));
+
+                    serialized.AddRange(BitConverter.GetBytes(PartSizeMinus0x10));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown14));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown15));
+                    serialized.AddRange(BitConverter.GetBytes(LayerCount));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown17));
+                    serialized.AddRange(BitConverter.GetBytes(FrameCount));
+
+                    for (int i = 0; i < PaletteOffsets.Length; ++i)
+                    {
+                        serialized.AddRange(BitConverter.GetBytes(PaletteOffsets[i]));
+                    }
+                    while (serialized.Count % 16 != 0)
+                    {
+                        serialized.Add(0x00);
+                    }
+                    int BytePerColor = GetBytePerColor();
+                    foreach (List<uint> pal in Palettes)
+                    {
+                        foreach (uint col in pal)
+                        {
+                            if (BytePerColor == 4)
+                            {
+                                serialized.AddRange(BitConverter.GetBytes(col));
+                            }
+                            else if (BytePerColor == 2)
+                            {
+                                serialized.AddRange(BitConverter.GetBytes((ushort)col));
+                            }
+                        }
+                    }
+                    return serialized.ToArray();
+                }
+            }
+
+            enum ImageFormat : short
+            {
+                RGBA5650 = 0,
+                RGBA5551 = 1,
+                RGBA4444 = 2,
+                RGBA8888 = 3,
+                Index4 = 4,
+                Index8 = 5,
+                Index16 = 6,
+                Index32 = 7,
+            }
+
+            enum PixelOrder : short
+            {
+                Normal = 0,
+                Faster = 1
+            }
+
+            class ImageSection : ISection
+            {
+                public int Offset;
+
+                public ushort Type;
+                public ushort Unknown;
+                public uint PartSizeDuplicate;
+                public uint PartSize;
+                public uint Unknown2;
+
+                public ushort DataOffset;
+                public ushort Unknown3;
+                public ImageFormat Format;
+                public PixelOrder PxOrder;
+                public ushort Width;
+                public ushort Height;
+                public ushort ColorDepth;
+                public ushort Unknown7;
+
+                public ushort Unknown8;
+                public ushort Unknown9;
+                public ushort Unknown10;
+                public ushort Unknown11;
+                public uint Unknown12;
+                public uint Unknown13;
+
+                public uint PartSizeMinus0x10;
+                public uint Unknown14;
+                public ushort Unknown15;
+                public ushort LayerCount;
+                public ushort Unknown17;
+                public ushort FrameCount;
+
+                public uint[] ImageOffsets;
+                public byte[][] ImagesRawBytes;
+                public List<List<uint>> Images;
+
+
+                public uint ImageCount;
+
+                public ImageSection(byte[] File, int Offset)
+                {
+                    this.Offset = Offset;
+
+
+                    Type = BitConverter.ToUInt16(File, Offset);
+                    Unknown = BitConverter.ToUInt16(File, Offset + 0x02);
+                    PartSizeDuplicate = BitConverter.ToUInt32(File, Offset + 0x04);
+                    PartSize = BitConverter.ToUInt32(File, Offset + 0x08);
+                    Unknown2 = BitConverter.ToUInt32(File, Offset + 0x0C);
+
+                    DataOffset = BitConverter.ToUInt16(File, Offset + 0x10);
+                    Unknown3 = BitConverter.ToUInt16(File, Offset + 0x12);
+                    Format = (ImageFormat)BitConverter.ToUInt16(File, Offset + 0x14);
+                    PxOrder = (PixelOrder)BitConverter.ToUInt16(File, Offset + 0x16);
+                    Width = BitConverter.ToUInt16(File, Offset + 0x18);
+                    Height = BitConverter.ToUInt16(File, Offset + 0x1A);
+                    ColorDepth = BitConverter.ToUInt16(File, Offset + 0x1C);
+                    Unknown7 = BitConverter.ToUInt16(File, Offset + 0x1E);
+
+                    Unknown8 = BitConverter.ToUInt16(File, Offset + 0x20);
+                    Unknown9 = BitConverter.ToUInt16(File, Offset + 0x22);
+                    Unknown10 = BitConverter.ToUInt16(File, Offset + 0x24);
+                    Unknown11 = BitConverter.ToUInt16(File, Offset + 0x26);
+                    Unknown12 = BitConverter.ToUInt32(File, Offset + 0x28);
+                    Unknown13 = BitConverter.ToUInt32(File, Offset + 0x2C);
+
+                    PartSizeMinus0x10 = BitConverter.ToUInt32(File, Offset + 0x30);
+                    Unknown14 = BitConverter.ToUInt32(File, Offset + 0x34);
+                    Unknown15 = BitConverter.ToUInt16(File, Offset + 0x38);
+                    LayerCount = BitConverter.ToUInt16(File, Offset + 0x3A);
+                    Unknown17 = BitConverter.ToUInt16(File, Offset + 0x3C);
+                    FrameCount = BitConverter.ToUInt16(File, Offset + 0x3E);
+
+                    ImageCount = Math.Max(LayerCount, FrameCount);
+                    ImageOffsets = new uint[ImageCount];
+                    for (int i = 0; i < ImageCount; ++i)
+                    {
+                        ImageOffsets[i] = BitConverter.ToUInt32(File, Offset + 0x40 + i * 0x04);
+                    }
+
+
+                    ImagesRawBytes = new byte[ImageCount][];
+                    for (int i = 0; i < ImageOffsets.Length; ++i)
+                    {
+                        uint poffs = ImageOffsets[i];
+                        uint nextpoffs;
+                        if (i == ImageOffsets.Length - 1)
+                        {
+                            nextpoffs = PartSizeMinus0x10;
+                        }
+                        else
+                        {
+                            nextpoffs = ImageOffsets[i + 1];
+                        }
+                        uint size = nextpoffs - poffs;
+                        ImagesRawBytes[i] = new byte[size];
+
+                        Util.CopyByteArrayPart(File, Offset + (int)poffs + 0x10, ImagesRawBytes[i], 0, (int)size);
+                    }
+
+
+
+                    Images = new List<List<uint>>();
+                    foreach (byte[] img in ImagesRawBytes)
+                    {
+                        int BitPerPixel = GetBitPerPixel();
+                        List<uint> IndividualImage = new List<uint>();
+                        for (int cnt = 0; cnt < img.Length * 8; cnt += BitPerPixel)
+                        {
+                            uint color = 0;
+                            int i = cnt / 8;
+                            switch (BitPerPixel)
+                            {
+                                case 4:
+                                    if (cnt % 8 != 0)
+                                    {
+                                        color = (img[i] & 0xF0u) >> 4;
+                                    }
+                                    else
+                                    {
+                                        color = (img[i] & 0x0Fu);
+                                    }
+                                    break;
+                                case 8:
+                                    color = img[i];
+                                    break;
+                                case 16:
+                                    color = BitConverter.ToUInt16(img, i);
+                                    break;
+                                case 32:
+                                    color = BitConverter.ToUInt32(img, i);
+                                    break;
+                            }
+                            IndividualImage.Add(color);
+                        }
+                        Images.Add(IndividualImage);
+                    }
+
+
+                    return;
+                }
+
+                public int GetBitPerPixel()
+                {
+                    switch (Format)
+                    {
+                        case ImageFormat.Index4:
+                            return 4;
+                        case ImageFormat.Index8:
+                            return 8;
+                        case ImageFormat.Index16:
+                        case ImageFormat.RGBA4444:
+                        case ImageFormat.RGBA5551:
+                        case ImageFormat.RGBA5650:
+                            return 16;
+                        case ImageFormat.Index32:
+                        case ImageFormat.RGBA8888:
+                            return 32;
+                    }
+                    return 0;
+                }
+
+                public uint GetPartSize()
+                {
+                    return PartSize;
+                }
+
+
+                public void Recalculate(int NewFilesize)
+                {
+                    if (ImageOffsets.Length != ImagesRawBytes.Length)
+                    {
+                        ImageOffsets = new uint[ImagesRawBytes.Length];
+                    }
+
+                    uint totalLength = 0;
+                    for (int i = 0; i < ImagesRawBytes.Length; ++i)
+                    {
+                        ImageOffsets[i] = totalLength + 0x40;
+                        totalLength += (uint)ImagesRawBytes[i].Length;
+                    }
+
+                    PartSize = totalLength + 0x50;
+                    PartSizeDuplicate = totalLength + 0x50;
+                    PartSizeMinus0x10 = totalLength + 0x40;
+                    LayerCount = 1;
+                    FrameCount = 1;
+
+                }
+
+                private static Color ColorFromRGBA5650(uint color)
+                {
+                    int r = (int)(((color & 0x0000001F)) << 3);
+                    int g = (int)(((color & 0x000007E0) >> 5) << 2);
+                    int b = (int)(((color & 0x0000F800) >> 11) << 3);
+                    return Color.FromArgb(0, r, g, b);
+                }
+                private static Color ColorFromRGBA5551(uint color)
+                {
+                    int r = (int)(((color & 0x0000001F)) << 3);
+                    int g = (int)(((color & 0x000003E0) >> 5) << 3);
+                    int b = (int)(((color & 0x00007C00) >> 10) << 3);
+                    int a = (int)(((color & 0x00008000) >> 15) << 7);
+                    return Color.FromArgb(a, r, g, b);
+                }
+                private static Color ColorFromRGBA4444(uint color)
+                {
+                    int r = (int)(((color & 0x0000000F)) << 4);
+                    int g = (int)(((color & 0x000000F0) >> 4) << 4);
+                    int b = (int)(((color & 0x00000F00) >> 8) << 4);
+                    int a = (int)(((color & 0x0000F000) >> 12) << 4);
+                    return Color.FromArgb(a, r, g, b);
+                }
+                private static Color ColorFromRGBA8888(uint color)
+                {
+                    int r = (int)((color & 0x000000FF));
+                    int g = (int)((color & 0x0000FF00) >> 8);
+                    int b = (int)((color & 0x00FF0000) >> 16);
+                    int a = (int)((color & 0xFF000000) >> 24);
+                    return Color.FromArgb(a, r, g, b);
+                }
+
+                public List<Bitmap> ConvertToBitmaps(PaletteSection psec)
+                {
+                    List<Bitmap> bitmaps = new List<Bitmap>();
+                    for (int i = 0; i < Images.Count; ++i)
+                    {
+                        int w = (ushort)(Width >> i);
+                        int h = (ushort)(Height >> i);
+
+                        Bitmap bmp = new Bitmap(w, h);
+
+                        IPixelOrderIterator pixelPosition;
+                        switch (PxOrder)
+                        {
+                            case PixelOrder.Normal:
+                                pixelPosition = new LinearPixelOrderIterator(w, h);
+                                break;
+                            case PixelOrder.Faster:
+                                pixelPosition = new GimPixelOrderFasterIterator(w, h, GetBitPerPixel());
+                                break;
+                            default:
+                                throw new Exception("Unexpected pixel order: " + PxOrder);
+                        }
+
+                        for (int idx = 0; idx < Images[i].Count; ++idx)
+                        {
+                            uint rawcolor = Images[i][idx];
+                            Color color;
+
+                            switch (Format)
+                            {
+                                case ImageFormat.RGBA5650:
+                                    color = ColorFromRGBA5650(rawcolor);
+                                    break;
+                                case ImageFormat.RGBA5551:
+                                    color = ColorFromRGBA5551(rawcolor);
+                                    break;
+                                case ImageFormat.RGBA4444:
+                                    color = ColorFromRGBA4444(rawcolor);
+                                    break;
+                                case ImageFormat.RGBA8888:
+                                    color = ColorFromRGBA8888(rawcolor);
+                                    break;
+                                case ImageFormat.Index4:
+                                case ImageFormat.Index8:
+                                case ImageFormat.Index16:
+                                case ImageFormat.Index32:
+                                    switch (psec.Format)
+                                    {
+                                        case ImageFormat.RGBA5650:
+                                            color = ColorFromRGBA5650(psec.Palettes[i][(int)rawcolor]);
+                                            break;
+                                        case ImageFormat.RGBA5551:
+                                            color = ColorFromRGBA5551(psec.Palettes[i][(int)rawcolor]);
+                                            break;
+                                        case ImageFormat.RGBA4444:
+                                            color = ColorFromRGBA4444(psec.Palettes[i][(int)rawcolor]);
+                                            break;
+                                        case ImageFormat.RGBA8888:
+                                            color = ColorFromRGBA8888(psec.Palettes[i][(int)rawcolor]);
+                                            break;
+                                        default:
+                                            throw new Exception("Unexpected palette color type: " + psec.Format);
+                                    }
+                                    break;
+                                default:
+                                    throw new Exception("Unexpected image color type: " + psec.Format);
+                            }
+
+                            if (pixelPosition.X < w && pixelPosition.Y < h)
+                            {
+                                bmp.SetPixel(pixelPosition.X, pixelPosition.Y, color);
+                            }
+                            pixelPosition.Next();
+                        }
+                        bitmaps.Add(bmp);
+                    }
+                    return bitmaps;
+                }
+
+                public byte[] Serialize()
+                {
+                    List<byte> serialized = new List<byte>((int)PartSize);
+                    serialized.AddRange(BitConverter.GetBytes(Type));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown));
+                    serialized.AddRange(BitConverter.GetBytes(PartSizeDuplicate));
+                    serialized.AddRange(BitConverter.GetBytes(PartSize));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown2));
+
+                    serialized.AddRange(BitConverter.GetBytes(DataOffset));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown3));
+                    serialized.AddRange(BitConverter.GetBytes((ushort)Format));
+                    serialized.AddRange(BitConverter.GetBytes((ushort)PxOrder));
+                    serialized.AddRange(BitConverter.GetBytes(Width));
+                    serialized.AddRange(BitConverter.GetBytes(Height));
+                    serialized.AddRange(BitConverter.GetBytes(ColorDepth));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown7));
+
+                    serialized.AddRange(BitConverter.GetBytes(Unknown8));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown9));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown10));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown11));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown12));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown13));
+
+                    serialized.AddRange(BitConverter.GetBytes(PartSizeMinus0x10));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown14));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown15));
+                    serialized.AddRange(BitConverter.GetBytes(LayerCount));
+                    serialized.AddRange(BitConverter.GetBytes(Unknown17));
+                    serialized.AddRange(BitConverter.GetBytes(FrameCount));
+
+                    for (int i = 0; i < ImageOffsets.Length; ++i)
+                    {
+                        serialized.AddRange(BitConverter.GetBytes(ImageOffsets[i]));
+                    }
+                    while (serialized.Count % 16 != 0)
+                    {
+                        serialized.Add(0x00);
+                    }
+
+                    int BitPerPixel = GetBitPerPixel();
+                    foreach (List<uint> img in Images)
+                    {
+                        for (int i = 0; i < img.Count; ++i)
+                        {
+                            uint col = img[i];
+                            switch (BitPerPixel)
+                            {
+                                case 4:
+                                    col = (img[i + 1] << 4) | (img[i]);
+                                    serialized.Add((byte)col);
+                                    ++i;
+                                    break;
+                                case 8:
+                                    serialized.Add((byte)col);
+                                    break;
+                                case 16:
+                                    serialized.AddRange(BitConverter.GetBytes((ushort)col));
+                                    break;
+                                case 32:
+                                    serialized.AddRange(BitConverter.GetBytes(col));
+                                    break;
+                            }
+                        }
+                    }
+
+                    return serialized.ToArray();
+                }
+
+                public void ConvertToTruecolor(int imageNumber, List<uint> Palette)
+                {
+                    for (int i = 0; i < Images[imageNumber].Count; ++i)
+                    {
+                        uint index = Images[imageNumber][i];
+                        Images[imageNumber][i] = Palette[(int)index];
+                    }
+                }
+
+                public void CovertToPaletted(int imageNumber, uint[] NewPalette)
+                {
+                    Dictionary<uint, uint> PaletteDict = new Dictionary<uint, uint>(NewPalette.Length);
+                    for (uint i = 0; i < NewPalette.Length; ++i)
+                    {
+                        try
+                        {
+                            PaletteDict.Add(NewPalette[i], i);
+                        }
+                        catch (System.ArgumentException)
+                        {
+                            // if we reach a duplicate we *should* be at the end of our colors
+                            break;
+                        }
+                    }
+
+                    for (int i = 0; i < Images[imageNumber].Count; ++i)
+                    {
+                        uint color = Images[imageNumber][i];
+                        uint index = PaletteDict[color];
+                        Images[imageNumber][i] = index;
+                    }
+                }
+
+                public void DiscardUnusedColorsPaletted(int imageNumber, PaletteSection paletteSection, int paletteNumber)
+                {
+                    List<uint> pal = paletteSection.Palettes[paletteNumber];
+                    List<uint> img = Images[imageNumber];
+
+                    bool[] usedPaletteEntries = new bool[pal.Count];
+                    for (int i = 0; i < usedPaletteEntries.Length; ++i)
+                    {
+                        usedPaletteEntries[i] = false; // initialize array to false
+                    }
+                    for (int i = 0; i < img.Count; ++i)
+                    {
+                        usedPaletteEntries[img[i]] = true; // all used palette entries get set to true
+                    }
+
+                    // remap old palette entries to new ones by essentially skipping over all unused colors
+                    uint[] remapTable = new uint[pal.Count];
+                    uint counter = 0;
+                    for (int i = 0; i < usedPaletteEntries.Length; ++i)
+                    {
+                        if (usedPaletteEntries[i])
+                        {
+                            remapTable[i] = counter;
+                            counter++;
+                        }
+                        else
+                        {
+                            remapTable[i] = 0xFFFFFFFFu; // just making sure these aren't used
+                        }
+                    }
+
+                    // remap the image
+                    for (int i = 0; i < img.Count; ++i)
+                    {
+                        img[i] = remapTable[img[i]];
+                    }
+
+                    // generate the new palette
+                    List<uint> newPal = new List<uint>((int)counter);
+                    for (int i = 0; i < usedPaletteEntries.Length; ++i)
+                    {
+                        if (usedPaletteEntries[i])
+                        {
+                            newPal.Add(pal[i]);
+                        }
+                    }
+
+                    paletteSection.Palettes[paletteNumber] = newPal;
+                }
+            }
+
+            class GimPixelOrderFasterIterator : TiledPixelOrderIterator
+            {
+                public GimPixelOrderFasterIterator(int width, int height, int bpp) : base(width, height, 0x80 / bpp, 0x08) { }
+            }
+
+            interface ISection
+            {
+                uint GetPartSize();
+                void Recalculate(int NewFilesize);
+                byte[] Serialize();
+            }
+            public class GIM
+            {
+
+                byte[] File;
+                List<ISection> Sections;
+
+                public GIM(byte[] File)
+                {
+                    Initialize(File);
+                }
+
+                public GIM(string Filename)
+                {
+                    Initialize(System.IO.File.ReadAllBytes(Filename));
+                }
+
+                public void Initialize(byte[] File)
+                {
+                    this.File = File;
+                    uint location = 0x10;
+
+                    Sections = new List<ISection>();
+                    Sections.Add(new HeaderSection(File, 0));
+                    while (location < File.Length)
+                    {
+                        ushort CurrentType = BitConverter.ToUInt16(File, (int)location);
+                        ISection section;
+                        switch (CurrentType)
+                        {
+                            case 0x02:
+                                section = new EndOfFileSection(File, (int)location);
+                                break;
+                            case 0x03:
+                                section = new EndOfImageSection(File, (int)location);
+                                break;
+                            case 0x04:
+                                section = new ImageSection(File, (int)location);
+                                break;
+                            case 0x05:
+                                section = new PaletteSection(File, (int)location);
+                                break;
+                            case 0xFF:
+                                section = new FileInfoSection(File, (int)location);
+                                break;
+                            default:
+                                throw new Exception("Invalid Section Type");
+                        }
+
+                        Sections.Add(section);
+                        location += section.GetPartSize();
+                    }
+                }
+
+                public uint GetTotalFilesize()
+                {
+                    uint totalFilesize = 0;
+                    foreach (var section in Sections)
+                    {
+                        totalFilesize += section.GetPartSize();
+                    }
+                    return totalFilesize;
+                }
+
+                public void ReduceToOneImage(int imageNumber)
+                {
+                    foreach (var section in Sections)
+                    {
+                        if (section.GetType() == typeof(ImageSection))
+                        {
+                            ImageSection isec = (ImageSection)section;
+                            byte[] img = isec.ImagesRawBytes[imageNumber];
+                            isec.ImagesRawBytes = new byte[1][];
+                            isec.ImagesRawBytes[0] = img;
+                            isec.Width = (ushort)(isec.Width >> imageNumber);
+                            isec.Height = (ushort)(isec.Height >> imageNumber);
+                        }
+                        if (section.GetType() == typeof(PaletteSection))
+                        {
+                            PaletteSection psec = (PaletteSection)section;
+                            byte[] pal = psec.PalettesRawBytes[imageNumber];
+                            psec.PalettesRawBytes = new byte[1][];
+                            psec.PalettesRawBytes[0] = pal;
+                        }
+                    }
+
+                    uint fileinfosection = 0;
+                    foreach (var section in Sections)
+                    {
+                        section.Recalculate(0);
+                        if (section.GetType() == typeof(FileInfoSection))
+                        {
+                            fileinfosection = section.GetPartSize();
+                        }
+                    }
+                    uint Filesize = GetTotalFilesize();
+                    foreach (var section in Sections)
+                    {
+                        if (section.GetType() == typeof(EndOfFileSection))
+                        {
+                            section.Recalculate((int)Filesize - 0x10);
+                        }
+                        if (section.GetType() == typeof(EndOfImageSection))
+                        {
+                            section.Recalculate((int)Filesize - 0x20 - (int)fileinfosection);
+                        }
+                    }
+                }
+
+                public List<System.Drawing.Bitmap> ConvertToBitmaps()
+                {
+                    ImageSection isec = null;
+                    PaletteSection psec = null;
+                    foreach (var section in Sections)
+                    {
+                        if (section.GetType() == typeof(ImageSection))
+                        {
+                            isec = (ImageSection)section;
+                        }
+                        if (section.GetType() == typeof(PaletteSection))
+                        {
+                            psec = (PaletteSection)section;
+                        }
+                    }
+
+                    return isec.ConvertToBitmaps(psec);
+                }
+
+                public void HomogenizePalette()
+                {
+                    ImageSection isec = null;
+                    PaletteSection psec = null;
+                    foreach (var section in Sections)
+                    {
+                        if (section.GetType() == typeof(ImageSection))
+                        {
+                            isec = (ImageSection)section;
+                        }
+                        if (section.GetType() == typeof(PaletteSection))
+                        {
+                            psec = (PaletteSection)section;
+                        }
+                    }
+
+                    for (int i = 0; i < isec.ImageCount; ++i)
+                    {
+                        isec.DiscardUnusedColorsPaletted(i, psec, i);
+                    }
+
+                    List<uint> PaletteList = new List<uint>();
+                    foreach (List<uint> pal in psec.Palettes)
+                    {
+                        PaletteList.AddRange(pal);
+                    }
+                    List<uint> NewPalette = PaletteList.Distinct().ToList();
+
+                    int maxColors = 1 << isec.ColorDepth;
+                    if (NewPalette.Count > maxColors)
+                    {
+                        string err = "ERROR: Combined Palette over the amount of allowed colors. (" + NewPalette.Count + " > " + maxColors + ")";
+                        Console.WriteLine(err);
+                        throw new Exception(err);
+                    }
+                    while (NewPalette.Count < maxColors)
+                    {
+                        NewPalette.Add(0);
+                    }
+
+                    for (int i = 0; i < isec.ImageCount; ++i)
+                    {
+                        isec.ConvertToTruecolor(i, psec.Palettes[i]);
+                        isec.CovertToPaletted(i, NewPalette.ToArray());
+                        psec.Palettes[i] = NewPalette.ToList();
+                    }
+                }
+
+
+                public byte[] Serialize()
+                {
+                    List<byte> newfile = new List<byte>(File.Length);
+                    foreach (var section in Sections)
+                    {
+                        newfile.AddRange(section.Serialize());
+                    }
+                    return newfile.ToArray();
+                }
+            }
+
+            #endregion << Gim >>
+        }
+
     }
 
+
+    /// <summary>
+    /// RCO File Class
+    /// Credits to CFW Prophet for his C# tool
+    /// https://github.com/cfwprpht/Simply_Vita_RCO_Extractor
+    /// </summary>
     public class RCO
     {
+        #region << Vars >>
+        private static byte[] gimMagic = new byte[16] { 0x4D, 0x49, 0x47, 0x2E, 0x30, 0x30, 0x2E, 0x31, 0x50, 0x53, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, };
+        private static byte[] vagEnd = new byte[16] { 0x00, 0x07, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, };
+        private static byte[] pngMagic = new byte[16] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52, };
+        private static byte[] ngrcoMagic = new byte[8] { 0x52, 0x43, 0x4F, 0x46, 0x10, 0x01, 0x00, 0x00, };
+        private static byte[] ngCXML = new byte[8] { 0x52, 0x43, 0x53, 0x46, 0x10, 0x01, 0x00, 0x00, };
+        private static byte[] vagMagic = new byte[8] { 0x56, 0x41, 0x47, 0x70, 0x00, 0x02, 0x00, 0x01, };
+        private static byte[] ddsMagic = new byte[4] { 0x44, 0x44, 0x53, 0x20, };
+        private static byte[] wavMagic = new byte[4] { 0x52, 0x49, 0x46, 0x46, };
+        private static byte[] gtfMagic = new byte[4] { 0x02, 0x02, 0x00, 0xFF, };
+        private static byte[] zlibMagic = new byte[3] { 0x00, 0x78, 0xDA, };
+        private static byte[] singlZL = new byte[2] { 0x78, 0xDA, };
+        private static byte[] _vag = new byte[0];
+        private static byte[] _png = new byte[0];
+        private static byte[] _cxml = new byte[0];
+        private static byte[] _zlib = new byte[0];
+        private static byte[] _wav = new byte[0];
+        private static byte[] _gtf = new byte[0];
+        private static byte[] _dds = new byte[0];
+        private static byte[] zlib = new byte[2];
+        private static byte[] vag = new byte[8];
+        private static byte[] cxml = new byte[8];
+        private static byte[] png = new byte[16];
+        private static byte[] temp = new byte[1];
+        private static byte[] dds = new byte[4];
+        private static byte[] gtf = new byte[4];
+        private static byte[] wav = new byte[4];
+        private static int i = 0;
+        private static int dumped = 0;
+        private static int end = 0;
+        private static int count = 0;
+        private static int countVag = 0;
+        private static int countCXML = 0;
+        private static int countGim = 0;
+        private static int countDDS = 0;
+        private static int countPNG = 0;
+        private static int countGTF = 0;
+        private static int countWAV = 0;
+        private static int countZLIB = 0;
+        private static string baseDir = "";
+        private static string convDir = "";
+        private static string corExt = "";
+        private static string move = "";
+        private static string dest = "";
 
+        #endregion << Vars >>
+        /// <summary>
+        /// Compare Byte by Byte or Array by Array
+        /// </summary>
+        /// <param name="bA1">Byte Array 1</param>
+        /// <param name="bA2">Byte Array 2</param>
+        /// <returns>True if both Byte Array's do match</returns>
+        private static bool CompareBytes(byte[] bA1, byte[] bA2)
+        {
+            int s = 0;
+            for (int z = 0; z < bA1.Length; z++)
+            {
+                if (bA1[z] != bA2[z])
+                    s++;
+            }
+
+            if (s == 0)
+                return true;
+
+            return false;
+        }
+
+        public static void DumpRco(string File)
+        {
+            try
+            {
+                // Reading Header
+                byte[] magic = new byte[8];
+                byte[] offset = new byte[4];
+                string outFile = "notDefined";
+                using (BinaryReader br = new BinaryReader(new FileStream(File, FileMode.Open, FileAccess.Read)))
+                {
+                    // Check Magic
+                    Console.Write("Checking Header....");
+                    br.Read(magic, 0, 8);
+
+                    if (!CompareBytes(magic, ngrcoMagic))
+                    {
+                        Console.WriteLine("ERROR: That is not a valid NextGen RCO!\nExiting now...");
+                        Environment.Exit(0);
+                    }
+
+                    Console.Write("Magic OK!\nThat's a NextGen RCO :)\n");
+                    //create folder in which to extact 
+                    //if it exists delete the dam thing xD
+                    if(Directory.Exists(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File)))
+                    {
+                        PS4_Tools.DeleteDirectory(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File));
+                    }
+                    Directory.CreateDirectory(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File));
+
+                    baseDir = PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File) + @"\";
+
+                    // Get Data Table Offset and Length
+                    Console.Write("Reading Offset and Length of Data Table...");
+                    offset = new byte[4];
+                    byte[] eof = new byte[4];
+                    br.BaseStream.Seek(0x48, SeekOrigin.Begin);
+                    br.Read(offset, 0, 4);
+                    br.Read(eof, 0, 4);
+                    Array.Reverse(offset);
+                    Array.Reverse(eof);
+                    Console.Write("done!\n");
+                    Console.WriteLine("Readed Hex value of Offset: 0x" + BitConverter.ToString(offset).Replace("-", ""));
+                    Console.WriteLine("Readed Hex value of Size: 0x" + BitConverter.ToString(eof).Replace("-", ""));
+
+                    // Check for zlib Header '0x78DA' (compression level=9) or VAG & PNG files and write to file
+
+                    end = Convert.ToInt32(BitConverter.ToString(eof).Replace("-", ""), 16);
+                    count = Convert.ToInt32(BitConverter.ToString(offset).Replace("-", ""), 16);
+                    Console.WriteLine("Offset to start from: " + count + " bytes");
+                    Console.WriteLine("Size to Dump: " + end + " bytes");
+                    Console.WriteLine("Searching for ZLib Compressed (Vita) or Non-Compressed (PS4) Files...");
+                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                    br.Read(zlib, 0, 2);
+
+                    // main loop
+                    if (!CompareBytes(zlib, singlZL))
+                    {
+                        temp = new byte[16];
+                        while ((i = br.Read(temp, 0, 16)) != 0)
+                        {
+                            // In case of we now also have PS4 RCO's to work down and to not compromise the routine, we swapped the Extraction here 
+                            // and placed the search for zlib files under the VAG and PNG file search
+                            // For ZLib i removed the second routine that would read after the first Zlib compressed block, adding a 0 byte 0x00 on top of 0x78DA
+                            // Instead of that, we simple counted +1 byte on end of dumping process and continue as usually
+
+                            // Now we first fill the buffer's for the header's which we will compare after
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(vag, 0, 8);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(cxml, 0, 8);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(zlib, 0, 2);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(png, 0, 16);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(dds, 0, 4);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(gtf, 0, 4);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(wav, 0, 4);
+
+                            #region vagExtract
+                            if (CompareBytes(vag, vagMagic))
+                            {
+                                Console.Write("Found a VAG File will start to extract...");
+                                outFile = baseDir + countVag + ".vag";
+                                System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                                {
+                                    bw.Write(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(toWrite, vagEnd))
+                                        {
+                                            if (!CompareBytes(_cxml, ngCXML))
+                                            {
+                                                if (!CompareBytes(toWrite, pngMagic))
+                                                {
+                                                    if (!CompareBytes(_zlib, singlZL))
+                                                    {
+                                                        if (!CompareBytes(_wav, wavMagic))
+                                                        {
+                                                            if (!CompareBytes(_dds, ddsMagic))
+                                                            {
+                                                                if (!CompareBytes(_gtf, gtfMagic))
+                                                                {
+                                                                    bw.Write(toWrite, 0, 16);
+                                                                    dumped += 16;
+                                                                    count += 16;
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                        {
+                                            // We reached the eof and loop was stopped. Now we need to write out the last 16 bytes which build the eof of a VAG file.
+                                            bw.Write(toWrite, 0, 16);
+                                            dumped += 16;
+                                            count += 16;
+                                            break;
+                                        }
+                                    }
+                                    bw.Close();
+                                }
+                                Console.Write("done!\n");
+
+                                // Convert VAG to WAV
+                                //TODO :Create C# Converter
+                                //ConvertVAG(outFile);
+                                countVag++;
+                            }
+                            #endregion vagExtract
+                            #region pngExtract
+                            else if (CompareBytes(png, pngMagic))
+                            {
+                                Console.Write("Found a PNG File will start to extract...");
+                                outFile = baseDir + countPNG + ".png";
+                                System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _vag = new byte[8];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                                {
+                                    // Before we Jump into the Loop we need to write out the first readed 16 bytes which are the PNG Magic.
+                                    // This is needed cause we need to compare for new Magic's / Header's to know if we reached the eof of current file.
+                                    // Otherwise the routine would detect a PNG Magic and stop right after we jumped in, resulting in not extracting the PNG and loosing
+                                    // the allready readed 16 bytes.
+                                    bw.Write(toWrite, 0, 16);
+
+                                    // count up the readed bytes and read next one before the loop start
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    // Now let's start the Loop and extract the PNG
+                                    while (true)
+                                    {
+                                        // Have we reached EOF ?
+                                        if (!CompareBytes(toWrite, pngMagic))
+                                        {
+                                            if (!CompareBytes(_cxml, ngCXML))
+                                            {
+                                                if (!CompareBytes(_zlib, singlZL))
+                                                {
+                                                    if (!CompareBytes(_vag, vagMagic))
+                                                    {
+                                                        if (!CompareBytes(_wav, wavMagic))
+                                                        {
+                                                            if (!CompareBytes(_dds, ddsMagic))
+                                                            {
+                                                                if (!CompareBytes(_gtf, gtfMagic))
+                                                                {
+                                                                    // Write out the readed data
+                                                                    bw.Write(toWrite, 0, 16);
+                                                                    dumped += 16;
+                                                                    count += 16;
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    bw.Close();
+                                }
+                                Console.Write("done!\n");
+                                countPNG++;
+                            }
+                            #endregion pngExtract
+                            #region cxmlExtract
+                            else if (CompareBytes(cxml, ngCXML))
+                            {
+                                Console.Write("Found a CXML File will start to extract...");
+                                outFile = baseDir + countCXML + ".cxml";
+                                System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _vag = new byte[8];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                                {
+                                    bw.Write(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(_cxml, ngCXML))
+                                        {
+                                            if (!CompareBytes(toWrite, pngMagic))
+                                            {
+                                                if (!CompareBytes(_wav, wavMagic))
+                                                {
+                                                    if (!CompareBytes(_dds, ddsMagic))
+                                                    {
+                                                        if (!CompareBytes(_gtf, gtfMagic))
+                                                        {
+                                                            if (!CompareBytes(_zlib, singlZL))
+                                                            {
+                                                                if (!CompareBytes(_vag, vagMagic))
+                                                                {
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        bw.Write(toWrite, 0, 16);
+                                                                        dumped += 16;
+                                                                        count += 16;
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    bw.Close();
+                                }
+                                Console.Write("done!\n");
+                                countCXML++;
+                            }
+                            #endregion cxmlExtract
+                            #region ddsExtract
+                            else if (CompareBytes(dds, ddsMagic))
+                            {
+                                Console.Write("Found a DDS File will start to extract...");
+                                outFile = baseDir + countDDS + ".dds";
+                                System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _vag = new byte[8];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                                {
+                                    bw.Write(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(_cxml, ngCXML))
+                                        {
+                                            if (!CompareBytes(toWrite, pngMagic))
+                                            {
+                                                if (!CompareBytes(_wav, wavMagic))
+                                                {
+                                                    if (!CompareBytes(_dds, ddsMagic))
+                                                    {
+                                                        if (!CompareBytes(_gtf, gtfMagic))
+                                                        {
+                                                            if (!CompareBytes(_zlib, singlZL))
+                                                            {
+                                                                if (!CompareBytes(_vag, vagMagic))
+                                                                {
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        bw.Write(toWrite, 0, 16);
+                                                                        dumped += 16;
+                                                                        count += 16;
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    bw.Close();
+                                }
+                                Console.Write("done!\n");
+                                countDDS++;
+                            }
+                            #endregion ddsExtract
+                            #region gtfExtract
+                            else if (CompareBytes(gtf, gtfMagic))
+                            {
+                                Console.Write("Found a GTF File will start to extract...");
+                                outFile = baseDir + countGTF + ".gtf";
+                                System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _vag = new byte[8];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                                {
+                                    bw.Write(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(_cxml, ngCXML))
+                                        {
+                                            if (!CompareBytes(toWrite, pngMagic))
+                                            {
+                                                if (!CompareBytes(_wav, wavMagic))
+                                                {
+                                                    if (!CompareBytes(_dds, ddsMagic))
+                                                    {
+                                                        if (!CompareBytes(_gtf, gtfMagic))
+                                                        {
+                                                            if (!CompareBytes(_zlib, singlZL))
+                                                            {
+                                                                if (!CompareBytes(_vag, vagMagic))
+                                                                {
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        bw.Write(toWrite, 0, 16);
+                                                                        dumped += 16;
+                                                                        count += 16;
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    bw.Close();
+                                }
+                                Console.Write("done!\n");
+                                countGTF++;
+                            }
+                            #endregion gtfExtract
+                            #region wavExtract
+                            else if (CompareBytes(wav, wavMagic))
+                            {
+                                Console.Write("Found a WAV File will start to extract...");
+                                outFile = baseDir + countWAV + ".wav";
+                                System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _vag = new byte[8];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                                {
+                                    bw.Write(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(_cxml, ngCXML))
+                                        {
+                                            if (!CompareBytes(toWrite, pngMagic))
+                                            {
+                                                if (!CompareBytes(_wav, wavMagic))
+                                                {
+                                                    if (!CompareBytes(_dds, ddsMagic))
+                                                    {
+                                                        if (!CompareBytes(_gtf, gtfMagic))
+                                                        {
+                                                            if (!CompareBytes(_zlib, singlZL))
+                                                            {
+                                                                if (!CompareBytes(_vag, vagMagic))
+                                                                {
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        bw.Write(toWrite, 0, 16);
+                                                                        dumped += 16;
+                                                                        count += 16;
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    bw.Close();
+                                }
+                                Console.Write("done!\n");
+                                countWAV++;
+                            }
+                            #endregion wavExtract
+                            else
+                            {
+                                Console.WriteLine("\nFound a new File which i don't know what to do with !\nPlease contact the Developer @ www.playstationhax.it");
+                                break;
+                            }
+                            if (dumped == end)
+                                break;
+                            else
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                        }
+                    }
+                    else if (CompareBytes(zlib, singlZL))
+                    {
+                        while ((i = br.Read(temp, 0, 1)) != 0)
+                        {
+                            #region zlibExtract
+                            _zlib = new byte[3];
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(_zlib, 0, 3);
+                            Console.Write("Found a ZLib Compressed File, starting to extract...");
+                            byte[] toWrite = new byte[1];
+                            outFile = baseDir + countZLIB + ".compressed";
+                            corExt = "";
+                            System.IO.File.Create(outFile).Close();
+
+                            using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                            {
+                                while (true)
+                                {
+                                    if (!CompareBytes(_zlib, zlibMagic))  // Next Byte is not the start of a Header from a other file ?
+                                    {
+                                        // write out data to file
+                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                        br.Read(toWrite, 0, 1);
+                                        bw.Write(toWrite, 0, 1);
+
+                                        // Count up 1 and read the next byte(s) before the loop start again
+                                        count++;
+                                        dumped++;
+
+                                        // Have we reached the end of data table?
+                                        if (dumped != end)
+                                        {
+                                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                            br.Read(_zlib, 0, 3);
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    else
+                                        break;
+                                }
+
+                                // In case of we need to compare zlibHeader with a additional 0x00 on top to know if it is really a zlibHeader and not just a 0x78DA data value
+                                // we add that 0x00 on end of the extracted file and count dumped var +1
+                                if (CompareBytes(_zlib, zlibMagic))
+                                {
+                                    toWrite = new byte[1];
+                                    bw.Write(toWrite, 0, 1);
+                                    dumped++;
+                                    count++;
+                                    countZLIB++;
+                                }
+                                bw.Close();
+                            }
+                            Console.Write("done!\n");
+
+                            // Decompress dumped File
+                            if (outFile == "notDefined")
+                                Console.WriteLine("Found a Unknowen File!\nPlease contact the Developer on: www.playstationhax.it\n");
+                            else
+                                //ZLibDeCompress(outFile);
+
+                            // Check Header of Decompressed File and rename
+                            Console.Write("Checking Header of Decompressed File...");
+                            outFile = outFile + ".decompressed";
+                            bool gHeader = false;
+                            bool dHeader = false;
+                            using (BinaryReader _br = new BinaryReader(new FileStream(outFile, FileMode.Open, FileAccess.Read)))
+                            {
+                                byte[] xmlHeader = new byte[8];
+                                byte[] gimHeader = new byte[16];
+                                byte[] ddsHeader = new byte[4];
+                                _br.Read(xmlHeader, 0, 8);
+                                _br.BaseStream.Seek(0, SeekOrigin.Begin);
+                                _br.Read(gimHeader, 0, 16);
+                                _br.BaseStream.Seek(0, SeekOrigin.Begin);
+                                _br.Read(ddsHeader, 0, 4);
+
+                                if (CompareBytes(xmlHeader, ngCXML))
+                                {
+                                    countCXML++;
+                                    Console.Write("done!\nIt's a CXML Container.\n");
+                                    corExt = outFile.Replace(".compressed.decompressed", ".cxml");
+
+                                }
+                                else if (CompareBytes(gimHeader, gimMagic))
+                                {
+                                    countGim++;
+                                    gHeader = true;
+                                    Console.Write("done!\nIt's a GIM File.\n");
+                                    corExt = outFile.Replace(".compressed.decompressed", ".gim");
+                                    move = corExt.Replace(".gim", ".png");
+                                    dest = convDir + countGim + ".png";
+                                }
+                                else if (CompareBytes(ddsHeader, ddsMagic))
+                                {
+                                    countDDS++;
+                                    dHeader = true;
+                                    Console.Write("done!\nIt's a DDS Container.\n");
+                                    corExt = outFile.Replace(".compressed.decompressed", ".dds");
+                                    move = corExt.Replace(".dds", ".gtf");
+                                    dest = convDir + countDDS + ".gtf";
+                                }
+                                else
+                                    Console.Write("error!\nUnknown Header, please contact the developer...\n");
+                                _br.Close();
+                            }
+
+                            // Finally Rename to the correct extension
+                            Console.Write("Renaming " + "'" + outFile.Replace(baseDir, "") + "'" + " to " + "'" + corExt.Replace(baseDir, "") + "'...");
+                            System.IO.File.Move(outFile, corExt);
+                            Console.Write("done!\n");
+
+                            // Convert GIM to PNG or DDS to GTF
+                            if (gHeader)
+                            {
+                                //ConvertGIM(corExt);
+                            }
+                            else if (dHeader)
+                            {
+                                //  ConvertDDS(corExt);
+                                Image.DDS.SavePNGFromDDS(corExt, corExt.Replace(".dds", ".png"));
+                            }
+                            #endregion ZlibExtract
+                            // Have we dumped all data?
+                            if (dumped == end)
+                            {
+                                Console.Write("Moving Converted Files to Extracted Folder...");
+                                string fi = "";
+                                string final = "";
+                                string[] files = Directory.GetFiles(baseDir);
+
+                                foreach (string s in files)
+                                {
+                                    if (s.Contains(".png") || s.Contains(".gtf"))
+                                    {
+                                        fi = s.Replace(baseDir, "");
+                                        final = convDir + fi;
+                                        System.IO.File.Move(s, final);
+                                    }
+                                }
+                                Console.Write("Done!\n");
+                                break;
+                            }
+                            else
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                        }
+                        br.Close();
+                    }
+                    else
+                        Console.WriteLine("\nSomthing went wrong!\nPlease contact the developer @ www.playstationhax.it\nERROR: 1");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\n\nERROR:\n" + e.ToString());
+                //Environment.Exit(0);
+            }
+        }
     }
 
     public class SaveData
@@ -214,247 +2463,661 @@ namespace PS4_Tools
      *          
      *********************************************************/
 
-    public class PKG
+public class PKG
     {
-        /// <summary>
-        /// This Uses SCE Tools PLease Try and avoid this
-        /// Will be intigrating maxtrons pkg tools
-        /// </summary>
-        /// <param name="FilePath">PS4 PKG File Path</param>
-        /// <returns></returns>
-        public static List<string> ReadAllUnprotectedData(string FilePath)
+
+        #region << Official >>
+        public class Official
         {
-            File.WriteAllBytes(PS4_Tools.AppCommonPath() + "ext.zip", Properties.Resources.ext);
-            File.WriteAllBytes(PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe", Properties.Resources.orbis_pub_cmd);
-
-            if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\ext\"))
-            {          
-               ZipFile.ExtractToDirectory(PS4_Tools.AppCommonPath() + "ext.zip", PS4_Tools.AppCommonPath());
-            }
-            
-
-
-            List<string> rtnlist = new List<string>();
-
-            ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe ";
-            start.Arguments = "img_file_list  --no_passcode --oformat recursive \""+FilePath+"\"";
-            start.UseShellExecute = false;
-            start.RedirectStandardOutput = true;
-            start.CreateNoWindow = true;
-            using (Process process = Process.Start(start))
+            /// <summary>
+            /// This Uses SCE Tools PLease Try and avoid this
+            /// Will be intigrating maxtrons pkg tools
+            /// </summary>
+            /// <param name="FilePath">PS4 PKG File Path</param>
+            /// <returns></returns>
+            public static List<string> ReadAllUnprotectedData(string FilePath)
             {
-                process.ErrorDataReceived += delegate {
+                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "ext.zip", Properties.Resources.ext);
+                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe", Properties.Resources.orbis_pub_cmd);
 
-                };
-                using (StreamReader reader = process.StandardOutput)
+                if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\ext\"))
                 {
-                    string result = reader.ReadToEnd();
-                    string[] splitresult = result.Split('\n');
-                    for (int i = 0; i < splitresult.Length; i++)
+                    ZipFile.ExtractToDirectory(PS4_Tools.AppCommonPath() + "ext.zip", PS4_Tools.AppCommonPath());
+                }
+
+
+
+                List<string> rtnlist = new List<string>();
+
+                ProcessStartInfo start = new ProcessStartInfo();
+                start.FileName = PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe ";
+                start.Arguments = "img_file_list  --no_passcode --oformat recursive \"" + FilePath + "\"";
+                start.UseShellExecute = false;
+                start.RedirectStandardOutput = true;
+                start.CreateNoWindow = true;
+                using (Process process = Process.Start(start))
+                {
+                    process.ErrorDataReceived += delegate
                     {
-                        rtnlist.Add(splitresult[i]);
+
+                    };
+                    using (StreamReader reader = process.StandardOutput)
+                    {
+                        string result = reader.ReadToEnd();
+                        string[] splitresult = result.Split('\n');
+                        for (int i = 0; i < splitresult.Length; i++)
+                        {
+                            rtnlist.Add(splitresult[i]);
+                        }
+
+                        // return result;
                     }
-                    
-                   // return result;
                 }
+
+
+                return rtnlist;
             }
 
 
-            return rtnlist;
-        }
-
-        /// <summary>
-        /// GP4 Project Class
-        /// </summary>
-        public class GP4
-        {
-
-            [XmlRoot(ElementName = "package")]
-            public class Package
+            public class Update_Structure
             {
-                [XmlAttribute(AttributeName = "content_id")]
-                public string Content_id { get; set; }
-                [XmlAttribute(AttributeName = "passcode")]
-                public string Passcode { get; set; }
-                [XmlAttribute(AttributeName = "storage_type")]
-                public string Storage_type { get; set; }
-                [XmlAttribute(AttributeName = "app_type")]
-                public string App_type { get; set; }
-            }
-
-            [XmlRoot(ElementName = "chunk")]
-            public class Chunk
-            {
-                [XmlAttribute(AttributeName = "id")]
-                public string Id { get; set; }
-                [XmlAttribute(AttributeName = "layer_no")]
-                public string Layer_no { get; set; }
-                [XmlAttribute(AttributeName = "label")]
-                public string Label { get; set; }
-            }
-
-            [XmlRoot(ElementName = "chunks")]
-            public class Chunks
-            {
-                [XmlElement(ElementName = "chunk")]
-                public Chunk Chunk { get; set; }
-            }
-
-            [XmlRoot(ElementName = "scenario")]
-            public class Scenario
-            {
-                [XmlAttribute(AttributeName = "id")]
-                public string Id { get; set; }
-                [XmlAttribute(AttributeName = "type")]
-                public string Type { get; set; }
-                [XmlAttribute(AttributeName = "initial_chunk_count")]
-                public string Initial_chunk_count { get; set; }
-                [XmlAttribute(AttributeName = "label")]
-                public string Label { get; set; }
-                [XmlText]
-                public string Text { get; set; }
-            }
-
-            [XmlRoot(ElementName = "scenarios")]
-            public class Scenarios
-            {
-                [XmlElement(ElementName = "scenario")]
-                public Scenario Scenario { get; set; }
-                [XmlAttribute(AttributeName = "default_id")]
-                public string Default_id { get; set; }
-            }
-
-            [XmlRoot(ElementName = "chunk_info")]
-            public class Chunk_info
-            {
-                [XmlElement(ElementName = "chunks")]
-                public Chunks Chunks { get; set; }
-                [XmlElement(ElementName = "scenarios")]
-                public Scenarios Scenarios { get; set; }
-                [XmlAttribute(AttributeName = "chunk_count")]
-                public string Chunk_count { get; set; }
-                [XmlAttribute(AttributeName = "scenario_count")]
-                public string Scenario_count { get; set; }
-            }
-
-            [XmlRoot(ElementName = "volume")]
-            public class Volume
-            {
-                [XmlElement(ElementName = "volume_type")]
-                public string Volume_type { get; set; }
-                [XmlElement(ElementName = "volume_id")]
-                public string Volume_id { get; set; }
-                [XmlElement(ElementName = "volume_ts")]
-                public string Volume_ts { get; set; }
-                [XmlElement(ElementName = "package")]
-                public Package Package { get; set; }
-                [XmlElement(ElementName = "chunk_info")]
-                public Chunk_info Chunk_info { get; set; }
-            }
-
-            [XmlRoot(ElementName = "file")]
-            public class File
-            {
-                [XmlAttribute(AttributeName = "targ_path")]
-                public string Targ_path { get; set; }
-                [XmlAttribute(AttributeName = "orig_path")]
-                public string Orig_path { get; set; }
-            }
-
-            [XmlRoot(ElementName = "files")]
-            public class Files
-            {
-                [XmlElement(ElementName = "file")]
-                public List<File> File { get; set; }
-                [XmlAttribute(AttributeName = "img_no")]
-                public string Img_no { get; set; }
-            }
-
-            [XmlRoot(ElementName = "dir")]
-            public class Dir
-            {
-                [XmlAttribute(AttributeName = "targ_name")]
-                public string Targ_name { get; set; }
-            }
-
-            [XmlRoot(ElementName = "rootdir")]
-            public class Rootdir
-            {
-                [XmlElement(ElementName = "dir")]
-                public List<Dir> Dir { get; set; }
-            }
-
-            [XmlRoot(ElementName = "psproject")]
-            public class Psproject
-            {
-                [XmlElement(ElementName = "volume")]
-                public Volume Volume { get; set; }
-                [XmlElement(ElementName = "files")]
-                public Files Files { get; set; }
-                [XmlElement(ElementName = "rootdir")]
-                public Rootdir Rootdir { get; set; }
-                [XmlAttribute(AttributeName = "fmt")]
-                public string Fmt { get; set; }
-                [XmlAttribute(AttributeName = "version")]
-                public string Version { get; set; }
-            }
-
-            /// <summary>
-            /// Read a PS4 GP4 
-            /// </summary>
-            /// <param name="gp4filelocation">gp4 File Location</param>
-            /// <returns></returns>
-            public static Psproject ReadGP4(string gp4filelocation)
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(Psproject));
-                using (FileStream fileStream = new FileStream(gp4filelocation, FileMode.Open))
+                [ XmlRoot(ElementName = "titlepatch")]
+                public class Titlepatch
                 {
-                    Psproject result = (Psproject)serializer.Deserialize(fileStream);
-                    return result;
-                }
-            }
 
-            /// <summary>
-            /// Read a PS4 PG4
-            /// </summary>
-            /// <param name="GP4File">Gp4 File Stream</param>
-            /// <returns></returns>
-            public static Psproject ReadGP4(Stream GP4File)
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(Psproject));
-                using (TextReader reader = new StreamReader(GP4File))
+                    [XmlElement(ElementName = "tag")]
+                    public Tag Tag { get; set; }
+                    [XmlAttribute(AttributeName = "titleid")]
+                    public string Titleid { get; set; }
+                }
+
+                [ XmlRoot(ElementName = "delta_info_set")]
+                public class Delta_info_set
                 {
-                    Psproject result = (Psproject)serializer.Deserialize(reader);
-                    return result;
+                    [XmlAttribute(AttributeName = "url")]
+                    public string Url { get; set; }
                 }
+
+                [XmlRoot(ElementName = "paramsfo")]
+                public class Paramsfo
+                {
+                    [XmlElement(ElementName = "title")]
+                    public string Title { get; set; }
+                    [XmlElement(ElementName = "title_00")]
+                    public string Title_00 { get; set; }
+                }
+
+                public class Piece
+                {
+                    public string url { get; set; }
+                    public int fileOffset { get; set; }
+                    public long fileSize { get; set; }
+                    public string hashValue { get; set; }
+                }
+
+                public class Manifest_Item
+                {
+                    public long originalFileSize { get; set; }
+                    public string packageDigest { get; set; }
+                    public int numberOfSplitFiles { get; set; }
+                    public List<Piece> pieces { get; set; }
+                }
+
+                [XmlRoot(ElementName = "package")]
+                public class Package
+                {
+                    [XmlElement(ElementName = "delta_info_set")]
+                    public Delta_info_set Delta_info_set { get; set; }
+                    [XmlElement(ElementName = "paramsfo")]
+                    public Paramsfo Paramsfo { get; set; }
+                    [XmlAttribute(AttributeName = "version")]
+                    public string Version { get; set; }
+                    [XmlAttribute(AttributeName = "size")]
+                    public string Size { get; set; }
+                    [XmlAttribute(AttributeName = "digest")]
+                    public string Digest { get; set; }
+                    [XmlAttribute(AttributeName = "manifest_url")]
+                    public string Manifest_url { get; set; }
+                    [XmlAttribute(AttributeName = "content_id")]
+                    public Manifest_Item Manifest_item { get; set; }
+                    public string Content_id { get; set; }
+                    [XmlAttribute(AttributeName = "system_ver")]
+                    public string System_ver { get; set; }
+                    [XmlAttribute(AttributeName = "type")]
+                    public string Type { get; set; }
+                    [XmlAttribute(AttributeName = "remaster")]
+                    public string Remaster { get; set; }
+                    [XmlAttribute(AttributeName = "patchgo")]
+                    public string Patchgo { get; set; }
+                }
+
+                [XmlRoot(ElementName = "latest_playgo_manifest")]
+                public class Latest_playgo_manifest
+                {
+                    [XmlAttribute(AttributeName = "url")]
+                    public string Url { get; set; }
+
+                    public PKG.SceneRelated.GP4.Psproject PlayGoPG4 { get; set; }
+                }
+                
+
+                [XmlRoot(ElementName = "tag")]
+                public class Tag
+                {
+                    [XmlElement(ElementName = "package")]
+                    public Package Package { get; set; }
+                    [XmlElement(ElementName = "latest_playgo_manifest")]
+                    public Latest_playgo_manifest Latest_playgo_manifest { get; set; }
+                    [XmlAttribute(AttributeName = "name")]
+                    public string Name { get; set; }
+                    [XmlAttribute(AttributeName = "mandatory")]
+                    public string Mandatory { get; set; }
+                }
+
+               
             }
 
-            /// <summary>
-            /// Save GP4
-            /// </summary>
-            /// <param name="savelocation">GP4 File Location</param>
-            /// <param name="gp4project">gp4 Project</param>
-            public static void SaveGP4(string savelocation,Psproject gp4project)
+            public static Update_Structure.Titlepatch CheckForUpdate(string TitleID)
             {
+                /*Check for update to ps game*/
+
+                /*HMAC Create new url*/
+                System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+                string nptitle = "np_" + TitleID;
+                byte[] keyByte = Util.Utils.Hex2Binary("AD62E37F905E06BC19593142281C112CEC0E7EC3E97EFDCAEFCDBAAFA6378D84");
+                HMACSHA256 hmacsha256 = new HMACSHA256(keyByte);
+                byte[] messageBytes = encoding.GetBytes(nptitle);
+                byte[] hashnptitle = hmacsha256.ComputeHash(messageBytes);
+                string hash = Util.Utils.ByteToString(hashnptitle);
+
+               // return;
+                //var test = new SHA256()
+
+                /*Get XML String */
+                string urlofupdatexml = "http://gs-sec.ww.np.dl.playstation.net/plo/np/" + TitleID + "/" + hash.ToLower() + "/" + TitleID + "-ver.xml";
+
                 try
                 {
-                    var xmlserializer = new XmlSerializer(typeof(Psproject));
-                    var stringWriter = new StringWriter();
-                    using (var writer = XmlWriter.Create(stringWriter))
+                    using (WebClient client = new WebClient())
                     {
-                        xmlserializer.Serialize(writer, gp4project);
-                        string savestring  =stringWriter.ToString();
-                        System.IO.File.WriteAllText(savelocation, savestring);
+                        //add protocols incase sony wants to add them
+                        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
+                        //add a header cause sometimes they check this setting 
+                        //also we can make the Header match the ps4 if need be
+                        client.Headers.Add("user-agent", "Only a test!");
+
+                        //downlad string to xml
+                        //string xmlheader = "<?xml version='1.0'?>";
+
+                        string xmlfilecontent = client.DownloadString(urlofupdatexml);
+                        XmlDocument xmldoc = new XmlDocument();
+                        xmldoc.LoadXml(xmlfilecontent);
+
+                        /*XML Node List*/
+                        XmlNodeList xmlnode;
+                        
+                        /*we need to load all the info via nodes ext ext */
+
+                        XmlElement root = xmldoc.DocumentElement;
+
+                        Update_Structure updatstruct = new Update_Structure();
+                        
+                        /*Get TitlePatch*/
+                        Update_Structure.Titlepatch titlepatch = new Update_Structure.Titlepatch();
+                        XmlNodeList test = xmldoc.GetElementsByTagName("titlepatch");
+                        /*get attributes*/
+                        titlepatch.Titleid = test[0].Attributes["titleid"].Value.ToString();
+
+                        /*get tag*/
+                        Update_Structure.Tag tag = new Update_Structure.Tag();
+                        XmlNodeList tagnodelist = xmldoc.GetElementsByTagName("tag");
+                        tag.Name = tagnodelist[0].Attributes["name"].Value.ToString();
+                        tag.Mandatory = tagnodelist[0].Attributes["mandatory"].Value.ToString();
+
+                        /*get package*/
+                        Update_Structure.Package pkg = new Update_Structure.Package();
+                        XmlNodeList pkgnodelist = xmldoc.GetElementsByTagName("package");
+                        /*get attributes*/
+                        pkg.Version = pkgnodelist[0].Attributes["version"].Value.ToString();
+                        pkg.Size = pkgnodelist[0].Attributes["size"].Value.ToString();
+                        pkg.Digest = pkgnodelist[0].Attributes["digest"].Value.ToString();
+                        pkg.Manifest_url = pkgnodelist[0].Attributes["manifest_url"].Value.ToString();
+
+                        /*we add a manaifest item reader and deserliezer here*/
+                        Stream stream = client.OpenRead(pkg.Manifest_url);
+                        StreamReader sr = new StreamReader(stream);
+                        string json = sr.ReadToEnd();
+                        pkg.Manifest_item = JsonConvert.DeserializeObject<Update_Structure.Manifest_Item>(json);
+
+                        /*Content ID*/
+                        pkg.Content_id = pkgnodelist[0].Attributes["content_id"].Value.ToString();
+
+                        pkg.System_ver = pkgnodelist[0].Attributes["system_ver"].Value.ToString();
+
+                        pkg.Type = pkgnodelist[0].Attributes["type"].Value.ToString();
+
+                        pkg.Remaster = pkgnodelist[0].Attributes["remaster"].Value.ToString();
+
+                        pkg.Patchgo = pkgnodelist[0].Attributes["patchgo"].Value.ToString();
+
+                        /*Delta Info Patch*/
+
+                        Update_Structure.Delta_info_set deltainfo = new Update_Structure.Delta_info_set();
+                        XmlNodeList deltanodelist = xmldoc.GetElementsByTagName("delta_info_set");
+
+                        deltainfo.Url = deltanodelist[0].Attributes["url"].Value.ToString();
+                        
+                        /*Param Sfo*/
+                        Update_Structure.Paramsfo paramsfo = new Update_Structure.Paramsfo();
+                        XmlNodeList sfotitlenodelist = xmldoc.GetElementsByTagName("title");
+                        XmlNodeList sfotitl00enodelist = xmldoc.GetElementsByTagName("title");
+                        paramsfo.Title = sfotitlenodelist[0].InnerText.ToString();
+                        paramsfo.Title_00 = sfotitl00enodelist[0].InnerText.ToString();
+
+                        /**/
+                        Update_Structure.Latest_playgo_manifest playgomani = new Update_Structure.Latest_playgo_manifest();
+                        XmlNodeList playgoenodelist = xmldoc.GetElementsByTagName("latest_playgo_manifest");
+                        playgomani.Url= playgoenodelist[0].Attributes["url"].Value.ToString();
+
+                        /*we can set the psproject here as well*/
+                        stream = client.OpenRead(playgomani.Url);
+                        playgomani.PlayGoPG4 = PKG.SceneRelated.GP4.ReadGP4(stream);
+
+
+                        /*set item to main reverse order */
+
+                        pkg.Paramsfo = paramsfo;
+                        pkg.Delta_info_set = deltainfo;
+                        tag.Package = pkg;
+                        tag.Latest_playgo_manifest = playgomani;
+                        titlepatch.Tag = tag;
+
+                        return titlepatch;
+
+                        Regex regex = new Regex("<titlepatch>(.*?)</titlepatch>", RegexOptions.Singleline);
+
+                        /*i have commented this out as for some or other reason I can't get the deserielizer to work */
+                        #region << Deserlizers not working >>
+                        //var item = DeserializeXMLFileToObject<Update_Structure>(@"C:\Users\3deEchelon\Downloads\CUSA07708-ver.xml");
+
+                        //using (XmlReader reader = new XmlNodeReader(xml))
+                        //{
+                        //    reader.Read();
+                        //    reader.ReadInnerXml();
+                        //    var serializer = new XmlSerializer(typeof(Update_Structure), new XmlRootAttribute("titlepatch"));
+                        //    var result_Structure = serializer.Deserialize(reader);
+                        //}
+
+                        //XmlSerializer serialize2r = new XmlSerializer(typeof(Update_Structure), new XmlRootAttribute("titlepatch"));
+                        //using (FileStream fileStream = new FileStream(@"test.file", FileMode.Open))
+                        //{
+                        //    Update_Structure result = (Update_Structure)serialize2r.Deserialize(fileStream);
+                        //    return result;
+                        //}
+
+
+                        //XmlSerializer serializer = new XmlSerializer(typeof(Update_Structure));
+                        //using (TextReader reader = new StringReader(xml.OuterXml))
+                        //{
+                        //    Update_Structure result = (Update_Structure)serializer.Deserialize(reader);
+                        //    return result;
+
+                        //}
+
+                        #endregion << Deserlizers not working >>
                     }
+
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("An error occurred", ex);
+
+                }
+                return null;
+            }
+
+            public static T DeserializeXMLFileToObject<T>(string XmlFilename)
+            {
+                T returnObject = default(T);
+                if (string.IsNullOrEmpty(XmlFilename)) return default(T);
+
+                try
+                {
+                    StreamReader xmlStream = new StreamReader(XmlFilename);
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+                    returnObject = (T)serializer.Deserialize(xmlStream);
+                }
+                catch (Exception ex)
+                {
+                    //ExceptionLogger.WriteExceptionToConsole(ex, DateTime.Now);
+                }
+                return returnObject;
+            }
+
+
+        }
+
+        #endregion << Official >>
+
+        #region << Scene Related >>
+
+        public class SceneRelated
+        {
+            /// <summary>
+            /// GP4 Project Class
+            /// </summary>
+            public class GP4
+            {
+
+                [XmlRoot(ElementName = "package")]
+                public class Package
+                {
+                    [XmlAttribute(AttributeName = "content_id")]
+                    public string Content_id { get; set; }
+                    [XmlAttribute(AttributeName = "passcode")]
+                    public string Passcode { get; set; }
+                    [XmlAttribute(AttributeName = "storage_type")]
+                    public string Storage_type { get; set; }
+                    [XmlAttribute(AttributeName = "app_type")]
+                    public string App_type { get; set; }
+                }
+
+                [XmlRoot(ElementName = "chunk")]
+                public class Chunk
+                {
+                    [XmlAttribute(AttributeName = "id")]
+                    public string Id { get; set; }
+                    [XmlAttribute(AttributeName = "layer_no")]
+                    public string Layer_no { get; set; }
+                    [XmlAttribute(AttributeName = "label")]
+                    public string Label { get; set; }
+                }
+
+                [XmlRoot(ElementName = "chunks")]
+                public class Chunks
+                {
+                    [XmlElement(ElementName = "chunk")]
+                    public Chunk Chunk { get; set; }
+                }
+
+                [XmlRoot(ElementName = "scenario")]
+                public class Scenario
+                {
+                    [XmlAttribute(AttributeName = "id")]
+                    public string Id { get; set; }
+                    [XmlAttribute(AttributeName = "type")]
+                    public string Type { get; set; }
+                    [XmlAttribute(AttributeName = "initial_chunk_count")]
+                    public string Initial_chunk_count { get; set; }
+                    [XmlAttribute(AttributeName = "label")]
+                    public string Label { get; set; }
+                    [XmlText]
+                    public string Text { get; set; }
+                }
+
+                [XmlRoot(ElementName = "scenarios")]
+                public class Scenarios
+                {
+                    [XmlElement(ElementName = "scenario")]
+                    public Scenario Scenario { get; set; }
+                    [XmlAttribute(AttributeName = "default_id")]
+                    public string Default_id { get; set; }
+                }
+
+                [XmlRoot(ElementName = "chunk_info")]
+                public class Chunk_info
+                {
+                    [XmlElement(ElementName = "chunks")]
+                    public Chunks Chunks { get; set; }
+                    [XmlElement(ElementName = "scenarios")]
+                    public Scenarios Scenarios { get; set; }
+                    [XmlAttribute(AttributeName = "chunk_count")]
+                    public string Chunk_count { get; set; }
+                    [XmlAttribute(AttributeName = "scenario_count")]
+                    public string Scenario_count { get; set; }
+                }
+
+                [XmlRoot(ElementName = "volume")]
+                public class Volume
+                {
+                    [XmlElement(ElementName = "volume_type")]
+                    public string Volume_type { get; set; }
+                    [XmlElement(ElementName = "volume_id")]
+                    public string Volume_id { get; set; }
+                    [XmlElement(ElementName = "volume_ts")]
+                    public string Volume_ts { get; set; }
+                    [XmlElement(ElementName = "package")]
+                    public Package Package { get; set; }
+                    [XmlElement(ElementName = "chunk_info")]
+                    public Chunk_info Chunk_info { get; set; }
+                }
+
+                [XmlRoot(ElementName = "file")]
+                public class File
+                {
+                    [XmlAttribute(AttributeName = "targ_path")]
+                    public string Targ_path { get; set; }
+                    [XmlAttribute(AttributeName = "orig_path")]
+                    public string Orig_path { get; set; }
+                }
+
+                [XmlRoot(ElementName = "files")]
+                public class Files
+                {
+                    [XmlElement(ElementName = "file")]
+                    public List<File> File { get; set; }
+                    [XmlAttribute(AttributeName = "img_no")]
+                    public string Img_no { get; set; }
+                }
+
+                [XmlRoot(ElementName = "dir")]
+                public class Dir
+                {
+                    [XmlAttribute(AttributeName = "targ_name")]
+                    public string Targ_name { get; set; }
+                }
+
+                [XmlRoot(ElementName = "rootdir")]
+                public class Rootdir
+                {
+                    [XmlElement(ElementName = "dir")]
+                    public List<Dir> Dir { get; set; }
+                }
+
+                [XmlRoot(ElementName = "psproject")]
+                public class Psproject
+                {
+                    [XmlElement(ElementName = "volume")]
+                    public Volume Volume { get; set; }
+                    [XmlElement(ElementName = "files")]
+                    public Files Files { get; set; }
+                    [XmlElement(ElementName = "rootdir")]
+                    public Rootdir Rootdir { get; set; }
+                    [XmlAttribute(AttributeName = "fmt")]
+                    public string Fmt { get; set; }
+                    [XmlAttribute(AttributeName = "version")]
+                    public string Version { get; set; }
+                }
+
+                /// <summary>
+                /// Read a PS4 GP4 
+                /// </summary>
+                /// <param name="gp4filelocation">gp4 File Location</param>
+                /// <returns></returns>
+                public static Psproject ReadGP4(string gp4filelocation)
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Psproject));
+                    using (FileStream fileStream = new FileStream(gp4filelocation, FileMode.Open))
+                    {
+                        Psproject result = (Psproject)serializer.Deserialize(fileStream);
+                        return result;
+                    }
+                }
+
+                /// <summary>
+                /// Read a PS4 PG4
+                /// </summary>
+                /// <param name="GP4File">Gp4 File Stream</param>
+                /// <returns></returns>
+                public static Psproject ReadGP4(Stream GP4File)
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Psproject));
+                    using (TextReader reader = new StreamReader(GP4File))
+                    {
+                        Psproject result = (Psproject)serializer.Deserialize(reader);
+                        return result;
+                    }
+                }
+
+                /// <summary>
+                /// Save GP4
+                /// </summary>
+                /// <param name="savelocation">GP4 File Location</param>
+                /// <param name="gp4project">gp4 Project</param>
+                public static void SaveGP4(string savelocation, Psproject gp4project)
+                {
+                    try
+                    {
+                        var xmlserializer = new XmlSerializer(typeof(Psproject));
+                        var stringWriter = new StringWriter();
+                        using (var writer = XmlWriter.Create(stringWriter))
+                        {
+                            xmlserializer.Serialize(writer, gp4project);
+                            string savestring = stringWriter.ToString();
+                            System.IO.File.WriteAllText(savelocation, savestring);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("An error occurred", ex);
+                    }
+                }
+
+            }
+
+          
+
+            public class IDS
+            {
+
+            }
+
+            public class PARAM_SFO
+            {
+                public static Param_SFO.PARAM_SFO Get_Param_SFO(string pkgfile)
+                {
+                    //PARAM_SFO 
+                    List<string> lstoffiles = Official.ReadAllUnprotectedData(pkgfile);
+
+                    if (lstoffiles.Contains("Sc0/nptitle.dat\r"))
+                    {
+                        if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\Working"))
+                        {
+                            Directory.CreateDirectory(PS4_Tools.AppCommonPath() + @"\Working");
+                        }
+
+                        //extract files to temp folder
+                        ProcessStartInfo start = new ProcessStartInfo();
+                        start.FileName = PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe ";
+                        start.Arguments = "img_extract --no_passcode \"" + pkgfile + "\" \"" + PS4_Tools.AppCommonPath() + @"Working" + "\"";
+                        start.UseShellExecute = false;
+                        start.RedirectStandardOutput = true;
+                        start.CreateNoWindow = true;
+                        using (Process process = Process.Start(start))
+                        {
+                            process.ErrorDataReceived += delegate
+                            {
+
+                            };
+                            using (StreamReader reader = process.StandardOutput)
+                            {
+                                string result = reader.ReadToEnd();
+
+
+                                // return result;
+                            }
+                        }
+
+                        return new Param_SFO.PARAM_SFO(PS4_Tools.AppCommonPath() + @"\Working\Sc0\Param.sfo");
+
+                    }
+                    return new Param_SFO.PARAM_SFO();
                 }
             }
 
+            public class NP_Data
+            {
+
+            }
+
+            public class NP_Title
+            {
+
+            }
+
+            public string pkgtable { get; set; }
+            private static LibOrbisPkg.PKG.Pkg pkg = null;
+            public static List<ListViewItem> lst = new List<ListViewItem>();
+
+            /// <summary>
+            /// Reads a pkg file and displays all its info inside the PKG Table 
+            /// (Custom to maxtron)
+            /// </summary>
+            /// <param name="pkgFile"></param>
+            public static void ReadPKG(string pkgFile)
+            {
+                var pkggame = GameArchives.Util.LocalFile(pkgFile);
+                using (var stream = pkggame.GetStream())
+                    pkg = new LibOrbisPkg.PKG.PkgReader(stream).ReadPkg();
+                //LibOrbisPkg.PKG.
+                //GameArchives.PackageReader.ReadPackageFromFile(pkg);
+                try
+                {
+                    //var pkggame = GameArchives.Util.LocalFile(pkgFile);
+                    var package = PackageReader.ReadPackageFromFile(pkggame);
+                    var sfo = PackageReader.ReadPackageFromFile(package.GetFile("/param.sfo"));
+                    var innerPfs = PackageReader.ReadPackageFromFile(package.GetFile("/pfs_image.dat"));
+                    PackageManager.GetInstance();
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                foreach (var e in pkg.Metas.Metas)
+                {
+                    var lvi = new ListViewItem(new[] {
+          e.id.ToString(),
+          string.Format("0x{0:X}", e.DataSize),
+          string.Format("0x{0:X}", e.DataOffset),
+          e.Encrypted ? "Yes" : "No",
+          e.KeyIndex.ToString(),
+        });
+                    lvi.Tag = e;
+                    //entriesListView.Items.Add(lvi);
+                    lst.Add(lvi);
+                }
+            }
+
+            /// <summary>
+            /// This one is pretty straight Forward it renames a pkg file to the content id name
+            /// </summary>
+            /// <param name="pkgfile"></param>
+            public static void Rename_pkg_To_ContentID(string pkgfile)
+            {
+
+            }
+
+            /// <summary>
+            /// This one is pretty straight Forward it renames a pkg file to the Title Of The Package
+            /// </summary>
+            /// <param name="pkgfile"></param>
+            public static void Rename_pkg_To_Title(string pkgfile)
+            {
+
+            }
         }
+
+        #endregion << Scene Related >>
 
         /// <summary>
         /// Class is used for PS2 Classic Building
@@ -481,7 +3144,7 @@ namespace PS4_Tools
             /// <param name="Icon0Location">location of ICON0 if none set default is used</param>
             /// <param name="BackgroundLocation">Location of Background image if none is set default is used</param>
             /// <param name="CustomGP4Location">Use a custom GP4 File For Repacking the ISO</param>
-            public void Create_Single_ISO_PKG(string PS2_ISO,string SaveFileLOcation,string Title,string ContentID ="" ,Bitmap Icon0 = null, string BackgroundLocation = "", string CustomGP4Location = "")
+            public void Create_Single_ISO_PKG(string PS2_ISO, string SaveFileLOcation, string Title, string ContentID = "", Bitmap Icon0 = null, string BackgroundLocation = "", string CustomGP4Location = "")
             {
                 Console.WriteLine("Reading PS2 ISO");
 
@@ -542,48 +3205,48 @@ namespace PS4_Tools
                 Console.WriteLine("Writing " + Working_Dir + @"\PS2Emu\" + "param.sfo");
                 System.IO.File.WriteAllBytes(Working_Dir + @"\PS2Emu\" + "param.sfo", Properties.Resources.param);
 
-                Console.WriteLine("Writing " + Working_Dir +"PS2Classics.gp4");
+                Console.WriteLine("Writing " + Working_Dir + "PS2Classics.gp4");
                 System.IO.File.WriteAllBytes(Working_Dir + "PS2Classics.gp4", Properties.Resources.PS2Classics);
 
                 #endregion << Set Up Wokring Directory >>
 
                 #region << LOad and update gp4 and sfo Project >>
                 Console.WriteLine("Loading GP4 Project");
-                var project = GP4.ReadGP4(Working_Dir + "PS2Classics.gp4");
+                var project = SceneRelated.GP4.ReadGP4(Working_Dir + "PS2Classics.gp4");
                 Console.WriteLine("Loading SFO");
                 var sfo = new Param_SFO.PARAM_SFO(Working_Dir + @"\PS2Emu\" + "param.sfo");
-                
-                if(ContentID == "")
+
+                if (ContentID == "")
                 {
                     Console.WriteLine("No Content ID Specified Building custom one");
                     //build custom content id
                     ContentID = "UP9000-" + sfo.TitleID.Trim() + "_00-" + PS2ID.Trim() + "0000001";
 
-                    Console.WriteLine("Content ID :"+ContentID);
+                    Console.WriteLine("Content ID :" + ContentID);
                 }
                 //update sfo info
 
                 Console.WriteLine("Updating SFO ");
-                for (int i =0;i< sfo.Tables.Count;i++)
+                for (int i = 0; i < sfo.Tables.Count; i++)
                 {
 
                     if (sfo.Tables[i].Name == "CONTENT_ID")
                     {
                         var tempitem = sfo.Tables[i];
 
-                        Console.WriteLine("Updating SFO  Content ID ( "+tempitem.Value + " -> "+ContentID + ")");
+                        Console.WriteLine("Updating SFO  Content ID ( " + tempitem.Value + " -> " + ContentID + ")");
                         tempitem.Value = ContentID;
                         sfo.Tables[i] = tempitem;
                     }
-                    if(sfo.Tables[i].Name == "TITLE")
+                    if (sfo.Tables[i].Name == "TITLE")
                     {
-                         var tempitem = sfo.Tables[i];
+                        var tempitem = sfo.Tables[i];
 
                         Console.WriteLine("Updating SFO  Title ( " + tempitem.Value + " -> " + Title + ")");
                         tempitem.Value = Title;
                         sfo.Tables[i] = tempitem;
                     }
-                    if(sfo.Tables[i].Name == "TITLE_ID")
+                    if (sfo.Tables[i].Name == "TITLE_ID")
                     {
                         var tempitem = sfo.Tables[i];
 
@@ -595,14 +3258,14 @@ namespace PS4_Tools
 
                 Console.WriteLine("Saving SFO");
                 sfo.SaveSFO(sfo, Working_Dir + @"\PS2Emu\" + "param.sfo");//update sfo info
-                //update GP4
-                
+                                                                          //update GP4
+
                 Console.WriteLine("Upating GP4");
                 project.Volume.Package.Content_id = ContentID;//set contentid
                 project.Volume.Package.Passcode = "00000000000000000000000000000000";//32 zeros
 
                 //this is single iso building so we shouldn't have to change disc image numbering
-                GP4.SaveGP4(Working_Dir + "PS2Classics.gp4",project);
+                SceneRelated.GP4.SaveGP4(Working_Dir + "PS2Classics.gp4", project);
 
                 Console.WriteLine("Saving GP4");
                 #endregion << Load GP4 Project >>
@@ -643,112 +3306,6 @@ namespace PS4_Tools
         {
 
         }
-
-        public class IDS
-        {
-
-        }
-
-        public class PARAM_SFO
-        {
-            public static Param_SFO.PARAM_SFO Get_Param_SFO(string pkgfile)
-            {
-                //PARAM_SFO 
-                List<string> lstoffiles = ReadAllUnprotectedData(pkgfile);
-
-                if (lstoffiles.Contains("Sc0/nptitle.dat\r"))
-                {
-                    if(!Directory.Exists(PS4_Tools.AppCommonPath() + @"\Working"))
-                    {
-                        Directory.CreateDirectory(PS4_Tools.AppCommonPath() + @"\Working");
-                    }
-
-                    //extract files to temp folder
-                    ProcessStartInfo start = new ProcessStartInfo();
-                    start.FileName = PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe ";
-                    start.Arguments = "img_extract --no_passcode \"" + pkgfile + "\" \"" +PS4_Tools.AppCommonPath() + @"Working" +"\"";
-                    start.UseShellExecute = false;
-                    start.RedirectStandardOutput = true;
-                    start.CreateNoWindow = true;
-                    using (Process process = Process.Start(start))
-                    {
-                        process.ErrorDataReceived += delegate {
-
-                        };
-                        using (StreamReader reader = process.StandardOutput)
-                        {
-                            string result = reader.ReadToEnd();
-                           
-
-                            // return result;
-                        }
-                    }
-
-                   return new Param_SFO.PARAM_SFO(PS4_Tools.AppCommonPath() + @"\Working\Sc0\Param.sfo");
-
-                }
-                return new Param_SFO.PARAM_SFO();
-            }
-        }
-
-        public class NP_Data
-        {
-
-        }
-
-        public class NP_Title
-        {
-
-        }
-
-        public string pkgtable { get; set; }
-        private static LibOrbisPkg.PKG.Pkg pkg = null;
-        public static List<ListViewItem> lst = new List<ListViewItem>();
-
-        /// <summary>
-        /// Reads a pkg file and displays all its info inside the PKG Table 
-        /// (Custom to maxtron)
-        /// </summary>
-        /// <param name="pkgFile"></param>
-        public static void ReadPKG(string pkgFile)
-        {
-            var pkggame = GameArchives.Util.LocalFile(pkgFile);
-            using (var stream = pkggame.GetStream())
-                pkg = new LibOrbisPkg.PKG.PkgReader(stream).ReadPkg();
-            //LibOrbisPkg.PKG.
-            //GameArchives.PackageReader.ReadPackageFromFile(pkg);
-            try
-            {
-                //var pkggame = GameArchives.Util.LocalFile(pkgFile);
-                var package = PackageReader.ReadPackageFromFile(pkggame);
-                var sfo = PackageReader.ReadPackageFromFile(package.GetFile("/param.sfo"));
-                var innerPfs = PackageReader.ReadPackageFromFile(package.GetFile("/pfs_image.dat"));
-                PackageManager.GetInstance();
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-            foreach (var e in pkg.Metas.Metas)
-            {
-                var lvi = new ListViewItem(new[] {
-          e.id.ToString(),
-          string.Format("0x{0:X}", e.DataSize),
-          string.Format("0x{0:X}", e.DataOffset),
-          e.Encrypted ? "Yes" : "No",
-          e.KeyIndex.ToString(),
-        });
-                lvi.Tag = e;
-                //entriesListView.Items.Add(lvi);
-                lst.Add(lvi);
-            }
-        }
-        public static void Rename_pkg_To_ContentID(string pkgfile)
-        {
-
-        }
-
     }
     /************************************
      * Credit TO IDC

@@ -63,6 +63,16 @@ namespace PS4_Tools.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] at9toolDefaultSettingFile {
+            get {
+                object obj = ResourceManager.GetObject("at9toolDefaultSettingFile", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] ext {
             get {
                 object obj = ResourceManager.GetObject("ext", resourceCulture);

@@ -58,6 +58,10 @@
     <Reference Include="LibOrbisPkg">
       <HintPath>..\..\..\..\..\Downloads\LibOrbisPkg-0.1.28\LibOrbisPkg.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PARAM.SFO">
       <HintPath>..\..\..\..\GitHub\PS3Tools\PARAM.SFO Editor\PARAM.SFO\bin\Debug\PARAM.SFO.dll</HintPath>
     </Reference>
@@ -114,6 +118,9 @@
     <Reference Include="Tao.DevIl">
       <HintPath>..\..\..\..\..\Downloads\DEVILDOTNET_PRE_V0_1\v0.1\bin\Tao.DevIl.dll</HintPath>
     </Reference>
+    <Reference Include="VGAudio">
+      <HintPath>..\..\..\..\..\Downloads\VGAudio-master\VGAudio.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Files\PUP\BlockInfo.cs" />
@@ -122,6 +129,26 @@
     <Compile Include="Files\SELF\llvm.cs" />
     <Compile Include="Files\SELF\Self.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Media\Atrac9\Atrac9Config.cs" />
+    <Compile Include="Media\Atrac9\Atrac9Decoder.cs" />
+    <Compile Include="Media\Atrac9\Atrac9Rng.cs" />
+    <Compile Include="Media\Atrac9\BandExtension.cs" />
+    <Compile Include="Media\Atrac9\BitAllocation.cs" />
+    <Compile Include="Media\Atrac9\Block.cs" />
+    <Compile Include="Media\Atrac9\Channel.cs" />
+    <Compile Include="Media\Atrac9\ChannelConfig.cs" />
+    <Compile Include="Media\Atrac9\Frame.cs" />
+    <Compile Include="Media\Atrac9\HuffmanCodebook.cs" />
+    <Compile Include="Media\Atrac9\HuffmanCodebooks.cs" />
+    <Compile Include="Media\Atrac9\Quantization.cs" />
+    <Compile Include="Media\Atrac9\ScaleFactors.cs" />
+    <Compile Include="Media\Atrac9\Stereo.cs" />
+    <Compile Include="Media\Atrac9\Tables.cs" />
+    <Compile Include="Media\Atrac9\Unpack.cs" />
+    <Compile Include="Media\Atrac9\Utilities\Bit.cs" />
+    <Compile Include="Media\Atrac9\Utilities\BitReader.cs" />
+    <Compile Include="Media\Atrac9\Utilities\Helpers.cs" />
+    <Compile Include="Media\Atrac9\Utilities\Mdct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -129,10 +156,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Util\DDS\DDSImage.cs" />
+    <Compile Include="Util\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Resources\at9toolDefaultSettingFile.ini" />
+    <None Include="Resources\at9toolDefaultSettingFile.ini.file" />
     <None Include="Resources\ext.zip" />
     <None Include="Resources\param.sfo" />
     <None Include="Resources\PS2Classics.gp4" />

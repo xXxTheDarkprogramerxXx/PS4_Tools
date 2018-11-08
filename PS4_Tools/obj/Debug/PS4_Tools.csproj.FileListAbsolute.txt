@@ -18,7 +18,6 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\ob
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\Debug\PS4_Tools.csproj.GenerateResource.Cache
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\Debug\PS4_Tools.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\Debug\PS4_Tools.pdb
-C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\Debug\PS4_Tools.csprojResolveAssemblyReference.cache
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\Tao.DevIl.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\SixLabors.Core.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\SixLabors.ImageSharp.dll
@@ -36,3 +35,7 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bi
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\System.ValueTuple.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\Pfim.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\Debug\PS4_Tools.csprojResolveAssemblyReference.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\VGAudio.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\Newtonsoft.Json.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\Newtonsoft.Json.xml

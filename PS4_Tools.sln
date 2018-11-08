@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS4_PKG_Tool", "PS4_PKG_Tool\PS4_PKG_Tool.csproj", "{8F13E995-45E8-4B01-B2B8-95586D333E86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS2 DB Controler", "PS2 DB Controler\PS2 DB Controler.csproj", "{F8E89303-EB85-4106-AD2A-4CAF5D3C25E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{8F13E995-45E8-4B01-B2B8-95586D333E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F13E995-45E8-4B01-B2B8-95586D333E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F13E995-45E8-4B01-B2B8-95586D333E86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8E89303-EB85-4106-AD2A-4CAF5D3C25E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8E89303-EB85-4106-AD2A-4CAF5D3C25E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8E89303-EB85-4106-AD2A-4CAF5D3C25E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8E89303-EB85-4106-AD2A-4CAF5D3C25E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

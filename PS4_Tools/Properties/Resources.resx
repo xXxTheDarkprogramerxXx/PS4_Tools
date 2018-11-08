@@ -130,4 +130,7 @@
   <data name="PS2Classics" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PS2Classics.gp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="at9toolDefaultSettingFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\at9toolDefaultSettingFile.ini.file;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
