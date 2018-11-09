@@ -128,3 +128,13 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 ```
     var storeitems = PS4_Tools.PKG.Official.Get_All_Store_Items(textBox1.Text);
 ```
+
+## Credits
+
+* [Maxton](https://github.com/maxton) - For The Amazing Work He has done for the scene ! (LibOrbisPKG)
+* [GarnetSunset](https://github.com/GarnetSunset) - Playstation Store DLC Indexer
+* [stooged](https://github.com/stooged) - PS4 DLC Indexer (C#)
+* [cfwprph](https://github.com/cfwprpht) - His help and Vita Rco extractor tool
+* [IDC](https://github.com/idc) - His PS4 Pup Extractor and other work he has done
+
+
