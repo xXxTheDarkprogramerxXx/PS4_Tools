@@ -20,6 +20,7 @@ using System.Xml;
 using System.Diagnostics;
 using System.IO.Compression;
 using DiscUtils.Iso9660;
+
 #region << VGAudio >>
 using VGAudio.Codecs.Atrac9;
 using VGAudio.Formats;
@@ -79,14 +80,14 @@ namespace PS4_Tools
     }
 
     public class Media
-    { 
+    {
         public class Atrac9
         {
-           
+
             public static void LoadAt9(string at9file)
             {
                 bool readAudioData = true;
-                byte[] configData = new byte[4] { 0xFE, 0x18, 0x28, 0x00 };                   
+                byte[] configData = new byte[4] { 0xFE, 0x18, 0x28, 0x00 };
 
                 LibAtrac9.Atrac9Config config = new LibAtrac9.Atrac9Config(configData);
 
@@ -175,7 +176,7 @@ namespace PS4_Tools
             /// </summary>
             /// <param name="inputfile">Original Bitmap Location</param>
             /// <param name="outputfile">Original Bitmap Location</param>
-            public void Create_PS4_Compatible_PNG(string inputfile,string outputfile)
+            public void Create_PS4_Compatible_PNG(string inputfile, string outputfile)
             {
                 //read input file
                 Bitmap returnbmp = new Bitmap(inputfile);
@@ -213,7 +214,7 @@ namespace PS4_Tools
             {
                 //create new bitmap
                 Bitmap returnbmp = inputfile;
-                
+
                 returnbmp = ResizeImage(returnbmp, 512, 512);//converts the image to the correct size
                 returnbmp = ConvertTo24bpp(returnbmp);//converts image to 24bpp
 
@@ -245,7 +246,7 @@ namespace PS4_Tools
         /// </summary>
         public class DDS
         {
-            public static void SavePNGFromDDS(string DDSFilePath,string savepath)
+            public static void SavePNGFromDDS(string DDSFilePath, string savepath)
             {
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
                 image.Save(savepath);
@@ -1593,7 +1594,7 @@ namespace PS4_Tools
                     Console.Write("Magic OK!\nThat's a NextGen RCO :)\n");
                     //create folder in which to extact 
                     //if it exists delete the dam thing xD
-                    if(Directory.Exists(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File)))
+                    if (Directory.Exists(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File)))
                     {
                         PS4_Tools.DeleteDirectory(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File));
                     }
@@ -2349,8 +2350,8 @@ namespace PS4_Tools
                             else
                                 //ZLibDeCompress(outFile);
 
-                            // Check Header of Decompressed File and rename
-                            Console.Write("Checking Header of Decompressed File...");
+                                // Check Header of Decompressed File and rename
+                                Console.Write("Checking Header of Decompressed File...");
                             outFile = outFile + ".decompressed";
                             bool gHeader = false;
                             bool dHeader = false;
@@ -2463,7 +2464,7 @@ namespace PS4_Tools
      *          
      *********************************************************/
 
-public class PKG
+    public class PKG
     {
 
         #region << Official >>
@@ -2518,10 +2519,9 @@ public class PKG
                 return rtnlist;
             }
 
-
             public class Update_Structure
             {
-                [ XmlRoot(ElementName = "titlepatch")]
+                [XmlRoot(ElementName = "titlepatch")]
                 public class Titlepatch
                 {
 
@@ -2531,7 +2531,7 @@ public class PKG
                     public string Titleid { get; set; }
                 }
 
-                [ XmlRoot(ElementName = "delta_info_set")]
+                [XmlRoot(ElementName = "delta_info_set")]
                 public class Delta_info_set
                 {
                     [XmlAttribute(AttributeName = "url")]
@@ -2599,7 +2599,7 @@ public class PKG
 
                     public PKG.SceneRelated.GP4.Psproject PlayGoPG4 { get; set; }
                 }
-                
+
 
                 [XmlRoot(ElementName = "tag")]
                 public class Tag
@@ -2614,7 +2614,46 @@ public class PKG
                     public string Mandatory { get; set; }
                 }
 
-               
+
+            }
+
+            public enum Store_Platform
+            {
+                PS4 = 0,
+                PS3 = 1,
+                PSP = 2,
+                PSPv2 = 3,
+                PS5 = 9,
+            }
+
+            public enum Store_Type
+            {
+                Add_On = 0,
+                Game_Video = 1,
+                Vehicle = 2,
+                Map = 3,
+                Bundle = 4,
+                Full_Game = 5,
+                Avatar = 6,
+                Avatars = 7,
+                Theme = 8,
+                Static_Theme = 9,
+                Dynamic_Theme = 10,
+                Season_Pass = 11,
+                Level = 12,
+                Character = 13,
+                Other = 14
+            }
+
+            public class StoreItems
+            {
+                public string Store_Content_Title { get; set; }
+                public Store_Type Store_Content_Type { get; set; }
+                public string Store_Content_Type_Str { get; set; }
+                public Store_Platform Store_Content_Platform { get; set; }
+                public string Store_Content_Platform_Str { get; set; }
+                public string Download_URL { get; set; }
+                public Bitmap Store_Content_Image { get; set; }
             }
 
             public static Update_Structure.Titlepatch CheckForUpdate(string TitleID)
@@ -2630,7 +2669,7 @@ public class PKG
                 byte[] hashnptitle = hmacsha256.ComputeHash(messageBytes);
                 string hash = Util.Utils.ByteToString(hashnptitle);
 
-               // return;
+                // return;
                 //var test = new SHA256()
 
                 /*Get XML String */
@@ -2655,13 +2694,13 @@ public class PKG
 
                         /*XML Node List*/
                         XmlNodeList xmlnode;
-                        
+
                         /*we need to load all the info via nodes ext ext */
 
                         XmlElement root = xmldoc.DocumentElement;
 
                         Update_Structure updatstruct = new Update_Structure();
-                        
+
                         /*Get TitlePatch*/
                         Update_Structure.Titlepatch titlepatch = new Update_Structure.Titlepatch();
                         XmlNodeList test = xmldoc.GetElementsByTagName("titlepatch");
@@ -2706,7 +2745,7 @@ public class PKG
                         XmlNodeList deltanodelist = xmldoc.GetElementsByTagName("delta_info_set");
 
                         deltainfo.Url = deltanodelist[0].Attributes["url"].Value.ToString();
-                        
+
                         /*Param Sfo*/
                         Update_Structure.Paramsfo paramsfo = new Update_Structure.Paramsfo();
                         XmlNodeList sfotitlenodelist = xmldoc.GetElementsByTagName("title");
@@ -2717,7 +2756,7 @@ public class PKG
                         /**/
                         Update_Structure.Latest_playgo_manifest playgomani = new Update_Structure.Latest_playgo_manifest();
                         XmlNodeList playgoenodelist = xmldoc.GetElementsByTagName("latest_playgo_manifest");
-                        playgomani.Url= playgoenodelist[0].Attributes["url"].Value.ToString();
+                        playgomani.Url = playgoenodelist[0].Attributes["url"].Value.ToString();
 
                         /*we can set the psproject here as well*/
                         stream = client.OpenRead(playgomani.Url);
@@ -2793,18 +2832,154 @@ public class PKG
                 return returnObject;
             }
 
+            private static string DownloadRecersivly(string currentdownload, int pages, WebClient client, string Region, string NPTitle)
+            {
+                if (currentdownload.Contains("paginator-control__end paginator-control__arrow-navigation internal-app-link ember-view"))
+                {
+                    try
+                    {
+                        pages++;
+                        currentdownload = currentdownload + client.DownloadString(new Uri("https://store.playstation.com/" + Region + "/grid/" + NPTitle + "_00" + "/" + pages + "?relationship=add-ons"));
+                        DownloadRecersivly(currentdownload, pages, client, Region, NPTitle);
+                    }
+                    catch (Exception ex)
+                    {
 
-        }
+                    }
+                }
 
-        #endregion << Official >>
+                return currentdownload;
+            }
 
-        #region << Scene Related >>
+            private static Bitmap LoadPicture(string url)
+            {
+                HttpWebRequest wreq;
+                HttpWebResponse wresp;
+                Stream mystream;
+                Bitmap bmp;
 
-        public class SceneRelated
-        {
+                bmp = null;
+                mystream = null;
+                wresp = null;
+                try
+                {
+                    wreq = (HttpWebRequest)WebRequest.Create("http" + url);
+                    wreq.AllowWriteStreamBuffering = true;
+
+                    wresp = (HttpWebResponse)wreq.GetResponse();
+
+                    if ((mystream = wresp.GetResponseStream()) != null)
+                        bmp = new Bitmap(mystream);
+                }
+                finally
+                {
+                    if (mystream != null)
+                        mystream.Close();
+
+                    if (wresp != null)
+                        wresp.Close();
+                }
+                return (bmp);
+            }
+
             /// <summary>
-            /// GP4 Project Class
+            /// This will return a List of Store Items
             /// </summary>
+            /// <param name="NPTitle">NP Title ID e.g. (CUSA07708)</param>
+            /// <returns></returns>
+            public static List<StoreItems> Get_All_Store_Items(string NPTitle)
+            {
+                List<StoreItems> storeitems = new List<StoreItems>();
+
+                WebClient client = new WebClient();
+                client.Headers.Add("Accept", "text/html");
+                client.Headers.Add("Accept-Language", "en-US");
+                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64)");
+                client.Headers.Add("Referer", "https://store.playstation.com/");
+
+                string Region = "";
+                int Page = 1;
+                string Regionstr = NPTitle.Substring(1, 1);
+                switch (Regionstr)
+                {
+                    case "U":
+                        Region = "en-gb";
+                        break;
+                    case "E":
+                        Region = "en-gb";
+                        break;
+                    case "I":
+                        Region = "en-us";
+                        break;
+                    default:
+                        Region = "ja-jp";
+                        break;
+                }
+
+                string download = client.DownloadString(new Uri("https://store.playstation.com/" + Region + "/grid/" + NPTitle + "_00" + "/" + Page + "?relationship=add-ons"));
+
+                string downloadholder = "";
+
+                HtmlAgilityPack.HtmlDocument storepage = new HtmlAgilityPack.HtmlDocument();
+                storepage.LoadHtml(download);
+
+                if (download.Contains("cell__title"))
+                {
+                    string[] Splliters1;
+
+
+                    /*recersive download*/
+                    download = DownloadRecersivly(download, Page, client, Region, NPTitle);
+                    string[] splitingcells, splittedfooter, splittedcelltitel, splittedifno;
+
+                    splitingcells = Regex.Split(download, "desktop-presentation__grid-cell__base");
+                    for (int i = 1; i < splitingcells.Length; i++)
+                    {
+                        StoreItems newitem = new StoreItems();
+
+                        splittedfooter = Regex.Split(splitingcells[i], "grid-cell__footer");
+
+                        if (splittedfooter[0].Contains("class=\"grid-cell__title\">"))
+                        {
+                            splittedcelltitel = Regex.Split(splittedfooter[0], "class=\"grid-cell__title\">");
+                            splittedifno = Regex.Split(splittedcelltitel[1], "<");
+                        }
+                        else
+                        {
+                            splittedcelltitel = Regex.Split(splittedfooter[0], "<span title=\"");
+                            splittedifno = Regex.Split(splittedcelltitel[1], "\"");
+                        }
+                        newitem.Store_Content_Title = splittedifno[0].Trim();
+                        newitem.Store_Content_Title = WebUtility.HtmlDecode(newitem.Store_Content_Title);
+
+                        splittedcelltitel = Regex.Split(splittedfooter[0], "a href=\"");
+                        splittedifno = Regex.Split(splittedcelltitel[1], "\"");
+                        newitem.Download_URL = "https://store.playstation.com" + splittedifno[0].Trim();
+
+                        splittedcelltitel = Regex.Split(splittedfooter[0], "img src=\"http");
+                        splittedifno = Regex.Split(splittedcelltitel[1], "\"");
+                        newitem.Store_Content_Image = LoadPicture(splittedifno[0].Trim());
+
+                        splittedcelltitel = Regex.Split(splittedfooter[0], "left-detail--detail-2\">");
+                        splittedifno = Regex.Split(splittedcelltitel[1], "<");
+                        newitem.Store_Content_Type_Str = splittedifno[0].Trim();
+                        newitem.Store_Content_Type_Str = WebUtility.HtmlDecode(newitem.Store_Content_Type_Str);
+
+                        splittedcelltitel = Regex.Split(splittedfooter[0], "left-detail--detail-1\">");
+                        splittedifno = Regex.Split(splittedcelltitel[1], "<");
+                        newitem.Store_Content_Platform_Str = splittedifno[0].Trim();
+                        newitem.Store_Content_Platform_Str = WebUtility.HtmlDecode(newitem.Store_Content_Platform_Str);
+
+                        storeitems.Add(newitem);
+
+                    }
+                }
+
+
+
+                return storeitems;
+            }
+
             public class GP4
             {
 
@@ -2994,8 +3169,32 @@ public class PKG
 
             }
 
-          
+        }
 
+        #endregion << Official >>
+
+        #region << Scene Related >>
+
+        public class SceneRelated
+        {
+            public static void Create_FKPG(string Download_Url, string SaveLocation)
+            {
+                /*we can download an item */
+                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "ext.zip", Properties.Resources.ext);
+                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe", Properties.Resources.orbis_pub_cmd);
+
+                if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\ext\"))
+                {
+                    ZipFile.ExtractToDirectory(PS4_Tools.AppCommonPath() + "ext.zip", PS4_Tools.AppCommonPath());
+                }
+
+
+            }
+
+            /// <summary>
+            /// GP4 Project Class
+            /// </summary>
+           
             public class IDS
             {
 
@@ -3312,14 +3511,14 @@ public class PKG
      ************************************/
     public class PUP
     {
-        public void Unpack_PUP(string PUPFile,string SaveToDir,bool SaveTables = false)
+        public void Unpack_PUP(string PUPFile, string SaveToDir, bool SaveTables = false)
         {
-            if(!File.Exists(PUPFile))
+            if (!File.Exists(PUPFile))
             {
                 throw new Exception("PUP File location does not exist \nLocationSupplied " + PUPFile);
             }
 
-            if(!Directory.Exists(SaveToDir))
+            if (!Directory.Exists(SaveToDir))
             {
                 throw new Exception("Save location does not exist \nLocationSupplied " + SaveToDir);
             }

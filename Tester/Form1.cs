@@ -132,7 +132,7 @@ namespace Tester
 
         private void button7_Click(object sender, EventArgs e)
         {
-            var item =PS4_Tools.PKG.Official.CheckForUpdate("CUSA07708");
+            var item =PS4_Tools.PKG.Official.CheckForUpdate(textBox1.Text);
 
             /*TitleID Patch Data Is Avaiavle Here*/
 
@@ -145,6 +145,15 @@ namespace Tester
             update += "\n Manifest File Number of Pieces : " + item.Tag.Package.Manifest_item.pieces.Count;
 
             label1.Text = update;
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+           var storeitems = PS4_Tools.PKG.Official.Get_All_Store_Items(textBox1.Text);
+            GridWithDisplay grid = new GridWithDisplay(storeitems);
+            grid.ShowDialog();
+
+            
         }
     }
 }

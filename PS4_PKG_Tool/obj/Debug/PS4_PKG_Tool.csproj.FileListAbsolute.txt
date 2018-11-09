@@ -35,3 +35,8 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\System.Buffers.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\VGAudio.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\Newtonsoft.Json.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\Newtonsoft.Json.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\HtmlAgilityPack.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\HtmlAgilityPack.xml
