@@ -8,7 +8,7 @@ Done Dusted and ready to use
 
 ### Class Structure
 
-The Class Strucutre Might Change in future releases
+The class strucutre might change in future releases
 
     namespace PS4_Tools
     ├── PS4_Tools                                 /*Some Defualt Methods For the Tools*/
@@ -46,6 +46,7 @@ The Class Strucutre Might Change in future releases
     |   ├──   ├── NP_Data                         /*NP_Data Reserved Class*/
     |   ├──   ├── NP_Title                        /*NP_Title Reserved Class*/
     |   ├──   ├── ReadPKG                         /*Reads a PKG File (Powered by maxtron)*/
+    |   ├──   ├── Read_PKG                        /*Reads all unprotected data from a pkg (Powered by Leecherman)*/
     |   ├──   ├── Rename_pkg_To_ContentID         /*Renames a PKG File to the Content ID of the SFO*/    
     |   ├──   ├── Rename_pkg_To_Title             /*Renames a PKG File to the Title of the SFO*/
     │   ├── PS2_Classics                          /*Class For Building PS2 Classics*/
@@ -60,8 +61,8 @@ The Class Strucutre Might Change in future releases
 
 Please see the testers form to see how some of the classes work if not documented here
 
-#### Reading a PKG File 
-```
+#### Reading a PKG File (Using Official Toolset) /*This will be depericated in a future update*/
+```c#
 /*Gets a list of unprotected items*/
 var lstitem =   PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEchelon\Downloads\Patapon_Remastered_CUSA07184_update_1.01.pkg");
 /*Reads a SFO File From an PKG File*/
@@ -73,7 +74,7 @@ var lstitem =   PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEche
 ```
 
 #### Reading and Saving a GP4
-```
+```c#
  PS4_Tools.PKG.SceneRelated.GP4.Psproject project =   PS4_Tools.PKG.SceneRelated.GP4.ReadGP4(@"C:\Users\3deEchelon\Documents\Sony\Crash Bandcioot Twinsanity.gp4");
             if(project.Fmt != "gp4")
             {
@@ -93,23 +94,23 @@ var lstitem =   PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEche
 ```
 
 #### Displaying a dds file 
-```
+```c#
 var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.dds");
             pictureBox1.Image = item;
 ```
 
 #### Dumping a RCO File
-```
+```c#
  PS4_Tools.RCO.DumpRco(@"C:\Users\3deEchelon\Desktop\PS4\RCO\Sce.Cdlg.GameCustomData.rco");
 ```
 
 #### Playing a at9 file 
-```
+```c#
  PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Users\3deEchelon\Desktop\PS4\AT9\prelude1.at9");
 ```
 
 #### Get Game Update Information 
-```
+```c#
             var item =PS4_Tools.PKG.Official.CheckForUpdate(textBox1.Text);
 
             /*TitleID Patch Data Is Avaiavle Here*/
@@ -125,8 +126,31 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
             label1.Text = update;
 ```
 #### Get Store Items From a Title ID 
-```
+``` c#
     var storeitems = PS4_Tools.PKG.Official.Get_All_Store_Items(textBox1.Text);
+```
+
+#### Get Unprotected Data From PKG 
+```c#
+     PS4_Tools.PKG.SceneRelated.Unprotected_PKG ps4pkg = PS4_Tools.PKG.SceneRelated.Read_PKG(@"C:\Users\3deEchelon\Desktop\PS4\Euro.FISHING.COLLECTORS.EDITION.PS4-DUPLEX\Euro.Fishing.Collectors.Edition.PS4-DUPLEX\duplex-euro.fishing.collectors.ed.ps4\Euro.Fishing.Collectors.Edition.PS4-DUPLEX.pkg");
+
+            /*Lets work with the data shall we*/
+            /*Display the PSFO in some type of info format*/
+            var item = ps4pkg.Param;
+           
+            for (int i = 0; i < item.Tables.Count; i++)
+            {
+                listBox3.Items.Add(item.Tables[i].Name + ":" + item.Tables[i].Value);
+            }
+            /*Display Image*/
+            pictureBox2.Image = ps4pkg.Image;
+
+            var trphy = ps4pkg.Trophy_File;
+
+            for (int i = 0; i < trphy.FileCount; i++)
+            {
+                listBox4.Items.Add(trphy.trophyItemList[i].Name);
+            }
 ```
 
 ## Credits
@@ -136,5 +160,5 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 * [stooged](https://github.com/stooged) - PS4 DLC Indexer (C#)
 * [cfwprph](https://github.com/cfwprpht) - His help and Vita Rco extractor tool
 * [IDC](https://github.com/idc) - His PS4 Pup Extractor and other work he has done
-
+* [Leecherman](https://sites.google.com/site/theleecherman/) - His tools are always a great reference for me and does some great work
 
