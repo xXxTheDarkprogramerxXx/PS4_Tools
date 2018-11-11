@@ -105,12 +105,12 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 ```
 
 #### Playing a at9 file 
-```
+```c#
  PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Users\3deEchelon\Desktop\PS4\AT9\prelude1.at9");
 ```
 
 #### Get Game Update Information 
-```
+```c#
             var item =PS4_Tools.PKG.Official.CheckForUpdate(textBox1.Text);
 
             /*TitleID Patch Data Is Avaiavle Here*/
@@ -126,12 +126,12 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
             label1.Text = update;
 ```
 #### Get Store Items From a Title ID 
-```
+``` c#
     var storeitems = PS4_Tools.PKG.Official.Get_All_Store_Items(textBox1.Text);
 ```
 
 #### Get Unprotected Data From PKG 
-```
+```c#
     
 ```
 
