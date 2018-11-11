@@ -62,7 +62,7 @@ The class strucutre might change in future releases
 Please see the testers form to see how some of the classes work if not documented here
 
 #### Reading a PKG File 
-```
+```c#
 /*Gets a list of unprotected items*/
 var lstitem =   PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEchelon\Downloads\Patapon_Remastered_CUSA07184_update_1.01.pkg");
 /*Reads a SFO File From an PKG File*/
@@ -74,7 +74,7 @@ var lstitem =   PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEche
 ```
 
 #### Reading and Saving a GP4
-```
+```c#
  PS4_Tools.PKG.SceneRelated.GP4.Psproject project =   PS4_Tools.PKG.SceneRelated.GP4.ReadGP4(@"C:\Users\3deEchelon\Documents\Sony\Crash Bandcioot Twinsanity.gp4");
             if(project.Fmt != "gp4")
             {
@@ -94,13 +94,13 @@ var lstitem =   PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEche
 ```
 
 #### Displaying a dds file 
-```
+```c#
 var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.dds");
             pictureBox1.Image = item;
 ```
 
 #### Dumping a RCO File
-```
+```c#
  PS4_Tools.RCO.DumpRco(@"C:\Users\3deEchelon\Desktop\PS4\RCO\Sce.Cdlg.GameCustomData.rco");
 ```
 
@@ -132,7 +132,25 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 
 #### Get Unprotected Data From PKG 
 ```c#
-    
+     PS4_Tools.PKG.SceneRelated.Unprotected_PKG ps4pkg = PS4_Tools.PKG.SceneRelated.Read_PKG(@"C:\Users\3deEchelon\Desktop\PS4\Euro.FISHING.COLLECTORS.EDITION.PS4-DUPLEX\Euro.Fishing.Collectors.Edition.PS4-DUPLEX\duplex-euro.fishing.collectors.ed.ps4\Euro.Fishing.Collectors.Edition.PS4-DUPLEX.pkg");
+
+            /*Lets work with the data shall we*/
+            /*Display the PSFO in some type of info format*/
+            var item = ps4pkg.Param;
+           
+            for (int i = 0; i < item.Tables.Count; i++)
+            {
+                listBox3.Items.Add(item.Tables[i].Name + ":" + item.Tables[i].Value);
+            }
+            /*Display Image*/
+            pictureBox2.Image = ps4pkg.Image;
+
+            var trphy = ps4pkg.Trophy_File;
+
+            for (int i = 0; i < trphy.FileCount; i++)
+            {
+                listBox4.Items.Add(trphy.trophyItemList[i].Name);
+            }
 ```
 
 ## Credits
