@@ -61,7 +61,7 @@ The class strucutre might change in future releases
 
 Please see the testers form to see how some of the classes work if not documented here
 
-#### Reading a PKG File 
+#### Reading a PKG File (Using Official Toolset) /*This will be depericated in a future update*/
 ```c#
 /*Gets a list of unprotected items*/
 var lstitem =   PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEchelon\Downloads\Patapon_Remastered_CUSA07184_update_1.01.pkg");
