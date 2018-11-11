@@ -8,7 +8,7 @@ Done Dusted and ready to use
 
 ### Class Structure
 
-The Class Strucutre Might Change in future releases
+The class strucutre might change in future releases
 
     namespace PS4_Tools
     ├── PS4_Tools                                 /*Some Defualt Methods For the Tools*/
@@ -46,6 +46,7 @@ The Class Strucutre Might Change in future releases
     |   ├──   ├── NP_Data                         /*NP_Data Reserved Class*/
     |   ├──   ├── NP_Title                        /*NP_Title Reserved Class*/
     |   ├──   ├── ReadPKG                         /*Reads a PKG File (Powered by maxtron)*/
+    |   ├──   ├── Read_PKG                        /*Reads all unprotected data from a pkg (Powered by Leecherman)*/
     |   ├──   ├── Rename_pkg_To_ContentID         /*Renames a PKG File to the Content ID of the SFO*/    
     |   ├──   ├── Rename_pkg_To_Title             /*Renames a PKG File to the Title of the SFO*/
     │   ├── PS2_Classics                          /*Class For Building PS2 Classics*/
@@ -129,6 +130,11 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
     var storeitems = PS4_Tools.PKG.Official.Get_All_Store_Items(textBox1.Text);
 ```
 
+#### Get Unprotected Data From PKG 
+```
+    
+```
+
 ## Credits
 
 * [Maxton](https://github.com/maxton) - For The Amazing Work He has done for the scene ! (LibOrbisPKG)
@@ -136,5 +142,5 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 * [stooged](https://github.com/stooged) - PS4 DLC Indexer (C#)
 * [cfwprph](https://github.com/cfwprpht) - His help and Vita Rco extractor tool
 * [IDC](https://github.com/idc) - His PS4 Pup Extractor and other work he has done
-
+* [Leecherman](https://sites.google.com/site/theleecherman/) - His tools are always a great reference for me and does some great work
 
