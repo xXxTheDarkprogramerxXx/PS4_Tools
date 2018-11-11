@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS4_PKG_Tool", "PS4_PKG_Too
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS2 DB Controler", "PS2 DB Controler\PS2 DB Controler.csproj", "{F8E89303-EB85-4106-AD2A-4CAF5D3C25E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS4_File_Explorer(WPF for unity)", "PS4_File_Explorer(WPF for unity)\PS4_File_Explorer(WPF for unity).csproj", "{FFD449DC-33B0-440E-BBDA-C72BBDA21531}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS4_PKG_Viewer", "PS4_PKG_Viewer\PS4_PKG_Viewer.csproj", "{F6803F1E-8484-4E76-933B-EF1C0355531D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,14 @@ Global
 		{F8E89303-EB85-4106-AD2A-4CAF5D3C25E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8E89303-EB85-4106-AD2A-4CAF5D3C25E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8E89303-EB85-4106-AD2A-4CAF5D3C25E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFD449DC-33B0-440E-BBDA-C72BBDA21531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD449DC-33B0-440E-BBDA-C72BBDA21531}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD449DC-33B0-440E-BBDA-C72BBDA21531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD449DC-33B0-440E-BBDA-C72BBDA21531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6803F1E-8484-4E76-933B-EF1C0355531D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6803F1E-8484-4E76-933B-EF1C0355531D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6803F1E-8484-4E76-933B-EF1C0355531D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6803F1E-8484-4E76-933B-EF1C0355531D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

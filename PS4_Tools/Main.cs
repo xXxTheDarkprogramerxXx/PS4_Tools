@@ -2451,8 +2451,443 @@ namespace PS4_Tools
 
     public class SaveData
     {
+        public struct Sealedkey
+        {
+            public byte[] MAGIC;/*Magic needs to be validated*/
+            public byte[] KeySet;
+            public byte[] AlignBytes;
+            public byte[] IV;
+            public byte[] KEY;
+            public byte[] SHA256;
+        }
+        public static void LoadSaveData(string filelocation, string Sealedkeylocation)
+        {
+            /*Load the sealed key from the file*/
+            Sealedkey sldkey = default(Sealedkey);
+            sldkey.MAGIC = new byte[8];
+            sldkey.KeySet = new byte[2];
+            sldkey.AlignBytes = new byte[6];
+            sldkey.IV = new byte[16];
+            sldkey.KEY = new byte[32];
+            sldkey.SHA256 = new byte[32];
+
+            FileStream fs = new FileStream(Sealedkeylocation, FileMode.Open, FileAccess.Read);
+
+            fs.Read(sldkey.MAGIC, 0, sldkey.MAGIC.Length);
+            fs.Read(sldkey.KeySet, 0, sldkey.KeySet.Length);
+            fs.Read(sldkey.AlignBytes, 0, sldkey.AlignBytes.Length);
+            fs.Read(sldkey.IV, 0, sldkey.IV.Length);
+            fs.Read(sldkey.KEY, 0, sldkey.KEY.Length);
+            fs.Read(sldkey.SHA256, 0, sldkey.SHA256.Length);
+
+            if (!Util.Utils.CompareBytes(sldkey.MAGIC, new byte[] { 0x70, 0x66, 0x73, 0x53, 0x4B, 0x4B, 0x65, 0x79 }))
+            {
+                throw new Exception("This is not a valid SealedKey");
+            }
+            // Declare CspParmeters and RsaCryptoServiceProvider
+            // objects with global scope of your Form class.
+            CspParameters cspp = new CspParameters();
+            RSACryptoServiceProvider rsa;
+
+            // Key container name for
+            // private/public key value pair.
+            const string keyName = "SonyKey";
+
+            //Create Keys
+            Label label1 = new Label();
+            // Stores a key pair in the key container.
+            cspp.KeyContainerName = keyName;
+            rsa = new RSACryptoServiceProvider(cspp);
+            rsa.PersistKeyInCsp = true;
+            if (rsa.PublicOnly == true)
+                label1.Text = "Key: " + cspp.KeyContainerName + " - Public Only";
+            else
+                label1.Text = "Key: " + cspp.KeyContainerName + " - Full Key Pair";
+
+            if (rsa == null)
+                MessageBox.Show("Key not set.");
+            else
+            {
+                // Display a dialog box to select the encrypted file.
+
+                string fName = filelocation;
+                if (fName != null)
+                {
+                    FileInfo fi = new FileInfo(fName);
+                    string name = fi.Name;
+                    // Create instance of Rijndael for
+                    // symetric decryption of the data.
+                    RijndaelManaged rjndl = new RijndaelManaged();
+                   // rjndl.KeySize = 256;
+                   // rjndl.BlockSize = 256;
+                    rjndl.Mode = CipherMode.CBC;
+
+                    // Use FileStream objects to read the encrypted
+                    // file (inFs) and save the decrypted file (outFs).
+                    using (FileStream inFs = new FileStream(fName, FileMode.Open))
+                    {
+
+                        // Create the byte arrays for
+                        // the encrypted Rijndael key,
+                        // the IV, and the cipher text.
+                        byte[] KeyEncrypted = sldkey.KEY;
+                        byte[] IV = sldkey.IV;
+
+                        /*Read Save File Header*/
+                        inFs.Seek(0, SeekOrigin.Begin);
+                        byte[] HeaderSave = new byte[116];/*Header info*/
+                        /*Encrypted Block 1*/
+                        byte[] Block1 = new byte[49154];
+                        byte[] Block2 = new byte[9501855];/*This is all testing*/
+
+                        inFs.Read(HeaderSave, 0, 116);
+                        inFs.Seek(117, SeekOrigin.Begin);
+                        inFs.Read(Block1, 0, Block1.Length);
+                        inFs.Seek(Block1.Length + 1, SeekOrigin.Begin);
+                        inFs.Read(Block2, 0, Block2.Length);
+                        
+                        /*The Rest is save info*/
+
+                        // Use RSACryptoServiceProvider
+                        // to decrypt the Rijndael key.
+                        //byte[] KeyDecrypted = rsa.Decrypt(KeyEncrypted, false);
+                        /*If im not mistaken the ps4 has already got this key decrypted for us*/
+
+                        // Decrypt the key.
+                        ICryptoTransform transform = rjndl.CreateDecryptor(KeyEncrypted, IV);
+
+                        // Decrypt the cipher text from
+                        // from the FileSteam of the encrypted
+                        // file (inFs) into the FileStream
+                        // for the decrypted file (outFs).
+
+                        string outFile = fName + ".dec";
+                        using (FileStream outFs = new FileStream(outFile, FileMode.Create))
+                        {
+
+                            int count = 0;
+                            int offset = 0;
+
+                            // blockSizeBytes can be any arbitrary size.
+                            int blockSizeBytes = rjndl.BlockSize / 8;
+                            byte[] data = new byte[blockSizeBytes];
+
+
+                            // By decrypting a chunk a time,
+                            // you can save memory and
+                            // accommodate large files.
+
+                            // Start at the beginning
+                            // of the cipher text.
+                            //inFs.Seek(startC, SeekOrigin.Begin);
+                            using (CryptoStream outStreamDecrypted = new CryptoStream(outFs, transform, CryptoStreamMode.Write))
+                            {
+                                do
+                                {
+                                    count = inFs.Read(data, 0, blockSizeBytes);
+                                    offset += count;
+                                    outStreamDecrypted.Write(data, 0, count);
+
+                                }
+                                while (count > 0);
+
+                                outStreamDecrypted.FlushFinalBlock();
+                                outStreamDecrypted.Close();
+                            }
+                            outFs.Close();
+                        }
+                        inFs.Close();
+                    }
+                }
+            }
+        }
+    }
+    public class Trophy_File
+    {
+        /*SHA1*/
+        private string SHA1;
+        private byte[] Bytes;
+
+        private bool Readbytes;
+
+        TrophyHeader trphy = new TrophyHeader();
+
+        public int FileCount
+        {
+            get
+            {
+                return checked((int)Util.Utils.byteArrayToLittleEndianInteger(trphy.files_count));
+            }
+        }
+
+        public int Version
+        {
+            get
+            {
+                return checked((int)Util.Utils.byteArrayToLittleEndianInteger(trphy.version));
+            }
+        }
+
+        /*Trophy header Structure*/
+        public struct TrophyHeader
+        {
+            public byte[] magic;
+
+            public byte[] version;
+
+            public byte[] file_size;
+
+            public byte[] files_count;
+
+            public byte[] element_size;
+
+            public byte[] dev_flag;
+
+            public byte[] sha1;
+
+            public byte[] padding;
+        }
+        /*Trophy items*/
+        public class TrophyItem
+        {
+            // Token: 0x0600001D RID: 29 RVA: 0x00002050 File Offset: 0x00000250
+            public TrophyItem(int Index, string Name, uint Offset, ulong Size, byte[] TotalBytes)
+            {
+                this.Index = Index;
+                this.Name = Name;
+                this.Size = checked((long)Size);
+                this.Offset = (long)((ulong)Offset);
+                this.TotalBytes = TotalBytes;
+            }
+            /*Index number of trophy item*/
+            public int Index;
+            /*Name of trophy item*/
+            public string Name;
+            /*offset as long*/
+            public long Offset;
+            /*Size*/
+            public long Size;
+            /*Total Bytes*/
+            public byte[] TotalBytes;
+        }
+
+        /*Trophy Files have multiple Items*/
+        public List<TrophyItem> trophyItemList = new List<TrophyItem>();
+
+        private TrophyHeader LoadHeader(Stream fs)
+        {
+            TrophyHeader hdr = default(TrophyHeader);
+            hdr.magic = new byte[4];
+            hdr.version = new byte[4];
+            hdr.file_size = new byte[8];
+            hdr.files_count = new byte[4];
+            hdr.element_size = new byte[4];
+            hdr.dev_flag = new byte[4];
+            hdr.sha1 = new byte[20];
+            hdr.padding = new byte[36];
+            fs.Read(hdr.magic, 0, hdr.magic.Length);
+            fs.Read(hdr.version, 0, hdr.version.Length);
+            fs.Read(hdr.file_size, 0, hdr.file_size.Length);
+            fs.Read(hdr.files_count, 0, hdr.files_count.Length);
+            fs.Read(hdr.element_size, 0, hdr.element_size.Length);
+            fs.Read(hdr.dev_flag, 0, hdr.dev_flag.Length);
+            long num = Util.Utils.byteArrayToLittleEndianInteger(hdr.version);
+            if (num <= 3L && num >= 1L)
+            {
+                switch ((int)(num - 1L))
+                {
+                    case 0:
+                        fs.Read(hdr.padding, 0, hdr.padding.Length);
+                        break;
+                    case 1:
+                        fs.Read(hdr.sha1, 0, hdr.sha1.Length);
+                        hdr.padding = new byte[16];
+                        fs.Read(hdr.padding, 0, hdr.padding.Length);
+                        break;
+                    case 2:
+                        fs.Read(hdr.sha1, 0, hdr.sha1.Length);
+                        hdr.padding = new byte[48];
+                        fs.Read(hdr.padding, 0, hdr.padding.Length);
+                        break;
+                }
+            }
+            return hdr;
+        }
+
+        private void ReadContent(Stream fs)
+        {
+            byte[] array = new byte[36];
+            byte[] array2 = new byte[4];
+            byte[] array3 = new byte[8];
+            byte[] array4 = new byte[4];
+            int num = 0;
+            checked
+            {
+                int num2 = this.FileCount - 1;
+                int i = num;
+                while (i <= num2)
+                {
+                    fs.Read(array, 0, array.Length);
+                    fs.Read(array2, 0, array2.Length);
+                    fs.Read(array3, 0, array3.Length);
+                    fs.Read(array4, 0, array4.Length);
+                    fs.Seek(12L, SeekOrigin.Current);
+                    long position = fs.Position;
+                    string name = Util.Utils.byteArrayToUTF8String(array).Replace("\0", null);
+                    long num3 = Util.Utils.hexStringToLong(Util.Utils.byteArrayToHexString(array2));
+                    long num4 = Util.Utils.hexStringToLong(Util.Utils.byteArrayToHexString(array3));
+                    if (this.Readbytes)
+                    {
+                        using (MemoryStream memoryStream = new MemoryStream(this.Bytes))
+                        {
+                            byte[] array5 = new byte[(int)(num4 - 1L) + 1];
+                            memoryStream.Seek(num3, SeekOrigin.Begin);
+                            memoryStream.Read(array5, 0, array5.Length);
+                            this.trophyItemList.Add(new TrophyItem(i, name, (uint)num3, (ulong)num4, array5));
+                            goto IL_124;
+                        }
+                        goto IL_10C;
+                    }
+                    goto IL_10C;
+                    IL_124:
+                    i++;
+                    continue;
+                    IL_10C:
+                    this.trophyItemList.Add(new TrophyItem(i, name, (uint)num3, (ulong)num4, null));
+                    goto IL_124;
+                }
+            }
+        }
+
+        private string CalculateSHA1Hash()
+        {
+            checked
+            {
+                if (this.Version > 1)
+                {
+                    byte[] array = new byte[28];
+                    SHA1CryptoServiceProvider sha1CryptoServiceProvider = new SHA1CryptoServiceProvider();
+                    MemoryStream memoryStream = new MemoryStream();
+                    using (MemoryStream memoryStream2 = new MemoryStream(this.Bytes))
+                    {
+                        memoryStream2.Read(array, 0, array.Length);
+                        memoryStream.Write(array, 0, array.Length);
+                        array = new byte[1];
+                        int num = 0;
+                        do
+                        {
+                            memoryStream.Write(array, 0, array.Length);
+                            num++;
+                        }
+                        while (num <= 19);
+                        memoryStream2.Seek(48L, SeekOrigin.Begin);
+                        array = new byte[(int)(memoryStream2.Length - 48L - 1L) + 1];
+                        memoryStream2.Read(array, 0, array.Length);
+                        memoryStream.Write(array, 0, array.Length);
+                    }
+                    byte[] array2 = sha1CryptoServiceProvider.ComputeHash(memoryStream.ToArray());
+                    StringBuilder stringBuilder = new StringBuilder();
+                    foreach (byte b in array2)
+                    {
+                        stringBuilder.Append(b.ToString("X2"));
+                    }
+                    return stringBuilder.ToString();
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// This method should create a blank trophy file
+        /// </summary>
+        public Trophy_File()
+        {
+            /*Load a blank tropy file ?*/
+        }
+
+        /// <summary>
+        /// Method Will Create a Trohy File From a File Path
+        /// </summary>
+        /// <param name="FilePath">File Location on disk</param>
+        public Trophy_File(string FilePath)
+        {
+            this.SHA1 = "";
+            this.trophyItemList = new List<TrophyItem>();
+            using (FileStream fileStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                fileStream.Read(Bytes, 0, checked((int)fileStream.Length));
+                fileStream.Seek(0L, SeekOrigin.Begin);
+                TrophyHeader hdr = LoadHeader(fileStream);
+                trphy = hdr;
+                if (!Util.Utils.ByteArraysEqual(hdr.magic, new byte[]{220,162,77,0}))
+                {
+                    throw new Exception("This file is not supported!");
+                }
+                ReadContent(fileStream);
+                if (Version > 1)
+                {
+                    SHA1 = CalculateSHA1Hash();
+                }
+            }
+            //MessageBox.Show(this._error, "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        public Trophy_File Load(byte[] bytes)
+        {
+            Trophy_File rtn = new Trophy_File();
+            try
+            {            
+                this.trophyItemList = new List<TrophyItem>();
+                this.Bytes = bytes;
+                using (MemoryStream memoryStream = new MemoryStream(bytes))
+                {
+                    TrophyHeader hdr = LoadHeader(memoryStream);
+                    trphy = hdr;
+                    if (!Util.Utils.ByteArraysEqual(hdr.magic, new byte[] { 220, 162, 77, 0 }))
+                    {
+                        throw new Exception("This file is not supported!");
+                    }
+                    ReadContent(memoryStream);
+                    if (Version > 1)
+                    {
+                        SHA1 = CalculateSHA1Hash();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                
+            }
+            rtn.Bytes = Bytes;
+            rtn.SHA1 = SHA1;
+            rtn.trphy = trphy;
+            rtn.trophyItemList = trophyItemList;
+            return rtn;
+        }
+
+        public byte[] ExtractFileToMemory(string filename)
+        {
+            byte[] result = null;
+            TrophyItem archiver = this.trophyItemList.Find((TrophyItem b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(Microsoft.VisualBasic.Strings.Mid(b.Name.ToUpper(), 1, Microsoft.VisualBasic.Strings.Len(filename.ToUpper())), filename.ToUpper(), false) == 0);
+            if (archiver != null)
+            {
+                byte[] array = new byte[checked((int)(archiver.Size - 1L) + 1)];
+                using (MemoryStream memoryStream = new MemoryStream(this.Bytes))
+                {
+                    memoryStream.Seek(archiver.Offset, SeekOrigin.Begin);
+                    memoryStream.Read(array, 0, array.Length);
+                    using (MemoryStream memoryStream2 = new MemoryStream())
+                    {
+                        memoryStream2.Write(array, 0, array.Length);
+                        result = memoryStream2.ToArray();
+                    }
+                }
+            }
+            return result;
+        }
 
     }
+
 
 
     /*********************************************************
@@ -2979,7 +3414,31 @@ namespace PS4_Tools
 
                 return storeitems;
             }
+        }
 
+        #endregion << Official >>
+
+        #region << Scene Related >>
+
+        public class SceneRelated
+        {
+            public static void Create_FKPG(string Download_Url, string SaveLocation)
+            {
+                /*we can download an item */
+                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "ext.zip", Properties.Resources.ext);
+                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe", Properties.Resources.orbis_pub_cmd);
+
+                if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\ext\"))
+                {
+                    ZipFile.ExtractToDirectory(PS4_Tools.AppCommonPath() + "ext.zip", PS4_Tools.AppCommonPath());
+                }
+
+
+            }
+
+            /// <summary>
+            /// GP4 Project Class
+            /// </summary>
             public class GP4
             {
 
@@ -3169,32 +3628,6 @@ namespace PS4_Tools
 
             }
 
-        }
-
-        #endregion << Official >>
-
-        #region << Scene Related >>
-
-        public class SceneRelated
-        {
-            public static void Create_FKPG(string Download_Url, string SaveLocation)
-            {
-                /*we can download an item */
-                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "ext.zip", Properties.Resources.ext);
-                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe", Properties.Resources.orbis_pub_cmd);
-
-                if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\ext\"))
-                {
-                    ZipFile.ExtractToDirectory(PS4_Tools.AppCommonPath() + "ext.zip", PS4_Tools.AppCommonPath());
-                }
-
-
-            }
-
-            /// <summary>
-            /// GP4 Project Class
-            /// </summary>
-           
             public class IDS
             {
 
@@ -3252,6 +3685,535 @@ namespace PS4_Tools
             {
 
             }
+
+            #region << UnprotectedPKG >>
+
+            private static string m_pkgfile;
+            private static bool m_loaded;
+            private static byte[] sfo_byte;
+            private static byte[] icon_byte;
+            private static byte[] pic_byte;
+            private static byte[] trp_byte;
+            private static bool m_error;
+            public enum PKGType
+            {
+                Game,
+                App,
+                Addon_Theme,
+                Patch,
+                Unknown
+            }
+
+            private class Names
+            {
+                public Names(int m_Index, ulong m_Offset, ulong m_Size, string m_Name)
+                {
+                    this.Index = m_Index;
+                    this.Offset = m_Offset;
+                    this.Size = m_Size;
+                    this.Name = m_Name;
+                }
+
+                public int Index;
+
+                public ulong Offset;
+
+                public ulong Size;
+
+                public string Name;
+            }
+
+            public enum PKG_State
+            {
+               Fake =0,
+               Official = 1,
+               Officail_DP = 2,
+               Unkown = 99 
+            }
+
+            private static PKGType GetPkgType(string str)
+            {
+                if (Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "gde", false) == 0 || Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "gdk", false) == 0)
+                {
+                    return PKGType.App;
+                }
+                if (Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "gd", false) == 0)
+                {
+                    return PKGType.Game;
+                }
+                if (Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "ac", false) == 0)
+                {
+                    return PKGType.Addon_Theme;
+                }
+                if (Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "gp", false) == 0)
+                {
+                    return PKGType.Patch;
+                }
+                return PKGType.Unknown;
+            }
+
+            public class Unprotected_PKG
+            {
+                /*Param.SFO*/
+                public Param_SFO.PARAM_SFO Param { get; set; }
+                /*Trophy File*/
+                public Trophy_File Trophy_File { get; set; }
+                /*PKG Image*/
+                public Bitmap Image { get; set; }
+                /*PKG State (Fake ? Offcial */
+
+                public PKG_State PKGState { get; set; }
+
+                public PKGType PKG_Type
+                {
+                    get
+                    {
+                        return GetPkgType(Param.Category);
+                        //return PKGType.Unknown;
+                    }
+                }
+
+                public string PS4_Title
+                {
+                    get
+                    {
+                        return Param.Title;
+                    }
+                }
+            }
+
+
+            private static byte[] PKG_Magic = new byte[]{ 0x7F, 0x43, 0x4E, 0x54 };
+
+            /// <summary>
+            /// Reads a PS4 PKG Into an Unprotected_PKG Object
+            /// </summary>
+            /// <param name="pkgfile">PKG File Location</param>
+            /// <returns>PKG With Unprotected_PKG Structure</returns>
+            public static Unprotected_PKG Read_PKG(string pkgfile)
+            {
+                Unprotected_PKG pkgreturn = new Unprotected_PKG();
+                m_loaded = false;
+                sfo_byte = null;
+                icon_byte = null;
+                pic_byte = null;
+                trp_byte = null;
+                
+                if (!File.Exists(pkgfile))
+                {
+                    throw new Exception("File not found!");
+                }
+                List<Names> list = new List<Names>();
+                byte[] array = new byte[]
+                {
+                    0,
+                    112,
+                    97,
+                    114,
+                    97,
+                    109,
+                    46,
+                    115,
+                    102,
+                    111,
+                    0
+                };
+                StringBuilder stringBuilder = new StringBuilder();
+                using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(pkgfile)))
+                {
+                    /*Check PS4 File Header*/
+                    Byte[] PKGFileHeader = binaryReader.ReadBytes(4);
+                    if(!Util.Utils.CompareBytes(PKGFileHeader,PKG_Magic))/*If Files Match*/
+                    {
+                        //fail
+                        throw new Exception("This is not a valid ps4 pkg");
+                    }
+                    binaryReader.BaseStream.Seek(24L, SeekOrigin.Begin);
+                    uint num = Util.Utils.ReadUInt32(binaryReader);
+                    uint num2 = Util.Utils.ReadUInt32(binaryReader);
+                    binaryReader.BaseStream.Seek(44L, SeekOrigin.Begin);
+                    uint num3 = Util.Utils.ReadUInt32(binaryReader);
+                    binaryReader.BaseStream.Seek(64L, SeekOrigin.Begin);
+                    string text = Util.Utils.ReadASCIIString(binaryReader, 36);
+                    binaryReader.BaseStream.Seek(119L, SeekOrigin.Begin);
+                    ushort num4 = Util.Utils.ReadUInt16(binaryReader);
+                    Dictionary<long, long> dictionary;
+                    uint num5;
+                    uint num6;
+                    checked
+                    {
+                        binaryReader.BaseStream.Seek((long)(unchecked((ulong)num) + 176UL), SeekOrigin.Begin);
+                        dictionary = new Dictionary<long, long>();
+                        num5 = Util.Utils.ReadUInt32(binaryReader);
+                        num6 = Util.Utils.ReadUInt32(binaryReader);
+                        binaryReader.BaseStream.Seek(binaryReader.BaseStream.Position + 24L, SeekOrigin.Begin);
+                    }
+                    do
+                    {
+                        dictionary.Add((long)((ulong)num5), (long)((ulong)num6));
+                        num5 = Util.Utils.ReadUInt32(binaryReader);
+                        num6 = Util.Utils.ReadUInt32(binaryReader);
+                        binaryReader.BaseStream.Seek(checked(binaryReader.BaseStream.Position + 24L), SeekOrigin.Begin);
+                    }
+                    while ((ulong)(checked(num5 + num6)) > 0UL);
+                    checked
+                    {
+                        int num8 = 0;
+                        try
+                        {
+                            foreach (KeyValuePair<long, long> keyValuePair in dictionary)
+                            {
+                                try
+                                {
+                                    binaryReader.BaseStream.Seek(keyValuePair.Key, SeekOrigin.Begin);
+                                    uint num7 = binaryReader.ReadUInt32();
+                                    binaryReader.BaseStream.Seek(keyValuePair.Key, SeekOrigin.Begin);
+                                    if (unchecked((ulong)num7) == 1179865088UL && sfo_byte == null)
+                                    {
+                                        sfo_byte = Util.Utils.ReadByte(binaryReader, (int)keyValuePair.Value);
+                                        break;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                                num8++;
+                            }
+                        }
+                        finally
+                        {
+                            Dictionary<long, long>.Enumerator enumerator2 = new Dictionary<long, long>.Enumerator();
+                            ((IDisposable)enumerator2).Dispose();
+                        }
+                        try
+                        {
+                            try
+                            {
+                                foreach (KeyValuePair<long, long> keyValuePair2 in dictionary)
+                                {
+                                    binaryReader.BaseStream.Seek(keyValuePair2.Key, SeekOrigin.Begin);
+                                    if (Util.Utils.Contain(binaryReader.ReadBytes(array.Length), array))
+                                    {
+                                        binaryReader.BaseStream.Seek(keyValuePair2.Key, SeekOrigin.Begin);
+                                        byte[] array2 = binaryReader.ReadBytes((int)keyValuePair2.Value);
+                                        int num9 = 1;
+                                        int num10 = array2.Length - 1;
+                                        for (int i = num9; i <= num10; i++)
+                                        {
+                                            if (array2[i] == 0)
+                                            {
+                                                list.Add(new Names(list.Count, (ulong)dictionary.Keys.ElementAtOrDefault(num8), (ulong)dictionary.Values.ElementAtOrDefault(num8), stringBuilder.ToString()));
+                                                num8++;
+                                                stringBuilder.Clear();
+                                            }
+                                            stringBuilder.Append(Util.Utils.HexToString(Microsoft.VisualBasic.Conversion.Hex(array2[i])));
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                Dictionary<long, long>.Enumerator enumerator3 = new Dictionary<long, long>.Enumerator();
+                                ((IDisposable)enumerator3).Dispose();
+                            }
+                        }
+                        catch (Exception ex2)
+                        {
+                        }
+                        try
+                        {
+                            foreach (Names names in list)
+                            {
+                                /*List Of names*/
+                            }
+                        }
+                        finally
+                        {
+                            List<Names>.Enumerator enumerator4 = new List<Names>.Enumerator();
+                            ((IDisposable)enumerator4).Dispose();
+                        }
+                        Names names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "param.sfo", false) == 0);
+                        if (names2 != null)
+                        {
+                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                            sfo_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                        }
+                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "icon0.png", false) == 0);
+                        if (names2 != null)
+                        {
+                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                            icon_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                        }
+                        else
+                        {
+                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "icon1.png", false) == 0);
+                            if (names2 != null)
+                            {
+                                binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                                icon_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                            }
+                        }
+                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "trophy/trophy00.trp", false) == 0);
+                        if (names2 != null)
+                        {
+                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                            trp_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                        }
+                        else
+                        {
+                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "trophy/trophy01.trp", false) == 0);
+                            if (names2 != null)
+                            {
+                                binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                                trp_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                            }
+                        }
+                        if (sfo_byte != null && sfo_byte.Length > 0)
+                        {
+                            Param_SFO.PARAM_SFO psfo = new Param_SFO.PARAM_SFO(sfo_byte);
+                            pkgreturn.Param = psfo;
+                        }
+                        if (icon_byte != null && icon_byte.Length > 0)
+                        {
+                            pkgreturn.Image = Util.Utils.BytesToBitmap(icon_byte);
+                        }
+                        else if (trp_byte != null && trp_byte.Length > 0)
+                        {
+                            Trophy_File trpreader = new Trophy_File();
+                            trpreader.Load(trp_byte);
+                            icon_byte = trpreader.ExtractFileToMemory("ICON0.PNG");
+                            if (icon_byte != null && icon_byte.Length > 0)
+                            {
+                                pkgreturn.Image = Util.Utils.BytesToBitmap(icon_byte);
+                            }
+                        }
+                        if(trp_byte != null && trp_byte.Length > 0)
+                        {
+                            Trophy_File trpreader = new Trophy_File();
+                            //trpreader.Load(trp_byte);
+                            pkgreturn.Trophy_File = trpreader.Load(trp_byte);
+                        }
+                       pkgreturn.PKGState = (num4 == 6666) ? PKG_State.Fake : ((num4 == 7747) ? PKG_State.Officail_DP : PKG_State.Official);
+                    }
+                }
+                m_loaded = true;
+                return pkgreturn;
+            }
+
+            /// <summary>
+            /// Reads a PS4 PKG Into an Unprotected_PKG Object
+            /// </summary>
+            /// <param name="pkgfile">PKG File Stream</param>
+            /// <returns>PKG With Unprotected_PKG Structure</returns>
+            public static Unprotected_PKG Read_PKG(Stream pkgfile)
+            {
+                Unprotected_PKG pkgreturn = new Unprotected_PKG();
+                m_loaded = false;
+                sfo_byte = null;
+                icon_byte = null;
+                pic_byte = null;
+                trp_byte = null;
+
+                List<Names> list = new List<Names>();
+                byte[] array = new byte[]
+                {
+                    0,
+                    112,
+                    97,
+                    114,
+                    97,
+                    109,
+                    46,
+                    115,
+                    102,
+                    111,
+                    0
+                };
+                StringBuilder stringBuilder = new StringBuilder();
+                using (BinaryReader binaryReader = new BinaryReader(pkgfile))
+                {
+                    /*Check PS4 File Header*/
+                    Byte[] PKGFileHeader = binaryReader.ReadBytes(4);
+                    if (!Util.Utils.CompareBytes(PKGFileHeader, PKG_Magic))/*If Files Match*/
+                    {
+                        //fail
+                        throw new Exception("This is not a valid ps4 pkg");
+                    }
+                    binaryReader.BaseStream.Seek(24L, SeekOrigin.Begin);
+                    uint num = Util.Utils.ReadUInt32(binaryReader);
+                    uint num2 = Util.Utils.ReadUInt32(binaryReader);
+                    binaryReader.BaseStream.Seek(44L, SeekOrigin.Begin);
+                    uint num3 = Util.Utils.ReadUInt32(binaryReader);
+                    binaryReader.BaseStream.Seek(64L, SeekOrigin.Begin);
+                    string text = Util.Utils.ReadASCIIString(binaryReader, 36);
+                    binaryReader.BaseStream.Seek(119L, SeekOrigin.Begin);
+                    ushort num4 = Util.Utils.ReadUInt16(binaryReader);
+                    Dictionary<long, long> dictionary;
+                    uint num5;
+                    uint num6;
+                    checked
+                    {
+                        binaryReader.BaseStream.Seek((long)(unchecked((ulong)num) + 176UL), SeekOrigin.Begin);
+                        dictionary = new Dictionary<long, long>();
+                        num5 = Util.Utils.ReadUInt32(binaryReader);
+                        num6 = Util.Utils.ReadUInt32(binaryReader);
+                        binaryReader.BaseStream.Seek(binaryReader.BaseStream.Position + 24L, SeekOrigin.Begin);
+                    }
+                    do
+                    {
+                        dictionary.Add((long)((ulong)num5), (long)((ulong)num6));
+                        num5 = Util.Utils.ReadUInt32(binaryReader);
+                        num6 = Util.Utils.ReadUInt32(binaryReader);
+                        binaryReader.BaseStream.Seek(checked(binaryReader.BaseStream.Position + 24L), SeekOrigin.Begin);
+                    }
+                    while ((ulong)(checked(num5 + num6)) > 0UL);
+                    checked
+                    {
+                        int num8 = 0;
+                        try
+                        {
+                            foreach (KeyValuePair<long, long> keyValuePair in dictionary)
+                            {
+                                try
+                                {
+                                    binaryReader.BaseStream.Seek(keyValuePair.Key, SeekOrigin.Begin);
+                                    uint num7 = binaryReader.ReadUInt32();
+                                    binaryReader.BaseStream.Seek(keyValuePair.Key, SeekOrigin.Begin);
+                                    if (unchecked((ulong)num7) == 1179865088UL && sfo_byte == null)
+                                    {
+                                        sfo_byte = Util.Utils.ReadByte(binaryReader, (int)keyValuePair.Value);
+                                        break;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                                num8++;
+                            }
+                        }
+                        finally
+                        {
+                            Dictionary<long, long>.Enumerator enumerator2 = new Dictionary<long, long>.Enumerator();
+                            ((IDisposable)enumerator2).Dispose();
+                        }
+                        try
+                        {
+                            try
+                            {
+                                foreach (KeyValuePair<long, long> keyValuePair2 in dictionary)
+                                {
+                                    binaryReader.BaseStream.Seek(keyValuePair2.Key, SeekOrigin.Begin);
+                                    if (Util.Utils.Contain(binaryReader.ReadBytes(array.Length), array))
+                                    {
+                                        binaryReader.BaseStream.Seek(keyValuePair2.Key, SeekOrigin.Begin);
+                                        byte[] array2 = binaryReader.ReadBytes((int)keyValuePair2.Value);
+                                        int num9 = 1;
+                                        int num10 = array2.Length - 1;
+                                        for (int i = num9; i <= num10; i++)
+                                        {
+                                            if (array2[i] == 0)
+                                            {
+                                                list.Add(new Names(list.Count, (ulong)dictionary.Keys.ElementAtOrDefault(num8), (ulong)dictionary.Values.ElementAtOrDefault(num8), stringBuilder.ToString()));
+                                                num8++;
+                                                stringBuilder.Clear();
+                                            }
+                                            stringBuilder.Append(Util.Utils.HexToString(Microsoft.VisualBasic.Conversion.Hex(array2[i])));
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                Dictionary<long, long>.Enumerator enumerator3 = new Dictionary<long, long>.Enumerator();
+                                ((IDisposable)enumerator3).Dispose();
+                            }
+                        }
+                        catch (Exception ex2)
+                        {
+                        }
+                        try
+                        {
+                            foreach (Names names in list)
+                            {
+                                /*List Of names*/
+                            }
+                        }
+                        finally
+                        {
+                            List<Names>.Enumerator enumerator4 = new List<Names>.Enumerator();
+                            ((IDisposable)enumerator4).Dispose();
+                        }
+                        Names names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "param.sfo", false) == 0);
+                        if (names2 != null)
+                        {
+                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                            sfo_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                        }
+                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "icon0.png", false) == 0);
+                        if (names2 != null)
+                        {
+                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                            icon_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                        }
+                        else
+                        {
+                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "icon1.png", false) == 0);
+                            if (names2 != null)
+                            {
+                                binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                                icon_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                            }
+                        }
+                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "trophy/trophy00.trp", false) == 0);
+                        if (names2 != null)
+                        {
+                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                            trp_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                        }
+                        else
+                        {
+                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "trophy/trophy01.trp", false) == 0);
+                            if (names2 != null)
+                            {
+                                binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                                trp_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                            }
+                        }
+                        if (sfo_byte != null && sfo_byte.Length > 0)
+                        {
+                            Param_SFO.PARAM_SFO psfo = new Param_SFO.PARAM_SFO(sfo_byte);
+                            pkgreturn.Param = psfo;
+                        }
+                        if (icon_byte != null && icon_byte.Length > 0)
+                        {
+                            pkgreturn.Image = Util.Utils.BytesToBitmap(icon_byte);
+                        }
+                        else if (trp_byte != null && trp_byte.Length > 0)
+                        {
+                            Trophy_File trpreader = new Trophy_File();
+                            trpreader.Load(trp_byte);
+                            icon_byte = trpreader.ExtractFileToMemory("ICON0.PNG");
+                            if (icon_byte != null && icon_byte.Length > 0)
+                            {
+                                pkgreturn.Image = Util.Utils.BytesToBitmap(icon_byte);
+                            }
+                        }
+                        if (trp_byte != null && trp_byte.Length > 0)
+                        {
+                            Trophy_File trpreader = new Trophy_File();
+                            //trpreader.Load(trp_byte);
+                            pkgreturn.Trophy_File = trpreader.Load(trp_byte);
+                        }
+                        pkgreturn.PKGState = (num4 == 6666) ? PKG_State.Fake : ((num4 == 7747) ? PKG_State.Officail_DP : PKG_State.Official);
+                    }
+                }
+                m_loaded = true;
+                return pkgreturn;
+            }
+
+            #endregion << UnprotectedPKG >>
 
             public string pkgtable { get; set; }
             private static LibOrbisPkg.PKG.Pkg pkg = null;

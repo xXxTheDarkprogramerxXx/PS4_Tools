@@ -155,5 +155,37 @@ namespace Tester
 
             
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            /*This was mainly powered by leecherman's version 1.1 code i do see he removed that code in future release
+             (Not sure why he ended up using official sce tools over this)*/
+            PS4_Tools.PKG.SceneRelated.Unprotected_PKG ps4pkg = PS4_Tools.PKG.SceneRelated.Read_PKG(@"C:\Users\3deEchelon\Desktop\PS4\Euro.FISHING.COLLECTORS.EDITION.PS4-DUPLEX\Euro.Fishing.Collectors.Edition.PS4-DUPLEX\duplex-euro.fishing.collectors.ed.ps4\Euro.Fishing.Collectors.Edition.PS4-DUPLEX.pkg");
+
+            /*Lets work with the data shall we*/
+            /*Display the PSFO in some type of info format*/
+            var item = ps4pkg.Param;
+           
+            for (int i = 0; i < item.Tables.Count; i++)
+            {
+                listBox3.Items.Add(item.Tables[i].Name + ":" + item.Tables[i].Value);
+            }
+            /*Display Image*/
+            pictureBox2.Image = ps4pkg.Image;
+
+            var trphy = ps4pkg.Trophy_File;
+
+            for (int i = 0; i < trphy.FileCount; i++)
+            {
+                listBox4.Items.Add(trphy.trophyItemList[i].Name);
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            /*Lets try and work with some savedata*/
+            PS4_Tools.SaveData.LoadSaveData(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\savedata\CUSA01656\sdimg_SAVEDATA00", @"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\savedata\CUSA01656\SAVEDATA00.bin");
+
+        }
     }
 }
