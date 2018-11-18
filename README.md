@@ -1,6 +1,8 @@
 # PS4_Tools
 Collection Of Open Source PS4 Tools all in one Library 
 
+Supports Unity
+
 ## Getting Started
 
 Add the .DLL to your solution. 
