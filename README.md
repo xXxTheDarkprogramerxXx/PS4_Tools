@@ -1,6 +1,8 @@
 # PS4_Tools
 Collection Of Open Source PS4 Tools all in one Library 
 
+Supports Unity
+
 ## Getting Started
 
 Add the .DLL to your solution. 
@@ -31,7 +33,7 @@ The class strucutre might change in future releases
     ├── SaveData                                  /* PS4 SaveData Reserved Class*/
     ├── PKG                                       /* PS4 PKG Handling Class*/ 
     │   ├── Official                              /*Some Methods for Official PKG Items*/
-    │   ├──   ├── ReadAllUnprotectedData          /*Retruns All Unprotected Data From a PS4 PKG (NO Passcode Section)*/
+    │   ├──   ├── ReadAllUnprotectedData          /*Deprecated*/
     │   ├──   ├── StoreItems                      /*Store Items Object Class (Placeholder)*/
     │   ├──   ├── CheckForUpdate                  /*Returns a Update_Structure Type*/
     │   ├──   ├── Get_All_Store_Items             /*Returns a List<StoreItems> With Download Links and some other infrmation*/
@@ -61,16 +63,9 @@ The class strucutre might change in future releases
 
 Please see the testers form to see how some of the classes work if not documented here
 
-#### Reading a PKG File (Using Official Toolset) /*This will be depericated in a future update*/
+#### Reading a PKG File (Using Official Toolset) /*Deprecated 2018-11-18*/
 ```c#
-/*Gets a list of unprotected items*/
-var lstitem =   PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEchelon\Downloads\Patapon_Remastered_CUSA07184_update_1.01.pkg");
-/*Reads a SFO File From an PKG File*/
- Param_SFO.PARAM_SFO sfo =      PS4_Tools.PKG.SceneRelated.PARAM_SFO.Get_Param_SFO(@"C:\Users\3deEchelon\Downloads\Patapon_Remastered_CUSA07184_update_1.01.pkg");
-            for (int i = 0; i < sfo.Tables.Count; i++)
-            {
-                listBox2.Items.Add( sfo.Tables[i].Name + " : " + sfo.Tables[i].Value);
-            }
+
 ```
 
 #### Reading and Saving a GP4
