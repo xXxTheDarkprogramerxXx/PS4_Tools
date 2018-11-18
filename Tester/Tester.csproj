@@ -100,6 +100,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PS4_PKG_Viewer\PS4_PKG_Viewer.csproj">
+      <Project>{f6803f1e-8484-4e76-933b-ef1c0355531d}</Project>
+      <Name>PS4_PKG_Viewer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PS4_Tools\PS4_Tools.csproj">
       <Project>{095271bf-9f85-43d0-bf8e-782b18eaed6f}</Project>
       <Name>PS4_Tools</Name>

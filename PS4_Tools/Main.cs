@@ -4,29 +4,22 @@
 * 
 */
 
-using GameArchives;
-using LibArchiveExplorer;
+//using GameArchives;
+//using LibArchiveExplorer;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Diagnostics;
-using System.IO.Compression;
 using DiscUtils.Iso9660;
 
 #region << VGAudio >>
-using VGAudio.Codecs.Atrac9;
-using VGAudio.Formats;
-using VGAudio.Formats.Atrac9;
-using VGAudio.Utilities.Riff;
-using VGAudio.Containers.At9;
 using System.Security.Cryptography;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -36,9 +29,9 @@ using Newtonsoft.Json;
 
 namespace PS4_Tools
 {
-    public class PS4_Tools
+    internal class PS4_Tools
     {
-        public static string AppCommonPath()
+        internal static string AppCommonPath()
         {
             return System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("PS4_Tools.dll", "");
         }
@@ -47,7 +40,7 @@ namespace PS4_Tools
         /// Deletes all files within a Directory and also deletes a Directory
         /// </summary>
         /// <param name="target_dir"></param>
-        public static void DeleteDirectory(string target_dir)
+        internal static void DeleteDirectory(string target_dir)
         {
             try
             {
@@ -110,11 +103,11 @@ namespace PS4_Tools
                 //    // Use the decoded audio in pcmBuffer however you want
                 //}
 
-                VGAudio.Containers.At9.At9Reader reader = new VGAudio.Containers.At9.At9Reader();
-                reader.Read(new System.IO.FileStream(at9file, FileMode.Open, FileAccess.Read));
+                //VGAudio.Containers.At9.At9Reader reader = new VGAudio.Containers.At9.At9Reader();
+                //reader.Read(new System.IO.FileStream(at9file, FileMode.Open, FileAccess.Read));
 
-                reader.ReadWithConfig(new System.IO.FileStream(at9file, FileMode.Open, FileAccess.Read));
-
+                //reader.ReadWithConfig(new System.IO.FileStream(at9file, FileMode.Open, FileAccess.Read));
+                //well fuck
             }
         }
     }
@@ -248,8 +241,9 @@ namespace PS4_Tools
         {
             public static void SavePNGFromDDS(string DDSFilePath, string savepath)
             {
+                /*Migrating to .Net3.5 this class will not work right now*/
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
-                image.Save(savepath);
+                image.BitmapImage.Save(savepath);
 
             }
 
@@ -258,8 +252,8 @@ namespace PS4_Tools
                 Stream rtnStream = new MemoryStream();
 
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
-                image.Save(rtnStream);
-
+                Bitmap temp = image.BitmapImage;
+                temp.Save(rtnStream,System.Drawing.Imaging.ImageFormat.Bmp);
                 return rtnStream;
 
             }
@@ -267,12 +261,8 @@ namespace PS4_Tools
             public static Bitmap GetBitmapFromDDS(string DDSFilePath)
             {
                 Stream rtnStream = new MemoryStream();
-
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
-                image.Save(rtnStream);
-
-                System.Drawing.Image rtnimage = System.Drawing.Image.FromStream(rtnStream);
-                return (Bitmap)rtnimage;
+                return (Bitmap)image.BitmapImage;
             }
         }
 
@@ -2447,6 +2437,9 @@ namespace PS4_Tools
                 //Environment.Exit(0);
             }
         }
+
+
+        /*Read RCO To Custom File*/
     }
 
     public class SaveData
@@ -2454,36 +2447,16 @@ namespace PS4_Tools
         public struct Sealedkey
         {
             public byte[] MAGIC;/*Magic needs to be validated*/
-            public byte[] KeySet;
-            public byte[] AlignBytes;
-            public byte[] IV;
-            public byte[] KEY;
-            public byte[] SHA256;
+            public byte[] KeySet;/*Sony uses this to tell the system which one of the key sets to use in case one needs to be scrapped I'm guessing*/
+            public byte[] AlignBytes;/*Padding to IV*/
+            public byte[] IV;/*IV Key For SHA256 at this point im guessing the system uses CBC but i could be wrong*/
+            public byte[] KEY;/*Key Fpr SHA256*/
+            public byte[] SHA256;//SHA256 HASH?
         }
         public static void LoadSaveData(string filelocation, string Sealedkeylocation)
         {
             /*Load the sealed key from the file*/
-            Sealedkey sldkey = default(Sealedkey);
-            sldkey.MAGIC = new byte[8];
-            sldkey.KeySet = new byte[2];
-            sldkey.AlignBytes = new byte[6];
-            sldkey.IV = new byte[16];
-            sldkey.KEY = new byte[32];
-            sldkey.SHA256 = new byte[32];
-
-            FileStream fs = new FileStream(Sealedkeylocation, FileMode.Open, FileAccess.Read);
-
-            fs.Read(sldkey.MAGIC, 0, sldkey.MAGIC.Length);
-            fs.Read(sldkey.KeySet, 0, sldkey.KeySet.Length);
-            fs.Read(sldkey.AlignBytes, 0, sldkey.AlignBytes.Length);
-            fs.Read(sldkey.IV, 0, sldkey.IV.Length);
-            fs.Read(sldkey.KEY, 0, sldkey.KEY.Length);
-            fs.Read(sldkey.SHA256, 0, sldkey.SHA256.Length);
-
-            if (!Util.Utils.CompareBytes(sldkey.MAGIC, new byte[] { 0x70, 0x66, 0x73, 0x53, 0x4B, 0x4B, 0x65, 0x79 }))
-            {
-                throw new Exception("This is not a valid SealedKey");
-            }
+            Sealedkey sldkey = LoadSealedKey(Sealedkeylocation);
             // Declare CspParmeters and RsaCryptoServiceProvider
             // objects with global scope of your Form class.
             CspParameters cspp = new CspParameters();
@@ -2520,7 +2493,7 @@ namespace PS4_Tools
                     RijndaelManaged rjndl = new RijndaelManaged();
                    // rjndl.KeySize = 256;
                    // rjndl.BlockSize = 256;
-                    rjndl.Mode = CipherMode.CBC;
+                    rjndl.Mode = CipherMode.CFB;
 
                     // Use FileStream objects to read the encrypted
                     // file (inFs) and save the decrypted file (outFs).
@@ -2543,7 +2516,7 @@ namespace PS4_Tools
                         inFs.Read(HeaderSave, 0, 116);
                         inFs.Seek(117, SeekOrigin.Begin);
                         inFs.Read(Block1, 0, Block1.Length);
-                        inFs.Seek(Block1.Length + 1, SeekOrigin.Begin);
+                       inFs.Seek(Block1.Length + 1, SeekOrigin.Begin);
                         inFs.Read(Block2, 0, Block2.Length);
                         
                         /*The Rest is save info*/
@@ -2584,7 +2557,7 @@ namespace PS4_Tools
                             {
                                 do
                                 {
-                                    count = inFs.Read(data, 0, blockSizeBytes);
+                                    count = Block1[blockSizeBytes];
                                     offset += count;
                                     outStreamDecrypted.Write(data, 0, count);
 
@@ -2600,6 +2573,198 @@ namespace PS4_Tools
                     }
                 }
             }
+        }
+
+        public static Sealedkey LoadSealedKey(string Sealedkeylocation)
+        {
+            /*Load the sealed key from the file*/
+            Sealedkey sldkey = default(Sealedkey);
+            sldkey.MAGIC = new byte[8];
+            sldkey.KeySet = new byte[2];
+            sldkey.AlignBytes = new byte[6];
+            sldkey.IV = new byte[16];
+            sldkey.KEY = new byte[32];
+            sldkey.SHA256 = new byte[32];
+
+            FileStream fs = new FileStream(Sealedkeylocation, FileMode.Open, FileAccess.Read);
+
+            fs.Read(sldkey.MAGIC, 0, sldkey.MAGIC.Length);
+            fs.Read(sldkey.KeySet, 0, sldkey.KeySet.Length);
+            fs.Read(sldkey.AlignBytes, 0, sldkey.AlignBytes.Length);
+            fs.Read(sldkey.IV, 0, sldkey.IV.Length);
+            fs.Read(sldkey.KEY, 0, sldkey.KEY.Length);
+            fs.Read(sldkey.SHA256, 0, sldkey.SHA256.Length);
+
+            if (!Util.Utils.CompareBytes(sldkey.MAGIC, new byte[] { 0x70, 0x66, 0x73, 0x53, 0x4B, 0x4B, 0x65, 0x79 }))
+            {
+                throw new Exception("This is not a valid SealedKey");
+            }
+            return sldkey;
+        }
+
+
+        /*CFW Propthet's Method*/
+        private static bool sceSblSsMemcmpConsttime(byte[] a, byte[] b, int len, int offsetA = 0, int offsetB = 0)
+        {
+            for (int i = 0; i < len; i++)
+            {
+                if (a[i + offsetA] != b[i + offsetB])
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static bool sceSblSsMemcmpConsttime(byte[] a, string b, int len, int offsetA = 0)
+        {
+            return ASCIIEncoding.ASCII.GetString(a, offsetA, len) == b;
+        }
+
+        private static void sceSblSsMemset(byte[] buffer, byte val, int len)
+        {
+            for (int i = 0; i < len; i++)
+            {
+                buffer[i] = val;
+            }
+        }
+
+
+        private static void Sha256Hmac(byte[] sha256HmacResult, byte[] enc, int datalen, byte[] sha256hmacKey, int keylen)
+        {
+            using (HMACSHA256 hmac = new HMACSHA256(sha256hmacKey))
+            {
+                var result = hmac.ComputeHash(enc, 0, datalen);
+                Buffer.BlockCopy(result, 0, sha256HmacResult, 0, sha256HmacResult.Length);
+            }
+        }
+
+        private static long sceSblSsDecryptSealedKey(byte[] enc, byte[] dec)
+        {
+            long errorCode = -2146499562;
+
+            if (enc != null && dec != null)
+            {
+                errorCode = -2146499532;
+                if (sceSblSsMemcmpConsttime(enc, "pfsSKKey", 8))
+                {
+                    errorCode = -2146499538;
+                    byte[] sha256hmacKey = new byte[16];
+                    short keyVersion = (short)enc[8];
+                    Console.WriteLine("Usering Keyset Version {0}", keyVersion);
+                    var allKeybytes = File.ReadAllBytes(string.Format("savedatamasterhashkey{0}.bin", keyVersion));
+                    Buffer.BlockCopy(allKeybytes, 0, sha256hmacKey, 0, 16);
+
+                    byte[] sha256HmacResult = new byte[32];
+                    Sha256Hmac(sha256HmacResult, enc, 0x40, sha256hmacKey, 0x10);
+                    errorCode = -2146499531;
+                    if (sceSblSsMemcmpConsttime(sha256HmacResult, enc, 32, 0, 64))
+                    {
+                        Console.WriteLine("HMAC Check... Success!");
+                        byte[] iv = new byte[16];
+                        Buffer.BlockCopy(enc, 16, iv, 0, iv.Length);
+
+                        byte[] encryptedKey = new byte[32];
+                        Buffer.BlockCopy(enc, 32, encryptedKey, 0, 32);
+
+                        using (AesManaged aes = new AesManaged())
+                        {
+                            byte[] aesKey = new byte[16];
+                            allKeybytes = File.ReadAllBytes(string.Format("savedatamasterkey{0}.bin", keyVersion));
+                            Buffer.BlockCopy(allKeybytes, 0, aesKey, 0, 16);
+
+                            aes.Mode = CipherMode.CBC;
+                            aes.IV = iv;
+                            aes.KeySize = 128;
+                            aes.Key = aesKey;
+                            aes.Padding = PaddingMode.None;
+                            var stream = new MemoryStream();
+                            using (var decryptor = aes.CreateDecryptor())
+                            {
+                                using (var cryptoStream = new CryptoStream(stream, decryptor, CryptoStreamMode.Write))
+                                {
+                                    using (var writer = new BinaryWriter(cryptoStream))
+                                    {
+                                        writer.Write(encryptedKey);
+                                    }
+                                }
+                            }
+                            byte[] cipherBytes = stream.ToArray();
+                            Buffer.BlockCopy(cipherBytes, 0, dec, 0, 32);
+                        }
+                        errorCode = 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine("HMAC Check... Failure!");
+                    }
+                }
+            }
+
+            return errorCode;
+        }
+
+        public static void Doit(string SealedKey,string SaveFile,string FileDecrypt)
+        {
+            var bytes = File.ReadAllBytes(SealedKey);
+            byte[] dec = new byte[32];
+            sceSblSsDecryptSealedKey(bytes, dec);
+
+            Console.WriteLine("Your PFS Key is {0}", BitConverter.ToString(dec).Replace("-", string.Empty));
+
+            var save = File.ReadAllBytes(SaveFile);
+            byte[] iv = new byte[16];
+            Buffer.BlockCopy(bytes, 16, iv, 0, iv.Length);
+
+            using (AesManaged aes = new AesManaged())
+            {
+                aes.Mode = CipherMode.CBC;
+                aes.IV = iv;
+                aes.KeySize = 256;
+                aes.Key = dec;
+                aes.Padding = PaddingMode.None;
+                var stream = new MemoryStream();
+                using (var decryptor = aes.CreateDecryptor())
+                {
+                    using (var cryptoStream = new CryptoStream(stream, decryptor, CryptoStreamMode.Write))
+                    {
+                        using (var writer = new BinaryWriter(cryptoStream))
+                        {
+                            writer.Write(save);
+                        }
+                    }
+                }
+
+                byte[] cipherBytes = stream.ToArray();
+                Console.WriteLine("PFS Save Content:");
+                Console.WriteLine(UTF8Encoding.UTF8.GetString(cipherBytes));
+            }
+
+            // TODO Reverse SAMU for Decryption of PFS File System
+            /*            using (AesManaged aes = new AesManaged())
+                        {
+                            aes.Mode = CipherMode.CBC;
+                            aes.IV = iv;
+                            aes.KeySize = 256;
+                            aes.Key = dec;
+                            aes.Padding = PaddingMode.None;
+                            var stream = new MemoryStream();
+                            using (var decryptor = aes.CreateDecryptor())
+                            {
+                                using (var cryptoStream = new CryptoStream(stream, decryptor, CryptoStreamMode.Write))
+                                {
+                                    using (var writer = new BinaryWriter(cryptoStream))
+                                    {
+                                        writer.Write(save);
+                                    }
+                                }
+                            }
+
+                            byte[] cipherBytes = stream.ToArray();
+                            Console.WriteLine("PFS Save Content:");
+                            Console.WriteLine(UTF8Encoding.UTF8.GetString(cipherBytes));
+                        }*/
+
+            Console.ReadLine();
         }
     }
     public class Trophy_File
@@ -2911,48 +3076,48 @@ namespace PS4_Tools
             /// </summary>
             /// <param name="FilePath">PS4 PKG File Path</param>
             /// <returns></returns>
-            public static List<string> ReadAllUnprotectedData(string FilePath)
-            {
-                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "ext.zip", Properties.Resources.ext);
-                File.WriteAllBytes(PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe", Properties.Resources.orbis_pub_cmd);
+            //public static List<string> ReadAllUnprotectedData(string FilePath)
+            //{
+            //    File.WriteAllBytes(PS4_Tools.AppCommonPath() + "ext.zip", Properties.Resources.ext);
+            //    File.WriteAllBytes(PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe", Properties.Resources.orbis_pub_cmd);
 
-                if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\ext\"))
-                {
-                    ZipFile.ExtractToDirectory(PS4_Tools.AppCommonPath() + "ext.zip", PS4_Tools.AppCommonPath());
-                }
-
-
-
-                List<string> rtnlist = new List<string>();
-
-                ProcessStartInfo start = new ProcessStartInfo();
-                start.FileName = PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe ";
-                start.Arguments = "img_file_list  --no_passcode --oformat recursive \"" + FilePath + "\"";
-                start.UseShellExecute = false;
-                start.RedirectStandardOutput = true;
-                start.CreateNoWindow = true;
-                using (Process process = Process.Start(start))
-                {
-                    process.ErrorDataReceived += delegate
-                    {
-
-                    };
-                    using (StreamReader reader = process.StandardOutput)
-                    {
-                        string result = reader.ReadToEnd();
-                        string[] splitresult = result.Split('\n');
-                        for (int i = 0; i < splitresult.Length; i++)
-                        {
-                            rtnlist.Add(splitresult[i]);
-                        }
-
-                        // return result;
-                    }
-                }
+            //    if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\ext\"))
+            //    {
+            //        ZipFile.ExtractToDirectory(PS4_Tools.AppCommonPath() + "ext.zip", PS4_Tools.AppCommonPath());
+            //    }
 
 
-                return rtnlist;
-            }
+
+            //    List<string> rtnlist = new List<string>();
+
+            //    ProcessStartInfo start = new ProcessStartInfo();
+            //    start.FileName = PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe ";
+            //    start.Arguments = "img_file_list  --no_passcode --oformat recursive \"" + FilePath + "\"";
+            //    start.UseShellExecute = false;
+            //    start.RedirectStandardOutput = true;
+            //    start.CreateNoWindow = true;
+            //    using (Process process = Process.Start(start))
+            //    {
+            //        process.ErrorDataReceived += delegate
+            //        {
+
+            //        };
+            //        using (StreamReader reader = process.StandardOutput)
+            //        {
+            //            string result = reader.ReadToEnd();
+            //            string[] splitresult = result.Split('\n');
+            //            for (int i = 0; i < splitresult.Length; i++)
+            //            {
+            //                rtnlist.Add(splitresult[i]);
+            //            }
+
+            //            // return result;
+            //        }
+            //    }
+
+
+            //    return rtnlist;
+            //}
 
             public class Update_Structure
             {
@@ -3087,7 +3252,10 @@ namespace PS4_Tools
                 public string Store_Content_Type_Str { get; set; }
                 public Store_Platform Store_Content_Platform { get; set; }
                 public string Store_Content_Platform_Str { get; set; }
-                public string Download_URL { get; set; }
+                /// <summary>
+                /// This use to be Download_URL but im adding changes so you can read content from the psn store
+                /// </summary>
+                public string Store_URL { get; set; }
                 public Bitmap Store_Content_Image { get; set; }
             }
 
@@ -3115,7 +3283,7 @@ namespace PS4_Tools
                     using (WebClient client = new WebClient())
                     {
                         //add protocols incase sony wants to add them
-                        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
+                        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
                         //add a header cause sometimes they check this setting 
                         //also we can make the Header match the ps4 if need be
                         client.Headers.Add("user-agent", "Only a test!");
@@ -3385,11 +3553,11 @@ namespace PS4_Tools
                             splittedifno = Regex.Split(splittedcelltitel[1], "\"");
                         }
                         newitem.Store_Content_Title = splittedifno[0].Trim();
-                        newitem.Store_Content_Title = WebUtility.HtmlDecode(newitem.Store_Content_Title);
+                        newitem.Store_Content_Title = Util.WebUtility.HtmlDecode(newitem.Store_Content_Title);
 
                         splittedcelltitel = Regex.Split(splittedfooter[0], "a href=\"");
                         splittedifno = Regex.Split(splittedcelltitel[1], "\"");
-                        newitem.Download_URL = "https://store.playstation.com" + splittedifno[0].Trim();
+                        newitem.Store_URL = "https://store.playstation.com" + splittedifno[0].Trim();
 
                         splittedcelltitel = Regex.Split(splittedfooter[0], "img src=\"http");
                         splittedifno = Regex.Split(splittedcelltitel[1], "\"");
@@ -3398,12 +3566,12 @@ namespace PS4_Tools
                         splittedcelltitel = Regex.Split(splittedfooter[0], "left-detail--detail-2\">");
                         splittedifno = Regex.Split(splittedcelltitel[1], "<");
                         newitem.Store_Content_Type_Str = splittedifno[0].Trim();
-                        newitem.Store_Content_Type_Str = WebUtility.HtmlDecode(newitem.Store_Content_Type_Str);
+                        newitem.Store_Content_Type_Str = Util.WebUtility.HtmlDecode(newitem.Store_Content_Type_Str);
 
                         splittedcelltitel = Regex.Split(splittedfooter[0], "left-detail--detail-1\">");
                         splittedifno = Regex.Split(splittedcelltitel[1], "<");
                         newitem.Store_Content_Platform_Str = splittedifno[0].Trim();
-                        newitem.Store_Content_Platform_Str = WebUtility.HtmlDecode(newitem.Store_Content_Platform_Str);
+                        newitem.Store_Content_Platform_Str = Util.WebUtility.HtmlDecode(newitem.Store_Content_Platform_Str);
 
                         storeitems.Add(newitem);
 
@@ -3422,7 +3590,12 @@ namespace PS4_Tools
 
         public class SceneRelated
         {
-            public static void Create_FKPG(string Download_Url, string SaveLocation)
+            /// <summary>
+            /// Creates a PS4 Fake DLC Package
+            /// </summary>
+            /// <param name="Download_Url">PKG.Official.StoreItems().Store_URL</param>
+            /// <param name="SaveLocation">Save Location on Local Disc</param>
+            public static void Create_DLC_FKPG(string Download_Url, string SaveLocation)
             {
                 /*we can download an item */
                 File.WriteAllBytes(PS4_Tools.AppCommonPath() + "ext.zip", Properties.Resources.ext);
@@ -3430,11 +3603,13 @@ namespace PS4_Tools
 
                 if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\ext\"))
                 {
-                    ZipFile.ExtractToDirectory(PS4_Tools.AppCommonPath() + "ext.zip", PS4_Tools.AppCommonPath());
+                    //*Untill Maxtron has his method avaialble we still need some tools*//
+                    Util.Utils.ExtractFileToDirectory(PS4_Tools.AppCommonPath() + "ext.zip", PS4_Tools.AppCommonPath());
                 }
 
 
             }
+
 
             /// <summary>
             /// GP4 Project Class
@@ -3630,6 +3805,8 @@ namespace PS4_Tools
 
             public class IDS
             {
+                /*TODO::*/
+                /*Console ID*/
 
             }
 
@@ -3638,41 +3815,45 @@ namespace PS4_Tools
                 public static Param_SFO.PARAM_SFO Get_Param_SFO(string pkgfile)
                 {
                     //PARAM_SFO 
-                    List<string> lstoffiles = Official.ReadAllUnprotectedData(pkgfile);
 
-                    if (lstoffiles.Contains("Sc0/nptitle.dat\r"))
-                    {
-                        if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\Working"))
-                        {
-                            Directory.CreateDirectory(PS4_Tools.AppCommonPath() + @"\Working");
-                        }
+                    var ps4_pkg = PKG.SceneRelated.Read_PKG(pkgfile);
+                    return ps4_pkg.Param;
 
-                        //extract files to temp folder
-                        ProcessStartInfo start = new ProcessStartInfo();
-                        start.FileName = PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe ";
-                        start.Arguments = "img_extract --no_passcode \"" + pkgfile + "\" \"" + PS4_Tools.AppCommonPath() + @"Working" + "\"";
-                        start.UseShellExecute = false;
-                        start.RedirectStandardOutput = true;
-                        start.CreateNoWindow = true;
-                        using (Process process = Process.Start(start))
-                        {
-                            process.ErrorDataReceived += delegate
-                            {
+                    //List<string> lstoffiles = 
 
-                            };
-                            using (StreamReader reader = process.StandardOutput)
-                            {
-                                string result = reader.ReadToEnd();
+                    //if (lstoffiles.Contains("Sc0/nptitle.dat\r"))
+                    //{
+                    //    if (!Directory.Exists(PS4_Tools.AppCommonPath() + @"\Working"))
+                    //    {
+                    //        Directory.CreateDirectory(PS4_Tools.AppCommonPath() + @"\Working");
+                    //    }
+
+                    //    //extract files to temp folder
+                    //    ProcessStartInfo start = new ProcessStartInfo();
+                    //    start.FileName = PS4_Tools.AppCommonPath() + "orbis-pub-cmd.exe ";
+                    //    start.Arguments = "img_extract --no_passcode \"" + pkgfile + "\" \"" + PS4_Tools.AppCommonPath() + @"Working" + "\"";
+                    //    start.UseShellExecute = false;
+                    //    start.RedirectStandardOutput = true;
+                    //    start.CreateNoWindow = true;
+                    //    using (Process process = Process.Start(start))
+                    //    {
+                    //        process.ErrorDataReceived += delegate
+                    //        {
+
+                    //        };
+                    //        using (StreamReader reader = process.StandardOutput)
+                    //        {
+                    //            string result = reader.ReadToEnd();
 
 
-                                // return result;
-                            }
-                        }
+                    //            // return result;
+                    //        }
+                    //    }
 
-                        return new Param_SFO.PARAM_SFO(PS4_Tools.AppCommonPath() + @"\Working\Sc0\Param.sfo");
+                    //    return new Param_SFO.PARAM_SFO(PS4_Tools.AppCommonPath() + @"\Working\Sc0\Param.sfo");
 
-                    }
-                    return new Param_SFO.PARAM_SFO();
+                    //}
+                    //return new Param_SFO.PARAM_SFO();
                 }
             }
 
@@ -3695,6 +3876,7 @@ namespace PS4_Tools
             private static byte[] pic_byte;
             private static byte[] trp_byte;
             private static bool m_error;
+            private static byte[] image_byte;
             public enum PKGType
             {
                 Game,
@@ -3760,6 +3942,11 @@ namespace PS4_Tools
                 public Trophy_File Trophy_File { get; set; }
                 /*PKG Image*/
                 public Bitmap Image { get; set; }
+                /// <summary>
+                /// PS4 Icon Image
+                /// </summary>
+                public Bitmap Icon { get; set; }
+
                 /*PKG State (Fake ? Offcial */
 
                 public PKG_State PKGState { get; set; }
@@ -3798,6 +3985,7 @@ namespace PS4_Tools
                 icon_byte = null;
                 pic_byte = null;
                 trp_byte = null;
+                image_byte = null;
                 
                 if (!File.Exists(pkgfile))
                 {
@@ -3826,6 +4014,9 @@ namespace PS4_Tools
                     if(!Util.Utils.CompareBytes(PKGFileHeader,PKG_Magic))/*If Files Match*/
                     {
                         //fail
+                        /*Lets be Honnest id actually want a universal solution ps3/psp2/psp pkg's all in one spot 
+                         This will also be used in my other project*/
+
                         throw new Exception("This is not a valid ps4 pkg");
                     }
                     binaryReader.BaseStream.Seek(24L, SeekOrigin.Begin);
@@ -3904,7 +4095,7 @@ namespace PS4_Tools
                                             {
                                                 list.Add(new Names(list.Count, (ulong)dictionary.Keys.ElementAtOrDefault(num8), (ulong)dictionary.Values.ElementAtOrDefault(num8), stringBuilder.ToString()));
                                                 num8++;
-                                                stringBuilder.Clear();
+                                                stringBuilder = new StringBuilder();
                                             }
                                             stringBuilder.Append(Util.Utils.HexToString(Microsoft.VisualBasic.Conversion.Hex(array2[i])));
                                         }
@@ -3954,6 +4145,22 @@ namespace PS4_Tools
                                 icon_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
                             }
                         }
+
+                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "pic0.png", false) == 0);
+                        if (names2 != null)
+                        {
+                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                            image_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                        }
+                        else
+                        {
+                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "pic1.png", false) == 0);
+                            if (names2 != null)
+                            {
+                                binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
+                                image_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                            }
+                        }
                         names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "trophy/trophy00.trp", false) == 0);
                         if (names2 != null)
                         {
@@ -3976,7 +4183,7 @@ namespace PS4_Tools
                         }
                         if (icon_byte != null && icon_byte.Length > 0)
                         {
-                            pkgreturn.Image = Util.Utils.BytesToBitmap(icon_byte);
+                            pkgreturn.Icon = Util.Utils.BytesToBitmap(icon_byte);
                         }
                         else if (trp_byte != null && trp_byte.Length > 0)
                         {
@@ -3985,9 +4192,14 @@ namespace PS4_Tools
                             icon_byte = trpreader.ExtractFileToMemory("ICON0.PNG");
                             if (icon_byte != null && icon_byte.Length > 0)
                             {
-                                pkgreturn.Image = Util.Utils.BytesToBitmap(icon_byte);
+                                pkgreturn.Icon = Util.Utils.BytesToBitmap(icon_byte);
                             }
                         }
+                        if(image_byte != null && image_byte.Length > 0)
+                        {
+                            pkgreturn.Image = Util.Utils.BytesToBitmap(image_byte);
+                        }
+
                         if(trp_byte != null && trp_byte.Length > 0)
                         {
                             Trophy_File trpreader = new Trophy_File();
@@ -4116,7 +4328,7 @@ namespace PS4_Tools
                                             {
                                                 list.Add(new Names(list.Count, (ulong)dictionary.Keys.ElementAtOrDefault(num8), (ulong)dictionary.Values.ElementAtOrDefault(num8), stringBuilder.ToString()));
                                                 num8++;
-                                                stringBuilder.Clear();
+                                                stringBuilder = new StringBuilder();
                                             }
                                             stringBuilder.Append(Util.Utils.HexToString(Microsoft.VisualBasic.Conversion.Hex(array2[i])));
                                         }
@@ -4216,7 +4428,7 @@ namespace PS4_Tools
             #endregion << UnprotectedPKG >>
 
             public string pkgtable { get; set; }
-            private static LibOrbisPkg.PKG.Pkg pkg = null;
+            //private static LibOrbisPkg.PKG.Pkg pkg = null;
             public static List<ListViewItem> lst = new List<ListViewItem>();
 
             /// <summary>
@@ -4226,45 +4438,64 @@ namespace PS4_Tools
             /// <param name="pkgFile"></param>
             public static void ReadPKG(string pkgFile)
             {
-                var pkggame = GameArchives.Util.LocalFile(pkgFile);
-                using (var stream = pkggame.GetStream())
-                    pkg = new LibOrbisPkg.PKG.PkgReader(stream).ReadPkg();
-                //LibOrbisPkg.PKG.
-                //GameArchives.PackageReader.ReadPackageFromFile(pkg);
-                try
-                {
-                    //var pkggame = GameArchives.Util.LocalFile(pkgFile);
-                    var package = PackageReader.ReadPackageFromFile(pkggame);
-                    var sfo = PackageReader.ReadPackageFromFile(package.GetFile("/param.sfo"));
-                    var innerPfs = PackageReader.ReadPackageFromFile(package.GetFile("/pfs_image.dat"));
-                    PackageManager.GetInstance();
-                }
-                catch (Exception ex)
-                {
+                throw new Exception("LibOrbisPkg needs to be ported to .net3.5 this is noted for a future release");
 
-                }
+        //        var pkggame = GameArchives.Util.LocalFile(pkgFile);
+        //        using (var stream = pkggame.GetStream())
+        //            pkg = new LibOrbisPkg.PKG.PkgReader(stream).ReadPkg();
+        //        //LibOrbisPkg.PKG.
+        //        //GameArchives.PackageReader.ReadPackageFromFile(pkg);
+        //        try
+        //        {
+        //            //var pkggame = GameArchives.Util.LocalFile(pkgFile);
+        //            var package = PackageReader.ReadPackageFromFile(pkggame);
+        //            var sfo = PackageReader.ReadPackageFromFile(package.GetFile("/param.sfo"));
+        //            var innerPfs = PackageReader.ReadPackageFromFile(package.GetFile("/pfs_image.dat"));
+        //            PackageManager.GetInstance();
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                foreach (var e in pkg.Metas.Metas)
-                {
-                    var lvi = new ListViewItem(new[] {
-          e.id.ToString(),
-          string.Format("0x{0:X}", e.DataSize),
-          string.Format("0x{0:X}", e.DataOffset),
-          e.Encrypted ? "Yes" : "No",
-          e.KeyIndex.ToString(),
-        });
-                    lvi.Tag = e;
-                    //entriesListView.Items.Add(lvi);
-                    lst.Add(lvi);
-                }
+        //        }
+
+        //        foreach (var e in pkg.Metas.Metas)
+        //        {
+        //            var lvi = new ListViewItem(new[] {
+        //  e.id.ToString(),
+        //  string.Format("0x{0:X}", e.DataSize),
+        //  string.Format("0x{0:X}", e.DataOffset),
+        //  e.Encrypted ? "Yes" : "No",
+        //  e.KeyIndex.ToString(),
+        //});
+        //            lvi.Tag = e;
+        //            //entriesListView.Items.Add(lvi);
+        //            lst.Add(lvi);
+        //        }
             }
 
             /// <summary>
             /// This one is pretty straight Forward it renames a pkg file to the content id name
             /// </summary>
             /// <param name="pkgfile"></param>
-            public static void Rename_pkg_To_ContentID(string pkgfile)
+            public static void Rename_pkg_To_ContentID(string pkgfile,string outputpkgfolder,bool overwrite = false)
             {
+                Unprotected_PKG ps4pkg = Read_PKG(pkgfile);
+                //get paramsfo 
+                Param_SFO.PARAM_SFO psfo = ps4pkg.Param;
+                string FolderName = new FileInfo(pkgfile).DirectoryName;
+                string FileName = new FileInfo(pkgfile).Name;
+
+                string outputfile = outputpkgfolder  + psfo.ContentID+".pkg";
+
+                if (!File.Exists(outputfile) && overwrite == false)
+                {
+                    File.Copy(pkgfile, outputfile, overwrite);
+                }
+                else
+                {
+                    File.Copy(pkgfile, outputfile, overwrite);
+                }
+
 
             }
 
@@ -4272,200 +4503,219 @@ namespace PS4_Tools
             /// This one is pretty straight Forward it renames a pkg file to the Title Of The Package
             /// </summary>
             /// <param name="pkgfile"></param>
-            public static void Rename_pkg_To_Title(string pkgfile)
+            public static void Rename_pkg_To_Title(string pkgfile, string outputpkgfolder, bool overwrite = false)
             {
+                Unprotected_PKG ps4pkg = Read_PKG(pkgfile);
+                //get paramsfo 
+                Param_SFO.PARAM_SFO psfo = ps4pkg.Param;
+                string FolderName = new FileInfo(pkgfile).DirectoryName;
+                string FileName = new FileInfo(pkgfile).Name;
 
+                string outputfile = outputpkgfolder + psfo.Title  + ".pkg";
+
+                if (!File.Exists(outputfile) && overwrite == false)
+                {
+                    File.Copy(pkgfile, outputfile, overwrite);
+                }
+                else
+                {
+                    File.Copy(pkgfile, outputfile, overwrite);
+                }
             }
         }
 
         #endregion << Scene Related >>
 
-        /// <summary>
-        /// Class is used for PS2 Classic Building
-        /// </summary>
-        public class PS2_Classics
+        public class Remastered
         {
-            public PS2_Classics()
-            {
-                Working_Dir = PS4_Tools.AppCommonPath() + @"\Working\";
-            }
-
             /// <summary>
-            /// This is the temp directory where the app needs to work if not set by the users the app will set itself
+            /// Class is used for PS2 Classic Building
+            /// This class will repack PS2 Games Into PS4
             /// </summary>
-            public string Working_Dir { get; set; }
-
-            public string PS2ID { get; set; }
-
-            /// <summary>
-            /// Creates a single ISO Game For PS4
-            /// </summary>
-            /// <param name="PS2_ISO">PS2 ISo Location</param>
-            /// <param name="SaveFileLOcation">Preferred pkg save location</param>
-            /// <param name="Icon0Location">location of ICON0 if none set default is used</param>
-            /// <param name="BackgroundLocation">Location of Background image if none is set default is used</param>
-            /// <param name="CustomGP4Location">Use a custom GP4 File For Repacking the ISO</param>
-            public void Create_Single_ISO_PKG(string PS2_ISO, string SaveFileLOcation, string Title, string ContentID = "", Bitmap Icon0 = null, string BackgroundLocation = "", string CustomGP4Location = "")
+            public class PS2_Classics
             {
-                Console.WriteLine("Reading PS2 ISO");
-
-                #region << CNF Reader >>
-
-                //start off by reading the ISO FIle
-                //we need to get the control file info
-                //now using the file stream we can read the CNF file
-                using (FileStream isoStream = File.OpenRead(PS2_ISO))
+                public PS2_Classics()
                 {
-                    //use disk utils to read iso file
-                    CDReader cd = new CDReader(isoStream, true);
-                    //look for the specific file naimly the system config file
-                    Stream fileStream = cd.OpenFile(@"SYSTEM.CNF", FileMode.Open);
-                    // Use fileStream...
-                    TextReader tr = new StreamReader(fileStream);
-                    string fullstring = tr.ReadToEnd();//read string to end this will read all the info we need
+                    Working_Dir = PS4_Tools.AppCommonPath() + @"\Working\";
+                }
 
-                    //mine for info
-                    string Is = @"\";
-                    string Ie = ";";
+                /// <summary>
+                /// This is the temp directory where the app needs to work if not set by the users the app will set itself
+                /// </summary>
+                public string Working_Dir { get; set; }
 
-                    //mine the start and end of the string
-                    int start = fullstring.ToString().IndexOf(Is) + Is.Length;
-                    int end = fullstring.ToString().IndexOf(Ie, start);
-                    if (end > start)
+                public string PS2ID { get; set; }
+
+                /// <summary>
+                /// Creates a single ISO Game For PS4
+                /// </summary>
+                /// <param name="PS2_ISO">PS2 ISo Location</param>
+                /// <param name="SaveFileLOcation">Preferred pkg save location</param>
+                /// <param name="Icon0Location">location of ICON0 if none set default is used</param>
+                /// <param name="BackgroundLocation">Location of Background image if none is set default is used</param>
+                /// <param name="CustomGP4Location">Use a custom GP4 File For Repacking the ISO</param>
+                public void Create_Single_ISO_PKG(string PS2_ISO, string SaveFileLOcation, string Title, string ContentID = "", Bitmap Icon0 = null, string BackgroundLocation = "", string CustomGP4Location = "")
+                {
+                    Console.WriteLine("Reading PS2 ISO");
+
+                    #region << CNF Reader >>
+
+                    //start off by reading the ISO FIle
+                    //we need to get the control file info
+                    //now using the file stream we can read the CNF file
+                    using (FileStream isoStream = File.OpenRead(PS2_ISO))
                     {
-                        string PS2Id = fullstring.ToString().Substring(start, end - start);
+                        //use disk utils to read iso file
+                        CDReader cd = new CDReader(isoStream, true);
+                        //look for the specific file naimly the system config file
+                        Stream fileStream = cd.OpenFile(@"SYSTEM.CNF", FileMode.Open);
+                        // Use fileStream...
+                        TextReader tr = new StreamReader(fileStream);
+                        string fullstring = tr.ReadToEnd();//read string to end this will read all the info we need
 
-                        if (PS2Id != string.Empty)
+                        //mine for info
+                        string Is = @"\";
+                        string Ie = ";";
+
+                        //mine the start and end of the string
+                        int start = fullstring.ToString().IndexOf(Is) + Is.Length;
+                        int end = fullstring.ToString().IndexOf(Ie, start);
+                        if (end > start)
                         {
-                            PS2ID = PS2Id.Replace(".", "");
-                            Console.WriteLine("PS2 ID Found" + PS2Id);
+                            string PS2Id = fullstring.ToString().Substring(start, end - start);
+
+                            if (PS2Id != string.Empty)
+                            {
+                                PS2ID = PS2Id.Replace(".", "");
+                                Console.WriteLine("PS2 ID Found" + PS2Id);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Could not load PS2 ID");
+                                return;
+                            }
                         }
-                        else
+                    }
+
+                    #endregion << CNF Reader >>
+
+                    #region << Set Up Working Directory >>
+
+                    if (!Directory.Exists(Working_Dir))
+                    {
+                        Console.WriteLine("Created " + Working_Dir);
+                        Directory.CreateDirectory(Working_Dir);
+                    }
+                    if (!Directory.Exists(Working_Dir + @"\PS2Emu\"))
+                    {
+                        Console.WriteLine("Created " + Working_Dir + @"\PS2Emu\");
+                        Directory.CreateDirectory(Working_Dir + @"\PS2Emu\");
+                    }
+
+                    Console.WriteLine("Writing " + Working_Dir + @"\PS2Emu\" + "param.sfo");
+                    System.IO.File.WriteAllBytes(Working_Dir + @"\PS2Emu\" + "param.sfo", Properties.Resources.param);
+
+                    Console.WriteLine("Writing " + Working_Dir + "PS2Classics.gp4");
+                    System.IO.File.WriteAllBytes(Working_Dir + "PS2Classics.gp4", Properties.Resources.PS2Classics);
+
+                    #endregion << Set Up Wokring Directory >>
+
+                    #region << LOad and update gp4 and sfo Project >>
+                    Console.WriteLine("Loading GP4 Project");
+                    var project = SceneRelated.GP4.ReadGP4(Working_Dir + "PS2Classics.gp4");
+                    Console.WriteLine("Loading SFO");
+                    var sfo = new Param_SFO.PARAM_SFO(Working_Dir + @"\PS2Emu\" + "param.sfo");
+
+                    if (ContentID == "")
+                    {
+                        Console.WriteLine("No Content ID Specified Building custom one");
+                        //build custom content id
+                        ContentID = "UP9000-" + sfo.TitleID.Trim() + "_00-" + PS2ID.Trim() + "0000001";
+
+                        Console.WriteLine("Content ID :" + ContentID);
+                    }
+                    //update sfo info
+
+                    Console.WriteLine("Updating SFO ");
+                    for (int i = 0; i < sfo.Tables.Count; i++)
+                    {
+
+                        if (sfo.Tables[i].Name == "CONTENT_ID")
                         {
-                            Console.WriteLine("Could not load PS2 ID");
-                            return;
+                            var tempitem = sfo.Tables[i];
+
+                            Console.WriteLine("Updating SFO  Content ID ( " + tempitem.Value + " -> " + ContentID + ")");
+                            tempitem.Value = ContentID;
+                            sfo.Tables[i] = tempitem;
+                        }
+                        if (sfo.Tables[i].Name == "TITLE")
+                        {
+                            var tempitem = sfo.Tables[i];
+
+                            Console.WriteLine("Updating SFO  Title ( " + tempitem.Value + " -> " + Title + ")");
+                            tempitem.Value = Title;
+                            sfo.Tables[i] = tempitem;
+                        }
+                        if (sfo.Tables[i].Name == "TITLE_ID")
+                        {
+                            var tempitem = sfo.Tables[i];
+
+                            Console.WriteLine("Updating SFO  Title ID ( " + tempitem.Value + " -> " + PS2ID + ")");
+                            tempitem.Value = PS2ID;
+                            sfo.Tables[i] = tempitem;
                         }
                     }
+
+                    Console.WriteLine("Saving SFO");
+                    sfo.SaveSFO(sfo, Working_Dir + @"\PS2Emu\" + "param.sfo");//update sfo info
+                                                                              //update GP4
+
+                    Console.WriteLine("Upating GP4");
+                    project.Volume.Package.Content_id = ContentID;//set contentid
+                    project.Volume.Package.Passcode = "00000000000000000000000000000000";//32 zeros
+
+                    //this is single iso building so we shouldn't have to change disc image numbering
+                    SceneRelated.GP4.SaveGP4(Working_Dir + "PS2Classics.gp4", project);
+
+                    Console.WriteLine("Saving GP4");
+                    #endregion << Load GP4 Project >>
+
+
+                    #region << Save Image Files to corresponding locations and also change to correct format >>
+
+                    Console.WriteLine("Saving Images");
+
+                    Image.PNG ps4icon0 = new Image.PNG();
+
+                    Bitmap icon0 = ps4icon0.Create_PS4_Compatible_PNG(Icon0);
+                    icon0.Save(PS4_Tools.AppCommonPath() + @"PS2\sce_sys\icon0.png", System.Drawing.Imaging.ImageFormat.Png);
+
+                    #endregion  << Save Image Files to corresponding locations and also change to correct format >>
                 }
 
-                #endregion << CNF Reader >>
 
-                #region << Set Up Working Directory >>
 
-                if (!Directory.Exists(Working_Dir))
+                /// <summary>
+                /// Creates a Multi Iso Repacked PS2 Classic
+                /// </summary>
+                /// <param name="PS2_ISO_s">List of iso locations </param>
+                /// <param name="SaveFileLOcation">Preferred pkg save location</param>
+                /// <param name="Icon0Location">location of ICON0 if none set default is used</param>
+                /// <param name="BackgroundLocation">Location of Background image if none is set default is used</param>
+                /// <param name="CustomGP4Location">Use a custom GP4 File For Repacking the ISO</param>
+                public void Create_Multi_ISO_PKG(List<string> PS2_ISO_s, string SaveFileLOcation, string Icon0Location = "", string BackgroundLocation = "", string CustomGP4Location = "")
                 {
-                    Console.WriteLine("Created " + Working_Dir);
-                    Directory.CreateDirectory(Working_Dir);
+                    throw new Exception("Function not built");
                 }
-                if (!Directory.Exists(Working_Dir + @"\PS2Emu\"))
-                {
-                    Console.WriteLine("Created " + Working_Dir + @"\PS2Emu\");
-                    Directory.CreateDirectory(Working_Dir + @"\PS2Emu\");
-                }
-
-                Console.WriteLine("Writing " + Working_Dir + @"\PS2Emu\" + "param.sfo");
-                System.IO.File.WriteAllBytes(Working_Dir + @"\PS2Emu\" + "param.sfo", Properties.Resources.param);
-
-                Console.WriteLine("Writing " + Working_Dir + "PS2Classics.gp4");
-                System.IO.File.WriteAllBytes(Working_Dir + "PS2Classics.gp4", Properties.Resources.PS2Classics);
-
-                #endregion << Set Up Wokring Directory >>
-
-                #region << LOad and update gp4 and sfo Project >>
-                Console.WriteLine("Loading GP4 Project");
-                var project = SceneRelated.GP4.ReadGP4(Working_Dir + "PS2Classics.gp4");
-                Console.WriteLine("Loading SFO");
-                var sfo = new Param_SFO.PARAM_SFO(Working_Dir + @"\PS2Emu\" + "param.sfo");
-
-                if (ContentID == "")
-                {
-                    Console.WriteLine("No Content ID Specified Building custom one");
-                    //build custom content id
-                    ContentID = "UP9000-" + sfo.TitleID.Trim() + "_00-" + PS2ID.Trim() + "0000001";
-
-                    Console.WriteLine("Content ID :" + ContentID);
-                }
-                //update sfo info
-
-                Console.WriteLine("Updating SFO ");
-                for (int i = 0; i < sfo.Tables.Count; i++)
-                {
-
-                    if (sfo.Tables[i].Name == "CONTENT_ID")
-                    {
-                        var tempitem = sfo.Tables[i];
-
-                        Console.WriteLine("Updating SFO  Content ID ( " + tempitem.Value + " -> " + ContentID + ")");
-                        tempitem.Value = ContentID;
-                        sfo.Tables[i] = tempitem;
-                    }
-                    if (sfo.Tables[i].Name == "TITLE")
-                    {
-                        var tempitem = sfo.Tables[i];
-
-                        Console.WriteLine("Updating SFO  Title ( " + tempitem.Value + " -> " + Title + ")");
-                        tempitem.Value = Title;
-                        sfo.Tables[i] = tempitem;
-                    }
-                    if (sfo.Tables[i].Name == "TITLE_ID")
-                    {
-                        var tempitem = sfo.Tables[i];
-
-                        Console.WriteLine("Updating SFO  Title ID ( " + tempitem.Value + " -> " + PS2ID + ")");
-                        tempitem.Value = PS2ID;
-                        sfo.Tables[i] = tempitem;
-                    }
-                }
-
-                Console.WriteLine("Saving SFO");
-                sfo.SaveSFO(sfo, Working_Dir + @"\PS2Emu\" + "param.sfo");//update sfo info
-                                                                          //update GP4
-
-                Console.WriteLine("Upating GP4");
-                project.Volume.Package.Content_id = ContentID;//set contentid
-                project.Volume.Package.Passcode = "00000000000000000000000000000000";//32 zeros
-
-                //this is single iso building so we shouldn't have to change disc image numbering
-                SceneRelated.GP4.SaveGP4(Working_Dir + "PS2Classics.gp4", project);
-
-                Console.WriteLine("Saving GP4");
-                #endregion << Load GP4 Project >>
-
-
-                #region << Save Image Files to corresponding locations and also change to correct format >>
-
-                Console.WriteLine("Saving Images");
-
-                Image.PNG ps4icon0 = new Image.PNG();
-
-                Bitmap icon0 = ps4icon0.Create_PS4_Compatible_PNG(Icon0);
-                icon0.Save(PS4_Tools.AppCommonPath() + @"PS2\sce_sys\icon0.png", System.Drawing.Imaging.ImageFormat.Png);
-
-                #endregion  << Save Image Files to corresponding locations and also change to correct format >>
             }
-
-
 
             /// <summary>
-            /// Creates a Multi Iso Repacked PS2 Classic
+            /// Class is used for PSP HD Building
             /// </summary>
-            /// <param name="PS2_ISO_s">List of iso locations </param>
-            /// <param name="SaveFileLOcation">Preferred pkg save location</param>
-            /// <param name="Icon0Location">location of ICON0 if none set default is used</param>
-            /// <param name="BackgroundLocation">Location of Background image if none is set default is used</param>
-            /// <param name="CustomGP4Location">Use a custom GP4 File For Repacking the ISO</param>
-            public void Create_Multi_ISO_PKG(List<string> PS2_ISO_s, string SaveFileLOcation, string Icon0Location = "", string BackgroundLocation = "", string CustomGP4Location = "")
+            public class PSP_HD
             {
-                throw new Exception("Function not built");
+
             }
-        }
-
-        /// <summary>
-        /// Class is used for PSP HD Building
-        /// </summary>
-        public class PSP_HD
-        {
-
         }
     }
     /************************************

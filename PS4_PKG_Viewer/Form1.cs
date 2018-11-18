@@ -39,9 +39,16 @@ namespace PS4_PKG_Viewer
                 dataGridView1.DataSource = dttemp;
                 dttemp = new DataTable();
                 dttemp.Columns.Add("Tropy File");
-                for (int i = 0; i < PS4_PKG.Trophy_File.FileCount; i++)
+                try
                 {
-                    dttemp.Rows.Add(PS4_PKG.Trophy_File.trophyItemList[i].Name);
+                    for (int i = 0; i < PS4_PKG.Trophy_File.trophyItemList.Count; i++)
+                    {
+                        dttemp.Rows.Add(PS4_PKG.Trophy_File.trophyItemList[i].Name);
+                    }
+                }
+                catch(Exception ex)
+                {
+
                 }
                 dataGridView2.DataSource = dttemp;
             }

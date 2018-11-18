@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PS4_Tools")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("PS4 Tools")]
+[assembly: AssemblyDescription("Open Source collection of PS4 Tools")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PS4_Tools")]
+[assembly: AssemblyCompany("The Darkprogramer(PSTools)")]
+[assembly: AssemblyProduct("PS4 Tools")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

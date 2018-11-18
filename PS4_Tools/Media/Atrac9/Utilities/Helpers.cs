@@ -4,7 +4,7 @@ namespace LibAtrac9.Utilities
 {
     internal static class Helpers
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]/*.Net 3.5*///[MethodImpl(MethodImplOptions.AggressiveInlining)]/*,net4.5*/
         public static short Clamp16(int value)
         {
             if (value > short.MaxValue)
