@@ -143,9 +143,15 @@ namespace DDSReader
             }
         }
 
-        private DDSImage(System.Drawing.Bitmap bitmap)
+        public DDSImage(System.Drawing.Bitmap bitmap)
         {
             this.m_bitmap = bitmap;
+        }
+
+        public void Save(string Path)
+        {
+            //this.m_bitmap.PixelFormat;
+            //new SharpDX.Toolkit.Image.Save
         }
         #endregion
 

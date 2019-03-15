@@ -97,7 +97,13 @@ namespace Tester
 
         private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Official Method has been removed");
+            //MessageBox.Show("Official Method has been removed");
+
+            /*Intigration with Maxtron's LibOrbis has begun */
+
+            var temp = PS4_Tools.PKG.SceneRelated.ReadPKG(@"C:\Users\3deEchelon\Downloads\PS4-Xplorer BETA 1.05 - Lapy\ED1234-NPXX20001_00-0000000000000000-A0100-V0105.pkg");
+
+
             //var lstitem = PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEchelon\Downloads\Patapon_Remastered_CUSA07184_update_1.01.pkg");
             //listBox1.Items.Clear();
             //listBox2.Items.Clear();
@@ -123,7 +129,15 @@ namespace Tester
 
         private void button5_Click(object sender, EventArgs e)
         {
-            PS4_Tools.RCO.DumpRco(@"C:\Users\3deEchelon\Desktop\PS4\RCO\Sce.Cdlg.GameCustomData.rco");
+            //PS4_Tools.RCO.DumpRco(@"C:\Users\3deEchelon\Desktop\PS4\RCO\Sce.Cdlg.GameCustomData.rco");
+            var file = PS4_Tools.RCO.ReadRco(@"C:\Users\3deEchelon\Desktop\PS4\RCO\Sce.Cdlg.GameCustomData.rco");
+            //testing time 
+            //write a file to server or whatever
+            //we can dump them all if we want 2
+            var image = file.FileTable.PNGFiles[0].FileBytes;
+            System.IO.File.WriteAllBytes(@"C: \Users\3deEchelon\Desktop\PS4\RCO\img0.png", image);
+
+            //here we can view spesific files and there file bytes are there if the need arrises
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -177,6 +191,65 @@ namespace Tester
         private void button11_Click(object sender, EventArgs e)
         {
             PS4_Tools.PKG.SceneRelated.Rename_pkg_To_ContentID(@"E:\Euro.Fishing.Collectors.Edition.PS4-DUPLEX.pkg", @"E:\", true);
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            // PS4_Tools.PKG.Official.RIF rifitem = PS4_Tools.PKG.Official.ReadRif(@"C:\Users\3deEchelon\Downloads\RifTest.rif");
+            PS4_Tools.PKG.Official.RIF rifitem = PS4_Tools.PKG.Official.ReadRif(@"C:\Users\3deEchelon\Desktop\PS4\LM\Sc0\license.dat");
+            /*Rif Loaded*/
+            // string Content_ID = System.Text.Encoding.ASCII.GetString(rifitem.Content_ID);
+
+            lblExtrInfo.Text = "Rif information" + "\r\n"; 
+
+            lblExtrInfo.Text += @"Content ID : " + rifitem.Content_ID + "\r\n" + "\r\n";
+
+            lblExtrInfo.Text += @"Encrypted Secret : " + rifitem.Encrypted_Secret.Entitlement_Key + "\r\n";
+            lblExtrInfo.Text += @"Secret Encryption IV" + rifitem.Secret_Encryption_IV + "\r\n";
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            //Open File Items
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            openFileDialog1.Title = "Select PS4 File";
+
+            openFileDialog1.CheckFileExists = true;
+
+            openFileDialog1.CheckPathExists = true;
+
+            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+
+            openFileDialog1.RestoreDirectory = true;
+
+            openFileDialog1.Multiselect = false;
+
+            openFileDialog1.ReadOnlyChecked = true;
+
+            openFileDialog1.ShowReadOnly = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                var ps4filetype = PS4_Tools.Tools.Get_PS4_File_Type(openFileDialog1.FileName);
+                MessageBox.Show("File is a " + ps4filetype.ToString());
+            }
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            //Create a RIF File
+
+
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            Bitmap btimap = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.png");
+            PS4_Tools.Image.DDS.CreateDDSFromBitmap(btimap, @"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
+           // pictureBox1.Image = item;
         }
     }
 }

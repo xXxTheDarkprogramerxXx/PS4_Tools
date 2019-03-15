@@ -7,7 +7,6 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\DiscUtils.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\PS4_Tools.pdb
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\PARAM.SFO.pdb
-C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\DiscUtils.pdb
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Debug\PS4_PKG_Tool.csprojResolveAssemblyReference.cache
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Debug\PS4_PKG_Tool.Form1.resources
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Debug\PS4_PKG_Tool.Properties.Resources.resources
@@ -21,3 +20,5 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\HtmlAgilityPack.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\DotNetZip.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\DotNetZip.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\GameArchives.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\bin\Debug\BigInteger.dll

@@ -45,6 +45,11 @@
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
+            this.lblExtrInfo = new System.Windows.Forms.Label();
+            this.button13 = new System.Windows.Forms.Button();
+            this.button14 = new System.Windows.Forms.Button();
+            this.button15 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -108,7 +113,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(119, 317);
+            this.button4.Location = new System.Drawing.Point(119, 305);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(118, 23);
             this.button4.TabIndex = 8;
@@ -212,11 +217,65 @@
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(19, 418);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(161, 23);
+            this.button12.TabIndex = 22;
+            this.button12.Text = "Read Rif";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
+            // lblExtrInfo
+            // 
+            this.lblExtrInfo.AutoSize = true;
+            this.lblExtrInfo.Location = new System.Drawing.Point(207, 392);
+            this.lblExtrInfo.Name = "lblExtrInfo";
+            this.lblExtrInfo.Size = new System.Drawing.Size(89, 17);
+            this.lblExtrInfo.TabIndex = 23;
+            this.lblExtrInfo.Text = "Update Info :";
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(693, 457);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(161, 23);
+            this.button13.TabIndex = 24;
+            this.button13.Text = "Read Rif";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
+            // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(19, 447);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(161, 23);
+            this.button14.TabIndex = 25;
+            this.button14.Text = "Create Rif";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
+            // button15
+            // 
+            this.button15.Location = new System.Drawing.Point(119, 331);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(118, 23);
+            this.button15.TabIndex = 26;
+            this.button15.Text = "Create DDS";
+            this.button15.UseVisualStyleBackColor = true;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 506);
+            this.Controls.Add(this.button15);
+            this.Controls.Add(this.button14);
+            this.Controls.Add(this.button13);
+            this.Controls.Add(this.lblExtrInfo);
+            this.Controls.Add(this.button12);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
@@ -262,6 +321,11 @@
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Label lblExtrInfo;
+        private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button button15;
     }
 }
 

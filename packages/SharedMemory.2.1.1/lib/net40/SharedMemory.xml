@@ -1,0 +1,1286 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SharedMemory</name>
+    </assembly>
+    <members>
+        <member name="T:SharedMemory.BufferReadWrite">
+            <summary>
+            Read/Write buffer with support for simple inter-process read/write synchronisation.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates a new shared memory buffer with the specified name and size
+            </summary>
+            <param name="name">The name of the shared memory to create</param>
+            <param name="bufferSize">The size of the buffer</param>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.#ctor(System.String)">
+            <summary>
+            Opens an existing shared memory buffer with the specified name
+            </summary>
+            <param name="name">The name of the shared memory to open</param>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.Write``1(``0@,System.Int64)">
+            <summary>
+            Writes an instance of <typeparamref name="T"/> into the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="data">A reference to an instance of <typeparamref name="T"/> to be written</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.Write``1(``0[],System.Int64)">
+            <summary>
+            Writes an array of <typeparamref name="T"/> into the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="buffer">An array of <typeparamref name="T"/> to be written. The length of this array controls the number of elements to be written.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.Write(System.IntPtr,System.Int32,System.Int64)">
+            <summary>
+            Writes <paramref name="length"/> bytes from the <paramref name="ptr"/> into the shared memory buffer.
+            </summary>
+            <param name="ptr">A managed pointer to the memory location to be copied into the buffer</param>
+            <param name="length">The number of bytes to be copied</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.Write(System.Action{System.IntPtr},System.Int64)">
+            <summary>
+            Prepares an IntPtr to the buffer position and calls <paramref name="writeFunc"/> to perform the writing.
+            </summary>
+            <param name="writeFunc">A function used to write to the buffer. The IntPtr parameter is a pointer to the buffer offset by <paramref name="bufferPosition"/>.</param>
+            <param name="bufferPosition">The offset within the buffer region to start writing from.</param>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.Read``1(``0@,System.Int64)">
+            <summary>
+            Reads an instance of <typeparamref name="T"/> from the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="data">Output parameter that will contain the value read from the buffer</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.Read``1(``0[],System.Int64)">
+            <summary>
+            Reads an array of <typeparamref name="T"/> from the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="buffer">Array that will contain the values read from the buffer. The length of this array controls the number of elements to read.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.Read(System.IntPtr,System.Int32,System.Int64)">
+            <summary>
+            Reads <paramref name="length"/> bytes into the memory location <paramref name="destination"/> from the shared memory buffer.
+            </summary>
+            <param name="destination">A managed pointer to the memory location to copy data into from the buffer</param>
+            <param name="length">The number of bytes to be copied</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.BufferReadWrite.Read(System.Action{System.IntPtr},System.Int64)">
+            <summary>
+            Prepares an IntPtr to the buffer position and calls <paramref name="readFunc"/> to perform the reading.
+            </summary>
+            <param name="readFunc">A function used to read from the buffer. The IntPtr parameter is a pointer to the buffer offset by <paramref name="bufferPosition"/>.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="T:SharedMemory.BufferWithLocks">
+            <summary>
+            <para>Extends <see cref="T:SharedMemory.SharedBuffer"/> to support simple thread-synchronisation for read/write 
+            to the buffer by allowing callers to acquire and release read/write locks.</para>
+            <para>All buffer read/write operations have been overloaded to first perform a <see cref="M:System.Threading.WaitHandle.WaitOne"/> 
+            using the <see cref="P:SharedMemory.BufferWithLocks.ReadWaitEvent"/> and <see cref="P:SharedMemory.BufferWithLocks.WriteWaitEvent"/> respectively.</para>
+            <para>By default all read/write operations will not block, it is necessary to first acquire locks 
+            through calls to <see cref="M:SharedMemory.BufferWithLocks.AcquireReadLock(System.Int32)"/> and <see cref="M:SharedMemory.BufferWithLocks.AcquireWriteLock(System.Int32)"/> as appropriate, with corresponding 
+            calls to <see cref="M:SharedMemory.BufferWithLocks.ReleaseReadLock"/> and <see cref="M:SharedMemory.BufferWithLocks.ReleaseWriteLock"/> to release the locks.</para>
+            </summary>
+        </member>
+        <member name="P:SharedMemory.BufferWithLocks.WriteWaitEvent">
+            <summary>
+            An event handle used for blocking write operations.
+            </summary>
+        </member>
+        <member name="P:SharedMemory.BufferWithLocks.ReadWaitEvent">
+            <summary>
+            An event handle used for blocking read operations.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.#ctor(System.String,System.Int64,System.Boolean)">
+            <summary>
+            Create a new <see cref="T:SharedMemory.BufferWithLocks"/> instance with the specified name and buffer size.
+            </summary>
+            <param name="name">The name of the shared memory</param>
+            <param name="bufferSize">The buffer size in bytes.</param>
+            <param name="ownsSharedMemory">Whether or not the current instance owns the shared memory. If true a new shared memory will be created and initialised otherwise an existing one is opened.</param>
+        </member>
+        <member name="P:SharedMemory.BufferWithLocks.ReadWriteTimeout">
+            <summary>
+            The Read/Write operation timeout in milliseconds (to prevent deadlocks). Defaults to 100ms and must be larger than -1.
+            If a Read or Write operation's WaitEvent does not complete within this timeframe a <see cref="T:System.TimeoutException"/> will be thrown.
+            If using AcquireReadLock/ReleaseReadLock and AcquireWriteLock/ReleaseWriteLock correctly this timeout will never occur.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.AcquireReadLock(System.Int32)">
+            <summary>
+            Blocks the current thread until it is able to acquire a read lock. If successful all subsequent writes will be blocked until after a call to <see cref="M:SharedMemory.BufferWithLocks.ReleaseReadLock"/>.
+            </summary>
+            <param name="millisecondsTimeout">The number of milliseconds to wait, or <see cref="F:System.Threading.Timeout.Infinite" /> (-1) to wait indefinitely.</param>
+            <returns>true if the read lock was able to be acquired, otherwise false.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout"/> is a negative number other than -1, which represents an infinite time-out.</exception>
+            <remarks>If <paramref name="millisecondsTimeout"/> is <see cref="F:System.Threading.Timeout.Infinite" /> (-1), then attempting to acquire a read lock after acquiring a write lock on the same thread will result in a deadlock.</remarks>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.ReleaseReadLock">
+            <summary>
+            Releases the current read lock, allowing all blocked writes to continue.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.AcquireWriteLock(System.Int32)">
+            <summary>
+            Blocks the current thread until it is able to acquire a write lock. If successful all subsequent reads will be blocked until after a call to <see cref="M:SharedMemory.BufferWithLocks.ReleaseWriteLock"/>.
+            </summary>
+            <param name="millisecondsTimeout">The number of milliseconds to wait, or System.Threading.Timeout.Infinite (-1) to wait indefinitely.</param>
+            <returns>true if the write lock was able to be acquired, otherwise false.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout"/> is a negative number other than -1, which represents an infinite time-out.</exception>
+            <remarks>If <paramref name="millisecondsTimeout"/> is <see cref="F:System.Threading.Timeout.Infinite" /> (-1), then attempting to acquire a write lock after acquiring a read lock on the same thread will result in a deadlock.</remarks>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.ReleaseWriteLock">
+            <summary>
+            Releases the current write lock, allowing all blocked reads to continue.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.WriteWait">
+            <summary>
+            Prevents write operations from deadlocking by throwing a TimeoutException if the WriteWaitEvent is not available within <see cref="P:SharedMemory.BufferWithLocks.ReadWriteTimeout"/> milliseconds
+            </summary>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.Write``1(``0@,System.Int64)">
+            <summary>
+            Writes an instance of <typeparamref name="T"/> into the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="data">A reference to an instance of <typeparamref name="T"/> to be written</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.Write``1(``0[],System.Int64)">
+            <summary>
+            Writes an array of <typeparamref name="T"/> into the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="buffer">An array of <typeparamref name="T"/> to be written. The length of this array controls the number of elements to be written.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.Write(System.IntPtr,System.Int32,System.Int64)">
+            <summary>
+            Writes <paramref name="length"/> bytes from the <paramref name="ptr"/> into the shared memory buffer.
+            </summary>
+            <param name="ptr">A managed pointer to the memory location to be copied into the buffer</param>
+            <param name="length">The number of bytes to be copied</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.Write(System.Action{System.IntPtr},System.Int64)">
+            <summary>
+            Prepares an IntPtr to the buffer position and calls <paramref name="writeFunc"/> to perform the writing.
+            </summary>
+            <param name="writeFunc">A function used to write to the buffer. The IntPtr parameter is a pointer to the buffer offset by <paramref name="bufferPosition"/>.</param>
+            <param name="bufferPosition">The offset within the buffer region to start writing from.</param>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.ReadWait">
+            <summary>
+            Prevents read operations from deadlocking by throwing a TimeoutException if the ReadWaitEvent is not available within <see cref="P:SharedMemory.BufferWithLocks.ReadWriteTimeout"/> milliseconds
+            </summary>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.Read``1(``0@,System.Int64)">
+            <summary>
+            Reads an instance of <typeparamref name="T"/> from the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="data">Output parameter that will contain the value read from the buffer</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.Read``1(``0[],System.Int64)">
+            <summary>
+            Reads an array of <typeparamref name="T"/> from the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="buffer">Array that will contain the values read from the buffer. The length of this array controls the number of elements to read.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.Read(System.IntPtr,System.Int32,System.Int64)">
+            <summary>
+            Reads <paramref name="length"/> bytes into the memory location <paramref name="destination"/> from the shared memory buffer.
+            </summary>
+            <param name="destination">A managed pointer to the memory location to copy data into from the buffer</param>
+            <param name="length">The number of bytes to be copied</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.Read(System.Action{System.IntPtr},System.Int64)">
+            <summary>
+            Prepares an IntPtr to the buffer position and calls <paramref name="readFunc"/> to perform the reading.
+            </summary>
+            <param name="readFunc">A function used to read from the buffer. The IntPtr parameter is a pointer to the buffer offset by <paramref name="bufferPosition"/>.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.BufferWithLocks.Dispose(System.Boolean)">
+            <summary>
+            IDisposable pattern
+            </summary>
+            <param name="disposeManagedResources">true to release managed resources</param>
+        </member>
+        <member name="T:SharedMemory.CircularBuffer">
+            <summary>
+            A lock-free FIFO shared memory circular buffer (or ring buffer) utilising a <see cref="T:System.IO.MemoryMappedFiles.MemoryMappedFile"/>.
+            </summary>
+        </member>
+        <member name="P:SharedMemory.CircularBuffer.NodeCount">
+            <summary>
+            The number of nodes within the circular linked-list
+            </summary>
+        </member>
+        <member name="P:SharedMemory.CircularBuffer.NodeBufferSize">
+            <summary>
+            The buffer size of each node
+            </summary>
+        </member>
+        <member name="P:SharedMemory.CircularBuffer.DataExists">
+            <summary>
+            Event signaled when data has been written if the reading index has caught up to the writing index
+            </summary>
+        </member>
+        <member name="P:SharedMemory.CircularBuffer.NodeAvailable">
+            <summary>
+            Event signaled when a node becomes available after reading if the writing index has caught up to the reading index
+            </summary>
+        </member>
+        <member name="P:SharedMemory.CircularBuffer.NodeHeaderOffset">
+            <summary>
+            The offset relative to <see cref="F:SharedMemory.SharedBuffer.BufferStartPtr"/> where the node header starts within the buffer region of the shared memory
+            </summary>
+        </member>
+        <member name="P:SharedMemory.CircularBuffer.NodeOffset">
+            <summary>
+            Where the linked-list nodes are located within the buffer
+            </summary>
+        </member>
+        <member name="P:SharedMemory.CircularBuffer.NodeBufferOffset">
+            <summary>
+            Where the list of buffers are located within the shared memory
+            </summary>
+        </member>
+        <member name="P:SharedMemory.CircularBuffer.Item(System.Int32)">
+            <summary>
+            Provide direct access to the Node[] memory
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SharedMemory.CircularBuffer.NodeHeader">
+            <summary>
+            Provides cursors for the circular buffer along with dimensions
+            </summary>
+            <remarks>This structure is the same size on 32-bit and 64-bit architectures.</remarks>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.NodeHeader.ReadEnd">
+            <summary>
+            The index of the first unreadable node
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.NodeHeader.ReadStart">
+            <summary>
+            The index of the next readable node
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.NodeHeader.WriteEnd">
+            <summary>
+            The index of the first unwritable node
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.NodeHeader.WriteStart">
+            <summary>
+            The index of the next writable node
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.NodeHeader.NodeCount">
+            <summary>
+            The number of nodes within the buffer
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.NodeHeader.NodeBufferSize">
+            <summary>
+            The size of the buffer for each node
+            </summary>
+        </member>
+        <member name="T:SharedMemory.CircularBuffer.Node">
+            <summary>
+            Represents a node within the buffer's circular linked list
+            </summary>
+            <remarks>This structure is the same size on 32-bit and 64-bit architectures.</remarks>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.Node.Next">
+            <summary>
+            The previous node.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.Node.Prev">
+            <summary>
+            The next node.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.Node.DoneRead">
+            <summary>
+            A flag used while returning a node for writing after having been read.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.Node.DoneWrite">
+            <summary>
+            A flag used while posting a node for reading after writing is completed.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.Node.Offset">
+            <summary>
+            Represents the offset relative to <see cref="F:SharedMemory.SharedBuffer.BufferStartPtr"/> where the data for this node can be found.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.Node.Index">
+            <summary>
+            Represents the index of the current node.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.CircularBuffer.Node.AmountWritten">
+            <summary>
+            Holds the number of bytes written into this node.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Creates and opens a new <see cref="T:SharedMemory.CircularBuffer"/> instance with the specified name, node count and buffer size per node.
+            </summary>
+            <param name="name">The name of the shared memory to be created</param>
+            <param name="nodeCount">The number of nodes within the circular linked-list (minimum of 2)</param>
+            <param name="nodeBufferSize">The buffer size per node in bytes. The total shared memory size will be <code>Marshal.SizeOf(SharedMemory.SharedHeader) + Marshal.SizeOf(CircularBuffer.NodeHeader) + (Marshal.SizeOf(CircularBuffer.Node) * nodeCount) + (bufferSize * nodeCount)</code></param>
+            <remarks>
+            <para>The maximum total shared memory size is dependent upon the system and current memory fragmentation.</para>
+            <para>The shared memory layout on 32-bit and 64-bit architectures is:<br />
+            <code>
+            |       Header       |   NodeHeader  | Node[0] | ... | Node[N-1] | buffer[0] | ... | buffer[N-1] |<br />
+            |      16-bytes      |    24-bytes   |       32-bytes * N        |     NodeBufferSize * N        |<br />
+                                 |------------------------------BufferSize-----------------------------------|<br />
+            |-----------------------------------------SharedMemorySize---------------------------------------|
+            </code>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.#ctor(System.String)">
+            <summary>
+            Opens an existing <see cref="T:SharedMemory.CircularBuffer"/> with the specified name.
+            </summary>
+            <param name="name">The name of an existing <see cref="T:SharedMemory.CircularBuffer"/> previously created with <see cref="P:SharedMemory.SharedBuffer.IsOwnerOfSharedMemory"/>=true</param>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.DoOpen">
+            <summary>
+            Attempts to create the <see cref="T:System.Threading.EventWaitHandle"/> handles and initialise the node header and buffers.
+            </summary>
+            <returns>True if the events and nodes were initialised successfully.</returns>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.InitialiseNodeHeader">
+            <summary>
+            Initialises the node header within the shared memory. Only applicable if <see cref="P:SharedMemory.SharedBuffer.IsOwnerOfSharedMemory"/> is true.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.InitialiseLinkedListNodes">
+            <summary>
+            Initialise the nodes of the circular linked-list. Only applicable if <see cref="P:SharedMemory.SharedBuffer.IsOwnerOfSharedMemory"/> is true.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.DoClose">
+            <summary>
+            Closes the events. The shared memory could still be open within one or more other instances.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.GetNodeForWriting(System.Int32)">
+            <summary>
+            Attempts to reserve a node from the linked-list for writing with the specified timeout.
+            </summary>
+            <param name="timeout">The number of milliseconds to wait if a node is not immediately available for writing.</param>
+            <returns>An unsafe pointer to the node if successful, otherwise null</returns>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.PostNode(SharedMemory.CircularBuffer.Node*)">
+            <summary>
+            Makes a node available for reading after writing is complete
+            </summary>
+            <param name="node">An unsafe pointer to the node to return</param>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes the byte array buffer to the next available node for writing
+            </summary>
+            <param name="source">Reference to the buffer to write</param>
+            <param name="startIndex">The index within the buffer to start writing from</param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available for writing (default 1000ms)</param>
+            <returns>The number of bytes written</returns>
+            <remarks>The maximum number of bytes that can be written is the minimum of the length of <paramref name="source"/> and <see cref="P:SharedMemory.CircularBuffer.NodeBufferSize"/>.</remarks>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Write``1(``0[],System.Int32,System.Int32)">
+            <summary>
+            Writes the structure array buffer to the next available node for writing
+            </summary>
+            <param name="source">Reference to the buffer to write</param>
+            <param name="startIndex">The index within the buffer to start writing from</param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available for writing (default 1000ms)</param>
+            <returns>The number of elements written</returns>
+            <remarks>The maximum number of elements that can be written is the minimum of the length of <paramref name="source"/> subtracted by <paramref name="startIndex"/> and <see cref="P:SharedMemory.CircularBuffer.NodeBufferSize"/> divided by <code>FastStructure.SizeOf&gt;T&lt;()</code>.</remarks>        
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Write``1(``0@,System.Int32)">
+            <summary>
+            Writes the structure to the next available node for writing
+            </summary>
+            <typeparam name="T">The structure type to be written</typeparam>
+            <param name="source">The structure to be written</param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available for writing (default 1000ms)</param>
+            <returns>The number of bytes written - larger than 0 if successful</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">If the size of the <typeparamref name="T"/> structure is larger than <see cref="P:SharedMemory.CircularBuffer.NodeBufferSize"/>.</exception>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Write(System.IntPtr,System.Int32,System.Int32)">
+            <summary>
+            Writes <paramref name="length"/> bytes from <paramref name="source"/> to the next available node for writing
+            </summary>
+            <param name="source">Pointer to the buffer to copy</param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available (default 1000ms)</param>
+            <param name="length">The number of bytes to attempt to write</param>
+            <returns>The number of bytes written</returns>
+            <remarks>The maximum number of bytes that can be written is the minimum of <paramref name="length"/> and <see cref="P:SharedMemory.CircularBuffer.NodeBufferSize"/>.</remarks>        
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Write(System.Func{System.IntPtr,System.Int32},System.Int32)">
+            <summary>
+            Reserves a node for writing and then calls the provided <paramref name="writeFunc"/> to perform the write operation.
+            </summary>
+            <param name="writeFunc">A function to used to write to the node's buffer. The first parameter is a pointer to the node's buffer. 
+            The provided function should return the number of bytes written.</param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available for writing (default 1000ms)</param>
+            <returns>The number of bytes written</returns>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.ReadNodeHeader">
+            <summary>
+            Returns a copy of the shared memory header
+            </summary>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.GetNodeForReading(System.Int32)">
+            <summary>
+            Attempts to reserve a node from the linked-list for reading with the specified timeout
+            </summary>
+            <param name="timeout">The number of milliseconds to wait if a node is not immediately available for reading.</param>
+            <returns>An unsafe pointer to the node if successful, otherwise null</returns>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.ReturnNode(SharedMemory.CircularBuffer.Node*)">
+            <summary>
+            Returns a node to the available list of nodes for writing.
+            </summary>
+            <param name="node">An unsafe pointer to the node to be returned</param>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads the next available node for reading into the specified byte array
+            </summary>
+            <param name="destination">Reference to the buffer</param>
+            <param name="startIndex">The index within the buffer to start writing from</param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available for reading (default 1000ms)</param>
+            <returns>The number of bytes read</returns>
+            <remarks>The maximum number of bytes that can be read is the minimum of the length of <paramref name="destination"/> subtracted by <paramref name="startIndex"/> and <see cref="P:SharedMemory.CircularBuffer.NodeBufferSize"/>.</remarks>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Read``1(``0[],System.Int32,System.Int32)">
+            <summary>
+            Reads the next available node for reading into the specified structure array
+            </summary>
+            <typeparam name="T">The structure type to be read</typeparam>
+            <param name="destination">Reference to the buffer</param>
+            <param name="startIndex">The index within the destination to start writing to.</param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available for reading (default 1000ms)</param>
+            <returns>The number of elements read into destination</returns>
+            <remarks>The maximum number of elements that can be read is the minimum of the length of <paramref name="destination"/> subtracted by <paramref name="startIndex"/> and <see cref="F:SharedMemory.CircularBuffer.Node.AmountWritten"/> divided by <code>FastStructure.SizeOf&gt;T&lt;()</code>.</remarks>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Read``1(``0@,System.Int32)">
+            <summary>
+            Reads the next available node for reading into the a structure
+            </summary>
+            <typeparam name="T">The structure type to be read</typeparam>
+            <param name="destination">The resulting structure if successful otherwise default(T)</param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available for reading (default 1000ms)</param>
+            <returns>The number of bytes read</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">If the size of <typeparamref name="T"/> is larger than <see cref="P:SharedMemory.CircularBuffer.NodeBufferSize"/>.</exception>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Read(System.IntPtr,System.Int32,System.Int32)">
+            <summary>
+            Reads the next available node for reading into the specified memory location with the specified length
+            </summary>
+            <param name="destination">Pointer to the buffer</param>
+            <param name="length">The maximum length of <paramref name="destination"/></param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available for reading (default 1000ms)</param>
+            <returns>The number of bytes read</returns>
+            <remarks>The maximum number of bytes that can be read is the minimum of the <paramref name="length"/> and <see cref="F:SharedMemory.CircularBuffer.Node.AmountWritten"/>.</remarks>
+        </member>
+        <member name="M:SharedMemory.CircularBuffer.Read(System.Func{System.IntPtr,System.Int32},System.Int32)">
+            <summary>
+            Reserves a node for reading and then calls the provided <paramref name="readFunc"/> to perform the read operation.
+            </summary>
+            <param name="readFunc">A function used to read from the node's buffer. The first parameter is a pointer to the node's buffer. 
+            The provided function should return the number of bytes read.</param>
+            <param name="timeout">The maximum number of milliseconds to wait for a node to become available for reading (default 1000ms)</param>
+            <returns>The number of bytes read</returns>
+        </member>
+        <member name="T:SharedMemory.FastStructure">
+            <summary>
+            Provides fast reading and writing of generic structures to a memory location using IL emitted functions.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.FastStructure.GetPtr``1(``0@)">
+            <summary>
+            Retrieve a pointer to the passed generic structure type. This is achieved by emitting a <see cref="T:System.Reflection.Emit.DynamicMethod"/> to retrieve a pointer to the structure.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="structure"></param>
+            <returns>A pointer to the provided structure in memory.</returns>
+            <see cref="F:SharedMemory.FastStructure`1.GetPtr"/>
+        </member>
+        <member name="M:SharedMemory.FastStructure.PtrToStructure``1(System.IntPtr)">
+            <summary>
+            Loads the generic value type <typeparamref name="T"/> from a pointer. This is achieved by emitting a <see cref="T:System.Reflection.Emit.DynamicMethod"/> that returns the value in the memory location as a <typeparamref name="T"/>.
+            <para>The equivalent non-generic C# code:</para>
+            <code>
+            unsafe MyStruct ReadFromPointer(byte* pointer)
+            {
+                return *(MyStruct*)pointer;
+            }
+            </code>
+            </summary>
+            <typeparam name="T">Any value/structure type</typeparam>
+            <param name="pointer">Unsafe pointer to memory to load the value from</param>
+            <returns>The newly loaded value</returns>
+        </member>
+        <member name="M:SharedMemory.FastStructure.StructureToPtr``1(``0@,System.IntPtr)">
+            <summary>
+            Writes the generic value type <typeparamref name="T"/> to the location specified by a pointer. This is achieved by emitting a <see cref="T:System.Reflection.Emit.DynamicMethod"/> that copies the value from the referenced structure into the specified memory location.
+            <para>There is no exact equivalent possible in C#, the closest possible (generates the same IL) is the following code:</para>
+            <code>
+            unsafe void WriteToPointer(ref SharedHeader dest, ref SharedHeader src)
+            {
+                dest = src;
+            }
+            </code>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="pointer"></param>
+            <param name="structure"></param>
+        </member>
+        <member name="M:SharedMemory.FastStructure.SizeOf``1">
+            <summary>
+            Retrieve the cached size of a structure
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <remarks>Caches the size by type</remarks>
+            <see cref="F:SharedMemory.FastStructure`1.Size"/>
+        </member>
+        <member name="M:SharedMemory.FastStructure.ReadArray``1(``0[],System.IntPtr,System.Int32,System.Int32)">
+            <summary>
+            Reads a number of elements from a memory location into the provided buffer starting at the specified index.
+            </summary>
+            <typeparam name="T">The structure type</typeparam>
+            <param name="buffer">The destination buffer.</param>
+            <param name="source">The source memory location.</param>
+            <param name="index">The start index within <paramref name="buffer"/>.</param>
+            <param name="count">The number of elements to read.</param>
+        </member>
+        <member name="M:SharedMemory.FastStructure.WriteArray``1(System.IntPtr,``0[],System.Int32,System.Int32)">
+            <summary>
+            Writes a number of elements to a memory location from the provided buffer starting at the specified index.
+            </summary>
+            <typeparam name="T">The structure type</typeparam>
+            <param name="destination">The destination memory location.</param>
+            <param name="buffer">The source buffer.</param>
+            <param name="index">The start index within <paramref name="buffer"/>.</param>
+            <param name="count">The number of elements to write.</param>
+        </member>
+        <member name="T:SharedMemory.FastStructure`1">
+            <summary>
+            Emits optimized IL for the reading and writing of structures to/from memory.
+            <para>For a 32-byte structure with 1 million iterations:</para>
+            <para>The <see cref="F:SharedMemory.FastStructure`1.PtrToStructure"/> method performs approx. 20x faster than
+            <see cref="M:System.Runtime.InteropServices.Marshal.PtrToStructure(System.IntPtr,System.Type)"/> (8ms vs 160ms), and about 1.6x slower than the non-generic equivalent (8ms vs 5ms)</para>
+            <para>The <see cref="F:SharedMemory.FastStructure`1.StructureToPtr"/> method performs approx. 8x faster than 
+            <see cref="M:System.Runtime.InteropServices.Marshal.StructureToPtr(System.Object,System.IntPtr,System.Boolean)"/> (4ms vs 34ms). </para>
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:SharedMemory.FastStructure`1.GetPtrDelegate">
+            <summary>
+            Delegate that returns a pointer to the provided structure. Use with extreme caution.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SharedMemory.FastStructure`1.PtrToStructureDelegate">
+            <summary>
+            Delegate for loading a structure from the specified memory address
+            </summary>
+            <param name="pointer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SharedMemory.FastStructure`1.StructureToPtrDelegate">
+            <summary>
+            Delegate for writing a structure to the specified memory address
+            </summary>
+            <param name="value"></param>
+            <param name="pointer"></param>
+        </member>
+        <member name="F:SharedMemory.FastStructure`1.GetPtr">
+            <summary>
+            The <see cref="T:SharedMemory.FastStructure`1.GetPtrDelegate"/> delegate for the generated IL to retrieve a pointer to the structure
+            </summary>
+        </member>
+        <member name="F:SharedMemory.FastStructure`1.PtrToStructure">
+            <summary>
+            The <see cref="T:SharedMemory.FastStructure`1.PtrToStructureDelegate"/> delegate for the generated IL to retrieve a structure from a specified memory address.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.FastStructure`1.StructureToPtr">
+            <summary>
+            The <see cref="T:SharedMemory.FastStructure`1.StructureToPtrDelegate"/> delegate for the generated IL to store a structure at the specified memory address.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.FastStructure`1.Size">
+            <summary>
+            Cached size of T as determined by <see cref="M:System.Runtime.InteropServices.Marshal.SizeOf(System.Type)"/>.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.FastStructure`1.#cctor">
+            <summary>
+            Performs once of type compatibility check.
+            </summary>
+            <exception cref="T:System.ArgumentException">Thrown if the type T is incompatible</exception>
+        </member>
+        <member name="T:SharedMemory.SharedArray`1">
+            <summary>
+            A generic fixed-length shared memory array of structures with support for simple inter-process read/write synchronisation.
+            </summary>
+            <typeparam name="T">The structure type that will be stored in the elements of this fixed array buffer.</typeparam>
+        </member>
+        <member name="P:SharedMemory.SharedArray`1.Length">
+            <summary>
+            Gets a 32-bit integer that represents the total number of elements in the <see cref="T:SharedMemory.SharedArray`1"/>
+            </summary>
+        </member>
+        <member name="P:SharedMemory.SharedArray`1.Item(System.Int32)">
+            <summary>
+            Gets or sets the element at the specified index
+            </summary>
+            <param name="index">The zero-based index of the element to get or set.</param>
+            <returns>The element at the specified index.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is less than 0 -or- index is equal to or greater than <see cref="P:SharedMemory.SharedArray`1.Length"/>.</exception>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates the shared memory array with the name specified by <paramref name="name"/>.
+            </summary>
+            <param name="name">The name of the shared memory array to be created.</param>
+            <param name="length">The number of elements to make room for within the shared memory array.</param>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.#ctor(System.String)">
+            <summary>
+            Opens an existing shared memory array with the name as specified by <paramref name="name"/>.
+            </summary>
+            <param name="name">The name of the shared memory array to open.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">If the shared memory location specified by <paramref name="name"/> does not have a <see cref="P:SharedMemory.SharedBuffer.BufferSize"/> that is evenly divisible by the size of <typeparamref name="T"/>.</exception>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.DoOpen">
+            <summary>
+            Perform any initialisation required when opening the shared memory array
+            </summary>
+            <returns>true if successful</returns>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.Write(`0@,System.Int32)">
+            <summary>
+            Copy <paramref name="data"/> to the shared memory array element at index <paramref name="index"/>.
+            </summary>
+            <param name="data">The data to be written.</param>
+            <param name="index">The zero-based index of the element to set.</param>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.Write(`0[],System.Int32)">
+            <summary>
+            Copy the elements of the array <paramref name="buffer"/> into the shared memory array starting at index <paramref name="startIndex"/>.
+            </summary>
+            <param name="buffer">The source array to copy elements from.</param>
+            <param name="startIndex">The zero-based index of the shared memory array element to begin writing to.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="startIndex"/> is less than 0 -or- length of <paramref name="buffer"/> + <paramref name="startIndex"/> is greater than <see cref="P:SharedMemory.SharedArray`1.Length"/>.</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="buffer"/> must not be null</exception>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.Read(`0@,System.Int32)">
+            <summary>
+            Reads a single element from the shared memory array into <paramref name="data"/> located at <paramref name="index"/>.
+            </summary>
+            <param name="data">The element at the specified index.</param>
+            <param name="index">The zero-based index of the element to get.</param>
+            <returns>The element at the specified index.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is less than 0 -or- index is equal to or greater than <see cref="P:SharedMemory.SharedArray`1.Length"/>.</exception>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.CopyTo(`0[],System.Int32)">
+            <summary>
+            Reads buffer.Length elements from the shared memory array into <paramref name="buffer"/> starting at the shared memory array element located at <paramref name="startIndex"/>.
+            </summary>
+            <param name="buffer">The destination array to copy the elements into.</param>
+            <param name="startIndex">The zero-based index of the shared memory array element to begin reading from.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="startIndex"/> is less than 0 -or- length of <paramref name="buffer"/> + <paramref name="startIndex"/> is greater than <see cref="P:SharedMemory.SharedArray`1.Length"/>.</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="buffer"/> must not be null</exception>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerator`1"/> instance that can be used to iterate through the collection</returns>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.Add(`0)">
+            <summary>
+            Operation not supported. Throws <see cref="T:System.NotImplementedException"/>
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.Clear">
+            <summary>
+            Operation not supported. Throws <see cref="T:System.NotImplementedException"/>
+            </summary>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.Contains(`0)">
+            <summary>
+            Checks if the list contains the specified item.
+            </summary>
+            <param name="item"></param>
+            <returns>True if found</returns>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.Remove(`0)">
+            <summary>
+            Operation not supported. Throws <see cref="T:System.NotImplementedException"/>
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="P:SharedMemory.SharedArray`1.Count">
+            <summary>
+            The number of elements in the array
+            </summary>
+        </member>
+        <member name="P:SharedMemory.SharedArray`1.IsReadOnly">
+            <summary>
+            The elements are not read-only
+            </summary>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.IndexOf(`0)">
+            <summary>
+            Return the index of the specified item.
+            </summary>
+            <param name="item"></param>
+            <returns>The index of the item if found, otherwise -1.</returns>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.Insert(System.Int32,`0)">
+            <summary>
+            Operation not supported. Throws <see cref="T:System.NotImplementedException"/>
+            </summary>
+            <param name="index"></param>
+            <param name="item"></param>
+        </member>
+        <member name="M:SharedMemory.SharedArray`1.RemoveAt(System.Int32)">
+            <summary>
+            Operation not supported. Throws <see cref="T:System.NotImplementedException"/>
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="T:SharedMemory.SharedBuffer">
+            <summary>
+            Abstract base class that provides client/server support for reading/writing structures to a buffer within a <see cref="T:System.IO.MemoryMappedFiles.MemoryMappedFile" />.
+            A header structure allows clients to open the buffer without knowing the size.
+            </summary>
+        </member>
+        <member name="P:SharedMemory.SharedBuffer.Name">
+            <summary>
+            The name of the Shared Memory instance
+            </summary>
+        </member>
+        <member name="P:SharedMemory.SharedBuffer.BufferSize">
+            <summary>
+            The buffer size
+            </summary>
+        </member>
+        <member name="P:SharedMemory.SharedBuffer.SharedMemorySize">
+            <summary>
+            The total shared memory size, including header and buffer.
+            </summary>
+        </member>
+        <member name="P:SharedMemory.SharedBuffer.IsOwnerOfSharedMemory">
+            <summary>
+            Indicates whether this instance owns the shared memory (i.e. creator of the shared memory)
+            </summary>
+        </member>
+        <member name="P:SharedMemory.SharedBuffer.ShuttingDown">
+            <summary>
+            Returns true if the SharedMemory owner has/is shutting down
+            </summary>
+        </member>
+        <member name="P:SharedMemory.SharedBuffer.HeaderOffset">
+            <summary>
+            Where the header starts within the shared memory
+            </summary>
+        </member>
+        <member name="P:SharedMemory.SharedBuffer.BufferOffset">
+            <summary>
+            Where the buffer is located within the shared memory
+            </summary>
+        </member>
+        <member name="F:SharedMemory.SharedBuffer.Mmf">
+            <summary>
+            Memory mapped file
+            </summary>
+        </member>
+        <member name="F:SharedMemory.SharedBuffer.View">
+            <summary>
+            Memory mapped view
+            </summary>
+        </member>
+        <member name="F:SharedMemory.SharedBuffer.ViewPtr">
+            <summary>
+            Pointer to the memory mapped view
+            </summary>
+        </member>
+        <member name="F:SharedMemory.SharedBuffer.BufferStartPtr">
+            <summary>
+            Pointer to the start of the buffer region of the memory mapped view
+            </summary>
+        </member>
+        <member name="F:SharedMemory.SharedBuffer.Header">
+            <summary>
+            Pointer to the header within shared memory
+            </summary>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.#ctor(System.String,System.Int64,System.Boolean)">
+            <summary>
+            Create a new <see cref="T:SharedMemory.SharedBuffer"/> instance with the specified name and buffer size
+            </summary>
+            <param name="name">The name of the shared memory</param>
+            <param name="bufferSize">The buffer size in bytes. The total shared memory size will be <code>Marshal.SizeOf(SharedMemory.SharedHeader) + bufferSize</code></param>
+            <param name="ownsSharedMemory">Whether or not the current instance owns the shared memory. If true a new shared memory will be created and initialised otherwise an existing one is opened.</param>
+            <remarks>
+            <para>The maximum total shared memory size is dependent upon the system and current memory fragmentation.</para>
+            <para>The shared memory layout on 32-bit and 64-bit is:<br />
+            <code>
+            |       Header       |    Buffer    |<br />
+            |      16-bytes      |  bufferSize  |
+            </code>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Finalize">
+            <summary>
+            Destructor - for Dispose(false)
+            </summary>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Open">
+            <summary>
+            Creates a new or opens an existing shared memory buffer with the name of <see cref="P:SharedMemory.SharedBuffer.Name"/> depending on the value of <see cref="P:SharedMemory.SharedBuffer.IsOwnerOfSharedMemory"/>. 
+            </summary>
+            <returns>True if the memory was successfully mapped</returns>
+            <remarks>If <see cref="P:SharedMemory.SharedBuffer.IsOwnerOfSharedMemory"/> is true then the shared memory buffer will be created, opening will fail in this case if the shared memory already exists. Otherwise if IsOwnerOfSharedMemory is false then the shared memory buffer will be opened, which will fail if it doesn't already exist.</remarks>
+            <exception cref="T:System.IO.IOException">If trying to create a new shared memory buffer with a duplicate name as buffer owner.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">If trying to open a new shared memory buffer that does not exist as a consumer of existing buffer.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">If trying to create a new shared memory buffer with a size larger than the logical addressable space.</exception>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.DoOpen">
+            <summary>
+            Allows any classes that inherit from <see cref="T:SharedMemory.SharedBuffer"/> to perform additional open logic. There is no need to call base.DoOpen() from these implementations.
+            </summary>
+            <returns>True if successful, otherwise false.</returns>
+            <remarks>By throwing an exception or returning false, the call to <see cref="M:SharedMemory.SharedBuffer.Open"/> will fail and <see cref="M:SharedMemory.SharedBuffer.Close"/> will be called.</remarks>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.InitialiseHeader">
+            <summary>
+            Initialises the header within the shared memory. Only applicable if <see cref="P:SharedMemory.SharedBuffer.IsOwnerOfSharedMemory"/> is true.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Close">
+            <summary>
+            Sets the <see cref="P:SharedMemory.SharedBuffer.ShuttingDown"/> flag, and disposes of the MemoryMappedFile and MemoryMappedViewAccessor.<br />
+            Attempting to read/write to the buffer after closing will result in a <see cref="T:System.NullReferenceException"/>.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.DoClose">
+            <summary>
+            Any classes that inherit from <see cref="T:SharedMemory.SharedBuffer"/> should implement any <see cref="M:SharedMemory.SharedBuffer.Close"/> logic here, <see cref="F:SharedMemory.SharedBuffer.Mmf"/> and <see cref="F:SharedMemory.SharedBuffer.View"/> are still active at this point. There is no need to call base.DoClose() from these classes.
+            </summary>
+            <remarks>It is possible for <see cref="M:SharedMemory.SharedBuffer.Close"/> to be called before <see cref="M:SharedMemory.SharedBuffer.Open"/> has completed successfully, in this situation <see cref="M:SharedMemory.SharedBuffer.DoClose"/> should fail gracefully.</remarks>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Write``1(``0@,System.Int64)">
+            <summary>
+            Writes an instance of <typeparamref name="T"/> into the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="source">A reference to an instance of <typeparamref name="T"/> to be written into the buffer</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Write``1(``0[],System.Int64)">
+            <summary>
+            Writes an array of <typeparamref name="T"/> into the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="source">An array of <typeparamref name="T"/> to be written. The length of this array controls the number of elements to be written.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Write``1(``0[],System.Int32,System.Int64)">
+            <summary>
+            Writes an array of <typeparamref name="T"/> into the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="source">An array of <typeparamref name="T"/> to be written. The length of this array controls the number of elements to be written.</param>
+            <param name="index">The index within the array to start writing from.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.WriteArray``1(``0[],System.Int32,System.Int32,System.Int64)">
+            <summary>
+            Writes an array of <typeparamref name="T"/> into the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="source">The source data to be written to the buffer</param>
+            <param name="index">The start index within <paramref name="source"/>.</param>
+            <param name="count">The number of elements to write.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Write(System.IntPtr,System.Int32,System.Int64)">
+            <summary>
+            Writes <paramref name="length"/> bytes from the <paramref name="source"/> into the shared memory buffer.
+            </summary>
+            <param name="source">A managed pointer to the memory location to be copied into the buffer</param>
+            <param name="length">The number of bytes to be copied</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to write to.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Write(System.Action{System.IntPtr},System.Int64)">
+            <summary>
+            Prepares an IntPtr to the buffer position and calls <paramref name="writeFunc"/> to perform the writing.
+            </summary>
+            <param name="writeFunc">A function used to write to the buffer. The IntPtr parameter is a pointer to the buffer location offset by <paramref name="bufferPosition"/>.</param>
+            <param name="bufferPosition">The offset within the buffer region to start writing to.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Read``1(``0@,System.Int64)">
+            <summary>
+            Reads an instance of <typeparamref name="T"/> from the buffer
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="data">Output parameter that will contain the value read from the buffer</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Read``1(``0[],System.Int64)">
+            <summary>
+            Reads an array of <typeparamref name="T"/> from the buffer.
+            </summary>
+            <typeparam name="T">A structure type</typeparam>
+            <param name="destination">Array that will contain the values read from the buffer. The length of this array controls the number of elements to read.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.ReadArray``1(``0[],System.Int32,System.Int32,System.Int64)">
+            <summary>
+            Reads a number of elements from a memory location into the provided buffer starting at the specified index.
+            </summary>
+            <typeparam name="T">The structure type</typeparam>
+            <param name="destination">The destination buffer.</param>
+            <param name="index">The start index within <paramref name="destination"/>.</param>
+            <param name="count">The number of elements to read.</param>
+            <param name="bufferPosition">The source offset within the buffer region of the shared memory.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Read(System.IntPtr,System.Int32,System.Int64)">
+            <summary>
+            Reads <paramref name="length"/> bytes into the memory location <paramref name="destination"/> from the buffer region of the shared memory.
+            </summary>
+            <param name="destination">A managed pointer to the memory location to copy data into from the buffer</param>
+            <param name="length">The number of bytes to be copied</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Read(System.Action{System.IntPtr},System.Int64)">
+            <summary>
+            Prepares an IntPtr to the buffer position and calls <paramref name="readFunc"/> to perform the reading.
+            </summary>
+            <param name="readFunc">A function used to read from the buffer. The IntPtr parameter is a pointer to the buffer offset by <paramref name="bufferPosition"/>.</param>
+            <param name="bufferPosition">The offset within the buffer region of the shared memory to read from.</param>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.SharedBuffer.Dispose(System.Boolean)">
+            <summary>
+            IDisposable pattern - dispose of managed/unmanaged resources
+            </summary>
+            <param name="disposeManagedResources">true to dispose of managed resources as well as unmanaged.</param>
+        </member>
+        <member name="T:SharedMemory.SharedHeader">
+            <summary>
+            A structure that is always located at the start of the shared memory in a <see cref="T:SharedMemory.SharedBuffer"/> instance. 
+            This allows the shared memory to be opened by other instances without knowing its size before hand.
+            </summary>
+            <remarks>This structure is the same size on 32-bit and 64-bit architectures.</remarks>
+        </member>
+        <member name="F:SharedMemory.SharedHeader.SharedMemorySize">
+            <summary>
+            The total size of the buffer including <see cref="T:SharedMemory.SharedHeader"/>, i.e. <code>BufferSize + Marshal.SizeOf(typeof(SharedMemory.SharedHeader))</code>.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.SharedHeader.Shutdown">
+            <summary>
+            Flag indicating whether the owner of the buffer has closed its <see cref="T:System.IO.MemoryMappedFiles.MemoryMappedFile"/> and <see cref="T:System.IO.MemoryMappedFiles.MemoryMappedViewAccessor"/>.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.SharedHeader._padding0">
+            <summary>
+            Pad to 16-bytes.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.UnsafeNativeMethods.CopyMemory(System.IntPtr,System.IntPtr,System.UInt32)">
+            <summary>
+            Allow copying memory from one IntPtr to another. Required as the <see cref="M:System.Runtime.InteropServices.Marshal.Copy(System.IntPtr,System.IntPtr[],System.Int32,System.Int32)"/> implementation does not provide an appropriate override.
+            </summary>
+            <param name="dest"></param>
+            <param name="src"></param>
+            <param name="count"></param>
+        </member>
+        <member name="T:SharedMemory.Utilities.ArraySlice`1">
+            <summary>
+            Like <see cref="T:System.ArraySegment`1"/>, but works with <see cref="T:System.Collections.Generic.IList`1"/> not just an array.
+            </summary>
+            <typeparam name="T">The type that is stored in the elements of the <see cref="T:System.Collections.Generic.IList`1"/>.</typeparam>
+        </member>
+        <member name="M:SharedMemory.Utilities.ArraySlice`1.#ctor(System.Collections.Generic.IList{`0})">
+            <summary>
+            No slicing. Just mirror the list
+            </summary>
+            <param name="list">The list to be sliced.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="list"/> is null.</exception>
+        </member>
+        <member name="M:SharedMemory.Utilities.ArraySlice`1.#ctor(System.Collections.Generic.IList{`0},System.Int32,System.Int32)">
+            <summary>
+            Create a slice of a list (virtually).
+            </summary>
+            <param name="list">The list to be sliced.</param>
+            <param name="offset">The offset into <paramref name="list"/> to start the slice.</param>
+            <param name="count">The number of elements to be included in this slice.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="list"/> is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if <paramref name="offset"/> or <paramref name="count"/> are less than zero.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the number of elements in <paramref name="list"/> - <paramref name="offset"/> are not less than <paramref name="count"/>.</exception>
+        </member>
+        <member name="P:SharedMemory.Utilities.ArraySlice`1.List">
+            <summary>
+            The list that is being sliced.
+            </summary>
+        </member>
+        <member name="P:SharedMemory.Utilities.ArraySlice`1.Offset">
+            <summary>
+            The offset into the <see cref="T:ArraySlice`1.List"/>.
+            </summary>
+        </member>
+        <member name="P:SharedMemory.Utilities.ArraySlice`1.Count">
+            <summary>
+            The number of elements to be included in this slice.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.Utilities.ArraySlice`1.GetHashCode">
+            <summary>
+            Used to determine uniqueness.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SharedMemory.Utilities.ArraySlice`1.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
+            <param name="obj">Another object to compare to. </param>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:SharedMemory.Utilities.ArraySlice`1.Equals(SharedMemory.Utilities.ArraySlice{`0})">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SharedMemory.Utilities.ArraySlice`1.op_Equality(SharedMemory.Utilities.ArraySlice{`0},SharedMemory.Utilities.ArraySlice{`0})">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SharedMemory.Utilities.ArraySlice`1.op_Inequality(SharedMemory.Utilities.ArraySlice{`0},SharedMemory.Utilities.ArraySlice{`0})">
+            <summary>Indicates whether this instance and a specified object are not equal.</summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="P:SharedMemory.Utilities.ArraySlice`1.Item(System.Int32)">
+            <summary>Gets or sets the element at the specified index.</summary>
+            <returns>The element at the specified index.</returns>
+            <param name="index">The zero-based index of the element to get or set.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.</exception>
+            <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1" /> is read-only.</exception>
+        </member>
+        <member name="M:SharedMemory.Utilities.ArraySlice`1.IndexOf(`0)">
+            <summary>Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1" />.</summary>
+            <returns>The index of <paramref name="item" /> if found in the list; otherwise, -1.</returns>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
+        </member>
+        <member name="T:SharedMemory.Utilities.ExpandingArray`1">
+            <summary>
+            This is a dynamic array like .NET's List'T, except for the following:
+            - Should be used only when growing the list incrementally.  No inserts or deletes in the middle of the list.
+            - You can specify a custom allocator, so the data can be stored in any IList'T, including a memory-mapped file.
+                  for struct types.
+            - Unlike a typical dynamic array, such as List'T, this class does not copy data and fragment the memory by
+                  leaving holes that have to be freed/reallocated.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="F:SharedMemory.Utilities.ExpandingArray`1._allocator">
+            <summary>
+            Passed in allocator.  We use to this get "memory" where the actual data is stored.  Can be any IList'T
+            </summary>
+        </member>
+        <member name="F:SharedMemory.Utilities.ExpandingArray`1._count">
+            <summary>
+            Backing field for Count.  Contains the number of elements in the list from the user's perspective.
+            </summary>
+        </member>
+        <member name="F:SharedMemory.Utilities.ExpandingArray`1._buckets">
+            <summary>
+            This is where all the allocations are stored.  The 1st bucket is a special case 
+            and represents the first 3 elements of the list.
+            The 2nd bucket contains the next 4 element of the list.
+            The 3rd bucket contains the next 8 element of the list.
+            The 4th bucket contains the next 16 element of the list.
+            The 5th bucket contains the next 32 element of the list.
+            etc.
+            This way, given the index into the list, we can calculate which bucket it belongs to using log(i)/log(2)
+            This array is initially allocated to contain only one bucket.   But a hint can be passed in to the constructor
+            to pre-allocate more pubckets.  This will reduce reallocating the array as it grows.
+            </summary>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.#ctor(System.Func{System.Int32,System.Collections.Generic.IList{`0}},System.Int32)">
+            <summary>
+            The allocation is used to specify a customer allocator.
+               It's a function that returns an IList of the indicated size.
+               It can be as simple as something like: size => new int[size]
+            The finalCapacityHint allows us to preallocate the buckets based on what the
+               the final capacity might be.   This does not allocate the entire list.
+               For instance, if finalCapacityHint one-million, an array of 18 objects
+               are allocated.
+               Guessing a smaller number simply means that the buckets are reallocated
+               as the array grows, causing GC churn which could otherwise be avoided.
+            </summary>
+            <param name="allocator"></param>
+            <param name="finalCapacityHint"></param>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.GetBucket(System.Int32)">
+            <summary>
+            Given the bucket number, returns the bucket entry, which may be null if it hasn't
+            been allocated yet.
+            </summary>
+            <param name="bucketIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.GetBucketIndex(System.Int32)">
+            <summary>
+            Given the index into the list, determines which bucket the element resides in.
+            Made pubic for testing.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.GetLocalIndex(System.Int32,System.Collections.Generic.IList{`0}@)">
+            <summary>
+            Given the index into the list, returns the index into the bucket where the actual element resides.
+            along with the bucket itself.
+            </summary>
+            <param name="globalIndex"></param>
+            <param name="bucket"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.Add(`0)">
+            <summary>
+            IList.Add().  Add an item to the list.
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="P:SharedMemory.Utilities.ExpandingArray`1.Item(System.Int32)">
+            <summary>Gets or sets the element at the specified index.</summary>
+            <returns>The element at the specified index.</returns>
+            <param name="index">The zero-based index of the element to get or set.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.</exception>
+            <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1" /> is read-only.</exception>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.Clear">
+            <summary>Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
+            <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only. </exception>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.Contains(`0)">
+            <summary>Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.</summary>
+            <returns>true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false.</returns>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.CopyTo(`0[],System.Int32)">
+            <summary>Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.</summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+            <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="array" /> is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="arrayIndex" /> is less than 0.</exception>
+            <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.Remove(`0)">
+            <summary>not implemented Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
+            <returns>true if <paramref name="item" /> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.</returns>
+            <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+            <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.</exception>
+        </member>
+        <member name="P:SharedMemory.Utilities.ExpandingArray`1.Count">
+            <summary>Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
+            <returns>The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</returns>
+        </member>
+        <member name="P:SharedMemory.Utilities.ExpandingArray`1.IsReadOnly">
+            <summary>Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.</summary>
+            <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only; otherwise, false.</returns>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.GetEnumerator">
+            <summary>Returns an enumerator that iterates through the collection.</summary>
+            <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>Returns an enumerator that iterates through a collection.</summary>
+            <returns>An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.IndexOf(`0)">
+            <summary>Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1" />.</summary>
+            <returns>The index of <paramref name="item" /> if found in the list; otherwise, -1.</returns>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.Insert(System.Int32,`0)">
+            <summary>not implemented.  Inserts an item to the <see cref="T:System.Collections.Generic.IList`1" /> at the specified index.</summary>
+            <param name="index">The zero-based index at which <paramref name="item" /> should be inserted.</param>
+            <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1" />.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.</exception>
+            <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1" /> is read-only.</exception>
+        </member>
+        <member name="M:SharedMemory.Utilities.ExpandingArray`1.RemoveAt(System.Int32)">
+            <summary>not implemented.  Removes the <see cref="T:System.Collections.Generic.IList`1" /> item at the specified index.</summary>
+            <param name="index">The zero-based index of the item to remove.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.</exception>
+            <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1" /> is read-only.</exception>
+        </member>
+    </members>
+</doc>

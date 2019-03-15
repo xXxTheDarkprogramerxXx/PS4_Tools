@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,6 +42,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BigInteger">
+      <HintPath>..\..\..\..\..\Downloads\biginteger_binaries\BigInteger.dll</HintPath>
+    </Reference>
     <Reference Include="DiscUtils, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Downloads\DiscUtils\sourceCode\discutils\src\bin\Debug\DiscUtils.dll</HintPath>
@@ -50,6 +55,10 @@
     </Reference>
     <Reference Include="DspAdpcm">
       <HintPath>..\..\..\..\..\Downloads\VGAudio-master\DspAdpcm.dll</HintPath>
+    </Reference>
+    <Reference Include="GameArchives, Version=0.1.138.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Downloads\LibOrbisPkg-0.1.138\GameArchives.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.8.10.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.8.10\lib\Net20\HtmlAgilityPack.dll</HintPath>
@@ -66,6 +75,10 @@
     </Reference>
     <Reference Include="PARAM.SFO">
       <HintPath>..\..\..\..\GitHub\PS3Tools\PARAM.SFO Editor\PARAM.SFO\bin\Debug\PARAM.SFO.dll</HintPath>
+    </Reference>
+    <Reference Include="SharedMemory, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharedMemory.2.1.1\lib\net35\SharedMemory.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -105,6 +118,23 @@
     <Compile Include="Files\PUP\PUP.cs" />
     <Compile Include="Files\SELF\llvm.cs" />
     <Compile Include="Files\SELF\Self.cs" />
+    <Compile Include="LibOrbis\GP4\Gp4Project.cs" />
+    <Compile Include="LibOrbis\SFO\ParamSfo.cs" />
+    <Compile Include="LibOrbis\Util\Crypto.cs" />
+    <Compile Include="LibOrbis\Util\Enums.cs" />
+    <Compile Include="LibOrbis\PKG\Entry.cs" />
+    <Compile Include="LibOrbis\PKG\Pkg.cs" />
+    <Compile Include="LibOrbis\PKG\PkgReader.cs" />
+    <Compile Include="LibOrbis\PlayGo\ChunkDat.cs" />
+    <Compile Include="LibOrbis\PlayGo\Manifest.cs" />
+    <Compile Include="LibOrbis\Util\Extensions.cs" />
+    <Compile Include="LibOrbis\Util\Keys.cs" />
+    <Compile Include="LibOrbis\Util\MersenneTwister.cs" />
+    <Compile Include="LibOrbis\Util\Net4Extensions.cs" />
+    <Compile Include="LibOrbis\Util\Net4Fix.cs" />
+    <Compile Include="LibOrbis\Util\ReaderBase.cs" />
+    <Compile Include="LibOrbis\Util\StreamExtensions.cs" />
+    <Compile Include="LibOrbis\Util\SubStream.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Media\Atrac9\Atrac9Config.cs" />
     <Compile Include="Media\Atrac9\Atrac9Decoder.cs" />

@@ -26,6 +26,8 @@ using System.Text.RegularExpressions;
 #endregion << VGAudio >>
 
 using Newtonsoft.Json;
+using PS4_Tools.LibOrbis.PKG;
+using PS4_Tools.LibOrbis.Util;
 
 namespace PS4_Tools
 {
@@ -164,6 +166,8 @@ namespace PS4_Tools
                 return bmp;
             }
 
+            #region << Create_PS4_Compatible_PNG >>
+
             /// <summary>
             /// Converts a file location of a bitmap to a ps4 compatible one
             /// </summary>
@@ -232,6 +236,8 @@ namespace PS4_Tools
                 //return ps4 compatible one
                 return returnbmp;
             }
+
+            #endregion << Create_PS4_Compatible_PNG >>
         }
 
         /// <summary>
@@ -241,7 +247,7 @@ namespace PS4_Tools
         {
             public static void SavePNGFromDDS(string DDSFilePath, string savepath)
             {
-                /*Migrating to .Net3.5 this class will not work right now*/
+                /*Migrating to .Net3.5 this class might not work right now*/
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
                 image.BitmapImage.Save(savepath);
 
@@ -263,6 +269,15 @@ namespace PS4_Tools
                 Stream rtnStream = new MemoryStream();
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
                 return (Bitmap)image.BitmapImage;
+            }
+
+            public static void CreateDDSFromBitmap(Bitmap Bitmap,string SavePath)
+            {
+                DDSReader.DDSImage img = new DDSReader.DDSImage(Bitmap);
+                
+                
+
+                //img;
             }
         }
 
@@ -2440,10 +2455,1005 @@ namespace PS4_Tools
 
 
         /*Read RCO To Custom File*/
+
+        public static RCOFile ReadRco(string File)
+        {
+            RCOFile rco = new RCOFile();
+            rco.FileTable = new FileTable();
+            
+            try
+            {
+                // Reading Header
+                byte[] magic = new byte[8];
+                byte[] offset = new byte[4];
+                string outFile = "notDefined";
+                using (BinaryReader br = new BinaryReader(new FileStream(File, FileMode.Open, FileAccess.Read)))
+                {
+
+
+                    // Check Magic
+                    //Console.Write("Checking Header....");
+                    br.Read(magic, 0, 8);
+
+                    if (!CompareBytes(magic, ngrcoMagic))
+                    {
+                        //Console.WriteLine("ERROR: That is not a valid NextGen RCO!\nExiting now...");
+                        //Environment.Exit(0);
+                        throw new Exception("ERROR: That is not a valid NextGen RCO!");
+                    }
+
+                    //Console.Write("Magic OK!\nThat's a NextGen RCO :)\n");
+                    //create folder in which to extact 
+                    //if it exists delete the dam thing xD
+                    //if (Directory.Exists(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File)))
+                    //{
+                    //    PS4_Tools.DeleteDirectory(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File));
+                    //}
+                    //Directory.CreateDirectory(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File));
+
+                    //baseDir = PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File) + @"\";
+
+                    // Get Data Table Offset and Length
+                    //Console.Write("Reading Offset and Length of Data Table...");
+                    offset = new byte[4];
+                    byte[] eof = new byte[4];
+                    br.BaseStream.Seek(0x48, SeekOrigin.Begin);
+                    br.Read(offset, 0, 4);
+                    br.Read(eof, 0, 4);
+                    Array.Reverse(offset);
+                    Array.Reverse(eof);
+                    //Console.Write("done!\n");
+                    //Console.WriteLine("Readed Hex value of Offset: 0x" + BitConverter.ToString(offset).Replace("-", ""));
+                    //Console.WriteLine("Readed Hex value of Size: 0x" + BitConverter.ToString(eof).Replace("-", ""));
+
+                    // Check for zlib Header '0x78DA' (compression level=9) or VAG & PNG files and write to file
+
+                    end = Convert.ToInt32(BitConverter.ToString(eof).Replace("-", ""), 16);
+                    count = Convert.ToInt32(BitConverter.ToString(offset).Replace("-", ""), 16);
+                    //Console.WriteLine("Offset to start from: " + count + " bytes");
+                    //Console.WriteLine("Size to Dump: " + end + " bytes");
+                    //Console.WriteLine("Searching for ZLib Compressed (Vita) or Non-Compressed (PS4) Files...");
+                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                    br.Read(zlib, 0, 2);
+
+
+                    ////somehow we need to get the name of the file
+                    //BinaryReader br2 = br;
+                    //byte[] array = new byte[br.BaseStream.Length];
+
+                    //br2.Read(array, 0, (int)br.BaseStream.Length);
+                    //string filenametest = System.Text.Encoding.UTF8.GetString(array);
+                    //string tempstr = Util.Utils.byteArrayToHexString(array);
+                    //string idkanymore = Util.Utils.HexToString(tempstr);
+
+                    // main loop
+                    if (!CompareBytes(zlib, singlZL))
+                    {
+                        temp = new byte[16];
+                        while ((i = br.Read(temp, 0, 16)) != 0)
+                        {
+                            // In case of we now also have PS4 RCO's to work down and to not compromise the routine, we swapped the Extraction here 
+                            // and placed the search for zlib files under the VAG and PNG file search
+                            // For ZLib i removed the second routine that would read after the first Zlib compressed block, adding a 0 byte 0x00 on top of 0x78DA
+                            // Instead of that, we simple counted +1 byte on end of dumping process and continue as usually
+
+                            // Now we first fill the buffer's for the header's which we will compare after
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(vag, 0, 8);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(cxml, 0, 8);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(zlib, 0, 2);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(png, 0, 16);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(dds, 0, 4);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(gtf, 0, 4);
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(wav, 0, 4);
+
+                            #region vagExtract
+                            if (CompareBytes(vag, vagMagic))
+                            {
+                                //Console.Write("Found a VAG File will start to extract...");
+                                //outFile = baseDir + countVag + ".vag";
+                                //System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                MemoryStream memset = new MemoryStream();
+
+                                using (BinaryWriter bw = new BinaryWriter(memset))
+                                {
+                                    bw.Write(toWrite, 0, 16);
+                                    memset.Read(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(toWrite, vagEnd))
+                                        {
+                                            if (!CompareBytes(_cxml, ngCXML))
+                                            {
+                                                if (!CompareBytes(toWrite, pngMagic))
+                                                {
+                                                    if (!CompareBytes(_zlib, singlZL))
+                                                    {
+                                                        if (!CompareBytes(_wav, wavMagic))
+                                                        {
+                                                            if (!CompareBytes(_dds, ddsMagic))
+                                                            {
+                                                                if (!CompareBytes(_gtf, gtfMagic))
+                                                                {
+                                                                    bw.Write(toWrite, 0, 16);
+                                                                    memset.Read(toWrite, 0, 16);
+                                                                    dumped += 16;
+                                                                    count += 16;
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                        {
+                                            // We reached the eof and loop was stopped. Now we need to write out the last 16 bytes which build the eof of a VAG file.
+                                            bw.Write(toWrite, 0, 16);
+                                            memset.Read(toWrite, 0, 16);
+                                            Vag vag  = new Vag();
+                                            vag.FileBytes = memset.ToArray();
+                                            vag.VagFile = outFile;
+                                            rco.FileTable.VagFiles.Add(vag);
+                                            dumped += 16;
+                                            count += 16;
+                                            break;
+                                        }
+                                    }
+                                    bw.Close();
+
+                                    memset.Close();
+                                }
+                                Console.Write("done!\n");
+
+                                // Convert VAG to WAV
+                                //TODO :Create C# Converter
+                                //ConvertVAG(outFile);
+                                countVag++;
+                            }
+                            #endregion vagExtract
+                            #region pngExtract
+                            else if (CompareBytes(png, pngMagic))
+                            {
+                                //Console.Write("Found a PNG File will start to extract...");
+                                outFile = baseDir + countPNG + ".png";
+                                //System.IO.File.Create(outFile).Close();
+
+                                byte[] toWrite = new byte[16];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _vag = new byte[8];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+                                MemoryStream memset = new MemoryStream();
+                                using (BinaryWriter bw = new BinaryWriter(memset))
+                                {
+                                    // Before we Jump into the Loop we need to write out the first readed 16 bytes which are the PNG Magic.
+                                    // This is needed cause we need to compare for new Magic's / Header's to know if we reached the eof of current file.
+                                    // Otherwise the routine would detect a PNG Magic and stop right after we jumped in, resulting in not extracting the PNG and loosing
+                                    // the allready readed 16 bytes.
+                                    bw.Write(toWrite, 0, 16);
+
+                                    memset.Read(toWrite, 0, 16);
+                                    // count up the readed bytes and read next one before the loop start
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    // Now let's start the Loop and extract the PNG
+                                    while (true)
+                                    {
+                                        // Have we reached EOF ?
+                                        if (!CompareBytes(toWrite, pngMagic))
+                                        {
+                                            if (!CompareBytes(_cxml, ngCXML))
+                                            {
+                                                if (!CompareBytes(_zlib, singlZL))
+                                                {
+                                                    if (!CompareBytes(_vag, vagMagic))
+                                                    {
+                                                        if (!CompareBytes(_wav, wavMagic))
+                                                        {
+                                                            if (!CompareBytes(_dds, ddsMagic))
+                                                            {
+                                                                if (!CompareBytes(_gtf, gtfMagic))
+                                                                {
+                                                                    // Write out the readed data
+                                                                    bw.Write(toWrite, 0, 16);
+                                                                    dumped += 16;
+                                                                    count += 16;
+                                                                    memset.Read(toWrite, 0, 16);
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    PNG png = new PNG();
+                                    png.PNGFile = outFile;
+                                    
+                                    png.FileBytes = memset.ToArray();
+                                    rco.FileTable.PNGFiles.Add(png);
+                                    bw.Close();
+
+                                    memset.Close();
+                                }
+                                Console.Write("done!\n");
+                                countPNG++;
+                            }
+                            #endregion pngExtract
+                            #region cxmlExtract
+                            else if (CompareBytes(cxml, ngCXML))
+                            {
+                                //Console.Write("Found a CXML File will start to extract...");
+                                outFile = baseDir + countCXML + ".cxml";
+                                //System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _vag = new byte[8];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                MemoryStream memset = new MemoryStream();
+
+                                using (BinaryWriter bw = new BinaryWriter(memset))
+                                {
+                                    bw.Write(toWrite, 0, 16);
+                                    memset.Read(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(_cxml, ngCXML))
+                                        {
+                                            if (!CompareBytes(toWrite, pngMagic))
+                                            {
+                                                if (!CompareBytes(_wav, wavMagic))
+                                                {
+                                                    if (!CompareBytes(_dds, ddsMagic))
+                                                    {
+                                                        if (!CompareBytes(_gtf, gtfMagic))
+                                                        {
+                                                            if (!CompareBytes(_zlib, singlZL))
+                                                            {
+                                                                if (!CompareBytes(_vag, vagMagic))
+                                                                {
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        bw.Write(toWrite, 0, 16);
+                                                                        memset.Read(toWrite, 0, 16);
+                                                                        dumped += 16;
+                                                                        count += 16;
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    
+                                    CXML cxml = new CXML();
+                                    cxml.CXMLFile = outFile;
+                                    cxml.FileBytes = memset.ToArray(); 
+                                    bw.Close();
+                                    memset.Close();
+                                }
+                                Console.Write("done!\n");
+                                countCXML++;
+                            }
+                            #endregion cxmlExtract
+                            #region ddsExtract
+                            else if (CompareBytes(dds, ddsMagic))
+                            {
+                             //   Console.Write("Found a DDS File will start to extract...");
+                                outFile = baseDir + countDDS + ".dds";
+                               // System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _vag = new byte[8];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                //using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                                {
+                                    //bw.Write(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(_cxml, ngCXML))
+                                        {
+                                            if (!CompareBytes(toWrite, pngMagic))
+                                            {
+                                                if (!CompareBytes(_wav, wavMagic))
+                                                {
+                                                    if (!CompareBytes(_dds, ddsMagic))
+                                                    {
+                                                        if (!CompareBytes(_gtf, gtfMagic))
+                                                        {
+                                                            if (!CompareBytes(_zlib, singlZL))
+                                                            {
+                                                                if (!CompareBytes(_vag, vagMagic))
+                                                                {
+                                                                    if (dumped != end)
+                                                                    {
+                                      //                                  bw.Write(toWrite, 0, 16);
+                                                                        dumped += 16;
+                                                                        count += 16;
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    DDS dds = new DDS();
+                                    //Image.DDS dds = new Image.DDS();
+                                    dds.DDS_Name = outFile;
+                                    //we need to still convert these images
+                                    dds.DDS_File = new Image.DDS();
+                                    rco.FileTable.DDSFiles.Add(dds);
+                                    //bw.Close();
+                                }
+                                Console.Write("done!\n");
+                                countDDS++;
+                            }
+                            #endregion ddsExtract
+                            #region gtfExtract
+                            else if (CompareBytes(gtf, gtfMagic))
+                            {
+                                Console.Write("Found a GTF File will start to extract...");
+                                outFile = baseDir + countGTF + ".gtf";
+                                System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _vag = new byte[8];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                                {
+                                    bw.Write(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(_cxml, ngCXML))
+                                        {
+                                            if (!CompareBytes(toWrite, pngMagic))
+                                            {
+                                                if (!CompareBytes(_wav, wavMagic))
+                                                {
+                                                    if (!CompareBytes(_dds, ddsMagic))
+                                                    {
+                                                        if (!CompareBytes(_gtf, gtfMagic))
+                                                        {
+                                                            if (!CompareBytes(_zlib, singlZL))
+                                                            {
+                                                                if (!CompareBytes(_vag, vagMagic))
+                                                                {
+                                                                    if (dumped != end)
+                                                                    {
+                                                                        bw.Write(toWrite, 0, 16);
+                                                                        dumped += 16;
+                                                                        count += 16;
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    bw.Close();
+                                }
+                                Console.Write("done!\n");
+                                countGTF++;
+                            }
+                            #endregion gtfExtract
+                            #region wavExtract
+                            else if (CompareBytes(wav, wavMagic))
+                            {
+                               // Console.Write("Found a WAV File will start to extract...");
+                                outFile = baseDir + countWAV + ".wav";
+                                //System.IO.File.Create(outFile).Close();
+                                byte[] toWrite = new byte[16];
+                                _vag = new byte[8];
+                                _zlib = new byte[2];
+                                _wav = new byte[4];
+                                _gtf = new byte[4];
+                                _dds = new byte[4];
+                                _cxml = new byte[8];
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                br.Read(toWrite, 0, 16);
+
+                                //using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                                {
+                                   // bw.Write(toWrite, 0, 16);
+                                    dumped += 16;
+                                    count += 16;
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_zlib, 0, 2);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_dds, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_gtf, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_wav, 0, 4);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_vag, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(_cxml, 0, 8);
+                                    br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                    br.Read(toWrite, 0, 16);
+
+                                    while (true)
+                                    {
+                                        if (!CompareBytes(_cxml, ngCXML))
+                                        {
+                                            if (!CompareBytes(toWrite, pngMagic))
+                                            {
+                                                if (!CompareBytes(_wav, wavMagic))
+                                                {
+                                                    if (!CompareBytes(_dds, ddsMagic))
+                                                    {
+                                                        if (!CompareBytes(_gtf, gtfMagic))
+                                                        {
+                                                            if (!CompareBytes(_zlib, singlZL))
+                                                            {
+                                                                if (!CompareBytes(_vag, vagMagic))
+                                                                {
+                                                                    if (dumped != end)
+                                                                    {
+                                     //                                   bw.Write(toWrite, 0, 16);
+                                                                        dumped += 16;
+                                                                        count += 16;
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_zlib, 0, 2);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_dds, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_gtf, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_wav, 0, 4);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_vag, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(_cxml, 0, 8);
+                                                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                                                        br.Read(toWrite, 0, 16);
+                                                                    }
+                                                                    else
+                                                                        break;
+                                                                }
+                                                                else
+                                                                    break;
+                                                            }
+                                                            else
+                                                                break;
+                                                        }
+                                                        else
+                                                            break;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                                else
+                                                    break;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    Wave wav = new Wave();
+                                    wav.WaveFile = outFile;
+                                    wav.FileBytes = toWrite;
+                                    rco.FileTable.WaveFiles.Add(wav);
+                                    //bw.Close();
+                                }
+                                Console.Write("done!\n");
+                                countWAV++;
+                            }
+                            #endregion wavExtract
+                            else
+                            {
+                                //Console.WriteLine("\nFound a new File which i don't know what to do with !\nPlease contact the Developer @ www.playstationhax.it");
+                                break;
+                            }
+                            if (dumped == end)
+                                break;
+                            else
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                        }
+                    }
+                    else if (CompareBytes(zlib, singlZL))
+                    {
+                        while ((i = br.Read(temp, 0, 1)) != 0)
+                        {
+                            #region zlibExtract
+                            _zlib = new byte[3];
+                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                            br.Read(_zlib, 0, 3);
+                            Console.Write("Found a ZLib Compressed File, starting to extract...");
+                            byte[] toWrite = new byte[1];
+                            outFile = baseDir + countZLIB + ".compressed";
+                            corExt = "";
+                            System.IO.File.Create(outFile).Close();
+
+                            using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
+                            {
+                                while (true)
+                                {
+                                    if (!CompareBytes(_zlib, zlibMagic))  // Next Byte is not the start of a Header from a other file ?
+                                    {
+                                        // write out data to file
+                                        br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                        br.Read(toWrite, 0, 1);
+                                        bw.Write(toWrite, 0, 1);
+
+                                        // Count up 1 and read the next byte(s) before the loop start again
+                                        count++;
+                                        dumped++;
+
+                                        // Have we reached the end of data table?
+                                        if (dumped != end)
+                                        {
+                                            br.BaseStream.Seek(count, SeekOrigin.Begin);
+                                            br.Read(_zlib, 0, 3);
+                                        }
+                                        else
+                                            break;
+                                    }
+                                    else
+                                        break;
+                                }
+
+                                // In case of we need to compare zlibHeader with a additional 0x00 on top to know if it is really a zlibHeader and not just a 0x78DA data value
+                                // we add that 0x00 on end of the extracted file and count dumped var +1
+                                if (CompareBytes(_zlib, zlibMagic))
+                                {
+                                    toWrite = new byte[1];
+                                    bw.Write(toWrite, 0, 1);
+                                    dumped++;
+                                    count++;
+                                    countZLIB++;
+                                }
+                                bw.Close();
+                            }
+                            Console.Write("done!\n");
+
+                            // Decompress dumped File
+                            if (outFile == "notDefined")
+                                Console.WriteLine("Found a Unknowen File!\nPlease contact the Developer on: www.playstationhax.it\n");
+                            else
+                                //ZLibDeCompress(outFile);
+
+                                // Check Header of Decompressed File and rename
+                                Console.Write("Checking Header of Decompressed File...");
+                            outFile = outFile + ".decompressed";
+                            bool gHeader = false;
+                            bool dHeader = false;
+                            using (BinaryReader _br = new BinaryReader(new FileStream(outFile, FileMode.Open, FileAccess.Read)))
+                            {
+                                byte[] xmlHeader = new byte[8];
+                                byte[] gimHeader = new byte[16];
+                                byte[] ddsHeader = new byte[4];
+                                _br.Read(xmlHeader, 0, 8);
+                                _br.BaseStream.Seek(0, SeekOrigin.Begin);
+                                _br.Read(gimHeader, 0, 16);
+                                _br.BaseStream.Seek(0, SeekOrigin.Begin);
+                                _br.Read(ddsHeader, 0, 4);
+
+                                if (CompareBytes(xmlHeader, ngCXML))
+                                {
+                                    countCXML++;
+                                    Console.Write("done!\nIt's a CXML Container.\n");
+                                    corExt = outFile.Replace(".compressed.decompressed", ".cxml");
+
+                                }
+                                else if (CompareBytes(gimHeader, gimMagic))
+                                {
+                                    countGim++;
+                                    gHeader = true;
+                                    Console.Write("done!\nIt's a GIM File.\n");
+                                    corExt = outFile.Replace(".compressed.decompressed", ".gim");
+                                    move = corExt.Replace(".gim", ".png");
+                                    dest = convDir + countGim + ".png";
+                                }
+                                else if (CompareBytes(ddsHeader, ddsMagic))
+                                {
+                                    countDDS++;
+                                    dHeader = true;
+                                    Console.Write("done!\nIt's a DDS Container.\n");
+                                    corExt = outFile.Replace(".compressed.decompressed", ".dds");
+                                    move = corExt.Replace(".dds", ".gtf");
+                                    dest = convDir + countDDS + ".gtf";
+                                }
+                                else
+                                    Console.Write("error!\nUnknown Header, please contact the developer...\n");
+                                _br.Close();
+                            }
+
+                            // Finally Rename to the correct extension
+                            Console.Write("Renaming " + "'" + outFile.Replace(baseDir, "") + "'" + " to " + "'" + corExt.Replace(baseDir, "") + "'...");
+                            System.IO.File.Move(outFile, corExt);
+                            Console.Write("done!\n");
+
+                            // Convert GIM to PNG or DDS to GTF
+                            if (gHeader)
+                            {
+                                //ConvertGIM(corExt);
+                            }
+                            else if (dHeader)
+                            {
+                                //  ConvertDDS(corExt);
+                                Image.DDS.SavePNGFromDDS(corExt, corExt.Replace(".dds", ".png"));
+                            }
+                            #endregion ZlibExtract
+                            // Have we dumped all data?
+                            if (dumped == end)
+                            {
+                                Console.Write("Moving Converted Files to Extracted Folder...");
+                                string fi = "";
+                                string final = "";
+                                string[] files = Directory.GetFiles(baseDir);
+
+                                foreach (string s in files)
+                                {
+                                    if (s.Contains(".png") || s.Contains(".gtf"))
+                                    {
+                                        fi = s.Replace(baseDir, "");
+                                        final = convDir + fi;
+                                        System.IO.File.Move(s, final);
+                                    }
+                                }
+                                Console.Write("Done!\n");
+                                break;
+                            }
+                            else
+                                br.BaseStream.Seek(count, SeekOrigin.Begin);
+                        }
+                        br.Close();
+                    }
+                    else
+                        Console.WriteLine("\nSomthing went wrong!\nPlease contact the developer @ www.playstationhax.it\nERROR: 1");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\n\nERROR:\n" + e.ToString());
+                //Environment.Exit(0);
+            }
+            return rco;
+        }
+
+        //stil working on the rco file archive type
+
+        public struct RCOFile
+        {
+            public byte[] MAGIC;/*Magic needs to be validated*/
+            public byte[] Offset;/*Offset information*/
+            public FileTable FileTable;
+        }
+
+        public class Wave
+        {
+            public string WaveFile { get; set; }
+            public byte[] FileBytes { get; set; }
+        }
+
+        public class Vag
+        {
+            public string VagFile { get; set; }
+            public byte[] FileBytes { get; set; }
+        }
+
+        public class CXML
+        {
+            public string CXMLFile { get; set; }
+            public byte[] FileBytes { get; set; }
+        }
+
+        public class PNG
+        {
+            public string PNGFile { get; set; }
+            public byte[] FileBytes { get; set; }
+        }
+
+        public class DDS
+        {
+            public string DDS_Name { get; set; }
+            public Image.DDS DDS_File{ get; set; }
+        }
+
+        public class GTF
+        {
+            public string FileName { get; set; }
+            public byte[] FileBytes { get; set; }
+        }
+
+        public class FileTable
+        {
+            public List<Wave> WaveFiles = new List<Wave>();
+            public List<Vag> VagFiles = new List<Vag>();
+            public List<PNG> PNGFiles = new List<PNG>();
+            public List<CXML> CXMLFiles = new List<CXML>();
+            public List<DDS> DDSFiles = new List<DDS>();
+            public List<GTF> GTFList = new List<GTF>();
+        }
     }
 
+    /// <summary>
+    /// Save Data Class That Needs To Be Finished (Encrypted saves should be included once samu is released)
+    /// </summary>
     public class SaveData
     {
+        /// <summary>
+        /// Everything Inside the PS4/ from PKG's To Save Data Uses a sealed key
+        /// </summary>
         public struct Sealedkey
         {
             public byte[] MAGIC;/*Magic needs to be validated*/
@@ -2453,6 +3463,14 @@ namespace PS4_Tools
             public byte[] KEY;/*Key Fpr SHA256*/
             public byte[] SHA256;//SHA256 HASH?
         }
+
+        #region << Load Save File Class>>
+
+        /// <summary>
+        /// Load a Save File
+        /// </summary>
+        /// <param name="filelocation">Save File Location on disk</param>
+        /// <param name="Sealedkeylocation">Selaed Key Location On Disk</param>
         public static void LoadSaveData(string filelocation, string Sealedkeylocation)
         {
             /*Load the sealed key from the file*/
@@ -2575,6 +3593,14 @@ namespace PS4_Tools
             }
         }
 
+
+        #endregion << Load Save File Class>>
+
+        /// <summary>
+        /// Loads a SealedKey File Into the SealedKey Obejct
+        /// </summary>
+        /// <param name="Sealedkeylocation">Sealed Key Location On Disk</param>
+        /// <returns></returns>
         public static Sealedkey LoadSealedKey(string Sealedkeylocation)
         {
             /*Load the sealed key from the file*/
@@ -2603,7 +3629,7 @@ namespace PS4_Tools
         }
 
 
-        /*CFW Propthet's Method*/
+        /*CFW Propthet's Method This Method still relies on samu to be dumped*/
         private static bool sceSblSsMemcmpConsttime(byte[] a, byte[] b, int len, int offsetA = 0, int offsetB = 0)
         {
             for (int i = 0; i < len; i++)
@@ -2767,16 +3793,24 @@ namespace PS4_Tools
             Console.ReadLine();
         }
     }
+
+
+    /// <summary>
+    /// Tropy File Class
+    /// </summary>
     public class Trophy_File
     {
         /*SHA1*/
-        private string SHA1;
-        private byte[] Bytes;
+        private string SHA1;//SHA1 PlaceHolder
+        private byte[] Bytes;//Bytes Placeholder
 
-        private bool Readbytes;
+        private bool Readbytes; //Bool Read Bytes
 
-        TrophyHeader trphy = new TrophyHeader();
+        TrophyHeader trphy = new TrophyHeader(); //Trophy Header Object
 
+        /// <summary>
+        /// How Many Files Are In The Trophy File
+        /// </summary>
         public int FileCount
         {
             get
@@ -2785,6 +3819,9 @@ namespace PS4_Tools
             }
         }
 
+        /// <summary>
+        /// Version of the Trophy File
+        /// </summary>
         public int Version
         {
             get
@@ -2793,29 +3830,30 @@ namespace PS4_Tools
             }
         }
 
-        /*Trophy header Structure*/
+        /// <summary>
+        /// Trophy header Structure
+        /// </summary>
         public struct TrophyHeader
         {
-            public byte[] magic;
+            public byte[] magic;//Magic
 
-            public byte[] version;
+            public byte[] version;//Version Of Trophy Header File
 
-            public byte[] file_size;
+            public byte[] file_size;//File Size
 
-            public byte[] files_count;
+            public byte[] files_count;//File Counts
 
-            public byte[] element_size;
+            public byte[] element_size;//Elements Size
 
-            public byte[] dev_flag;
+            public byte[] dev_flag;//Is a Dev Trophy File
 
-            public byte[] sha1;
+            public byte[] sha1;//SHA1 Hash
 
-            public byte[] padding;
+            public byte[] padding;//Padding 
         }
         /*Trophy items*/
         public class TrophyItem
         {
-            // Token: 0x0600001D RID: 29 RVA: 0x00002050 File Offset: 0x00000250
             public TrophyItem(int Index, string Name, uint Offset, ulong Size, byte[] TotalBytes)
             {
                 this.Index = Index;
@@ -3053,8 +4091,6 @@ namespace PS4_Tools
 
     }
 
-
-
     /*********************************************************
      *          PS4 PKG Reader by maxton  
      *          https://github.com/maxton/LibOrbisPkg
@@ -3070,6 +4106,291 @@ namespace PS4_Tools
         #region << Official >>
         public class Official
         {
+
+            #region << Riff Information >>
+            public enum RiffType
+            {
+                KDS,
+                Isolated,
+                Disc,
+                Debug,
+                Retial,
+                Unknown1,
+                DebugUnknown,
+            }
+
+            private static RiffType GetRiffType(byte[] TypeAddress)
+            {
+                if(Util.Utils.CompareBytes(TypeAddress, new byte[]{ 0,0}))
+                {
+                    return RiffType.KDS;
+                }
+                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 0, 1 }))
+                {
+                    return RiffType.KDS;
+                }
+                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 0, 3 }))
+                {
+                    return RiffType.KDS;
+                }
+                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 1, 1 }))
+                {
+                    return RiffType.Isolated;
+                }
+                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 3, 2 }))
+                {
+                    return RiffType.Isolated;
+                }
+                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 1, 2 }))
+                {
+                    return RiffType.Disc;
+                }
+                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 2, 1 }) || Util.Utils.CompareBytes(TypeAddress , new byte[] { 2, 2 }) || Util.Utils.CompareBytes(TypeAddress , new byte[] { 2, 3 }))
+                {
+                    return RiffType.Debug;
+                }
+
+                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 3, 3 } ))
+                {
+                    return RiffType.Retial;
+                }
+
+                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 3, 4 }))
+                {
+                    return RiffType.Unknown1;
+                }
+
+                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 3, 0, 5 }))
+                {
+                    return RiffType.DebugUnknown;
+                }
+                return RiffType.Unknown1;
+            }
+
+            public class RIF
+            {
+                /// <summary>
+                /// Magic should always be RIF\0
+                /// </summary>
+                public byte[] Magic { get; set; }
+                public byte[] Version { get; set; }
+                public byte[] Unknown { get; set; }
+                public byte[] PSN_Account_ID { get; set; }
+                public byte[] Start_Timestamp { get; set; }
+                public byte[] End_Timestamp { get; set; }
+                public byte[] Content_ID_Bytes{ get; set; }
+
+                public string Content_ID
+                { get { return System.Text.Encoding.Default.GetString(Content_ID_Bytes); } }
+                public RiffType Type {get;set;}
+                public byte[] DRM_Type { get; set; }
+                public byte[] Content_Type { get; set; }
+                public byte[] SKU_Flag { get; set; }
+                public byte[] Extra_Flags { get; set; }
+
+                public byte[] Unknown1 = new byte[4];
+
+                public byte[] Unknown2 = new byte[4];
+
+                public byte[] Unknown3 = new byte[3];
+
+                public byte[] Unknown4 = new byte[1];
+
+                public byte[] Unknown5 = new byte[468];
+
+                public byte[] Disc_key = new byte[32];
+
+                public byte[] Secret_Encryption_IV_Bytes = new byte[16];
+                public string Secret_Encryption_IV { get { return ByteArrayToString(Secret_Encryption_IV_Bytes); } }
+
+                public byte[] Encrypted_Secret_Bytes = new byte[144];
+                
+                public Secret Encrypted_Secret { get { return Get_Secret(Encrypted_Secret_Bytes); } }
+
+                public byte[] RSA_Signature_bytes = new byte[256];
+
+                public string RSA_Signature { get { return ByteArrayToString(RSA_Signature_bytes); } }
+
+            }
+
+            public class Secret
+            {
+                public byte[] Unknown1 = new byte[16];
+
+                public byte[] Unknown2 = new byte[16];
+
+                public byte[] Unknown3 = new byte[16];
+
+                public byte[] Content_Key_Seed = new byte[16]; //Used to generate PFS key
+                
+                public byte[] SELF_Key_Seed = new byte[16];//Used to generate SELF key
+               
+                public byte[] Unknown4 = new byte[16];
+
+                public byte[] Unknown5 = new byte[16];
+
+                public byte[] Entitlement_Key = new byte[16];
+
+                public byte[] Unknown6 = new byte[16];
+
+            }
+
+            public static Secret Get_Secret(byte[] bytes)
+            {
+                Secret secret = new Secret();
+
+                using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(bytes)))
+                {
+                    secret.Unknown1 = binaryReader.ReadBytes(16);
+                    secret.Unknown2 = binaryReader.ReadBytes(16);
+                    secret.Unknown3 = binaryReader.ReadBytes(16);
+                    secret.Content_Key_Seed = binaryReader.ReadBytes(16);
+                    secret.SELF_Key_Seed = binaryReader.ReadBytes(16);
+                    secret.Unknown4 = binaryReader.ReadBytes(16);
+                    secret.Unknown5 = binaryReader.ReadBytes(16);
+                    secret.Entitlement_Key = binaryReader.ReadBytes(16);
+                    secret.Unknown6 = binaryReader.ReadBytes(16);
+                }
+
+                return secret;
+            }
+
+            public static string ByteArrayToString(byte[] ba)
+            {
+                StringBuilder hex = new StringBuilder(ba.Length * 2);
+                foreach (byte b in ba)
+                    hex.AppendFormat("{0:x2}", b);
+                return hex.ToString();
+            }
+
+            public static RIF ReadRif(string RifLocation)
+            {
+                RIF rif = new RIF();
+                using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(RifLocation)))
+                {
+                    /*Check PS4 File Header*/
+                    Byte[] RifFileHeader = binaryReader.ReadBytes(4);
+                    if (!Util.Utils.CompareBytes(RifFileHeader, new byte[] { 0x52, 0x49, 0x46, 0x00 }))/*If Files Match*/
+                    {
+                        //fail
+                        /*Lets be Honest id actually want a universal solution ps3/psp2/psp rif's all in one spot 
+                         This will also be used in my other project*/
+
+                        throw new Exception("This is not a valid ps4 Rif File");
+                    }
+
+                    rif.Magic = RifFileHeader;
+                    rif.Version = binaryReader.ReadBytes(2);
+                    rif.Unknown = binaryReader.ReadBytes(2);
+                    rif.PSN_Account_ID = binaryReader.ReadBytes(8);
+                    rif.Start_Timestamp = binaryReader.ReadBytes(8);
+                    rif.End_Timestamp = binaryReader.ReadBytes(8);
+                    rif.Content_ID_Bytes = binaryReader.ReadBytes(48);
+                    rif.Type = GetRiffType(binaryReader.ReadBytes(2));
+                    rif.DRM_Type = binaryReader.ReadBytes(2);
+                    rif.Content_Type = binaryReader.ReadBytes(2);
+                    rif.SKU_Flag = binaryReader.ReadBytes(2);
+                    rif.Extra_Flags = binaryReader.ReadBytes(4);
+                    rif.Unknown1 = binaryReader.ReadBytes(4);
+                    rif.Unknown2 = binaryReader.ReadBytes(4);
+                    rif.Unknown3 = binaryReader.ReadBytes(3);
+                    rif.Unknown4 = binaryReader.ReadBytes(1);
+                    rif.Unknown5 = binaryReader.ReadBytes(468);
+                    rif.Disc_key = binaryReader.ReadBytes(32);
+                    rif.Secret_Encryption_IV_Bytes = binaryReader.ReadBytes(16);
+                    rif.Encrypted_Secret_Bytes = binaryReader.ReadBytes(144);
+                    rif.RSA_Signature_bytes = binaryReader.ReadBytes(256);
+                }
+
+
+                return rif;
+            }
+
+
+            public static RIF CreateNewRif(string COntentID,string PSN_Account_ID)
+            {
+                RIF rif = new RIF();
+                //we need act.dat ? 
+
+                return rif;
+            }
+
+            //public static RIF CreateNewRi
+            #endregion < Riff Informtaiton >>
+
+            #region << Act.Dat >>
+
+            public class Act_Dat
+            {
+                /// <summary>
+                /// Magic should always be ACT\0
+                /// </summary>
+                public byte[] Magic = new byte[4];
+
+                public byte[] Version = new byte[2];
+
+                public byte[] Type = new byte[2];
+                public byte[] PSN_Account_ID = new byte[8];
+                public byte[] Start_Timestamp { get; set; }
+                public byte[] End_Timestamp { get; set; }
+
+                public byte[] Unknown1 =new byte[64];
+
+                public byte[] DeviceId = new byte[32];
+                public byte[] Unknown2 = new byte[32];
+
+                public byte[] RIF_Secret_Encryption_IV_Bytes = new byte[16];
+                public string RIF_Secret_Encryption_IV { get { return ByteArrayToString(RIF_Secret_Encryption_IV_Bytes); } }
+
+                public byte[] RIF_Secret_Encryption_Key_Seed_Bytes = new byte[16];
+
+                public string RIF_Secret_Encryption_Key_Seed { get { return ByteArrayToString(RIF_Secret_Encryption_Key_Seed_Bytes); } }
+
+                public byte[] Unknown3 = new byte[64];
+
+                public byte[] RSA_Signature_bytes = new byte[256];
+
+                public string RSA_Signature { get { return ByteArrayToString(RSA_Signature_bytes); } }
+
+            }
+
+            public static Act_Dat Read_Act(string act_Location)
+            {
+                Act_Dat act = new Act_Dat();
+
+                using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(act_Location)))
+                {
+                    /*Check PS4 File Header*/
+                    Byte[] ActFileHeader = binaryReader.ReadBytes(4);
+                    if (!Util.Utils.CompareBytes(ActFileHeader, new byte[] { 0x41, 0x43, 0x54, 0x00 }))/*If Files Match*/
+                    {
+                        //fail
+                        /*Lets be Honest id actually want a universal solution ps3/psp2/psp rif's all in one spot 
+                         This will also be used in my other project*/
+
+                        throw new Exception("This is not a valid ps4 Act File");
+                    }
+
+                    act.Magic = ActFileHeader;
+                    act.Version = binaryReader.ReadBytes(2);
+                    act.Type = binaryReader.ReadBytes(2);
+                    act.PSN_Account_ID = binaryReader.ReadBytes(8);
+                    act.Start_Timestamp = binaryReader.ReadBytes(8);
+                    act.End_Timestamp = binaryReader.ReadBytes(8);
+                    act.Unknown1 = binaryReader.ReadBytes(64);
+                    act.DeviceId = binaryReader.ReadBytes(32);
+                    act.Unknown2 = binaryReader.ReadBytes(32);
+                    act.RIF_Secret_Encryption_IV_Bytes = binaryReader.ReadBytes(16);
+                    act.RIF_Secret_Encryption_Key_Seed_Bytes = binaryReader.ReadBytes(16);
+                    act.Unknown3 = binaryReader.ReadBytes(64);
+                    act.RSA_Signature_bytes = binaryReader.ReadBytes(256);
+                }
+
+
+                return act;
+            }
+
+            #endregion << Act.Dat>>
             /// <summary>
             /// This Uses SCE Tools PLease Try and avoid this
             /// Will be intigrating maxtrons pkg tools
@@ -3859,12 +5180,14 @@ namespace PS4_Tools
 
             public class NP_Data
             {
-
+                //Read NP_Data
+                //Save NP_Data
             }
 
             public class NP_Title
             {
-
+                //Read NP_Title
+                //Save NP_Title
             }
 
             #region << UnprotectedPKG >>
@@ -4427,8 +5750,41 @@ namespace PS4_Tools
 
             #endregion << UnprotectedPKG >>
 
+            /// <summary>
+            /// POWERED BY MAXTRON
+            /// </summary>
+
+            #region << PKG File >>
+            public class PS4PKGFile
+            {
+                public Pkg Package { get; set; }
+                public Header PackageHeader { get; set; }
+                public Param_SFO.PARAM_SFO PackageSFO {
+                    get;
+                    set;
+                } 
+                public byte[] Ekpfs { get; set; }
+
+                public GameArchives.AbstractPackage PackageInside { get; set; }
+
+                public GameArchives.AbstractPackage InnerPFS { get; set; }
+
+               public PKGEncryption Encryption { get; set; }
+            }
+
+            public class PKGEncryption
+            {
+                public byte[] dk3 { get; set; }
+
+                public byte[] iv { get; set; }
+
+                public byte[] imageKeyDecrypted { get; set; }
+            }
+
+            #endregion << PKG File >>
+
             public string pkgtable { get; set; }
-            //private static LibOrbisPkg.PKG.Pkg pkg = null;
+            //private static PS4_Tools.LibOrbis.PKG.Pkg pkg = null;
             public static List<ListViewItem> lst = new List<ListViewItem>();
 
             /// <summary>
@@ -4436,41 +5792,97 @@ namespace PS4_Tools
             /// (Custom to maxtron)
             /// </summary>
             /// <param name="pkgFile"></param>
-            public static void ReadPKG(string pkgFile)
+            public static PS4PKGFile ReadPKG(string pkgFile)
             {
-                throw new Exception("LibOrbisPkg needs to be ported to .net3.5 this is noted for a future release");
 
-        //        var pkggame = GameArchives.Util.LocalFile(pkgFile);
-        //        using (var stream = pkggame.GetStream())
-        //            pkg = new LibOrbisPkg.PKG.PkgReader(stream).ReadPkg();
-        //        //LibOrbisPkg.PKG.
-        //        //GameArchives.PackageReader.ReadPackageFromFile(pkg);
-        //        try
-        //        {
-        //            //var pkggame = GameArchives.Util.LocalFile(pkgFile);
-        //            var package = PackageReader.ReadPackageFromFile(pkggame);
-        //            var sfo = PackageReader.ReadPackageFromFile(package.GetFile("/param.sfo"));
-        //            var innerPfs = PackageReader.ReadPackageFromFile(package.GetFile("/pfs_image.dat"));
-        //            PackageManager.GetInstance();
-        //        }
-        //        catch (Exception ex)
-        //        {
+                PS4PKGFile rtnfile = new PS4PKGFile();
+                //throw new Exception("LibOrbisPkg needs to be ported to .net3.5 this is noted for a future release");
+                var pkgfileloc = GameArchives.Util.LocalFile(pkgFile);
 
-        //        }
+                Pkg pkg = new Pkg();
 
-        //        foreach (var e in pkg.Metas.Metas)
-        //        {
-        //            var lvi = new ListViewItem(new[] {
-        //  e.id.ToString(),
-        //  string.Format("0x{0:X}", e.DataSize),
-        //  string.Format("0x{0:X}", e.DataOffset),
-        //  e.Encrypted ? "Yes" : "No",
-        //  e.KeyIndex.ToString(),
-        //});
-        //            lvi.Tag = e;
-        //            //entriesListView.Items.Add(lvi);
-        //            lst.Add(lvi);
-        //        }
+                //lets see what happens
+                Stream ms = new FileStream(pkgFile, FileMode.Open, FileAccess.Read);
+
+                using (Stream s = new FileStream(pkgFile, FileMode.Open, FileAccess.Read))
+                {
+                    var header = new PkgReader(s).ReadHeader();
+                    rtnfile.PackageHeader = header;
+                }
+                using (Stream s = new FileStream(pkgFile, FileMode.Open, FileAccess.Read))
+                {
+                    var pkginside = new PkgReader(s).ReadPkg();
+                    rtnfile.Package = pkginside;
+                    var sfoEditor = pkginside.ParamSfo.ParamSfo;
+                    /*Need to convert the 2*/
+                    rtnfile.PackageSFO = ConvertToParam(pkginside.ParamSfo);
+                    pkg = pkginside;
+                }
+
+                    try
+                    {
+                    var dk3 = Crypto.RSA2048Decrypt(pkg.EntryKeys.Keys[3].key, RSAKeyset.PkgDerivedKey3Keyset);
+                    var iv_key = Crypto.Sha256(
+                      pkg.ImageKey.meta.GetBytes()
+                      .Concat(dk3)
+                      .ToArray());
+                    var imageKeyDecrypted = pkg.ImageKey.FileData.Clone() as byte[];
+                    Crypto.AesCbcCfb128Decrypt(
+                      imageKeyDecrypted,
+                      imageKeyDecrypted,
+                      imageKeyDecrypted.Length,
+                      iv_key.Skip(16).Take(16).ToArray(),
+                      iv_key.Take(16).ToArray());
+
+                    rtnfile.Encryption.dk3 = dk3;
+                    rtnfile.Encryption.iv = iv_key;
+                    rtnfile.Encryption.imageKeyDecrypted = imageKeyDecrypted;
+
+                    var ekpfs = Crypto.RSA2048Decrypt(imageKeyDecrypted, RSAKeyset.FakeKeyset);
+                    rtnfile.Ekpfs = ekpfs;
+                    var package = GameArchives. PackageReader.ReadPackageFromFile(pkgfileloc, new string(ekpfs.Select(b => (char)b).ToArray()));
+                    rtnfile.PackageInside = package;
+                    var innerPfs = GameArchives.PackageReader.ReadPackageFromFile(package.GetFile("/pfs_image.dat"));
+                    rtnfile.InnerPFS = innerPfs;
+                }
+                catch (Exception)
+                {
+                }
+                //var sfoEditor = new SFOView(pkginside.ParamSfo.ParamSfo, true);
+                //        var pkggame = GameArchives.Util.LocalFile(pkgFile);
+                //        using (var stream = pkggame.GetStream())
+                //            pkg = new PS4_Tools.LibOrbis.PKG.PkgReader(stream).ReadPkg();
+                //        //PS4_Tools.LibOrbis.PKG.
+                //        //GameArchives.PackageReader.ReadPackageFromFile(pkg);
+                //        try
+                //        {
+                //            //var pkggame = GameArchives.Util.LocalFile(pkgFile);
+                //            var package = PackageReader.ReadPackageFromFile(pkggame);
+                //            var sfo = PackageReader.ReadPackageFromFile(package.GetFile("/param.sfo"));
+                //            var innerPfs = PackageReader.ReadPackageFromFile(package.GetFile("/pfs_image.dat"));
+                //            PackageManager.GetInstance();
+                //        }
+                //        catch (Exception ex)
+                //        {
+
+                //        }
+
+                //        foreach (var e in pkg.Metas.Metas)
+                //        {
+                //            var lvi = new ListViewItem(new[] {
+                //  e.id.ToString(),
+                //  string.Format("0x{0:X}", e.DataSize),
+                //  string.Format("0x{0:X}", e.DataOffset),
+                //  e.Encrypted ? "Yes" : "No",
+                //  e.KeyIndex.ToString(),
+                //});
+                //            lvi.Tag = e;
+                //            //entriesListView.Items.Add(lvi);
+                //            lst.Add(lvi);
+                //        }
+
+                return rtnfile;
+
             }
 
             /// <summary>
@@ -4521,6 +5933,58 @@ namespace PS4_Tools
                 {
                     File.Copy(pkgfile, outputfile, overwrite);
                 }
+            }
+
+            public static List<Param_SFO.PARAM_SFO.Table> AddNewItem(int Index, string Name, string Value, Param_SFO.PARAM_SFO.FMT format, int lenght, int maxlength, List<Param_SFO.PARAM_SFO.Table> xtable)
+            {
+                Param_SFO.PARAM_SFO.index_table indextable = new Param_SFO.PARAM_SFO.index_table();
+
+                Param_SFO.PARAM_SFO.Table tableitem = new Param_SFO.PARAM_SFO.Table();
+
+                indextable.param_data_fmt = format;
+                indextable.param_data_len = Convert.ToUInt32(lenght);
+                indextable.param_data_max_len = Convert.ToUInt32(maxlength);
+                tableitem.index = Index;
+                tableitem.Indextable = indextable;
+                tableitem.Name = Name;
+                tableitem.Value = Value;
+                xtable.Add(tableitem);
+
+                return xtable;
+            }
+
+
+            private static Param_SFO.PARAM_SFO ConvertToParam(SfoEntry maxtronsfo)
+            {
+                Param_SFO.PARAM_SFO sfo = new Param_SFO.PARAM_SFO();
+
+                for (int i = 0; i < maxtronsfo.ParamSfo.Values.Count; i++)
+                {
+
+                    Param_SFO.PARAM_SFO.FMT format = Param_SFO.PARAM_SFO.FMT.Utf8Null;
+                    var item = maxtronsfo.ParamSfo.Values[i];
+                    string value = "";
+                    switch(item.Type)
+                    {
+                        case LibOrbis.SFO.SfoEntryType.Integer:
+                            format = Param_SFO.PARAM_SFO.FMT.UINT32;
+                            //value = Convert.ToInt32(Util.Utils.(item.ToString())).ToString();
+
+                            break;
+                        case LibOrbis.SFO.SfoEntryType.Utf8:
+                            format = Param_SFO.PARAM_SFO.FMT.Utf8Null;
+                            value = item.ToString();
+                            break;
+                        case LibOrbis.SFO.SfoEntryType.Utf8Special:
+                            format = Param_SFO.PARAM_SFO.FMT.ASCII;
+                            value = item.ToString();
+                            break;
+                    }
+
+                    AddNewItem(i, maxtronsfo.ParamSfo.Values[i].Name,value, format, item.Length, item.MaxLength, sfo.Tables);
+                }
+
+                return sfo;
             }
         }
 
@@ -4714,10 +6178,24 @@ namespace PS4_Tools
             /// </summary>
             public class PSP_HD
             {
+                /*PSP Tools should work on this without to much of a hastle*/
+
+                /// <summary>
+                /// This will validate a UMD dump from the PSP 
+                /// </summary>
+                /// <param name="path"></param>
+                public void ValidateUMD(string path)
+                {
+
+                }
+
+
+                /*Most of the PBP Tools will need to be referenced for this to work 100%*/
 
             }
         }
     }
+
     /************************************
      * Credit TO IDC
      ************************************/
@@ -4738,6 +6216,65 @@ namespace PS4_Tools
 
             Unpacker unpacker = new Unpacker();
             unpacker.Unpack(PUPFile, SaveToDir, SaveTables);
+        }
+    }
+
+
+    public class Tools
+    {
+        public enum File_Type
+        {
+            PS4_PKG,
+            PS4_ICON,
+            PS4_DDS,
+            PS4_RIF,
+            PS4_ACT,
+            PARAM_SFO,
+            PLAYGO,
+            Unkown,
+        }
+
+        public static File_Type Get_PS4_File_Type(string FileLocation)
+        {
+            //Check PS4 File Type
+            File_Type ps4type = File_Type.Unkown;
+            using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(FileLocation)))
+            {
+                //Check FIle Info
+                byte[] FileHeader = binaryReader.ReadBytes(4);//most of sony's magic's are 4 bytes
+                if (Util.Utils.CompareBytes(FileHeader, new byte[] { 0x41, 0x43, 0x54, 0x00 }))/*ACT.DAT*/
+                {
+                    ps4type = File_Type.PS4_ACT;
+                }
+                if (Util.Utils.CompareBytes(FileHeader, new byte[] { 0x52, 0x49, 0x46, 0x00 }))/*RIF*/
+                {
+                    ps4type = File_Type.PS4_RIF;
+                }
+                if (Util.Utils.CompareBytes(FileHeader, new byte[] { 0x7F, 0x43, 0x4E, 0x54 }))/*PKG*/
+                {
+                    ps4type = File_Type.PS4_PKG;
+                }
+                if (Util.Utils.CompareBytes(FileHeader, new byte[] { 0x00, 0x50, 0x53, 0x46 }))/*PARAM.SFO*/
+                {
+                    ps4type = File_Type.PARAM_SFO;
+                }
+                if (Util.Utils.CompareBytes(FileHeader, new byte[] { 0x89, 0x50, 0x4E, 0x47 }))/*PNG*/ //89 50 4E 47
+                {
+                    ps4type = File_Type.PS4_ICON;
+                }
+                if (Util.Utils.CompareBytes(FileHeader, new byte[] { 0x44, 0x44, 0x53, 0x20 }))/*DDS*/ //44 44 53 20
+                {
+                    ps4type = File_Type.PS4_DDS;
+                }
+                if (Util.Utils.CompareBytes(FileHeader, new byte[] { 0x70, 0x6C, 0x67, 0x6F }))/*Play Go*/ //70 6C 67 6F
+                {
+                    ps4type = File_Type.PLAYGO;
+                }
+
+            }
+
+
+            return ps4type;
         }
     }
 }

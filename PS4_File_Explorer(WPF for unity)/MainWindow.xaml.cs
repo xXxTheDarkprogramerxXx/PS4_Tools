@@ -32,10 +32,20 @@ namespace PS4_File_Explorer_WPF_for_unity_
             MainRootPath = System.IO.Path.GetPathRoot(Directory.GetCurrentDirectory());
             List<string> AllSub_Directories = new List<string>();
             MainRootDirectories = Directory.GetDirectories(MainRootPath).ToList();
+
+            /*main root path name of file only*/
+            for (int i = 0; i < MainRootDirectories.Count; i++)
+            {
+                string filename = new FileInfo(MainRootDirectories[i]).Name;
+            }
+            
+
+
             /*Now if a user clicks one something outside of the root we just need to add that up browser button*/
             /*Fuck i hope Sony's shit allows this else this is not going to go well*/
             /*If Unity Doesn't allow this we will have to create a c/cpp callable dll for unity just to get the File/Directory Listings*/
-            /*Mono is lovable sometimes we can call syscalls trough it which does make life a lot easier*/
+            /*Mono is lovable sometimes we can call sys calls trough it which does make life a lot easier*/
+
         }
 
         public MainWindow()
