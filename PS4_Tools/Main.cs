@@ -4,8 +4,6 @@
 * 
 */
 
-//using GameArchives;
-//using LibArchiveExplorer;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -3466,6 +3464,8 @@ namespace PS4_Tools
 
         #region << Load Save File Class>>
 
+        
+
         /// <summary>
         /// Load a Save File
         /// </summary>
@@ -4471,7 +4471,7 @@ namespace PS4_Tools
                 public class Piece
                 {
                     public string url { get; set; }
-                    public int fileOffset { get; set; }
+                    public long fileOffset { get; set; }
                     public long fileSize { get; set; }
                     public string hashValue { get; set; }
                 }
@@ -4480,7 +4480,7 @@ namespace PS4_Tools
                 {
                     public long originalFileSize { get; set; }
                     public string packageDigest { get; set; }
-                    public int numberOfSplitFiles { get; set; }
+                    public long numberOfSplitFiles { get; set; }
                     public List<Piece> pieces { get; set; }
                 }
 
@@ -4649,9 +4649,15 @@ namespace PS4_Tools
                         /*we add a manaifest item reader and deserliezer here*/
                         Stream stream = client.OpenRead(pkg.Manifest_url);
                         StreamReader sr = new StreamReader(stream);
-                        string json = sr.ReadToEnd();
-                        pkg.Manifest_item = JsonConvert.DeserializeObject<Update_Structure.Manifest_Item>(json);
-
+                        try
+                        {
+                            string json = sr.ReadToEnd();
+                            pkg.Manifest_item = JsonConvert.DeserializeObject<Update_Structure.Manifest_Item>(json);
+                        }
+                        catch(Exception ex)
+                        {
+                            //json changed ???
+                        }
                         /*Content ID*/
                         pkg.Content_id = pkgnodelist[0].Attributes["content_id"].Value.ToString();
 
@@ -5264,11 +5270,11 @@ namespace PS4_Tools
                 /*Trophy File*/
                 public Trophy_File Trophy_File { get; set; }
                 /*PKG Image*/
-                public Bitmap Image { get; set; }
+                public byte[] Image { get; set; }
                 /// <summary>
                 /// PS4 Icon Image
                 /// </summary>
-                public Bitmap Icon { get; set; }
+                public byte[] Icon { get; set; }
 
                 /*PKG State (Fake ? Offcial */
 
@@ -5506,7 +5512,7 @@ namespace PS4_Tools
                         }
                         if (icon_byte != null && icon_byte.Length > 0)
                         {
-                            pkgreturn.Icon = Util.Utils.BytesToBitmap(icon_byte);
+                            pkgreturn.Icon = icon_byte;
                         }
                         else if (trp_byte != null && trp_byte.Length > 0)
                         {
@@ -5515,12 +5521,12 @@ namespace PS4_Tools
                             icon_byte = trpreader.ExtractFileToMemory("ICON0.PNG");
                             if (icon_byte != null && icon_byte.Length > 0)
                             {
-                                pkgreturn.Icon = Util.Utils.BytesToBitmap(icon_byte);
+                                pkgreturn.Icon = icon_byte;
                             }
                         }
                         if(image_byte != null && image_byte.Length > 0)
                         {
-                            pkgreturn.Image = Util.Utils.BytesToBitmap(image_byte);
+                            pkgreturn.Image = image_byte;
                         }
 
                         if(trp_byte != null && trp_byte.Length > 0)
@@ -5723,7 +5729,7 @@ namespace PS4_Tools
                         }
                         if (icon_byte != null && icon_byte.Length > 0)
                         {
-                            pkgreturn.Image = Util.Utils.BytesToBitmap(icon_byte);
+                            pkgreturn.Image = icon_byte;
                         }
                         else if (trp_byte != null && trp_byte.Length > 0)
                         {
@@ -5732,7 +5738,7 @@ namespace PS4_Tools
                             icon_byte = trpreader.ExtractFileToMemory("ICON0.PNG");
                             if (icon_byte != null && icon_byte.Length > 0)
                             {
-                                pkgreturn.Image = Util.Utils.BytesToBitmap(icon_byte);
+                                pkgreturn.Image = icon_byte;
                             }
                         }
                         if (trp_byte != null && trp_byte.Length > 0)
@@ -5763,6 +5769,8 @@ namespace PS4_Tools
                     get;
                     set;
                 } 
+
+               
                 public byte[] Ekpfs { get; set; }
 
                 public GameArchives.AbstractPackage PackageInside { get; set; }
@@ -5815,7 +5823,7 @@ namespace PS4_Tools
                     rtnfile.Package = pkginside;
                     var sfoEditor = pkginside.ParamSfo.ParamSfo;
                     /*Need to convert the 2*/
-                    rtnfile.PackageSFO = ConvertToParam(pkginside.ParamSfo);
+                    //rtnfile.PackageSFO = ConvertToParam(pkginside.ParamSfo);
                     pkg = pkginside;
                 }
 

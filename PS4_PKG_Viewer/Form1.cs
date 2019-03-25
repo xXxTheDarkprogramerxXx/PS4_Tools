@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,16 @@ namespace PS4_PKG_Viewer
         {
             InitializeComponent();
         }
-
+        public static System.Drawing.Bitmap BytesToBitmap(byte[] ImgBytes)
+        {
+            System.Drawing.Bitmap result = null;
+            if (ImgBytes != null)
+            {
+                MemoryStream stream = new MemoryStream(ImgBytes);
+                result = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(stream);
+            }
+            return result;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog opendialog = new OpenFileDialog();
@@ -26,7 +36,7 @@ namespace PS4_PKG_Viewer
             {
                 PS4_Tools.PKG.SceneRelated.Unprotected_PKG PS4_PKG = PS4_Tools.PKG.SceneRelated.Read_PKG(opendialog.FileName);
                 textBox1.Text = opendialog.FileName;
-                pictureBox1.Image = PS4_PKG.Image;
+                pictureBox1.Image = BytesToBitmap(PS4_PKG.Image);
                 label2.Text = PS4_PKG.PS4_Title;
 
                 DataTable dttemp = new DataTable();

@@ -101,7 +101,7 @@ namespace Tester
 
             /*Intigration with Maxtron's LibOrbis has begun */
 
-            var temp = PS4_Tools.PKG.SceneRelated.ReadPKG(@"C:\Users\3deEchelon\Downloads\PS4-Xplorer BETA 1.05 - Lapy\ED1234-NPXX20001_00-0000000000000000-A0100-V0105.pkg");
+            var temp = PS4_Tools.PKG.SceneRelated.ReadPKG(@"C: \Users\3deEchelon\Desktop\PS4\Euro.FISHING.COLLECTORS.EDITION.PS4 - DUPLEX\Euro.Fishing.Collectors.Edition.PS4 - DUPLEX\duplex - euro.fishing.collectors.ed.ps4\Euro.Fishing.Collectors.Edition.PS4 - DUPLEX.pkg");
 
 
             //var lstitem = PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEchelon\Downloads\Patapon_Remastered_CUSA07184_update_1.01.pkg");

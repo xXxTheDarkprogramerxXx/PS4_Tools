@@ -16,7 +16,7 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bi
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\PARAM.SFO.pdb
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\Debug\PS4_Tools.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\Debug\PS4_Tools.pdb
-C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\Debug\PS4_Tools.csprojResolveAssemblyReference.cache
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\BigInteger.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\SharedMemory.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\SharedMemory.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\Debug\PS4_Tools.csprojResolveAssemblyReference.cache
