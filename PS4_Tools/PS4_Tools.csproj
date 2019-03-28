@@ -42,8 +42,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BigInteger">
-      <HintPath>..\..\..\..\..\Downloads\biginteger_binaries\BigInteger.dll</HintPath>
+    <Reference Include="BigInteger, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BigInteger.1.0.7\lib\net20\BigInteger.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DiscUtils, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -68,7 +69,6 @@
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net35\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -164,6 +164,10 @@
     </Compile>
     <Compile Include="Util\DDS\DDSImage.cs" />
     <Compile Include="Util\Utils.cs" />
+    <Compile Include="Util\VB\LateBinding.cs" />
+    <Compile Include="Util\VB\NewLateBinding.cs" />
+    <Compile Include="Util\VB\Symbols.cs" />
+    <Compile Include="Util\VB\VBBinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -9,12 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Xml.Serialization;
 using System.Xml;
-using System.Diagnostics;
 using DiscUtils.Iso9660;
 
 #region << VGAudio >>
@@ -26,6 +22,8 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using PS4_Tools.LibOrbis.PKG;
 using PS4_Tools.LibOrbis.Util;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace PS4_Tools
 {
@@ -3485,18 +3483,18 @@ namespace PS4_Tools
             const string keyName = "SonyKey";
 
             //Create Keys
-            Label label1 = new Label();
+            //Label label1 = new Label();
             // Stores a key pair in the key container.
             cspp.KeyContainerName = keyName;
             rsa = new RSACryptoServiceProvider(cspp);
             rsa.PersistKeyInCsp = true;
             if (rsa.PublicOnly == true)
-                label1.Text = "Key: " + cspp.KeyContainerName + " - Public Only";
+                Console.WriteLine( "Key: " + cspp.KeyContainerName + " - Public Only");
             else
-                label1.Text = "Key: " + cspp.KeyContainerName + " - Full Key Pair";
+                Console.WriteLine("Key: " + cspp.KeyContainerName + " - Full Key Pair");
 
             if (rsa == null)
-                MessageBox.Show("Key not set.");
+                throw new Exception("Key not set.");
             else
             {
                 // Display a dialog box to select the encrypted file.
@@ -4071,7 +4069,9 @@ namespace PS4_Tools
         public byte[] ExtractFileToMemory(string filename)
         {
             byte[] result = null;
-            TrophyItem archiver = this.trophyItemList.Find((TrophyItem b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(Microsoft.VisualBasic.Strings.Mid(b.Name.ToUpper(), 1, Microsoft.VisualBasic.Strings.Len(filename.ToUpper())), filename.ToUpper(), false) == 0);
+            //TrophyItem archiver = this.trophyItemList.Find((TrophyItem b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(Microsoft.VisualBasic.Strings.Mid(b.Name.ToUpper(), 1, Microsoft.VisualBasic.Strings.Len(filename.ToUpper())), filename.ToUpper(), false) == 0);
+            TrophyItem archiver = this.trophyItemList.Find((TrophyItem b) => b.Name == filename);
+
             if (archiver != null)
             {
                 byte[] array = new byte[checked((int)(archiver.Size - 1L) + 1)];
@@ -5244,19 +5244,19 @@ namespace PS4_Tools
 
             private static PKGType GetPkgType(string str)
             {
-                if (Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "gde", false) == 0 || Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "gdk", false) == 0)
+                if (str == "gde" || str== "gdk")
                 {
                     return PKGType.App;
                 }
-                if (Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "gd", false) == 0)
+                if (str =="gd")
                 {
                     return PKGType.Game;
                 }
-                if (Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "ac", false) == 0)
+                if (str =="ac")
                 {
                     return PKGType.Addon_Theme;
                 }
-                if (Microsoft.VisualBasic.CompilerServices.Operators.CompareString(str, "gp", false) == 0)
+                if (str =="gp")
                 {
                     return PKGType.Patch;
                 }
@@ -5349,7 +5349,8 @@ namespace PS4_Tools
                         throw new Exception("This is not a valid ps4 pkg");
                     }
                     binaryReader.BaseStream.Seek(24L, SeekOrigin.Begin);
-                    uint num = Util.Utils.ReadUInt32(binaryReader);
+                   // uint num = Util.Utils.ReadUInt32(binaryReader);
+                    uint num = Util.Utils.ReadUInt32(binaryReader); 
                     uint num2 = Util.Utils.ReadUInt32(binaryReader);
                     binaryReader.BaseStream.Seek(44L, SeekOrigin.Begin);
                     uint num3 = Util.Utils.ReadUInt32(binaryReader);
@@ -5426,7 +5427,7 @@ namespace PS4_Tools
                                                 num8++;
                                                 stringBuilder = new StringBuilder();
                                             }
-                                            stringBuilder.Append(Util.Utils.HexToString(Microsoft.VisualBasic.Conversion.Hex(array2[i])));
+                                            stringBuilder.Append(Util.Utils.HexToString(Util.Utils.Hex(array2[i])));
                                         }
                                         break;
                                     }
@@ -5453,13 +5454,15 @@ namespace PS4_Tools
                             List<Names>.Enumerator enumerator4 = new List<Names>.Enumerator();
                             ((IDisposable)enumerator4).Dispose();
                         }
-                        Names names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "param.sfo", false) == 0);
+                        //Names names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "param.sfo", false) == 0);
+                        Names names2 = list.Find((Names b) => b.Name == "param.sfo" );
+
                         if (names2 != null)
                         {
                             binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
                             sfo_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
                         }
-                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "icon0.png", false) == 0);
+                        names2 = list.Find((Names b) => b.Name =="icon0.png");
                         if (names2 != null)
                         {
                             binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
@@ -5467,7 +5470,7 @@ namespace PS4_Tools
                         }
                         else
                         {
-                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "icon1.png", false) == 0);
+                            names2 = list.Find((Names b) =>b.Name =="icon1.png");
                             if (names2 != null)
                             {
                                 binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
@@ -5475,7 +5478,7 @@ namespace PS4_Tools
                             }
                         }
 
-                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "pic0.png", false) == 0);
+                        names2 = list.Find((Names b) => b.Name== "pic0.png");
                         if (names2 != null)
                         {
                             binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
@@ -5483,22 +5486,23 @@ namespace PS4_Tools
                         }
                         else
                         {
-                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "pic1.png", false) == 0);
+                            names2 = list.Find((Names b) => b.Name == "pic1.png");
                             if (names2 != null)
                             {
                                 binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
                                 image_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
                             }
                         }
-                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "trophy/trophy00.trp", false) == 0);
+                        names2 = list.Find((Names b) => b.Name == "trophy/trophy00.trp");
                         if (names2 != null)
                         {
                             binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
                             trp_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
+                            File.WriteAllBytes(@"C:\Temp\Testing\tropy2.trp", trp_byte);
                         }
                         else
                         {
-                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "trophy/trophy01.trp", false) == 0);
+                            names2 = list.Find((Names b) => b.Name== "trophy/trophy01.trp");
                             if (names2 != null)
                             {
                                 binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
@@ -5659,7 +5663,7 @@ namespace PS4_Tools
                                                 num8++;
                                                 stringBuilder = new StringBuilder();
                                             }
-                                            stringBuilder.Append(Util.Utils.HexToString(Microsoft.VisualBasic.Conversion.Hex(array2[i])));
+                                            stringBuilder.Append(Util.Utils.HexToString(Util.Utils.Hex(array2[i])));
                                         }
                                         break;
                                     }
@@ -5686,13 +5690,13 @@ namespace PS4_Tools
                             List<Names>.Enumerator enumerator4 = new List<Names>.Enumerator();
                             ((IDisposable)enumerator4).Dispose();
                         }
-                        Names names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "param.sfo", false) == 0);
+                        Names names2 = list.Find((Names b) => b.Name == "param.sfo");
                         if (names2 != null)
                         {
                             binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
                             sfo_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
                         }
-                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "icon0.png", false) == 0);
+                        names2 = list.Find((Names b) => b.Name == "icon0.png");
                         if (names2 != null)
                         {
                             binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
@@ -5700,14 +5704,14 @@ namespace PS4_Tools
                         }
                         else
                         {
-                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "icon1.png", false) == 0);
+                            names2 = list.Find((Names b) => b.Name == "icon1.png");
                             if (names2 != null)
                             {
                                 binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
                                 icon_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
                             }
                         }
-                        names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "trophy/trophy00.trp", false) == 0);
+                        names2 = list.Find((Names b) => b.Name == "trophy/trophy00.trp");
                         if (names2 != null)
                         {
                             binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
@@ -5715,7 +5719,7 @@ namespace PS4_Tools
                         }
                         else
                         {
-                            names2 = list.Find((Names b) => Microsoft.VisualBasic.CompilerServices.Operators.CompareString(b.Name, "trophy/trophy01.trp", false) == 0);
+                            names2 = list.Find((Names b) => b.Name == "trophy/trophy01.trp");
                             if (names2 != null)
                             {
                                 binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
@@ -5793,7 +5797,7 @@ namespace PS4_Tools
 
             public string pkgtable { get; set; }
             //private static PS4_Tools.LibOrbis.PKG.Pkg pkg = null;
-            public static List<ListViewItem> lst = new List<ListViewItem>();
+            public static List<string> lst = new List<string>();
 
             /// <summary>
             /// Reads a pkg file and displays all its info inside the PKG Table 

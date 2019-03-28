@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using System.Runtime.CompilerServices;
 using Ionic.Zip;
 
@@ -77,6 +75,40 @@ namespace PS4_Tools.Util
         }
 
         /*VB Basics Method not needed as c# has this function already*/
+        //public static uint NewReadUInt32(object stream)
+        //{
+        //    byte[] array = new byte[4];
+        //    Type type = null;
+        //    string memberName = "Read";
+        //    object[] array2 = new object[]
+        //    {
+        //        array,
+        //        0,
+        //        4
+        //    };
+        //    object[] arguments = array2;
+        //    string[] argumentNames = null;
+        //    Type[] typeArguments = null;
+        //    bool[] array3 = new bool[]
+        //    {
+        //        true,
+        //        false,
+        //        false
+        //    };
+        //    NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
+        //    if (array3[0])
+        //    {
+        //        array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
+        //    }
+        //    Array.Reverse(array, 0, 4);
+        //    return BitConverter.ToUInt32(array, 0);
+
+        //    //string temp = "";
+        //    //BinaryReader reader = (BinaryReader)stream;
+        //    ////throw new Exception("sfasda");
+        //    //return reader.ReadUInt32();
+        //}
+
         public static uint ReadUInt32(object stream)
         {
             byte[] array = new byte[4];
@@ -97,15 +129,24 @@ namespace PS4_Tools.Util
                 false,
                 false
             };
-            NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
-            if (array3[0])
-            {
-                array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
-            }
+            //NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
+            //if (array3[0])
+            //{
+            //    array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
+            //}
+
+            array = ((BinaryReader)stream).ReadBytes(array.Length);
+
             Array.Reverse(array, 0, 4);
             return BitConverter.ToUInt32(array, 0);
+
+            //string temp = "";
+            //BinaryReader reader = (BinaryReader)stream;
+            ////throw new Exception("sfasda");
+            //return reader.ReadUInt32();
         }
-        
+
+
         public static ushort ReadUInt16(object stream)
         {
             byte[] array = new byte[4];
@@ -126,13 +167,20 @@ namespace PS4_Tools.Util
                 false,
                 false
             };
-            NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
-            if (array3[0])
-            {
-                array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
-            }
+            //NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
+            //if (array3[0])
+            //{
+            //    array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
+            //}
+            array = ((BinaryReader)stream).ReadBytes(array.Length);
             Array.Reverse(array, 0, 2);
             return BitConverter.ToUInt16(array, 0);
+
+            ////we need to make sure this all works 
+            //string temp = "";
+            //BinaryReader reader = (BinaryReader)stream;
+            ////throw new Exception("sfasda");
+            //return reader.ReadUInt16();
         }
 
         public static string ReadASCIIString(object stream, int legth)
@@ -155,16 +203,21 @@ namespace PS4_Tools.Util
                 false,
                 false
             };
-            NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
-            if (array3[0])
-            {
-                array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
-            }
+            //NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
+            //if (array3[0])
+            //{
+            //    array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
+            //}
+
+            array = ((BinaryReader)stream).ReadBytes(array.Length);
             return Encoding.ASCII.GetString(array);
         }
 
        public static byte[] ReadByte(object stream, int legth)
         {
+
+            
+
             byte[] array = new byte[checked(legth - 1 + 1)];
             Type type = null;
             string memberName = "Read";
@@ -183,11 +236,14 @@ namespace PS4_Tools.Util
                 false,
                 false
             };
-            NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
-            if (array3[0])
-            {
-                array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
-            }
+            //NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
+            //if (array3[0])
+            //{
+            //    array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
+                
+            //}
+            array = ((BinaryReader)stream).ReadBytes(array.Length);
+            //File.WriteAllBytes(@"C:\Temp\Testing\tropy.trp", array);
             return array;
         }
 
@@ -202,9 +258,13 @@ namespace PS4_Tools.Util
             return result;
         }
 
-        public static bool isLinux()
+        public static bool isLinux
         {
-            return Operators.CompareString(Conversions.ToString(Path.DirectorySeparatorChar), "/", false) == 0;
+            get
+            {
+                int p = (int)Environment.OSVersion.Platform;
+                return (p == 4) || (p == 6) || (p == 128);
+            }
         }
 
         public static bool Contain(byte[] a, byte[] b)
@@ -240,18 +300,32 @@ namespace PS4_Tools.Util
 
          public static string HexToString(string hex)
         {
-            StringBuilder stringBuilder = new StringBuilder(hex.Length / 2);
-            int num = 0;
-            checked
+            //StringBuilder stringBuilder = new StringBuilder(hex.Length / 2);
+            //int num = 0;
+            //checked
+            //{
+            //    int num2 = hex.Length - 2;
+            //    for (int i = num; i <= num2; i += 2)
+            //    {
+            //        stringBuilder.Append(Strings.Chr((int)Convert.ToByte(hex.Substring(i, 2), 16)));
+            //    }
+            //    return stringBuilder.ToString();
+            //}
+            var bytes = new byte[hex.Length / 2];
+            for (var i = 0; i < bytes.Length; i++)
             {
-                int num2 = hex.Length - 2;
-                for (int i = num; i <= num2; i += 2)
-                {
-                    stringBuilder.Append(Strings.Chr((int)Convert.ToByte(hex.Substring(i, 2), 16)));
-                }
-                return stringBuilder.ToString();
+                bytes[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
             }
+
+            return Encoding.ASCII.GetString(bytes); // returns: "Hello world" for "48656C6C6F20776F726C64"
+
         }
+
+        public static string Hex(byte Byte)
+        {
+            return Byte.ToString("X");
+        }
+
 
         public static long byteArrayToLittleEndianInteger(byte[] bits)
         {
@@ -297,35 +371,58 @@ namespace PS4_Tools.Util
             StringBuilder stringBuilder = new StringBuilder(checked(bytes_Input.Length * 2));
             foreach (byte number in bytes_Input)
             {
-                if (Conversion.Hex(number).Length == 1)
+                if (Util.Utils.Hex(number).Length == 1)
                 {
-                    stringBuilder.Append("0" + Conversion.Hex(number));
+                    stringBuilder.Append("0" + Util.Utils.Hex(number));
                 }
                 else
                 {
-                    stringBuilder.Append("" + Conversion.Hex(number));
+                    stringBuilder.Append("" + Util.Utils.Hex(number));
                 }
             }
             return stringBuilder.ToString();
+            //StringBuilder hex = new StringBuilder(bytes_Input.Length * 2);
+
+            //foreach (byte b in bytes_Input)
+            //{
+            //    hex.AppendFormat("{0:x2}", b);
+            //}
+            //return hex.ToString();
         }
 
         public static long hexStringToLong(string strHex)
         {
             checked
             {
-                long result;
-                try
-                {
-                    result = (long)Math.Round(Conversion.Val("&H" + strHex + "&"));
-                }
-                catch (Exception ex)
-                {
-                    result = (long)Math.Round(Conversion.Val("&H" + strHex));
-                }
-                return result;
+                return (long)HexLiteral2Unsigned(strHex);
             }
         }
+
+        public static ulong HexLiteral2Unsigned(string hex)
+        {
+            if (string.IsNullOrEmpty(hex)) throw new ArgumentException("hex");
+
+            int i = hex.Length > 1 && hex[0] == '0' && (hex[1] == 'x' || hex[1] == 'X') ? 2 : 0;
+            ulong value = 0;
+
+            while (i < hex.Length)
+            {
+                uint x = hex[i++];
+
+                if (x >= '0' && x <= '9') x = x - '0';
+                else if (x >= 'A' && x <= 'F') x = (x - 'A') + 10;
+                else if (x >= 'a' && x <= 'f') x = (x - 'a') + 10;
+                else throw new ArgumentOutOfRangeException("hex");
+
+                value = 16 * value + x;
+
+            }
+
+            return value;
+        }
     }
+
+
 
     /// <summary>
     ///     Taken from System.Net in 4.0, useful until we move to .NET 4.0 - needed for Client Profile

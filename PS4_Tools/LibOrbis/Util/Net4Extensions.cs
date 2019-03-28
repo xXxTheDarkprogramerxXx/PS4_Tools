@@ -91,7 +91,7 @@ namespace PS4_Tools.LibOrbis.Util
 
     public static class BigIntigerExtensions
     {
-        public static byte[] ToByteArray(this BigIntegerLibrary.BigInteger bi)
+        public static byte[] ToByteArray(this BigInteger bi)
         {
             return new byte[90];
         }
