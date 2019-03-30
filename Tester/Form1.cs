@@ -247,9 +247,14 @@ namespace Tester
 
         private void button15_Click(object sender, EventArgs e)
         {
-            Bitmap btimap = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.png");
+            Bitmap btimap = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\pic0.png");
             PS4_Tools.Image.DDS.CreateDDSFromBitmap(btimap, @"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
-           // pictureBox1.Image = item;
+            // pictureBox1.Image = item;
+
+            //test if dds is corectly saved
+
+            var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
+            pictureBox1.Image = item;
         }
     }
 }

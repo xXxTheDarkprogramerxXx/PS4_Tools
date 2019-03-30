@@ -162,12 +162,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Util\DDS\BC5Unorm.cs" />
+    <Compile Include="Util\DDS\DdsFile.cs" />
     <Compile Include="Util\DDS\DDSImage.cs" />
     <Compile Include="Util\Utils.cs" />
-    <Compile Include="Util\VB\LateBinding.cs" />
-    <Compile Include="Util\VB\NewLateBinding.cs" />
-    <Compile Include="Util\VB\Symbols.cs" />
-    <Compile Include="Util\VB\VBBinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

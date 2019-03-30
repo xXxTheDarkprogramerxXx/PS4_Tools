@@ -24,6 +24,7 @@ using PS4_Tools.LibOrbis.PKG;
 using PS4_Tools.LibOrbis.Util;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using PS4_Tools.Util;
 
 namespace PS4_Tools
 {
@@ -241,6 +242,7 @@ namespace PS4_Tools
         /// </summary>
         public class DDS
         {
+            #region << Returns >>
             public static void SavePNGFromDDS(string DDSFilePath, string savepath)
             {
                 /*Migrating to .Net3.5 this class might not work right now*/
@@ -266,15 +268,27 @@ namespace PS4_Tools
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
                 return (Bitmap)image.BitmapImage;
             }
+            
 
-            public static void CreateDDSFromBitmap(Bitmap Bitmap,string SavePath)
+            public static byte[] GetBytesFromDDS(string DDSFilePath)
+            {
+                DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
+                Bitmap temp = image.BitmapImage;
+                return temp.ToByteArray(System.Drawing.Imaging.ImageFormat.Bmp);
+            }
+
+            #endregion << Returns >>
+
+            #region << Creations >>
+
+            public static void CreateDDSFromBitmap(Bitmap Bitmap, string SavePath)
             {
                 DDSReader.DDSImage img = new DDSReader.DDSImage(Bitmap);
-                
-                
-
+                img.Save(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
                 //img;
             }
+
+            #endregion << Creations >>
         }
 
         /// <summary>
@@ -5498,7 +5512,7 @@ namespace PS4_Tools
                         {
                             binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
                             trp_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
-                            File.WriteAllBytes(@"C:\Temp\Testing\tropy2.trp", trp_byte);
+                            //File.WriteAllBytes(@"C:\Temp\Testing\tropy2.trp", trp_byte);
                         }
                         else
                         {
@@ -6168,8 +6182,6 @@ namespace PS4_Tools
 
                     #endregion  << Save Image Files to corresponding locations and also change to correct format >>
                 }
-
-
 
                 /// <summary>
                 /// Creates a Multi Iso Repacked PS2 Classic

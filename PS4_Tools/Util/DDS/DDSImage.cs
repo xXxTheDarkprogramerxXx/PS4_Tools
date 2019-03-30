@@ -4,6 +4,9 @@ using System.Text;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.IO;
+using PS4_Tools.Util;
+using System.Drawing;
+using PS4_Tools.Util.DDS;
 
 /*************************************************************************************
  *  Huge thanks for converting this class goes to https://gist.github.com/vmv (VMV) 
@@ -114,6 +117,31 @@ namespace DDSReader
         private System.Drawing.Bitmap m_bitmap = null;
         #endregion
 
+        public class MipMap
+        {
+            int width;
+            int height;
+            byte[] data;
+
+            public int Width
+            {
+                get { return width; }
+                set { width = value; }
+            }
+
+            public int Height
+            {
+                get { return height; }
+                set { height = value; }
+            }
+
+            public byte[] Data
+            {
+                get { return data; }
+                set { data = value; }
+            }
+        }
+
         #region Constructor/Destructor
         public DDSImage(byte[] ddsImage)
         {
@@ -146,19 +174,129 @@ namespace DDSReader
         public DDSImage(System.Drawing.Bitmap bitmap)
         {
             this.m_bitmap = bitmap;
+            
         }
 
-        public void Save(string Path)
+
+        public void Save(string FileLocation)
         {
-            //this.m_bitmap.PixelFormat;
-            //new SharpDX.Toolkit.Image.Save
+            Save(FileLocation, PixelFormat.DXT1);
         }
+
+        private void Save(string FileLocation,PixelFormat pixeltosave)
+        {
+
+            //check if file exitst
+            if(File.Exists(FileLocation))
+            {
+               // throw new Exception("File already exists in save location");
+            }
+
+            int Mips = 0;//set here for defualt
+
+
+              //First we need to write the header
+              DDSStruct header;
+            using (var stream = File.Open(FileLocation, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                if (!stream.CanSeek)
+                    throw new ArgumentException("Stream must be seekable");//throw this error we cant seek the stream
+
+                using (var writer = new BinaryWriter(stream,Encoding.Default))//start binary reader
+                {
+
+                    //lets write th header of the file
+
+                    writer.Write(0x20534444);//write magic "\0PSF" 
+
+                    writer.Write(124);//write size needs to be 124?
+
+                    writer.Write(0x1 | 0x2 | 0x4 | 0x1000 | (Mips != 0 ? 0x20000 : 0x0));// Flags to denote valid fields: DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT | DDSD_MIPMAPCOUNT
+               
+                    writer.Write(this.m_bitmap.Height);//height
+                    writer.Write(this.m_bitmap.Width);//width
+                    writer.Write(0);//dwPitchOrLinearSize
+                    writer.Write(0);//dwDepth
+                    writer.Write(Mips == 0 ? 1 : Mips);//dwMipMapCount
+                    // Write reserved
+                    for (int i = 0; i < 11; i++)
+                        writer.Write(0);
+                    //Write PIXELFORMAT
+                    writer.Write(32);//set Pixel format
+                    writer.Write(0x80000);//write flags
+
+                    writer.Write(0);//dwFourCC
+                    writer.Write(16);//dwRGBBitCount
+                    writer.Write(255);//dwRBitMask
+                    writer.Write(0x0000FF00);//dwGBitMask
+                    writer.Write(0);//dwBBitMask
+                    writer.Write(0);//dwABitMask
+
+                    writer.Write(0);//dwCaps
+                    writer.Write(0);//dwCaps2
+                    writer.Write(0);//dwCaps3
+                    writer.Write(0);//dwCaps4
+                    writer.Write(0);//dwReserved2
+
+                    //now we need to write the file info
+
+                    var mipBitmaps = GenerateMips(m_bitmap, m_bitmap.Width, m_bitmap.Height);
+                    //var flags = Squish.SquishFlags.kDxt1;
+
+                    List<MipMap> listofmips = new List<MipMap>();
+                    foreach (var mb in mipBitmaps)
+                    {
+                        var mip = new MipMap();
+                        mip.Width = mb.Width;
+                        mip.Height = mb.Height;
+
+                        byte[] data = new byte[mb.Width * mb.Height * 4];
+                        //byte[] dest = new byte[Squish.GetStorageRequirements(mb.Width, mb.Height, flags | Squish.SquishFlags.kColourIterativeClusterFit | Squish.SquishFlags.kWeightColourByAlpha)];
+                        int ii = 0;
+                        for (int y = 0; y < mb.Height; y++)
+                        {
+                            for (int x = 0; x < mb.Width; x++)
+                            {
+                                var p = mb.GetPixel(x, y);
+                                data[ii + 0] = p.R;
+                                data[ii + 1] = p.G;
+                                data[ii + 2] = p.B;
+                                data[ii + 3] = p.A;
+
+                                ii += 4;
+                            }
+                        }
+
+                       byte[] dest = PS4_Tools.Util.DDS.BC5Unorm.Compress(data, (ushort)mb.Width, (ushort)mb.Height, GetMipSize((ushort)mb.Width, (ushort)mb.Height));
+                        //else 
+                        mip.Data = dest;
+                        listofmips.Add(mip);
+                    }
+
+                    for (int i = 0; i < listofmips.Count; i++)
+                    {
+                        writer.Write(listofmips[i].Data);
+                    }
+                }
+            }
+        }
+
+        public static int GetMipSize(ushort width, ushort height)
+        {
+            width = Math.Max((ushort)4, width);
+            height = Math.Max((ushort)4, height);
+
+            return width * height * 4;
+        }
+
         #endregion
 
         #region Override Methods
         #endregion
 
         #region Private Methods
+
+
         private void Parse(BinaryReader reader)
         {
             DDSStruct header = new DDSStruct();
@@ -1648,6 +1786,30 @@ namespace DDSReader
             }
 
             return rawData;
+        }
+
+        public static List<System.Drawing.Bitmap> GenerateMips(System.Drawing.Bitmap b, int width, int height)
+        {
+            List<System.Drawing.Bitmap> mips = new List<System.Drawing.Bitmap>();
+            int currentWidth = width / 2;
+            int currentHeight = height / 2;
+            mips.Add(b);
+            int i = 1;
+            while (currentWidth > 1 && currentHeight > 1)
+            {
+                System.Drawing.Bitmap mipimage = new System.Drawing.Bitmap(currentWidth, currentHeight);
+                var srcRect = new RectangleF(0, 0, width, height);
+                var destRect = new RectangleF(0, 0, currentWidth, currentHeight);
+                Graphics grfx = Graphics.FromImage(mipimage);
+                grfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                grfx.DrawImage(b, destRect, srcRect, GraphicsUnit.Pixel);
+                mips.Add(mipimage);
+                i++;
+
+                currentHeight /= 2;
+                currentWidth /= 2;
+            }
+            return mips;
         }
 
         #region UNUSED

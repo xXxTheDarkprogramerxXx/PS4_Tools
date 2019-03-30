@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Runtime.CompilerServices;
 using Ionic.Zip;
+using System.Drawing.Imaging;
 
 namespace PS4_Tools.Util
 {
@@ -688,5 +689,17 @@ namespace PS4_Tools.Util
         }
     }
 
+
+    public static class ImageExtensions
+    {
+        public static byte[] ToByteArray(this System.Drawing.Image image, ImageFormat format)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, format);
+                return ms.ToArray();
+            }
+        }
+    }
 
 }
