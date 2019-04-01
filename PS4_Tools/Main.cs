@@ -25,11 +25,16 @@ using PS4_Tools.LibOrbis.Util;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using PS4_Tools.Util;
+using System.Runtime.InteropServices;
 
 namespace PS4_Tools
 {
     internal class PS4_Tools
     {
+        /// <summary>
+        /// App Common Path will be used to store some items locally 
+        /// </summary>
+        /// <returns>PS4_Tools execution directory</returns>
         internal static string AppCommonPath()
         {
             return System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("PS4_Tools.dll", "");
@@ -66,16 +71,60 @@ namespace PS4_Tools
         }
     }
 
+    /// <summary>
+    /// PS4 Self file handeling
+    /// </summary>
     public class SELF
     {
+        #region SelfStruct
+       
+        public class Self_Header
+        {
+            public const UInt32 signature = 0x1D3D154Fu;
 
+            public UInt32 magic = new UInt32();
+            public UInt32 unknown04 = new UInt32();
+            public UInt32 unknown08 = new UInt32();
+            public UInt16 header_size = new UInt16();
+            public UInt16 unknown_size = new UInt16();
+            public UInt32 file_size = new UInt32();
+            public UInt32 unknown14 = new UInt32();
+            public UInt16 segment_count = new UInt16();
+            public UInt16 unknown1A = new UInt16();
+            public UInt32 unknown1C = new UInt32();
+        }
+
+        //public class self_info
+        //{
+        //    public hilo64_t id = new hilo64_t();
+        //    public hilo64_t unknown08 = new hilo64_t();
+        //    public hilo64_t system_version_1 = new hilo64_t();
+        //    public hilo64_t system_version_2 = new hilo64_t();
+        //    public uint8_t[] content_id = Arrays.InitializeWithDefaultInstances<uint8_t>(32);
+        //}
+
+        //public class Self_Segment_Header
+        //{
+        //    public UInt32 flags = new uint32_t();
+        //    public uint32_t unknown04 = new uint32_t();
+        //    public hilo64_t offset = new hilo64_t();
+        //    public hilo64_t compressed_size = new hilo64_t();
+        //    public hilo64_t uncompressed_size = new hilo64_t();
+        //}
+
+        #endregion
     }
 
+    /// <summary>
+    /// PS4 Media Handler 
+    /// </summary>
     public class Media
     {
+        /// <summary>
+        /// ATRAC9 class
+        /// </summary>
         public class Atrac9
         {
-
             public static void LoadAt9(string at9file)
             {
                 bool readAudioData = true;
@@ -107,6 +156,12 @@ namespace PS4_Tools
 
                 //reader.ReadWithConfig(new System.IO.FileStream(at9file, FileMode.Open, FileAccess.Read));
                 //well fuck
+            }
+
+            public static byte[] GetWAVFromAt9(string at9file)
+            {
+                //we need to load the at9 into a conatianer
+                return new byte[4];
             }
         }
     }
@@ -3461,19 +3516,7 @@ namespace PS4_Tools
     /// </summary>
     public class SaveData
     {
-        /// <summary>
-        /// Everything Inside the PS4/ from PKG's To Save Data Uses a sealed key
-        /// </summary>
-        public struct Sealedkey
-        {
-            public byte[] MAGIC;/*Magic needs to be validated*/
-            public byte[] KeySet;/*Sony uses this to tell the system which one of the key sets to use in case one needs to be scrapped I'm guessing*/
-            public byte[] AlignBytes;/*Padding to IV*/
-            public byte[] IV;/*IV Key For SHA256 at this point im guessing the system uses CBC but i could be wrong*/
-            public byte[] KEY;/*Key Fpr SHA256*/
-            public byte[] SHA256;//SHA256 HASH?
-        }
-
+      
         #region << Load Save File Class>>
 
         
@@ -3486,7 +3529,7 @@ namespace PS4_Tools
         public static void LoadSaveData(string filelocation, string Sealedkeylocation)
         {
             /*Load the sealed key from the file*/
-            Sealedkey sldkey = LoadSealedKey(Sealedkeylocation);
+            Licensing.Sealedkey sldkey = Licensing.LoadSealedKey(Sealedkeylocation);
             // Declare CspParmeters and RsaCryptoServiceProvider
             // objects with global scope of your Form class.
             CspParameters cspp = new CspParameters();
@@ -3607,39 +3650,7 @@ namespace PS4_Tools
 
 
         #endregion << Load Save File Class>>
-
-        /// <summary>
-        /// Loads a SealedKey File Into the SealedKey Obejct
-        /// </summary>
-        /// <param name="Sealedkeylocation">Sealed Key Location On Disk</param>
-        /// <returns></returns>
-        public static Sealedkey LoadSealedKey(string Sealedkeylocation)
-        {
-            /*Load the sealed key from the file*/
-            Sealedkey sldkey = default(Sealedkey);
-            sldkey.MAGIC = new byte[8];
-            sldkey.KeySet = new byte[2];
-            sldkey.AlignBytes = new byte[6];
-            sldkey.IV = new byte[16];
-            sldkey.KEY = new byte[32];
-            sldkey.SHA256 = new byte[32];
-
-            FileStream fs = new FileStream(Sealedkeylocation, FileMode.Open, FileAccess.Read);
-
-            fs.Read(sldkey.MAGIC, 0, sldkey.MAGIC.Length);
-            fs.Read(sldkey.KeySet, 0, sldkey.KeySet.Length);
-            fs.Read(sldkey.AlignBytes, 0, sldkey.AlignBytes.Length);
-            fs.Read(sldkey.IV, 0, sldkey.IV.Length);
-            fs.Read(sldkey.KEY, 0, sldkey.KEY.Length);
-            fs.Read(sldkey.SHA256, 0, sldkey.SHA256.Length);
-
-            if (!Util.Utils.CompareBytes(sldkey.MAGIC, new byte[] { 0x70, 0x66, 0x73, 0x53, 0x4B, 0x4B, 0x65, 0x79 }))
-            {
-                throw new Exception("This is not a valid SealedKey");
-            }
-            return sldkey;
-        }
-
+        
 
         /*CFW Propthet's Method This Method still relies on samu to be dumped*/
         private static bool sceSblSsMemcmpConsttime(byte[] a, byte[] b, int len, int offsetA = 0, int offsetB = 0)
@@ -4105,6 +4116,348 @@ namespace PS4_Tools
 
     }
 
+    public class Licensing
+    {
+
+        #region << SealedKey >>
+        /// <summary>
+        /// Everything Inside the PS4/ from PKG's To Save Data Uses a sealed key
+        /// </summary>
+        public struct Sealedkey
+        {
+            public byte[] MAGIC;/*Magic needs to be validated*/
+            public byte[] KeySet;/*Sony uses this to tell the system which one of the key sets to use in case one needs to be scrapped I'm guessing*/
+            public byte[] AlignBytes;/*Padding to IV*/
+            public byte[] IV;/*IV Key For SHA256 at this point im guessing the system uses CBC but i could be wrong*/
+            public byte[] KEY;/*Key Fpr SHA256*/
+            public byte[] SHA256;//SHA256 HASH?
+        }
+
+        /// <summary>
+        /// Loads a SealedKey File Into the SealedKey Obejct
+        /// </summary>
+        /// <param name="Sealedkeylocation">Sealed Key Location On Disk</param>
+        /// <returns></returns>
+        public static Sealedkey LoadSealedKey(string Sealedkeylocation)
+        {
+            /*Load the sealed key from the file*/
+            Sealedkey sldkey = default(Sealedkey);
+            sldkey.MAGIC = new byte[8];
+            sldkey.KeySet = new byte[2];
+            sldkey.AlignBytes = new byte[6];
+            sldkey.IV = new byte[16];
+            sldkey.KEY = new byte[32];
+            sldkey.SHA256 = new byte[32];
+
+            FileStream fs = new FileStream(Sealedkeylocation, FileMode.Open, FileAccess.Read);
+
+            fs.Read(sldkey.MAGIC, 0, sldkey.MAGIC.Length);
+            fs.Read(sldkey.KeySet, 0, sldkey.KeySet.Length);
+            fs.Read(sldkey.AlignBytes, 0, sldkey.AlignBytes.Length);
+            fs.Read(sldkey.IV, 0, sldkey.IV.Length);
+            fs.Read(sldkey.KEY, 0, sldkey.KEY.Length);
+            fs.Read(sldkey.SHA256, 0, sldkey.SHA256.Length);
+
+            if (!Util.Utils.CompareBytes(sldkey.MAGIC, new byte[] { 0x70, 0x66, 0x73, 0x53, 0x4B, 0x4B, 0x65, 0x79 }))
+            {
+                throw new Exception("This is not a valid SealedKey");
+            }
+            return sldkey;
+        }
+
+        #endregion << SealedKey >>
+
+
+        #region << Rif >>
+
+        #region << Riff Information >>
+        public enum RiffType
+        {
+            KDS,
+            Isolated,
+            Disc,
+            Debug,
+            Retial,
+            Unknown1,
+            DebugUnknown,
+        }
+
+        private static RiffType GetRiffType(byte[] TypeAddress)
+        {
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 0, 0 }))
+            {
+                return RiffType.KDS;
+            }
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 0, 1 }))
+            {
+                return RiffType.KDS;
+            }
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 0, 3 }))
+            {
+                return RiffType.KDS;
+            }
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 1, 1 }))
+            {
+                return RiffType.Isolated;
+            }
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 3, 2 }))
+            {
+                return RiffType.Isolated;
+            }
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 1, 2 }))
+            {
+                return RiffType.Disc;
+            }
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 2, 1 }) || Util.Utils.CompareBytes(TypeAddress, new byte[] { 2, 2 }) || Util.Utils.CompareBytes(TypeAddress, new byte[] { 2, 3 }))
+            {
+                return RiffType.Debug;
+            }
+
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 3, 3 }))
+            {
+                return RiffType.Retial;
+            }
+
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 3, 4 }))
+            {
+                return RiffType.Unknown1;
+            }
+
+            if (Util.Utils.CompareBytes(TypeAddress, new byte[] { 3, 0, 5 }))
+            {
+                return RiffType.DebugUnknown;
+            }
+            return RiffType.Unknown1;
+        }
+
+        public class RIF
+        {
+            /// <summary>
+            /// Magic should always be RIF\0
+            /// </summary>
+            public byte[] Magic { get; set; }
+            public byte[] Version { get; set; }
+            public byte[] Unknown { get; set; }
+            public byte[] PSN_Account_ID { get; set; }
+            public byte[] Start_Timestamp { get; set; }
+            public byte[] End_Timestamp { get; set; }
+            public byte[] Content_ID_Bytes { get; set; }
+
+            public string Content_ID
+            { get { return System.Text.Encoding.Default.GetString(Content_ID_Bytes); } }
+            public RiffType Type { get; set; }
+            public byte[] DRM_Type { get; set; }
+            public byte[] Content_Type { get; set; }
+            public byte[] SKU_Flag { get; set; }
+            public byte[] Extra_Flags { get; set; }
+
+            public byte[] Unknown1 = new byte[4];
+
+            public byte[] Unknown2 = new byte[4];
+
+            public byte[] Unknown3 = new byte[3];
+
+            public byte[] Unknown4 = new byte[1];
+
+            public byte[] Unknown5 = new byte[468];
+
+            public byte[] Disc_key = new byte[32];
+
+            public byte[] Secret_Encryption_IV_Bytes = new byte[16];
+            public string Secret_Encryption_IV { get { return ByteArrayToString(Secret_Encryption_IV_Bytes); } }
+
+            public byte[] Encrypted_Secret_Bytes = new byte[144];
+
+            public Secret Encrypted_Secret { get { return Get_Secret(Encrypted_Secret_Bytes); } }
+
+            public byte[] RSA_Signature_bytes = new byte[256];
+
+            public string RSA_Signature { get { return ByteArrayToString(RSA_Signature_bytes); } }
+
+        }
+
+        public class Secret
+        {
+            public byte[] Unknown1 = new byte[16];
+
+            public byte[] Unknown2 = new byte[16];
+
+            public byte[] Unknown3 = new byte[16];
+
+            public byte[] Content_Key_Seed = new byte[16]; //Used to generate PFS key
+
+            public byte[] SELF_Key_Seed = new byte[16];//Used to generate SELF key
+
+            public byte[] Unknown4 = new byte[16];
+
+            public byte[] Unknown5 = new byte[16];
+
+            public byte[] Entitlement_Key = new byte[16];
+
+            public byte[] Unknown6 = new byte[16];
+
+        }
+
+        public static Secret Get_Secret(byte[] bytes)
+        {
+            Secret secret = new Secret();
+
+            using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(bytes)))
+            {
+                secret.Unknown1 = binaryReader.ReadBytes(16);
+                secret.Unknown2 = binaryReader.ReadBytes(16);
+                secret.Unknown3 = binaryReader.ReadBytes(16);
+                secret.Content_Key_Seed = binaryReader.ReadBytes(16);
+                secret.SELF_Key_Seed = binaryReader.ReadBytes(16);
+                secret.Unknown4 = binaryReader.ReadBytes(16);
+                secret.Unknown5 = binaryReader.ReadBytes(16);
+                secret.Entitlement_Key = binaryReader.ReadBytes(16);
+                secret.Unknown6 = binaryReader.ReadBytes(16);
+            }
+
+            return secret;
+        }
+
+        public static string ByteArrayToString(byte[] ba)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+                hex.AppendFormat("{0:x2}", b);
+            return hex.ToString();
+        }
+
+        public static RIF ReadRif(string RifLocation)
+        {
+            RIF rif = new RIF();
+            using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(RifLocation)))
+            {
+                /*Check PS4 File Header*/
+                Byte[] RifFileHeader = binaryReader.ReadBytes(4);
+                if (!Util.Utils.CompareBytes(RifFileHeader, new byte[] { 0x52, 0x49, 0x46, 0x00 }))/*If Files Match*/
+                {
+                    //fail
+                    /*Lets be Honest id actually want a universal solution ps3/psp2/psp rif's all in one spot 
+                     This will also be used in my other project*/
+
+                    throw new Exception("This is not a valid ps4 Rif File");
+                }
+
+                rif.Magic = RifFileHeader;
+                rif.Version = binaryReader.ReadBytes(2);
+                rif.Unknown = binaryReader.ReadBytes(2);
+                rif.PSN_Account_ID = binaryReader.ReadBytes(8);
+                rif.Start_Timestamp = binaryReader.ReadBytes(8);
+                rif.End_Timestamp = binaryReader.ReadBytes(8);
+                rif.Content_ID_Bytes = binaryReader.ReadBytes(48);
+                rif.Type = GetRiffType(binaryReader.ReadBytes(2));
+                rif.DRM_Type = binaryReader.ReadBytes(2);
+                rif.Content_Type = binaryReader.ReadBytes(2);
+                rif.SKU_Flag = binaryReader.ReadBytes(2);
+                rif.Extra_Flags = binaryReader.ReadBytes(4);
+                rif.Unknown1 = binaryReader.ReadBytes(4);
+                rif.Unknown2 = binaryReader.ReadBytes(4);
+                rif.Unknown3 = binaryReader.ReadBytes(3);
+                rif.Unknown4 = binaryReader.ReadBytes(1);
+                rif.Unknown5 = binaryReader.ReadBytes(468);
+                rif.Disc_key = binaryReader.ReadBytes(32);
+                rif.Secret_Encryption_IV_Bytes = binaryReader.ReadBytes(16);
+                rif.Encrypted_Secret_Bytes = binaryReader.ReadBytes(144);
+                rif.RSA_Signature_bytes = binaryReader.ReadBytes(256);
+            }
+
+
+            return rif;
+        }
+
+
+        public static RIF CreateNewRif(string COntentID, string PSN_Account_ID)
+        {
+            RIF rif = new RIF();
+            //we need act.dat ? 
+
+            return rif;
+        }
+
+        //public static RIF CreateNewRi
+        #endregion < Riff Informtaiton >>
+
+        #endregion << Rif >> 
+
+        #region << Act.Dat >>
+
+        public class Act_Dat
+        {
+            /// <summary>
+            /// Magic should always be ACT\0
+            /// </summary>
+            public byte[] Magic = new byte[4];
+
+            public byte[] Version = new byte[2];
+
+            public byte[] Type = new byte[2];
+            public byte[] PSN_Account_ID = new byte[8];
+            public byte[] Start_Timestamp { get; set; }
+            public byte[] End_Timestamp { get; set; }
+
+            public byte[] Unknown1 = new byte[64];
+
+            public byte[] DeviceId = new byte[32];
+            public byte[] Unknown2 = new byte[32];
+
+            public byte[] RIF_Secret_Encryption_IV_Bytes = new byte[16];
+            public string RIF_Secret_Encryption_IV { get { return ByteArrayToString(RIF_Secret_Encryption_IV_Bytes); } }
+
+            public byte[] RIF_Secret_Encryption_Key_Seed_Bytes = new byte[16];
+
+            public string RIF_Secret_Encryption_Key_Seed { get { return ByteArrayToString(RIF_Secret_Encryption_Key_Seed_Bytes); } }
+
+            public byte[] Unknown3 = new byte[64];
+
+            public byte[] RSA_Signature_bytes = new byte[256];
+
+            public string RSA_Signature { get { return ByteArrayToString(RSA_Signature_bytes); } }
+
+        }
+
+        public static Act_Dat Read_Act(string act_Location)
+        {
+            Act_Dat act = new Act_Dat();
+
+            using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(act_Location)))
+            {
+                /*Check PS4 File Header*/
+                Byte[] ActFileHeader = binaryReader.ReadBytes(4);
+                if (!Util.Utils.CompareBytes(ActFileHeader, new byte[] { 0x41, 0x43, 0x54, 0x00 }))/*If Files Match*/
+                {
+                    //fail
+                    /*Lets be Honest id actually want a universal solution ps3/psp2/psp rif's all in one spot 
+                     This will also be used in my other project*/
+
+                    throw new Exception("This is not a valid ps4 Act File");
+                }
+
+                act.Magic = ActFileHeader;
+                act.Version = binaryReader.ReadBytes(2);
+                act.Type = binaryReader.ReadBytes(2);
+                act.PSN_Account_ID = binaryReader.ReadBytes(8);
+                act.Start_Timestamp = binaryReader.ReadBytes(8);
+                act.End_Timestamp = binaryReader.ReadBytes(8);
+                act.Unknown1 = binaryReader.ReadBytes(64);
+                act.DeviceId = binaryReader.ReadBytes(32);
+                act.Unknown2 = binaryReader.ReadBytes(32);
+                act.RIF_Secret_Encryption_IV_Bytes = binaryReader.ReadBytes(16);
+                act.RIF_Secret_Encryption_Key_Seed_Bytes = binaryReader.ReadBytes(16);
+                act.Unknown3 = binaryReader.ReadBytes(64);
+                act.RSA_Signature_bytes = binaryReader.ReadBytes(256);
+            }
+
+
+            return act;
+        }
+
+        #endregion << Act.Dat>>
+    }
+
     /*********************************************************
      *          PS4 PKG Reader by maxton  
      *          https://github.com/maxton/LibOrbisPkg
@@ -4120,291 +4473,6 @@ namespace PS4_Tools
         #region << Official >>
         public class Official
         {
-
-            #region << Riff Information >>
-            public enum RiffType
-            {
-                KDS,
-                Isolated,
-                Disc,
-                Debug,
-                Retial,
-                Unknown1,
-                DebugUnknown,
-            }
-
-            private static RiffType GetRiffType(byte[] TypeAddress)
-            {
-                if(Util.Utils.CompareBytes(TypeAddress, new byte[]{ 0,0}))
-                {
-                    return RiffType.KDS;
-                }
-                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 0, 1 }))
-                {
-                    return RiffType.KDS;
-                }
-                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 0, 3 }))
-                {
-                    return RiffType.KDS;
-                }
-                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 1, 1 }))
-                {
-                    return RiffType.Isolated;
-                }
-                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 3, 2 }))
-                {
-                    return RiffType.Isolated;
-                }
-                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 1, 2 }))
-                {
-                    return RiffType.Disc;
-                }
-                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 2, 1 }) || Util.Utils.CompareBytes(TypeAddress , new byte[] { 2, 2 }) || Util.Utils.CompareBytes(TypeAddress , new byte[] { 2, 3 }))
-                {
-                    return RiffType.Debug;
-                }
-
-                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 3, 3 } ))
-                {
-                    return RiffType.Retial;
-                }
-
-                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 3, 4 }))
-                {
-                    return RiffType.Unknown1;
-                }
-
-                if (Util.Utils.CompareBytes(TypeAddress , new byte[] { 3, 0, 5 }))
-                {
-                    return RiffType.DebugUnknown;
-                }
-                return RiffType.Unknown1;
-            }
-
-            public class RIF
-            {
-                /// <summary>
-                /// Magic should always be RIF\0
-                /// </summary>
-                public byte[] Magic { get; set; }
-                public byte[] Version { get; set; }
-                public byte[] Unknown { get; set; }
-                public byte[] PSN_Account_ID { get; set; }
-                public byte[] Start_Timestamp { get; set; }
-                public byte[] End_Timestamp { get; set; }
-                public byte[] Content_ID_Bytes{ get; set; }
-
-                public string Content_ID
-                { get { return System.Text.Encoding.Default.GetString(Content_ID_Bytes); } }
-                public RiffType Type {get;set;}
-                public byte[] DRM_Type { get; set; }
-                public byte[] Content_Type { get; set; }
-                public byte[] SKU_Flag { get; set; }
-                public byte[] Extra_Flags { get; set; }
-
-                public byte[] Unknown1 = new byte[4];
-
-                public byte[] Unknown2 = new byte[4];
-
-                public byte[] Unknown3 = new byte[3];
-
-                public byte[] Unknown4 = new byte[1];
-
-                public byte[] Unknown5 = new byte[468];
-
-                public byte[] Disc_key = new byte[32];
-
-                public byte[] Secret_Encryption_IV_Bytes = new byte[16];
-                public string Secret_Encryption_IV { get { return ByteArrayToString(Secret_Encryption_IV_Bytes); } }
-
-                public byte[] Encrypted_Secret_Bytes = new byte[144];
-                
-                public Secret Encrypted_Secret { get { return Get_Secret(Encrypted_Secret_Bytes); } }
-
-                public byte[] RSA_Signature_bytes = new byte[256];
-
-                public string RSA_Signature { get { return ByteArrayToString(RSA_Signature_bytes); } }
-
-            }
-
-            public class Secret
-            {
-                public byte[] Unknown1 = new byte[16];
-
-                public byte[] Unknown2 = new byte[16];
-
-                public byte[] Unknown3 = new byte[16];
-
-                public byte[] Content_Key_Seed = new byte[16]; //Used to generate PFS key
-                
-                public byte[] SELF_Key_Seed = new byte[16];//Used to generate SELF key
-               
-                public byte[] Unknown4 = new byte[16];
-
-                public byte[] Unknown5 = new byte[16];
-
-                public byte[] Entitlement_Key = new byte[16];
-
-                public byte[] Unknown6 = new byte[16];
-
-            }
-
-            public static Secret Get_Secret(byte[] bytes)
-            {
-                Secret secret = new Secret();
-
-                using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(bytes)))
-                {
-                    secret.Unknown1 = binaryReader.ReadBytes(16);
-                    secret.Unknown2 = binaryReader.ReadBytes(16);
-                    secret.Unknown3 = binaryReader.ReadBytes(16);
-                    secret.Content_Key_Seed = binaryReader.ReadBytes(16);
-                    secret.SELF_Key_Seed = binaryReader.ReadBytes(16);
-                    secret.Unknown4 = binaryReader.ReadBytes(16);
-                    secret.Unknown5 = binaryReader.ReadBytes(16);
-                    secret.Entitlement_Key = binaryReader.ReadBytes(16);
-                    secret.Unknown6 = binaryReader.ReadBytes(16);
-                }
-
-                return secret;
-            }
-
-            public static string ByteArrayToString(byte[] ba)
-            {
-                StringBuilder hex = new StringBuilder(ba.Length * 2);
-                foreach (byte b in ba)
-                    hex.AppendFormat("{0:x2}", b);
-                return hex.ToString();
-            }
-
-            public static RIF ReadRif(string RifLocation)
-            {
-                RIF rif = new RIF();
-                using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(RifLocation)))
-                {
-                    /*Check PS4 File Header*/
-                    Byte[] RifFileHeader = binaryReader.ReadBytes(4);
-                    if (!Util.Utils.CompareBytes(RifFileHeader, new byte[] { 0x52, 0x49, 0x46, 0x00 }))/*If Files Match*/
-                    {
-                        //fail
-                        /*Lets be Honest id actually want a universal solution ps3/psp2/psp rif's all in one spot 
-                         This will also be used in my other project*/
-
-                        throw new Exception("This is not a valid ps4 Rif File");
-                    }
-
-                    rif.Magic = RifFileHeader;
-                    rif.Version = binaryReader.ReadBytes(2);
-                    rif.Unknown = binaryReader.ReadBytes(2);
-                    rif.PSN_Account_ID = binaryReader.ReadBytes(8);
-                    rif.Start_Timestamp = binaryReader.ReadBytes(8);
-                    rif.End_Timestamp = binaryReader.ReadBytes(8);
-                    rif.Content_ID_Bytes = binaryReader.ReadBytes(48);
-                    rif.Type = GetRiffType(binaryReader.ReadBytes(2));
-                    rif.DRM_Type = binaryReader.ReadBytes(2);
-                    rif.Content_Type = binaryReader.ReadBytes(2);
-                    rif.SKU_Flag = binaryReader.ReadBytes(2);
-                    rif.Extra_Flags = binaryReader.ReadBytes(4);
-                    rif.Unknown1 = binaryReader.ReadBytes(4);
-                    rif.Unknown2 = binaryReader.ReadBytes(4);
-                    rif.Unknown3 = binaryReader.ReadBytes(3);
-                    rif.Unknown4 = binaryReader.ReadBytes(1);
-                    rif.Unknown5 = binaryReader.ReadBytes(468);
-                    rif.Disc_key = binaryReader.ReadBytes(32);
-                    rif.Secret_Encryption_IV_Bytes = binaryReader.ReadBytes(16);
-                    rif.Encrypted_Secret_Bytes = binaryReader.ReadBytes(144);
-                    rif.RSA_Signature_bytes = binaryReader.ReadBytes(256);
-                }
-
-
-                return rif;
-            }
-
-
-            public static RIF CreateNewRif(string COntentID,string PSN_Account_ID)
-            {
-                RIF rif = new RIF();
-                //we need act.dat ? 
-
-                return rif;
-            }
-
-            //public static RIF CreateNewRi
-            #endregion < Riff Informtaiton >>
-
-            #region << Act.Dat >>
-
-            public class Act_Dat
-            {
-                /// <summary>
-                /// Magic should always be ACT\0
-                /// </summary>
-                public byte[] Magic = new byte[4];
-
-                public byte[] Version = new byte[2];
-
-                public byte[] Type = new byte[2];
-                public byte[] PSN_Account_ID = new byte[8];
-                public byte[] Start_Timestamp { get; set; }
-                public byte[] End_Timestamp { get; set; }
-
-                public byte[] Unknown1 =new byte[64];
-
-                public byte[] DeviceId = new byte[32];
-                public byte[] Unknown2 = new byte[32];
-
-                public byte[] RIF_Secret_Encryption_IV_Bytes = new byte[16];
-                public string RIF_Secret_Encryption_IV { get { return ByteArrayToString(RIF_Secret_Encryption_IV_Bytes); } }
-
-                public byte[] RIF_Secret_Encryption_Key_Seed_Bytes = new byte[16];
-
-                public string RIF_Secret_Encryption_Key_Seed { get { return ByteArrayToString(RIF_Secret_Encryption_Key_Seed_Bytes); } }
-
-                public byte[] Unknown3 = new byte[64];
-
-                public byte[] RSA_Signature_bytes = new byte[256];
-
-                public string RSA_Signature { get { return ByteArrayToString(RSA_Signature_bytes); } }
-
-            }
-
-            public static Act_Dat Read_Act(string act_Location)
-            {
-                Act_Dat act = new Act_Dat();
-
-                using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(act_Location)))
-                {
-                    /*Check PS4 File Header*/
-                    Byte[] ActFileHeader = binaryReader.ReadBytes(4);
-                    if (!Util.Utils.CompareBytes(ActFileHeader, new byte[] { 0x41, 0x43, 0x54, 0x00 }))/*If Files Match*/
-                    {
-                        //fail
-                        /*Lets be Honest id actually want a universal solution ps3/psp2/psp rif's all in one spot 
-                         This will also be used in my other project*/
-
-                        throw new Exception("This is not a valid ps4 Act File");
-                    }
-
-                    act.Magic = ActFileHeader;
-                    act.Version = binaryReader.ReadBytes(2);
-                    act.Type = binaryReader.ReadBytes(2);
-                    act.PSN_Account_ID = binaryReader.ReadBytes(8);
-                    act.Start_Timestamp = binaryReader.ReadBytes(8);
-                    act.End_Timestamp = binaryReader.ReadBytes(8);
-                    act.Unknown1 = binaryReader.ReadBytes(64);
-                    act.DeviceId = binaryReader.ReadBytes(32);
-                    act.Unknown2 = binaryReader.ReadBytes(32);
-                    act.RIF_Secret_Encryption_IV_Bytes = binaryReader.ReadBytes(16);
-                    act.RIF_Secret_Encryption_Key_Seed_Bytes = binaryReader.ReadBytes(16);
-                    act.Unknown3 = binaryReader.ReadBytes(64);
-                    act.RSA_Signature_bytes = binaryReader.ReadBytes(256);
-                }
-
-
-                return act;
-            }
-
-            #endregion << Act.Dat>>
             /// <summary>
             /// This Uses SCE Tools PLease Try and avoid this
             /// Will be intigrating maxtrons pkg tools
@@ -4591,7 +4659,7 @@ namespace PS4_Tools
                 /// This use to be Download_URL but im adding changes so you can read content from the psn store
                 /// </summary>
                 public string Store_URL { get; set; }
-                public Bitmap Store_Content_Image { get; set; }
+                public byte[] Store_Content_Image { get; set; }//swithing to bytearry for Lapy 
             }
 
             public static Update_Structure.Titlepatch CheckForUpdate(string TitleID)
@@ -4902,7 +4970,7 @@ namespace PS4_Tools
 
                         splittedcelltitel = Regex.Split(splittedfooter[0], "img src=\"http");
                         splittedifno = Regex.Split(splittedcelltitel[1], "\"");
-                        newitem.Store_Content_Image = LoadPicture(splittedifno[0].Trim());
+                        newitem.Store_Content_Image = LoadPicture(splittedifno[0].Trim()).ToByteArray(System.Drawing.Imaging.ImageFormat.Bmp);
 
                         splittedcelltitel = Regex.Split(splittedfooter[0], "left-detail--detail-2\">");
                         splittedifno = Regex.Split(splittedcelltitel[1], "<");
@@ -4922,6 +4990,11 @@ namespace PS4_Tools
 
 
                 return storeitems;
+            }
+
+            public static Licensing.RIF ReadRif(string v)
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -6016,6 +6089,9 @@ namespace PS4_Tools
 
         #endregion << Scene Related >>
 
+        /// <summary>
+        /// Remastered support class can build psp hd's and ps2 classics
+        /// </summary>
         public class Remastered
         {
             /// <summary>
@@ -6241,6 +6317,358 @@ namespace PS4_Tools
             Unpacker unpacker = new Unpacker();
             unpacker.Unpack(PUPFile, SaveToDir, SaveTables);
         }
+
+        /// <summary>
+        /// SLB2 Class to handle the PS4'S SLB2 container
+        /// </summary>
+        public class SLB2
+        {
+            #region Variables
+            static long slb2BaseOffset = 0x200;
+            static long containerSize;
+            static long slb2Version;
+            static long fileCount;
+            static int blockSize = 512;
+            static long containerCount;
+            static int blockCountOffset = 0x20;
+            static int byteCountOffset = 0x24;
+            static int fileNameOffset = 0x30;
+            static long byteCount;
+            static long blockCount;
+            static string fileName;
+            #endregion Variables
+
+            /// <summary>
+            /// Reset the major Variables for the next SLB2 Container
+            /// </summary>
+            private static void ResetVars()
+            {
+                slb2BaseOffset = 0x200;
+                blockCountOffset = 0x20;
+                byteCountOffset = 0x24;
+                fileNameOffset = 0x30;
+            }
+
+            /// <summary>
+            /// Check SLB2 Magic of a SLB2 Container
+            /// </summary>
+            /// <param name="slb2">The SLB2 Container to check</param>
+            /// <returns>True if the File Magic do match the SLB2 Magic</returns>
+            public static bool CheckHeader(string slb2)
+            {
+                using (BinaryReader b = new BinaryReader(new FileStream(slb2, FileMode.Open)))
+                {
+                    byte[] buffer = new byte[4];
+                    byte[] slb2Magic = new byte[5] { 0x53, 0x4C, 0x42, 0x32, 0x01, };
+                    b.Read(buffer, 0, 4);
+                    if (Util.Utils.CompareBytes(buffer, slb2Magic))
+                    {
+                        return true;
+                    }
+                    b.Close();
+                }
+                return false;
+            }
+
+            /// <summary>
+            /// Read the TOC of the SLB2 Container
+            /// </summary>
+            /// <param name="slb2">The SLB2 Container to read the TOC from</param>
+            internal static PlaystationUpdateFile Read(string slb2)
+            {
+                PlaystationUpdateFile file = new PlaystationUpdateFile();
+                using (BinaryReader b = new BinaryReader(new FileStream(slb2, FileMode.Open)))
+                {
+                    byte[] bufferA = new byte[4];
+                    byte[] bufferB = new byte[4];
+                    byte[] bufferC = new byte[4];
+                    byte[] bufferPup = new byte[20];
+                    slb2Version = 0;
+                    fileCount = 0;
+                    containerCount = 0;
+                    containerSize = 0;
+
+                    file.Magic = b.ReadBytes(4);//should be SLB2
+                    if (!Util.Utils.CompareBytes(file.Magic, new byte[] { 0x53, 0x4C, 0x42, 0x32 }))
+                    {
+                        throw new Exception("File is not a SLB2 container");
+                    }
+
+                    FileInfo fileInfo = new FileInfo(slb2);
+                    containerSize = fileInfo.Length;
+                    file.FileSize = containerSize;
+
+                    b.BaseStream.Seek(0x04, SeekOrigin.Begin);
+                    b.Read(bufferA, 0, 4);
+                    slb2Version = Util.Utils.HexToDec(bufferA, "reverse");
+
+                    file.Version = slb2Version;
+
+                    b.BaseStream.Seek(0x0C, SeekOrigin.Begin);
+                    b.Read(bufferB, 0, 4);
+                    fileCount = Util.Utils.HexToDec(bufferB, "reverse");
+
+                    file.File_Counter = fileCount;
+
+                    b.BaseStream.Seek(0x10, SeekOrigin.Begin);
+                    b.Read(bufferC, 0, 4);
+                    containerCount = Util.Utils.HexToDec(bufferC, "reverse");
+
+                    file.Container_Counter = containerCount;
+
+                    //start reading from 20 
+                    b.BaseStream.Seek(0x20, SeekOrigin.Begin);
+                    for (int i = 0; i < fileCount; i++)
+                    {                     
+                        InnerPUP pup = new InnerPUP();
+                        pup.OffsetOfDecryptedBlocks = b.ReadBytes(4);//read 4 bytes should state the start offset
+                        pup.CryptContentSize = Util.Utils.HexToDec(b.ReadBytes(4),"reverse");
+                        pup.Reserved = b.ReadBytes(8);
+                        pup.CryptContentName = Encoding.ASCII.GetString(b.ReadBytes(14));
+                        b.ReadBytes(18);//just skiep the next 4 bytes
+                        file.ListOfInnerPup.Add(pup);
+                    }
+
+                    //now we can read the actual file info if we need
+                    b.Close();
+                }
+                return file;
+            }
+
+            /// <summary>
+            /// Get the Version of the SLB2 Container (Need's Read() to be called once before)
+            /// </summary>
+            /// <returns>The version of the SLB2 Container</returns>
+            public static long GetVersion()
+            {
+                return slb2Version;
+            }
+
+            /// <summary>
+            /// Get File Count of SLB2 Container (Need's Read() to be called once before)
+            /// </summary>
+            /// <returns>File Count of the input SLB2 Container</returns>
+            public static long GetFileCount()
+            {
+                return fileCount;
+            }
+
+            /// <summary>
+            /// Check the Size of the input SLB2 Container against the saved size in the header (Need's Read() to be called once before)
+            /// </summary>
+            /// <returns>True if the saved size in header do match the reall file size</returns>
+            public static bool CheckSize()
+            {
+                if ((containerCount * blockSize) == containerSize)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            /// <summary>
+            /// Extract a SLB2 Container
+            /// </summary>
+            /// <param name="slb2">The SLB2 Container to use</param>
+            /// <param name="path">The path where to save the extracted files</param>
+            public static void Extract(string slb2, string path)
+            {
+                int flag = 0;
+                ASCIIEncoding enc = new ASCIIEncoding();
+
+                while (fileCount != 0)
+                {
+                    byte[] bufferA = new byte[4];
+                    byte[] bufferB = new byte[4];
+                    byte[] bufferC = new byte[16];
+
+                    using (BinaryReader b = new BinaryReader(new FileStream(slb2, FileMode.Open, FileAccess.Read)))
+                    {
+                        b.BaseStream.Seek(blockCountOffset, SeekOrigin.Begin);
+                        b.Read(bufferA, 0, 4);
+                        b.BaseStream.Seek(byteCountOffset, SeekOrigin.Begin);
+                        b.Read(bufferB, 0, 4);
+                        b.BaseStream.Seek(fileNameOffset, SeekOrigin.Begin);
+                        b.Read(bufferC, 0, 16);
+
+                        b.Close();
+                    }
+
+                    blockCount = Util.Utils.HexToDec(bufferA, "reverse");
+                    byteCount = Util.Utils.HexToDec(bufferB, "reverse");
+
+                    for (int i = 15; i > 0; i--)
+                    {
+                        if (bufferC[i] != 00)
+                        {
+                            byte[] newByte = new byte[i + 1];
+                            Array.Copy(bufferC, 0, newByte, 0, i + 1);
+                            fileName = enc.GetString(newByte);
+                            break;
+                        }
+                    }
+
+                    if (blockCount > 1)
+                    {
+                        slb2BaseOffset = (blockCount * blockSize);
+                    }
+
+                    if (fileName == "C0000001")
+                    {
+                        if (!File.Exists(path + fileName + "_stage1.bin") == true)
+                        {
+                            File.Create(path + fileName + "_stage1.bin").Close();
+                            flag = 1;
+                        }
+                        else
+                        {
+                            File.Create(path + fileName + "_stage2.bin").Close();
+                            flag = 2;
+                        }
+                    }
+                    else if (fileName == "C0008001")
+                    {
+                        if (!File.Exists(path + fileName + "_stage1.bin") == true)
+                        {
+                            File.Create(path + fileName + "_stage1.bin").Close();
+                            flag = 1;
+                        }
+                        else
+                        {
+                            File.Create(path + fileName + "_stage2.bin").Close();
+                            flag = 2;
+                        }
+                    }
+                    else if (fileName == "C0010001" ||
+                             fileName == "eap_kbl" ||
+                             fileName == "C0018001" ||
+                             fileName == "C0020001" ||
+                             fileName == "C0028001")
+                    {
+                        File.Create(path + fileName + ".bin").Close();
+                        flag = 3;
+                    }
+                    else
+                    {
+                        File.Create(path + fileName).Close();
+                    }
+
+                    if (flag == 1)
+                    {
+                        Util.Utils.ReadWriteData(slb2, (path + fileName + "_stage1.bin"), "b", "bi", null, 0, slb2BaseOffset, byteCount);
+                    }
+                    else if (flag == 2)
+                    {
+                        Util.Utils.ReadWriteData(slb2, (path + fileName + "_stage2.bin"), "b", "bi", null, 0, slb2BaseOffset, byteCount);
+                    }
+                    else if (flag == 3)
+                    {
+                        Util.Utils.ReadWriteData(slb2, (path + fileName + ".bin"), "b", "bi", null, 0, slb2BaseOffset, byteCount);
+                    }
+                    else
+                    {
+                        Util.Utils.ReadWriteData(slb2, (path + fileName), "b", "bi", null, 0, slb2BaseOffset, byteCount);
+                    }
+
+                    flag = 0;
+                    fileCount -= 1;
+                    blockCountOffset += 0x30;
+                    byteCountOffset += 0x30;
+                    fileNameOffset += 0x30;
+                }
+
+                // Reseting the main vars to the standart sart value
+                ResetVars();
+            }
+        }
+
+        public PlaystationUpdateFile Read_Pup(string PUPFile)
+        {
+            return SLB2.Read(PUPFile);
+        }
+
+        /// <summary>
+        /// Playstation Update File Holder
+        /// </summary>
+        public class PlaystationUpdateFile
+        {
+            /// <summary>
+            /// Magic of file
+            /// </summary>
+            public byte[] Magic { get; set; }
+
+            /// <summary>
+            /// Version of file
+            /// </summary>
+            public long Version { get; set; }
+
+            /// <summary>
+            /// Unknown Padding ?
+            /// </summary>
+            public long File_Counter { get; set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public long Container_Counter { get; set; }
+            /// <summary>
+            /// Flag
+            /// </summary>
+            public byte[] BlockCounter { get; set; }
+
+            /// <summary>
+            /// Unknown Padding ?
+            /// </summary>
+            public byte[] Reserved { get; set; }
+
+            /// <summary>
+            /// Unknown Padding ?
+            /// </summary>
+            public byte[] DecryptedBlocks { get; set; }
+
+            /// <summary>
+            /// Lists all inner PUP files
+            /// </summary>
+            public List<InnerPUP> ListOfInnerPup = new List<InnerPUP>();
+
+            /// <summary>
+            /// File Container Size
+            /// </summary>
+            public long FileSize { get; set; }
+        }
+
+        /// <summary>
+        /// Inner PUP
+        /// </summary>
+        public class InnerPUP
+        {
+            /// <summary>
+            /// Offset of DerytpedBlocks
+            /// </summary>
+            public byte[] OffsetOfDecryptedBlocks { get; set; }
+
+            /// <summary>
+            /// Crypt Content Size
+            /// </summary>
+            public long CryptContentSize { get; set; }
+
+            /// <summary>
+            /// Crypt Content Name
+            /// </summary>
+            public string CryptContentName { get; set; }
+
+            /// <summary>
+            /// Reserveed
+            /// </summary>
+            public byte[] Reserved { get; set; }
+
+            /// <summary>
+            /// Inner Pup Magic
+            /// </summary>
+            public byte[] InnerPupMagic { get; set; }
+        }
+
+    
     }
 
 
@@ -6255,6 +6683,7 @@ namespace PS4_Tools
             PS4_ACT,
             PARAM_SFO,
             PLAYGO,
+            ATRAC9,
             Unkown,
         }
 

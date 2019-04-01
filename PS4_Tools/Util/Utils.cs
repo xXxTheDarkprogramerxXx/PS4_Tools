@@ -28,6 +28,135 @@ namespace PS4_Tools.Util
             return bytes.ToArray();
         }
 
+        /// <summary>
+        /// Converts a Littel Endian Hex Decimal value to a Integer Decimal value
+        /// </summary>
+        /// <param name="Hex">The byte[] Array to convert from</param>
+        /// <param name="reverse">Defines if a array is Little Endian and should be reversed first</param>
+        /// <returns>The converted Integer Decimal value</returns>
+        public static long HexToDec(byte[] Hex, string reverse = "")
+        {
+            if (reverse == "reverse")
+            {
+                Array.Reverse(Hex);
+            }
+
+            string bufferString = BitConverter.ToString(Hex).Replace("-", "");
+            long bufferInteger = Convert.ToInt32(bufferString, 16);
+            return bufferInteger;
+        }
+
+        /// <summary>
+        /// Kombinated Command for Read or Write Binary or Integer Data
+        /// </summary>
+        /// <param name="fileToUse">The File that will be used to Read from or to Write to it</param>
+        /// <param name="fileToUse2">This is used for the "both" methode. fileToUse will be the file to read from and fileToUse2 will be the file to write to it.</param>
+        /// <param name="methodReadOrWriteOrBoth">Defination for Read "r" or Write "w" or if you have big data just use Both "b"</param>
+        /// <param name="methodBinaryOrInteger">Defination for Binary Data (bi) or Integer Data (in) when write to a file</param>
+        /// <param name="binData">byte array of the binary data to read or write</param>
+        /// <param name="binData2">integer array of the integer data to read or write</param>
+        /// <param name="offset">Otional, used for the "both" methode to deffine a offset to start to read from a file. If you do not wan't to read from the begin use this var to tell the Routine to jump to your deffined offset.</param>
+        /// <param name="count">Optional, also used for the "both" methode to deffine to only to read a specific byte count and not till the end of the file.</param>
+        public static void ReadWriteData(string fileToUse, string fileToUse2 = "", string methodReadOrWriteOrBoth = "",  string methodBinaryOrInteger = "",  byte[] binData = null, int binData2 = 0,  long offset = 0,  long count = 0)
+        {
+            byte[] readBuffer;
+            string caseSwitch = methodReadOrWriteOrBoth;
+            switch (caseSwitch)
+            {
+                case "r":
+                    {
+                        FileInfo fileInfo = new FileInfo(fileToUse);
+                        readBuffer = new byte[fileInfo.Length];
+                        using (BinaryReader b = new BinaryReader(new FileStream(fileToUse, FileMode.Open, FileAccess.Read)))
+                        {
+                            b.Read(readBuffer, 0, readBuffer.Length);
+                            b.Close();
+                        }
+                    }
+                    break;
+                case "w":
+                    {
+                        using (BinaryWriter b = new BinaryWriter(new FileStream(fileToUse, FileMode.Append, FileAccess.Write)))
+                        {
+                            caseSwitch = methodBinaryOrInteger;
+                            switch (caseSwitch)
+                            {
+                                case "bi":
+                                    {
+                                        b.Write(binData, 0, binData.Length);
+                                        b.Close();
+                                    }
+                                    break;
+                                case "in":
+                                    {
+                                        b.Write(binData2);
+                                        b.Close();
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                case "b":
+                    {   // For data that will cause a buffer overflow we use this method. We read from a Input File and Write to a Output File with the help of a Buffer till the end of file or the specified length is reached.
+                        using (BinaryReader br = new BinaryReader(new FileStream(fileToUse, FileMode.Open, FileAccess.Read)))
+                        {
+                            using (BinaryWriter bw = new BinaryWriter(new FileStream(fileToUse2, FileMode.Append, FileAccess.Write)))
+                            {
+                                // this is a variable for the Buffer size. Play arround with it and maybe set a new size to get better result's
+                                int workingBufferSize = 4096; // high
+                                // int workingBufferSize = 2048; // middle
+                                // int workingBufferSize = 1024; // default
+                                // int workingBufferSize = 128;  // minimum
+
+                                // Do we read data that is smaller then our working buffer size?
+                                if (count < workingBufferSize)
+                                {
+                                    workingBufferSize = (int)count;
+                                }
+
+                                byte[] buffer = new byte[workingBufferSize];
+                                int len;
+
+                                // Do we use a specific offset?
+                                if (offset != 0)
+                                {
+                                    br.BaseStream.Seek(offset, SeekOrigin.Begin);
+                                }
+
+                                // Run the process in a loop
+                                while ((len = br.Read(buffer, 0, workingBufferSize)) != 0)
+                                {
+                                    bw.Write(buffer, 0, len);
+
+                                    // Do we read a specific length?
+                                    if (count != 0)
+                                    {
+                                        // Subtract the working buffer size from the byte count to read/write.
+                                        count -= workingBufferSize;
+
+                                        // Stop the loop when the specified byte count to read/write is reached.
+                                        if (count == 0)
+                                        {
+                                            break;
+                                        }
+
+                                        // When the count value is lower then the working buffer size we set the working buffer to the value of the count variable to not read more data as wanted
+                                        if (count < workingBufferSize)
+                                        {
+                                            workingBufferSize = (int)count;
+                                        }
+                                    }
+                                }
+                                bw.Close();
+                            }
+                            br.Close();
+                        }
+                    }
+                    break;
+            }
+        }
+
         public static bool CompareBytes(byte[] a, byte[] b)
         {
             if (a.Length != b.Length)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,17 @@ namespace Tester
         private void GridWithDisplay_Load(object sender, EventArgs e)
         {
             dataGridView1.DataSource = Items;
+        }
+
+        public static System.Drawing.Bitmap BytesToBitmap(byte[] ImgBytes)
+        {
+            System.Drawing.Bitmap result = null;
+            if (ImgBytes != null)
+            {
+                MemoryStream stream = new MemoryStream(ImgBytes);
+                result = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(stream);
+            }
+            return result;
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)

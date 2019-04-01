@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,8 +51,11 @@ namespace Tester
                 // Show the FolderBrowserDialog.  
                 if (folderDlg.ShowDialog() == DialogResult.OK)
                 {
-                    PS4_Tools.PUP pupfunction = new PS4_Tools.PUP();
-                    pupfunction.Unpack_PUP(openFileDialog1.FileName, folderDlg.SelectedPath);
+                    //PS4_Tools.PUP pupfunction = new PS4_Tools.PUP();
+                    //pupfunction.Unpack_PUP(openFileDialog1.FileName, folderDlg.SelectedPath);
+                    PS4_Tools.PUP pupfile = new PS4_Tools.PUP();
+                    PS4_Tools.PUP.PlaystationUpdateFile pup = pupfile.Read_Pup(openFileDialog1.FileName);
+                    
                 }
             }
         }
@@ -97,33 +101,30 @@ namespace Tester
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("Official Method has been removed");
-
+            
             /*Intigration with Maxtron's LibOrbis has begun */
 
-            var temp = PS4_Tools.PKG.SceneRelated.ReadPKG(@"C: \Users\3deEchelon\Desktop\PS4\Euro.FISHING.COLLECTORS.EDITION.PS4 - DUPLEX\Euro.Fishing.Collectors.Edition.PS4 - DUPLEX\duplex - euro.fishing.collectors.ed.ps4\Euro.Fishing.Collectors.Edition.PS4 - DUPLEX.pkg");
+            var temp = PS4_Tools.PKG.SceneRelated.ReadPKG(@"C:\Users\3deEchelon\Desktop\PS4\Batman.RETURN.TO.ARKHAM.ARKHAM.ASYLUM.PS4-DUPLEX\Batman.Return.to.Arkham.Arkham.Asylum.PS4-DUPLEX\duplex-batman.return.to.arkham.arkham.asylum\Batman.Return.to.Arkham.Arkham.Asylum.PS4-DUPLEX.pkg");
 
 
-            //var lstitem = PS4_Tools.PKG.Official.ReadAllUnprotectedData(@"C:\Users\3deEchelon\Downloads\Patapon_Remastered_CUSA07184_update_1.01.pkg");
-            //listBox1.Items.Clear();
-            //listBox2.Items.Clear();
-            //for (int i = 0; i < lstitem.Count; i++)
-            //{
-            //    listBox1.Items.Add(lstitem[i]);
-            //}
-            ////Extarct SFO
+        }
 
-            //Param_SFO.PARAM_SFO sfo = PS4_Tools.PKG.SceneRelated.PARAM_SFO.Get_Param_SFO(@"C:\Users\3deEchelon\Downloads\Patapon_Remastered_CUSA07184_update_1.01.pkg");
-            //for (int i = 0; i < sfo.Tables.Count; i++)
-            //{
-            //    listBox2.Items.Add( sfo.Tables[i].Name + " : " + sfo.Tables[i].Value);
-            //}
-             
+        public static System.Drawing.Bitmap BytesToBitmap(byte[] ImgBytes)
+        {
+            System.Drawing.Bitmap result = null;
+            if (ImgBytes != null)
+            {
+                MemoryStream stream = new MemoryStream(ImgBytes);
+                result = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(stream);
+            }
+            return result;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.dds");
+            // var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.dds");
+            var byteimage = PS4_Tools.Image.DDS.GetBytesFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.dds");
+            var item = BytesToBitmap(byteimage);
             pictureBox1.Image = item;
         }
 
@@ -154,7 +155,8 @@ namespace Tester
             /*TitleID Patch Data Is Avaiavle Here*/
 
             /*Build some string*/
-            string update = label1.Text;
+            string update = " Update Info :";
+            update += "\n Title : " + item.Tag.Package.Paramsfo.Title;
             update += "\n Version : " + item.Tag.Package.Version;
             int ver = Convert.ToInt32(item.Tag.Package.System_ver);
             update += "\n System Version : " + ver.ToString("X");
@@ -166,11 +168,9 @@ namespace Tester
 
         private void button8_Click(object sender, EventArgs e)
         {
-           var storeitems = PS4_Tools.PKG.Official.Get_All_Store_Items(textBox1.Text);
+            var storeitems = PS4_Tools.PKG.Official.Get_All_Store_Items(textBox1.Text);
             GridWithDisplay grid = new GridWithDisplay(storeitems);
             grid.ShowDialog();
-
-            
         }
 
         private void button9_Click(object sender, EventArgs e)
@@ -196,14 +196,14 @@ namespace Tester
         private void button12_Click(object sender, EventArgs e)
         {
             // PS4_Tools.PKG.Official.RIF rifitem = PS4_Tools.PKG.Official.ReadRif(@"C:\Users\3deEchelon\Downloads\RifTest.rif");
-            PS4_Tools.PKG.Official.RIF rifitem = PS4_Tools.PKG.Official.ReadRif(@"C:\Users\3deEchelon\Desktop\PS4\LM\Sc0\license.dat");
+            PS4_Tools.Licensing.RIF rifitem = PS4_Tools.Licensing.ReadRif(@"C:\Users\3deEchelon\Desktop\PS4\LM\Sc0\license.dat");
             /*Rif Loaded*/
             // string Content_ID = System.Text.Encoding.ASCII.GetString(rifitem.Content_ID);
 
             lblExtrInfo.Text = "Rif information" + "\r\n"; 
 
             lblExtrInfo.Text += @"Content ID : " + rifitem.Content_ID + "\r\n" + "\r\n";
-
+            //lblExtrInfo.Text += @"Content Type : " + System.Text.Encoding.UTF8.GetString(rifitem.DRM_Type) + "\r\n" + "\r\n";
             lblExtrInfo.Text += @"Encrypted Secret : " + rifitem.Encrypted_Secret.Entitlement_Key + "\r\n";
             lblExtrInfo.Text += @"Secret Encryption IV" + rifitem.Secret_Encryption_IV + "\r\n";
         }
@@ -235,6 +235,18 @@ namespace Tester
             {
                 var ps4filetype = PS4_Tools.Tools.Get_PS4_File_Type(openFileDialog1.FileName);
                 MessageBox.Show("File is a " + ps4filetype.ToString());
+                switch (ps4filetype)
+                {
+                    case PS4_Tools.Tools.File_Type.PARAM_SFO:
+                        var sfo = new Param_SFO.PARAM_SFO(openFileDialog1.FileName);
+                        break;
+                    case PS4_Tools.Tools.File_Type.PS4_DDS:
+                        var dd = PS4_Tools.Image.DDS.GetBytesFromDDS(openFileDialog1.FileName);
+                        break;
+                    case PS4_Tools.Tools.File_Type.PS4_PKG:
+                        var pkg = PS4_Tools.PKG.SceneRelated.Read_PKG(openFileDialog1.FileName);
+                        break;
+                }
             }
         }
 

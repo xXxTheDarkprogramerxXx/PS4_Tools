@@ -32,8 +32,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.listBox2 = new System.Windows.Forms.ListBox();
             this.button4 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button5 = new System.Windows.Forms.Button();
@@ -50,22 +48,49 @@
             this.button13 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            this.groupBox11.SuspendLayout();
+            this.groupBox12.SuspendLayout();
+            this.groupBox13.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnPUPExtract
             // 
-            this.btnPUPExtract.Location = new System.Drawing.Point(13, 13);
+            this.btnPUPExtract.Location = new System.Drawing.Point(11, 34);
             this.btnPUPExtract.Name = "btnPUPExtract";
             this.btnPUPExtract.Size = new System.Drawing.Size(75, 46);
             this.btnPUPExtract.TabIndex = 0;
-            this.btnPUPExtract.Text = "PUP Extract";
+            this.btnPUPExtract.Text = "Read Extract";
             this.btnPUPExtract.UseVisualStyleBackColor = true;
             this.btnPUPExtract.Click += new System.EventHandler(this.btnPUPExtract_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 94);
+            this.button1.Location = new System.Drawing.Point(11, 86);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 46);
             this.button1.TabIndex = 1;
@@ -75,7 +100,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 159);
+            this.button2.Location = new System.Drawing.Point(6, 29);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 46);
             this.button2.TabIndex = 2;
@@ -85,37 +110,19 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(13, 227);
+            this.button3.Location = new System.Drawing.Point(6, 21);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 46);
+            this.button3.Size = new System.Drawing.Size(130, 28);
             this.button3.TabIndex = 3;
             this.button3.Text = "Read PKG File";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 16;
-            this.listBox1.Location = new System.Drawing.Point(152, 13);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(370, 148);
-            this.listBox1.TabIndex = 6;
-            // 
-            // listBox2
-            // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 16;
-            this.listBox2.Location = new System.Drawing.Point(152, 167);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(370, 132);
-            this.listBox2.TabIndex = 7;
-            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(119, 305);
+            this.button4.Location = new System.Drawing.Point(0, 89);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(118, 23);
+            this.button4.Size = new System.Drawing.Size(99, 23);
             this.button4.TabIndex = 8;
             this.button4.Text = "Display DDS";
             this.button4.UseVisualStyleBackColor = true;
@@ -123,7 +130,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(13, 292);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 21);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(100, 62);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -132,9 +139,9 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(283, 317);
+            this.button5.Location = new System.Drawing.Point(4, 24);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(118, 23);
+            this.button5.Size = new System.Drawing.Size(89, 23);
             this.button5.TabIndex = 10;
             this.button5.Text = "Dump RCO";
             this.button5.UseVisualStyleBackColor = true;
@@ -142,7 +149,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(407, 317);
+            this.button6.Location = new System.Drawing.Point(6, 23);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(118, 23);
             this.button6.TabIndex = 11;
@@ -152,7 +159,7 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(733, 13);
+            this.button7.Location = new System.Drawing.Point(210, 21);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(146, 23);
             this.button7.TabIndex = 12;
@@ -162,7 +169,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(529, 13);
+            this.textBox1.Location = new System.Drawing.Point(6, 21);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(198, 22);
             this.textBox1.TabIndex = 13;
@@ -171,7 +178,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(529, 54);
+            this.label1.Location = new System.Drawing.Point(6, 62);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 17);
             this.label1.TabIndex = 14;
@@ -179,7 +186,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(733, 42);
+            this.button8.Location = new System.Drawing.Point(210, 50);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(146, 23);
             this.button8.TabIndex = 15;
@@ -189,7 +196,7 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(19, 360);
+            this.button9.Location = new System.Drawing.Point(6, 56);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(218, 23);
             this.button9.TabIndex = 16;
@@ -199,7 +206,7 @@
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(19, 389);
+            this.button10.Location = new System.Drawing.Point(6, 33);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(161, 23);
             this.button10.TabIndex = 20;
@@ -209,7 +216,7 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(283, 360);
+            this.button11.Location = new System.Drawing.Point(6, 85);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(218, 23);
             this.button11.TabIndex = 21;
@@ -219,7 +226,7 @@
             // 
             // button12
             // 
-            this.button12.Location = new System.Drawing.Point(19, 418);
+            this.button12.Location = new System.Drawing.Point(6, 21);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(161, 23);
             this.button12.TabIndex = 22;
@@ -230,7 +237,7 @@
             // lblExtrInfo
             // 
             this.lblExtrInfo.AutoSize = true;
-            this.lblExtrInfo.Location = new System.Drawing.Point(207, 392);
+            this.lblExtrInfo.Location = new System.Drawing.Point(6, 76);
             this.lblExtrInfo.Name = "lblExtrInfo";
             this.lblExtrInfo.Size = new System.Drawing.Size(89, 17);
             this.lblExtrInfo.TabIndex = 23;
@@ -238,17 +245,17 @@
             // 
             // button13
             // 
-            this.button13.Location = new System.Drawing.Point(693, 457);
+            this.button13.Location = new System.Drawing.Point(6, 35);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(161, 23);
             this.button13.TabIndex = 24;
-            this.button13.Text = "Read Rif";
+            this.button13.Text = "Test";
             this.button13.UseVisualStyleBackColor = true;
             this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
             // button14
             // 
-            this.button14.Location = new System.Drawing.Point(19, 447);
+            this.button14.Location = new System.Drawing.Point(6, 50);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(161, 23);
             this.button14.TabIndex = 25;
@@ -258,47 +265,200 @@
             // 
             // button15
             // 
-            this.button15.Location = new System.Drawing.Point(119, 331);
+            this.button15.Location = new System.Drawing.Point(0, 116);
             this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(118, 23);
+            this.button15.Size = new System.Drawing.Size(100, 23);
             this.button15.TabIndex = 26;
             this.button15.Text = "Create DDS";
             this.button15.UseVisualStyleBackColor = true;
             this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnPUPExtract);
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Location = new System.Drawing.Point(2, 13);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(111, 141);
+            this.groupBox1.TabIndex = 27;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "PUP Tools";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Location = new System.Drawing.Point(6, 21);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(148, 80);
+            this.groupBox2.TabIndex = 28;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "PS4 GP4 Projects";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.pictureBox1);
+            this.groupBox3.Controls.Add(this.button4);
+            this.groupBox3.Controls.Add(this.button15);
+            this.groupBox3.Location = new System.Drawing.Point(6, 21);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(105, 148);
+            this.groupBox3.TabIndex = 29;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "DDS Files";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.groupBox7);
+            this.groupBox4.Controls.Add(this.groupBox5);
+            this.groupBox4.Controls.Add(this.groupBox2);
+            this.groupBox4.Location = new System.Drawing.Point(119, 13);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(406, 415);
+            this.groupBox4.TabIndex = 30;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "PKG Tools";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.groupBox6);
+            this.groupBox5.Location = new System.Drawing.Point(12, 115);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(388, 143);
+            this.groupBox5.TabIndex = 29;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Scene Related";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label2);
+            this.groupBox6.Controls.Add(this.button3);
+            this.groupBox6.Controls.Add(this.button9);
+            this.groupBox6.Controls.Add(this.button11);
+            this.groupBox6.Location = new System.Drawing.Point(6, 21);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(376, 112);
+            this.groupBox6.TabIndex = 0;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "PKG\'s";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(143, 32);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(178, 17);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "This method is for LibOrbis";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.textBox1);
+            this.groupBox7.Controls.Add(this.button7);
+            this.groupBox7.Controls.Add(this.label1);
+            this.groupBox7.Controls.Add(this.button8);
+            this.groupBox7.Location = new System.Drawing.Point(12, 274);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(388, 131);
+            this.groupBox7.TabIndex = 30;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Official";
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.groupBox9);
+            this.groupBox8.Controls.Add(this.groupBox3);
+            this.groupBox8.Location = new System.Drawing.Point(2, 160);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(111, 258);
+            this.groupBox8.TabIndex = 31;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Image";
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.button5);
+            this.groupBox9.Location = new System.Drawing.Point(6, 176);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(99, 76);
+            this.groupBox9.TabIndex = 30;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "RCO";
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.button6);
+            this.groupBox10.Location = new System.Drawing.Point(119, 434);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(406, 60);
+            this.groupBox10.TabIndex = 32;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Media";
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.button12);
+            this.groupBox11.Controls.Add(this.button14);
+            this.groupBox11.Controls.Add(this.lblExtrInfo);
+            this.groupBox11.Location = new System.Drawing.Point(532, 13);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(337, 194);
+            this.groupBox11.TabIndex = 33;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Licensing";
+            // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.button10);
+            this.groupBox12.Location = new System.Drawing.Point(532, 226);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(337, 100);
+            this.groupBox12.TabIndex = 34;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "Save Data";
+            // 
+            // groupBox13
+            // 
+            this.groupBox13.Controls.Add(this.button13);
+            this.groupBox13.Location = new System.Drawing.Point(532, 334);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(337, 100);
+            this.groupBox13.TabIndex = 35;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "Multi Function Testing";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 506);
-            this.Controls.Add(this.button15);
-            this.Controls.Add(this.button14);
-            this.Controls.Add(this.button13);
-            this.Controls.Add(this.lblExtrInfo);
-            this.Controls.Add(this.button12);
-            this.Controls.Add(this.button11);
-            this.Controls.Add(this.button10);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.listBox2);
-            this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.btnPUPExtract);
+            this.Controls.Add(this.groupBox13);
+            this.Controls.Add(this.groupBox12);
+            this.Controls.Add(this.groupBox11);
+            this.Controls.Add(this.groupBox10);
+            this.Controls.Add(this.groupBox8);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBox4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
+            this.groupBox12.ResumeLayout(false);
+            this.groupBox13.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -308,8 +468,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button5;
@@ -326,6 +484,20 @@
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.Button button14;
         private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.GroupBox groupBox13;
     }
 }
 
