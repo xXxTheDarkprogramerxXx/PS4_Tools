@@ -4,6 +4,8 @@
 * 
 */
 
+#region << System >>
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +13,14 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
+
+#endregion << System >>
+
+#region << Disc Utils >>
+
 using DiscUtils.Iso9660;
+
+#endregion << Disc Utils >>
 
 #region << VGAudio >>
 using System.Security.Cryptography;
@@ -19,16 +28,35 @@ using System.Net;
 using System.Text.RegularExpressions;
 #endregion << VGAudio >>
 
+#region << Json >>
+
 using Newtonsoft.Json;
-using PS4_Tools.LibOrbis.PKG;
-using PS4_Tools.LibOrbis.Util;
+
+#endregion << Json >>
+
+#region << Graphics >>
+
 using System.Drawing;
 using System.Drawing.Drawing2D;
+
+#endregion << Graphics >>
+
+#region << PS4 Tools >>
+
+using PS4_Tools.LibOrbis.PKG;
+using PS4_Tools.LibOrbis.Util;
 using PS4_Tools.Util;
-using System.Runtime.InteropServices;
+
+#endregion << PS4 Tools >>
+
+
 
 namespace PS4_Tools
 {
+
+    /// <summary>
+    /// Reserved class for some PS4 Tools helpers
+    /// </summary>
     internal class PS4_Tools
     {
         /// <summary>
@@ -121,51 +149,80 @@ namespace PS4_Tools
     public class Media
     {
         /// <summary>
-        /// ATRAC9 class
+        /// ATRAC9 Reserved class
         /// </summary>
         public class Atrac9
         {
-            public static void LoadAt9(string at9file)
+            /// <summary>
+            /// Atract 9 Structure class
+            /// </summary>
+            public class At9Structure
             {
+                public LibAtrac9.Atrac9Config Config { get; set; }
+                public byte[][] AudioData { get; set; }
+                public int SampleCount { get; set; }
+                public int Version { get; set; }
+                public int EncoderDelay { get; set; }
+                public int SuperframeCount { get; set; }
+
+                public bool Looping { get; set; }
+                public int LoopStart { get; set; }
+                public int LoopEnd { get; set; }
+            }
+                
+            /// <summary>
+            /// Allows users to load an at9 for decoding and returns the wav as a byte array
+            /// </summary>
+            /// <param name="at9file">Location of at9 file</param>
+            /// <returns>Byte Array of Wav file</returns>
+            public static byte[] LoadAt9(string at9file)
+            {
+                byte[] array = new byte[1024];
+
+                //we need to crate a builder
+
                 bool readAudioData = true;
                 byte[] configData = new byte[4] { 0xFE, 0x18, 0x28, 0x00 };
-
-                LibAtrac9.Atrac9Config config = new LibAtrac9.Atrac9Config(configData);
-
-                // Initialize the decoder
-                var decoder = new LibAtrac9.Atrac9Decoder();
-                decoder.Initialize(configData);
-
-                // Create a buffer for the output PCM
-                var pcmBuffer = new short[decoder.Config.ChannelCount][];
-                for (int i = 0; i < pcmBuffer.Length; i++)
+                byte[][] atrac9Data;
+                using (Stream stream = new FileStream(at9file, FileMode.Open, FileAccess.Read))
+                using (BinaryReader read = new BinaryReader(stream))
                 {
-                    pcmBuffer[i] = new short[decoder.Config.SuperframeSamples];
+                    At9Reader reader = new At9Reader();
+                    At9Structure structure = reader.ReadFile(stream);
+                    IAudioFormat format = new Atrac9FormatBuilder(structure.AudioData, structure.Config, structure.SampleCount, structure.EncoderDelay)
+                .WithLoop(structure.Looping, structure.LoopStart, structure.LoopEnd)
+                .Build();
+                    //now we have the atrac9 format now we need to play it somehow
+                    AudioData AudioData = new AudioData(format);
+                    MemoryStream SongStream = new MemoryStream(0);
+                    AudioInfo.Containers[FileType.Wave].GetWriter().WriteToStream(AudioData, SongStream, null);
+
+                    #if DEBUG
+
+                    System.IO.File.WriteAllBytes(at9file + ".mp3", SongStream.ToArray());
+
+                    #endif
+
+                    array = SongStream.ToArray();
+
+                    //System.Media.SoundPlayer player = new System.Media.SoundPlayer(SongStream);
+                    //player.Play();
+
                 }
-
-                // Decode each superframe
-                //for (int i = 0; i < atrac9Data.Length; i++)
-                //{
-                //    decoder.Decode(atrac9Data[i], pcmBuffer);
-
-                //    // Use the decoded audio in pcmBuffer however you want
-                //}
-
-                //VGAudio.Containers.At9.At9Reader reader = new VGAudio.Containers.At9.At9Reader();
-                //reader.Read(new System.IO.FileStream(at9file, FileMode.Open, FileAccess.Read));
-
-                //reader.ReadWithConfig(new System.IO.FileStream(at9file, FileMode.Open, FileAccess.Read));
-                //well fuck
+                return array;
             }
 
-            public static byte[] GetWAVFromAt9(string at9file)
-            {
-                //we need to load the at9 into a conatianer
-                return new byte[4];
-            }
+            //public static byte[] GetWAVFromAt9(string at9file)
+            //{
+            //    //we need to load the at9 into a conatianer
+            //    return new byte[4];
+            //}
         }
     }
 
+    /// <summary>
+    /// PS4 Tools Image Reserved class all Image files will be referenced in here
+    /// </summary>
     public class Image
     {
         /// <summary>
@@ -289,6 +346,24 @@ namespace PS4_Tools
                 return returnbmp;
             }
 
+            /// <summary>
+            /// Converts a file location of a bitmap to a ps4 compatible one
+            /// </summary>
+            /// <param name="inputfile">Original Bitmap Location</param>
+            /// <param name="outputfile">Original Bitmap Location</param>
+            /// <returns>PS4 Comptatible Bitmap as Byte[]</returns>
+            public byte[] Create_PS4_Compatible_PNG_As_Bytes(string InputFile)
+            {
+                //read input file
+                Bitmap returnbmp = new Bitmap(InputFile);
+
+                returnbmp = ResizeImage(returnbmp, 512, 512);//converts the image to the correct size
+                returnbmp = ConvertTo24bpp(returnbmp);//converts image to 24bpp
+
+                //reutrn new butmap
+                return returnbmp.ToByteArray(System.Drawing.Imaging.ImageFormat.Png);
+            }
+
             #endregion << Create_PS4_Compatible_PNG >>
         }
 
@@ -298,6 +373,12 @@ namespace PS4_Tools
         public class DDS
         {
             #region << Returns >>
+
+            /// <summary>
+            /// Directly save a PNG from a DDS File
+            /// </summary>
+            /// <param name="DDSFilePath">.dds file</param>
+            /// <param name="savepath">Location of png</param>
             public static void SavePNGFromDDS(string DDSFilePath, string savepath)
             {
                 /*Migrating to .Net3.5 this class might not work right now*/
@@ -306,6 +387,11 @@ namespace PS4_Tools
 
             }
 
+            /// <summary>
+            /// Gets a stream from a DDS
+            /// </summary>
+            /// <param name="DDSFilePath"></param>
+            /// <returns>Stream of PNG from DDS</returns>
             public static Stream GetStreamFromDDS(string DDSFilePath)
             {
                 Stream rtnStream = new MemoryStream();
@@ -317,6 +403,11 @@ namespace PS4_Tools
 
             }
 
+            /// <summary>
+            /// Get a Bitmap from a DDS
+            /// </summary>
+            /// <param name="DDSFilePath"></param>
+            /// <returns>Returns a Bitmap</returns>
             public static Bitmap GetBitmapFromDDS(string DDSFilePath)
             {
                 Stream rtnStream = new MemoryStream();
@@ -324,18 +415,27 @@ namespace PS4_Tools
                 return (Bitmap)image.BitmapImage;
             }
             
-
+            /// <summary>
+            /// Gets a PNG as byte[] from a dds file
+            /// </summary>
+            /// <param name="DDSFilePath"></param>
+            /// <returns></returns>
             public static byte[] GetBytesFromDDS(string DDSFilePath)
             {
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
                 Bitmap temp = image.BitmapImage;
-                return temp.ToByteArray(System.Drawing.Imaging.ImageFormat.Bmp);
+                return temp.ToByteArray(System.Drawing.Imaging.ImageFormat.Png);
             }
 
             #endregion << Returns >>
 
             #region << Creations >>
 
+            /// <summary>
+            /// Still not ready for release
+            /// </summary>
+            /// <param name="Bitmap"></param>
+            /// <param name="SavePath"></param>
             public static void CreateDDSFromBitmap(Bitmap Bitmap, string SavePath)
             {
                 DDSReader.DDSImage img = new DDSReader.DDSImage(Bitmap);
@@ -2520,7 +2620,6 @@ namespace PS4_Tools
 
 
         /*Read RCO To Custom File*/
-
         public static RCOFile ReadRco(string File)
         {
             RCOFile rco = new RCOFile();
@@ -3676,7 +3775,6 @@ namespace PS4_Tools
                 buffer[i] = val;
             }
         }
-
 
         private static void Sha256Hmac(byte[] sha256HmacResult, byte[] enc, int datalen, byte[] sha256hmacKey, int keylen)
         {
@@ -6671,7 +6769,6 @@ namespace PS4_Tools
     
     }
 
-
     public class Tools
     {
         public enum File_Type
@@ -6684,6 +6781,7 @@ namespace PS4_Tools
             PARAM_SFO,
             PLAYGO,
             ATRAC9,
+            UpdateFile,
             Unkown,
         }
 
@@ -6723,7 +6821,10 @@ namespace PS4_Tools
                 {
                     ps4type = File_Type.PLAYGO;
                 }
-
+                if(Utils.CompareBytes(FileHeader , new byte [] { 0x53, 0x4C, 0x42, 0x32, }))//SLB2
+                {
+                    ps4type = File_Type.UpdateFile;
+                }
             }
 
 

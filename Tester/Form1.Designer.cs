@@ -52,10 +52,10 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
@@ -67,9 +67,9 @@
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            this.groupBox7.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox10.SuspendLayout();
@@ -318,6 +318,19 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "PKG Tools";
             // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.textBox1);
+            this.groupBox7.Controls.Add(this.button7);
+            this.groupBox7.Controls.Add(this.label1);
+            this.groupBox7.Controls.Add(this.button8);
+            this.groupBox7.Location = new System.Drawing.Point(12, 274);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(388, 131);
+            this.groupBox7.TabIndex = 30;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Official";
+            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.groupBox6);
@@ -344,24 +357,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(143, 32);
+            this.label2.Location = new System.Drawing.Point(142, 27);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(178, 17);
             this.label2.TabIndex = 4;
             this.label2.Text = "This method is for LibOrbis";
-            // 
-            // groupBox7
-            // 
-            this.groupBox7.Controls.Add(this.textBox1);
-            this.groupBox7.Controls.Add(this.button7);
-            this.groupBox7.Controls.Add(this.label1);
-            this.groupBox7.Controls.Add(this.button8);
-            this.groupBox7.Location = new System.Drawing.Point(12, 274);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(388, 131);
-            this.groupBox7.TabIndex = 30;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Official";
             // 
             // groupBox8
             // 
@@ -446,11 +446,11 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
             this.groupBox8.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.groupBox10.ResumeLayout(false);

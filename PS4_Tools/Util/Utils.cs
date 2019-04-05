@@ -6,6 +6,7 @@ using System.Text;
 using System.Runtime.CompilerServices;
 using Ionic.Zip;
 using System.Drawing.Imaging;
+using System.Linq;
 
 namespace PS4_Tools.Util
 {
@@ -313,6 +314,7 @@ namespace PS4_Tools.Util
             //return reader.ReadUInt16();
         }
 
+
         public static string ReadASCIIString(object stream, int legth)
         {
             byte[] array = new byte[checked(legth - 1 + 1)];
@@ -343,7 +345,37 @@ namespace PS4_Tools.Util
             return Encoding.ASCII.GetString(array);
         }
 
-       public static byte[] ReadByte(object stream, int legth)
+        public static string ReadUTF8String(object stream, int legth)
+        {
+            byte[] array = new byte[checked(legth - 1 + 1)];
+            Type type = null;
+            string memberName = "Read";
+            object[] array2 = new object[]
+            {
+                array,
+                0,
+                array.Length
+            };
+            object[] arguments = array2;
+            string[] argumentNames = null;
+            Type[] typeArguments = null;
+            bool[] array3 = new bool[]
+            {
+                true,
+                false,
+                false
+            };
+            //NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
+            //if (array3[0])
+            //{
+            //    array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
+            //}
+
+            array = ((BinaryReader)stream).ReadBytes(array.Length);
+            return Encoding.UTF8.GetString(array);
+        }
+
+        public static byte[] ReadByte(object stream, int legth)
         {
 
             
@@ -549,6 +581,65 @@ namespace PS4_Tools.Util
             }
 
             return value;
+        }
+
+
+        public static T CreateJaggedArray<T>(params int[] lengths)
+        {
+            return (T)InitializeJaggedArray(typeof(T).GetElementType(), 0, lengths);
+        }
+        private static object InitializeJaggedArray(Type type, int index, int[] lengths)
+        {
+            Array array = Array.CreateInstance(type, lengths[index]);
+
+            Type elementType = type.GetElementType();
+            if (elementType == null) return array;
+
+            for (int i = 0; i < lengths[index]; i++)
+            {
+                array.SetValue(InitializeJaggedArray(elementType, index + 1, lengths), i);
+            }
+
+            return array;
+        }
+
+        [MethodImpl(256)]
+        public static int Clamp(int value, int min, int max)
+        {
+            if (value < min)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+
+        [MethodImpl(256)]
+        public static double Clamp(double value, double min, double max)
+        {
+            if (value < min)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+
+        [MethodImpl(256)]
+        public static short Clamp16(int value)
+        {
+            if (value > short.MaxValue)
+                return short.MaxValue;
+            if (value < short.MinValue)
+                return short.MinValue;
+            return (short)value;
+        }
+
+        public static sbyte Clamp4(int value)
+        {
+            if (value > 7)
+                return 7;
+            if (value < -8)
+                return -8;
+            return (sbyte)value;
         }
     }
 
@@ -828,6 +919,180 @@ namespace PS4_Tools.Util
                 image.Save(ms, format);
                 return ms.ToArray();
             }
+        }
+    }
+
+    public static class HexBinTemp
+    {
+        public static int DivideByRoundUp(this int value, int divisor)
+        {
+            return (value + divisor - 1) / divisor;
+        }
+
+        public static T[][] DeInterleave<T>(this T[] input, int interleaveSize, int outputCount, int outputSize = -1)
+        {
+            if (input.Length % outputCount != 0)
+                throw new ArgumentOutOfRangeException(nameof(outputCount), outputCount,
+                    $"The input array length ({input.Length}) must be divisible by the number of outputs.");
+
+            int inputSize = input.Length / outputCount;
+            if (outputSize == -1)
+                outputSize = inputSize;
+
+            int inBlockCount = inputSize.DivideByRoundUp(interleaveSize);
+            int outBlockCount = outputSize.DivideByRoundUp(interleaveSize);
+            int lastInputInterleaveSize = inputSize - (inBlockCount - 1) * interleaveSize;
+            int lastOutputInterleaveSize = outputSize - (outBlockCount - 1) * interleaveSize;
+            int blocksToCopy = Math.Min(inBlockCount, outBlockCount);
+
+            var outputs = new T[outputCount][];
+            for (int i = 0; i < outputCount; i++)
+            {
+                outputs[i] = new T[outputSize];
+            }
+
+            for (int b = 0; b < blocksToCopy; b++)
+            {
+                int currentInputInterleaveSize = b == inBlockCount - 1 ? lastInputInterleaveSize : interleaveSize;
+                int currentOutputInterleaveSize = b == outBlockCount - 1 ? lastOutputInterleaveSize : interleaveSize;
+                int bytesToCopy = Math.Min(currentInputInterleaveSize, currentOutputInterleaveSize);
+
+                for (int o = 0; o < outputCount; o++)
+                {
+                    Array.Copy(input, interleaveSize * b * outputCount + currentInputInterleaveSize * o, outputs[o],
+                        interleaveSize * b, bytesToCopy);
+                }
+            }
+
+            return outputs;
+        }
+
+        public static byte[][] DeInterleave(this Stream input, int length, int interleaveSize, int outputCount, int outputSize = -1)
+        {
+            if (input.CanSeek)
+            {
+                long remainingLength = input.Length - input.Position;
+                if (remainingLength < length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(length), length,
+                        "Specified length is greater than the number of bytes remaining in the Stream");
+                }
+            }
+
+            if (length % outputCount != 0)
+                throw new ArgumentOutOfRangeException(nameof(outputCount), outputCount,
+                    $"The input length ({length}) must be divisible by the number of outputs.");
+
+            int inputSize = length / outputCount;
+            if (outputSize == -1)
+                outputSize = inputSize;
+
+            int inBlockCount = inputSize.DivideByRoundUp(interleaveSize);
+            int outBlockCount = outputSize.DivideByRoundUp(interleaveSize);
+            int lastInputInterleaveSize = inputSize - (inBlockCount - 1) * interleaveSize;
+            int lastOutputInterleaveSize = outputSize - (outBlockCount - 1) * interleaveSize;
+            int blocksToCopy = Math.Min(inBlockCount, outBlockCount);
+
+            var outputs = new byte[outputCount][];
+            for (int i = 0; i < outputCount; i++)
+            {
+                outputs[i] = new byte[outputSize];
+            }
+
+            for (int b = 0; b < blocksToCopy; b++)
+            {
+                int currentInputInterleaveSize = b == inBlockCount - 1 ? lastInputInterleaveSize : interleaveSize;
+                int currentOutputInterleaveSize = b == outBlockCount - 1 ? lastOutputInterleaveSize : interleaveSize;
+                int bytesToCopy = Math.Min(currentInputInterleaveSize, currentOutputInterleaveSize);
+
+                for (int o = 0; o < outputCount; o++)
+                {
+                    input.Read(outputs[o], interleaveSize * b, bytesToCopy);
+                    if (bytesToCopy < currentInputInterleaveSize)
+                    {
+                        input.Position += currentInputInterleaveSize - bytesToCopy;
+                    }
+                }
+            }
+
+            return outputs;
+        }
+
+        public static short[][] InterleavedByteToShort(this byte[] input, int outputCount)
+        {
+            int itemCount = input.Length / 2 / outputCount;
+            var output = new short[outputCount][];
+            for (int i = 0; i < outputCount; i++)
+            {
+                output[i] = new short[itemCount];
+            }
+
+            for (int i = 0; i < itemCount; i++)
+            {
+                for (int o = 0; o < outputCount; o++)
+                {
+                    int offset = (i * outputCount + o) * 2;
+                    output[o][i] = (short)(input[offset] | (input[offset + 1] << 8));
+                }
+            }
+
+            return output;
+        }
+
+        public static byte[] ShortToInterleavedByte(this short[][] input)
+        {
+            int inputCount = input.Length;
+            int length = input[0].Length;
+            var output = new byte[inputCount * length * 2];
+
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < inputCount; j++)
+                {
+                    int offset = (i * inputCount + j) * 2;
+                    output[offset] = (byte)input[j][i];
+                    output[offset + 1] = (byte)(input[j][i] >> 8);
+                }
+            }
+
+            return output;
+        }
+
+        public static void Interleave(this byte[][] inputs, Stream output, int interleaveSize, int outputSize = -1)
+        {
+            int inputSize = inputs[0].Length;
+            if (outputSize == -1)
+                outputSize = inputSize;
+
+            if (inputs.Any(x => x.Length != inputSize))
+                throw new ArgumentOutOfRangeException(nameof(inputs), "Inputs must be of equal length");
+
+            int inputCount = inputs.Length;
+            int inBlockCount = inputSize.DivideByRoundUp(interleaveSize);
+            int outBlockCount = outputSize.DivideByRoundUp(interleaveSize);
+            int lastInputInterleaveSize = inputSize - (inBlockCount - 1) * interleaveSize;
+            int lastOutputInterleaveSize = outputSize - (outBlockCount - 1) * interleaveSize;
+            int blocksToCopy = Math.Min(inBlockCount, outBlockCount);
+
+            for (int b = 0; b < blocksToCopy; b++)
+            {
+                int currentInputInterleaveSize = b == inBlockCount - 1 ? lastInputInterleaveSize : interleaveSize;
+                int currentOutputInterleaveSize = b == outBlockCount - 1 ? lastOutputInterleaveSize : interleaveSize;
+                int bytesToCopy = Math.Min(currentInputInterleaveSize, currentOutputInterleaveSize);
+
+                for (int i = 0; i < inputCount; i++)
+                {
+                    output.Write(inputs[i], interleaveSize * b, bytesToCopy);
+                    if (bytesToCopy < currentOutputInterleaveSize)
+                    {
+                        output.Position += currentOutputInterleaveSize - bytesToCopy;
+                    }
+                }
+            }
+
+            //Simply setting the position past the end of the stream doesn't expand the stream,
+            //so we do that manually if necessary
+            output.SetLength(Math.Max(outputSize * inputCount, output.Length));
         }
     }
 

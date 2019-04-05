@@ -46,10 +46,10 @@ namespace Tester
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                FolderBrowserDialog folderDlg = new FolderBrowserDialog();
-                folderDlg.ShowNewFolderButton = true;
-                // Show the FolderBrowserDialog.  
-                if (folderDlg.ShowDialog() == DialogResult.OK)
+                //FolderBrowserDialog folderDlg = new FolderBrowserDialog();
+                //folderDlg.ShowNewFolderButton = true;
+                //// Show the FolderBrowserDialog.  
+                //if (folderDlg.ShowDialog() == DialogResult.OK)
                 {
                     //PS4_Tools.PUP pupfunction = new PS4_Tools.PUP();
                     //pupfunction.Unpack_PUP(openFileDialog1.FileName, folderDlg.SelectedPath);
@@ -145,7 +145,7 @@ namespace Tester
         {
 
 
-            PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Users\3deEchelon\Desktop\PS4\AT9\prelude1.at9");
+            var bytes = PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Users\3deEchelon\Desktop\PS4\AT9\ready.at9");
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -245,6 +245,10 @@ namespace Tester
                         break;
                     case PS4_Tools.Tools.File_Type.PS4_PKG:
                         var pkg = PS4_Tools.PKG.SceneRelated.Read_PKG(openFileDialog1.FileName);
+                        break;
+                    case PS4_Tools.Tools.File_Type.UpdateFile:
+                        var update = new PS4_Tools.PUP();
+                        var tempfile = update.Read_Pup(openFileDialog1.FileName);
                         break;
                 }
             }
