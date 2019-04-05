@@ -156,4 +156,5 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 * [cfwprph](https://github.com/cfwprpht) - His help and Vita Rco extractor tool
 * [IDC](https://github.com/idc) - His PS4 Pup Extractor and other work he has done
 * [Leecherman](https://sites.google.com/site/theleecherman/) - His tools are always a great reference for me and does some great work
+* [Thealexbarney](https://github.com/Thealexbarney) - His great research done on atrac9 files and decoding them 
 
