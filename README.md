@@ -17,9 +17,12 @@ The class strucutre might change in future releases
     │   ├── AppCommonPath()                       /*Returns Working Directory For Tools*/
     │   ├── DeleteDirectory()                     /*Recursive Deletes Directory*/
     ├── SELF                                      /* Reserved class for SELF/ELF Handeling*/
+    │   ├──Self_Header                            /*Self Header Class*/ 
     ├── Media                                     /* PS4 Media Class*/
     │   ├── Atrac9                                /*Atrac9 Class*/
-    │   ├──   ├── LoadAt9                         /*Loads Atrac9 Method still in the works*/
+    │   ├──   ├── At9Structure                    /*Atract 9 Structure class*/
+    │   ├──   ├── LoadAt9()                       /*Allows users to load an at9 for decoding and returns the wav as a byte array*/
+    │   ├──   ├── Load_At9()                      /*Allows user to load an at9 to At9Structure*/
     ├── Image                                     /* PS4 Image Class*/
     |   ├── PNG                                   /*PNG Class*/
     │   ├──   ├── Create_PS4_Compatible_PNG       /*Creates a Complatible PS4 PNG*/
@@ -27,13 +30,26 @@ The class strucutre might change in future releases
     │   ├──   ├── SavePNGFromDDS                  /*Saves a PNG from a DDS File*/
     │   ├──   ├── GetStreamFromDDS                /*Gets a Stream from a DDS*/   
     │   ├──   ├── GetBitmapFromDDS                /*Gets a Bitmap from a DDS*/
+    │   ├──   ├── GetBytesFromDDS                 /*Gets a byte[] from a DDS*/
+    │   ├──   ├── CreateDDSFromBitmap             /*Creates a DDS from a Bitmap*/
     │   └── GIMImages                             /*GIM Image Class*/
     ├── RCO                                       /* PS4 RCO Class*/
     │   ├── DumpRco                               /*Dumps a Rco File*/
+    │   ├── ReadRco                               /*Reads a RCO file into a RCOFile Container*/
     ├── SaveData                                  /* PS4 SaveData Reserved Class*/
+    │   ├── LoadSaveData                          /*Loads a savedata pfs using a SealedKey*/
+    ├── Trophy_File                               /* PS4 Trophy Files Reserved Class*/
+    │   ├── Trophy_File                           /*Reads a tropy file from a location on disk*/
+    │   ├── Load                                  /*Reads a tropy file from a byte[]*/
+    │   ├── ExtractFileToMemory                   /*Extracts a tropy file item to a byte[]*/
+    ├── Licensing                                 /* PS4 Licensing Reserved Class*/   
+    │   ├── LoadSealedKey                         /*Loads a SealedKey file to Sealedkey Structure*/
+    │   ├── ReadRif                               /*Loads a rif file to Rif Structure*/
+    │   ├── CreateNewRif                          /*Creates a new Rif File*/    
+    │   ├── Read_Act                              /*Reads an act.dat file to Act_Dat structure*/
     ├── PKG                                       /* PS4 PKG Handling Class*/ 
     │   ├── Official                              /*Some Methods for Official PKG Items*/
-    │   ├──   ├── ReadAllUnprotectedData          /*Deprecated*/
+    │   ├──   ├── ReadAllUnprotectedData          /*Deprecated no longer included inside PS4 Tools*/
     │   ├──   ├── StoreItems                      /*Store Items Object Class (Placeholder)*/
     │   ├──   ├── CheckForUpdate                  /*Returns a Update_Structure Type*/
     │   ├──   ├── Get_All_Store_Items             /*Returns a List<StoreItems> With Download Links and some other infrmation*/
@@ -41,7 +57,7 @@ The class strucutre might change in future releases
     |   ├──   ├── GP4                             /*GP4 File Class*/
     |   ├──   ├──   ├── ReadGP4                   /*Reads a GP4 File Into a Custom Object*/    
     |   ├──   ├──   ├── SaveGP4                   /*Saves a GP4 File From a Custom Object*/
-    |   ├──   ├── Create_FKPG                     /*Creates a FPKG (addon file from store items for a spesific item*/
+    |   ├──   ├── Create_DLC_FKPG                 /*Creates a PS4 Fake DLC Package*/
     |   ├──   ├── IDS                             /*IDS Reserved Class*/
     |   ├──   ├── PARAM_SFO                       /*Param.SFO Reserved Class*/
     |   ├──   ├──   ├── Get_Param_SFO             /*Reads a Param SFO into a Param.sfo structure*/
@@ -57,6 +73,9 @@ The class strucutre might change in future releases
     │   ├── PSP_HD                                /*Class For Building PSP HD Items*/
     │   ├── PUP                                   /*Class For PUP Tools*/
     |   ├──   ├── Unpack_PUP                      /*Unpacks a PUP Files*/
+    |   ├──   ├── Read_Pup                        /*Reads a PUP Files to a PlaystationUpdateFile Holder */
+    ├── Tools                                     /* PS4 Tools Tools Class*/ 
+    │   ├── Get_PS4_File_Type                     /*Gets the ps4 file type from any file supplied to it returns File_Type Enum*/
     └── (More to come)
     
 ### Using PS4_Tools
@@ -93,7 +112,20 @@ Please see the testers form to see how some of the classes work if not documente
 var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.dds");
             pictureBox1.Image = item;
 ```
-
+#### Creating a dds file (Still in development)
+```c#
+            Bitmap btimap = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\pic0.png");
+            PS4_Tools.Image.DDS.CreateDDSFromBitmap(btimap, @"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
+           
+            //test if dds is corectly saved
+            var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
+            pictureBox1.Image = item;
+```
+#### Reading a PS4Update File
+```c#
+                    PS4_Tools.PUP pupfile = new PS4_Tools.PUP();
+                    PS4_Tools.PUP.PlaystationUpdateFile pup = pupfile.Read_Pup(openFileDialog1.FileName);
+```
 #### Dumping a RCO File
 ```c#
  PS4_Tools.RCO.DumpRco(@"C:\Users\3deEchelon\Desktop\PS4\RCO\Sce.Cdlg.GameCustomData.rco");
@@ -101,7 +133,25 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 
 #### Playing a at9 file 
 ```c#
- PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Users\3deEchelon\Desktop\PS4\AT9\prelude1.at9");
+            System.Media.SoundPlayer player;
+            bool Playing = false;
+
+            if (Playing == false)
+            {
+                var bytes = PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Users\3deEchelon\Desktop\PS4\AT9\prelude1.at9");
+                player = new System.Media.SoundPlayer(new MemoryStream(bytes));
+                player.Play();
+
+                button6.Text = "Stop Playing";
+                Playing = true;
+            }
+            else
+            {
+                player.Stop();
+
+                button6.Text = "Play At9";
+                Playing = false;
+            }
 ```
 
 #### Get Game Update Information 
