@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+  <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
+    <item name="android:statusBarColor">@android:color/transparent</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:windowTranslucentStatus">true</item>
+  </style>
+
+  <style name="Theme.DesignDemo2" parent="Base.Theme.DesignDemo">
+    <item name="android:statusBarColor">@android:color/transparent</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:windowTranslucentStatus">true</item>
+    <item name="colorPrimary">#673AB7</item>
+    <item name="colorPrimaryDark">@android:color/transparent</item>
+    <item name="colorAccent">#FF4081</item>
+  </style>
+</resources>

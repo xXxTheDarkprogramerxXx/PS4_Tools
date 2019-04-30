@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd1" filename="WMSService.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd9" filename="WMSService0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd8" filename="WMSService1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://3deechelon/WMS/WMSService.svc?disco" filename="WMSService.disco" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd2" filename="WMSService2.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd3" filename="WMSService3.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd0" filename="WMSService4.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://3deechelon/WMS/WMSService.svc?wsdl" filename="WMSService.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd6" filename="WMSService5.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd7" filename="WMSService6.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd4" filename="WMSService7.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://3deechelon/WMS/WMSService.svc?xsd=xsd5" filename="WMSService8.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>

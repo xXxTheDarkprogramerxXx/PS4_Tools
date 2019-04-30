@@ -1,0 +1,17 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"><!--<PreferenceCategory
+          android:title="Account Settings">
+    --><!--<CheckBoxPreference
+       android:title="Allow Time Blocking"
+       android:key="blockingallowed"
+       android:summary="Enable or Disable application locking during key times"
+        />--><!--
+    <Preference android:key="simple_key"
+        android:title="Payment Settings">
+    
+      <intent android:action="android.intent.action.VIEW"
+        android:targetPackage="com.jem.studylocker"
+        android:targetClass="com.jem.studylocker.config.actDeviceList"
+        android:data="RadioReceiverDevice"></intent>
+      
+  </Preference>
+  </PreferenceCategory>--><PreferenceCategory android:title="WMS Service URL"><EditTextPreference android:title="URL" android:key="WMSUrl" android:summary="WMS url instance" /></PreferenceCategory></PreferenceScreen>

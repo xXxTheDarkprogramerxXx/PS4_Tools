@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Paths>
+  <AdditionalAndroidResourcePaths>
+    <AdditionalAndroidResourcePath>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.Design\23.2.1.0\embedded</AdditionalAndroidResourcePath>
+    <AdditionalAndroidResourcePath>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.v4\23.2.1.0\embedded</AdditionalAndroidResourcePath>
+    <AdditionalAndroidResourcePath>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.v7.AppCompat\23.2.1.0\embedded</AdditionalAndroidResourcePath>
+    <AdditionalAndroidResourcePath>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.v7.CardView\24.2.1\embedded</AdditionalAndroidResourcePath>
+    <AdditionalAndroidResourcePath>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.v7.RecyclerView\23.2.1.0\embedded</AdditionalAndroidResourcePath>
+  </AdditionalAndroidResourcePaths>
+  <AdditionalJavaLibraryReferences>
+    <AdditionalJavaLibraryReference>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.Design\23.2.1.0\embedded\classes.jar</AdditionalJavaLibraryReference>
+    <AdditionalJavaLibraryReference>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.v4\23.2.1.0\embedded\classes.jar</AdditionalJavaLibraryReference>
+    <AdditionalJavaLibraryReference>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.v4\23.2.1.0\embedded\libs\internal_impl-23.2.1.jar</AdditionalJavaLibraryReference>
+    <AdditionalJavaLibraryReference>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.v7.AppCompat\23.2.1.0\embedded\classes.jar</AdditionalJavaLibraryReference>
+    <AdditionalJavaLibraryReference>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.v7.CardView\24.2.1\embedded\classes.jar</AdditionalJavaLibraryReference>
+    <AdditionalJavaLibraryReference>C:\Users\3deEchelon\AppData\Local\Xamarin\Xamarin.Android.Support.v7.RecyclerView\23.2.1.0\embedded\classes.jar</AdditionalJavaLibraryReference>
+  </AdditionalJavaLibraryReferences>
+  <AdditionalNativeLibraryReferences />
+</Paths>

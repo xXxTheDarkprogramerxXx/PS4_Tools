@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"><!--<item android:id="@+id/action_search"
+          android:title="Search"
+          android:icon="@android:drawable/ic_menu_search"
+          app:showAsAction="always|collapseActionView"
+          app:actionViewClass="android.widget.SearchView" />
+
+  <item android:id="@+id/nav_messages"
+       app:actionLayout="@layout/custom_action_item_layout"
+       app:showAsAction="always"
+       android:title="Notifications"
+       android:icon="@drawable/Comments48"/>--><item android:id="@+id/nav_camera" app:showAsAction="always" android:title="Camera" android:icon="@drawable/if_camera_118719" /><item android:id="@+id/action_settings" android:title="@string/menu_settings" app:showAsAction="never" /></menu>

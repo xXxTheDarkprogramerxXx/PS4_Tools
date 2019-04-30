@@ -1,0 +1,325 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SignaturePad</name>
+    </assembly>
+    <members>
+        <member name="M:Xamarin.Controls.InkPresenter.UpdateBounds(CoreGraphics.CGPoint)">
+            <summary>
+            Update the bounds for the rectangle to be redrawn if necessary for the given point.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.InkPresenter.UpdateBounds(System.Single,System.Single)">
+            <summary>
+            Update the bounds for the rectangle to be redrawn if necessary for the given point.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.InkPresenter.ResetBounds(CoreGraphics.CGPoint)">
+            <summary>
+            Set the bounds for the rectangle that will need to be redrawn to show the drawn path.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.InkPresenter.ResetBounds(System.Single,System.Single)">
+            <summary>
+            Set the bounds for the rectangle that will need to be redrawn to show the drawn path.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified size.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified scale.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(UIKit.UIColor,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(UIKit.UIColor,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified size with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(UIKit.UIColor,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified scale with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(UIKit.UIColor,UIKit.UIColor,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(UIKit.UIColor,UIKit.UIColor,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified size with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(UIKit.UIColor,UIKit.UIColor,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified scale with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImage(Xamarin.Controls.ImageConstructionSettings)">
+            <summary>
+            Create an image of the currently drawn signature using the specified settings.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature at the specified size.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature at the specified scale.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature at the specified size with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature at the specified scale with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,UIKit.UIColor,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,UIKit.UIColor,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature at the specified size with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,UIKit.UIColor,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature at the specified scale with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadCanvasView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,Xamarin.Controls.ImageConstructionSettings)">
+            <summary>
+            Create an encoded image stream of the currently drawn signature using the specified settings.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Xamarin.Controls.SignaturePadCanvasView.LoadPoints(CoreGraphics.CGPoint[])" -->
+        <member name="P:Xamarin.Controls.SignaturePadView.SignatureLine">
+            <summary>
+            Gets the horizontal line that goes in the lower part of the pad.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.Caption">
+            <summary>
+            The caption displayed under the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.SignaturePrompt">
+            <summary>
+            The prompt displayed at the beginning of the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.ClearLabel">
+            <summary>
+            Gets the label that clears the pad when clicked.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.BackgroundImageView">
+            <summary>
+             Gets the image view that may be used as a watermark or as a texture
+             for the signature pad.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.SignatureLineColor">
+            <summary>
+            Gets or sets the color of the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.SignatureLineWidth">
+            <summary>
+            Gets or sets the width of the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.SignatureLineSpacing">
+            <summary>
+            Gets or sets the spacing between the signature line and the caption and prompt.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.CaptionText">
+            <summary>
+            Gets or sets the text for the caption displayed under the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.CaptionFontSize">
+            <summary>
+            Gets or sets the font size text for the caption displayed under the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.CaptionTextColor">
+            <summary>
+            Gets or sets the text color for the caption displayed under the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.SignaturePromptText">
+            <summary>
+            Gets or sets the text for the prompt displayed at the beginning of the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.SignaturePromptFontSize">
+            <summary>
+            Gets or sets the font size the prompt displayed at the beginning of the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.SignaturePromptTextColor">
+            <summary>
+            Gets or sets the text color for the prompt displayed at the beginning of the signature line.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.ClearLabelText">
+            <summary>
+            Gets or sets the text for the label that clears the pad when clicked.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.ClearLabelFontSize">
+            <summary>
+            Gets or sets the font size the label that clears the pad when clicked.
+            </summary>
+        </member>
+        <member name="P:Xamarin.Controls.SignaturePadView.ClearLabelTextColor">
+            <summary>
+            Gets or sets the text color for the label that clears the pad when clicked.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified size.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified scale.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(UIKit.UIColor,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(UIKit.UIColor,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified size with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(UIKit.UIColor,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified scale with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(UIKit.UIColor,UIKit.UIColor,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(UIKit.UIColor,UIKit.UIColor,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified size with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(UIKit.UIColor,UIKit.UIColor,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an image of the currently drawn signature at the specified scale with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImage(Xamarin.Controls.ImageConstructionSettings)">
+            <summary>
+            Create an image of the currently drawn signature using the specified settings.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image of the currently drawn signature.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image of the currently drawn signature at the specified size.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image of the currently drawn signature at the specified scale.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image of the currently drawn signature with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image of the currently drawn signature at the specified size with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image of the currently drawn signature at the specified scale with the specified stroke color.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,UIKit.UIColor,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image of the currently drawn signature with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,UIKit.UIColor,CoreGraphics.CGSize,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image of the currently drawn signature at the specified size with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,UIKit.UIColor,UIKit.UIColor,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Create an encoded image of the currently drawn signature at the specified scale with the specified stroke and background colors.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.SignaturePadView.GetImageStreamAsync(Xamarin.Controls.SignatureImageFormat,Xamarin.Controls.ImageConstructionSettings)">
+            <summary>
+            Create an encoded image of the currently drawn signature using the specified settings.
+            </summary>
+        </member>
+        <member name="M:Xamarin.Controls.PathSmoothing.SmoothedPathWithGranularity(Xamarin.Controls.InkStroke,System.Int32)">
+            <summary>
+            Obtain a smoothed path with the specified granularity from the current path using Catmull-Rom spline.
+            Also outputs a List of the points corresponding to the smoothed path.
+            </summary>
+            <remarks>
+            Implemented using a modified version of the code in the solution at 
+            http://stackoverflow.com/questions/8702696/drawing-smooth-curves-methods-needed
+            </remarks>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/WMS.CommonObjects.Syspro" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/WMS.CommonObjects.Syspro" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfInvInspectObjects">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InvInspectObjects" nillable="true" type="tns:InvInspectObjects" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfInvInspectObjects" nillable="true" type="tns:ArrayOfInvInspectObjects" />
+  <xs:complexType name="InvInspectObjects">
+    <xs:sequence>
+      <xs:element name="_x003C_Bin_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_Certificate_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_Company_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_ConvFactOrdUom_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_ConvFactPrcUom_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_CountCompleted_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_DeliveryDate_x003E_k__BackingField" type="xs:dateTime" />
+      <xs:element name="_x003C_DiscHPct1_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_DiscHPct2_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_DiscHPct3_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_DiscLPct1_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_DiscLPct2_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_DiscLPct3_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_DiscLValFlag_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_DiscLValue_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_DocumentPrinted_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_ExpiryDate_x003E_k__BackingField" type="xs:dateTime" />
+      <xs:element name="_x003C_GlCode_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_GrnOnHold_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_GrnReceiptDate_x003E_k__BackingField" type="xs:dateTime" />
+      <xs:element name="_x003C_Grn_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_InspNarration_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_InspectCompleted_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_Job_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_LatestDueDate_x003E_k__BackingField" type="xs:dateTime" />
+      <xs:element name="_x003C_LctFlag_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_Lot_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_NextLine_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_OrdFactor_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_OrderUom_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_OrigDueDate_x003E_k__BackingField" type="xs:dateTime" />
+      <xs:element name="_x003C_OrigOrderQty_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_PoCurrency_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_PoDateEntered_x003E_k__BackingField" type="xs:dateTime" />
+      <xs:element name="_x003C_PoDueDate_x003E_k__BackingField" type="xs:dateTime" />
+      <xs:element name="_x003C_PoPriceFor_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_PoPrice_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_PoTaxCode_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_PoTaxStatus_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_PrcFactor_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_PriceUom_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_PurchaseOrderLin_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_PurchaseOrder_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_QtyAccepted_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_QtyAdvised_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_QtyCounted_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_QtyInspected_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_QtyOffSite_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_QtyRejected_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_QtyScrapped_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_Release_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_StockCode_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_SupDelNote_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_SupNationality_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_Supplier_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_TotalReceiptQty_x003E_k__BackingField" type="xs:decimal" />
+      <xs:element name="_x003C_TraceableType_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_Version_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_Warehouse_x003E_k__BackingField" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvInspectObjects" nillable="true" type="tns:InvInspectObjects" />
+  <xs:complexType name="WipMaster">
+    <xs:sequence>
+      <xs:element name="_actCompleteDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_addLabPct" type="xs:decimal" />
+      <xs:element name="_addMatPct" type="xs:decimal" />
+      <xs:element name="_allocationLine" nillable="true" type="xs:string" />
+      <xs:element name="_capexCode" nillable="true" type="xs:string" />
+      <xs:element name="_capexLine" type="xs:decimal" />
+      <xs:element name="_coProductCostMet" nillable="true" type="xs:string" />
+      <xs:element name="_coProductCostVal" nillable="true" type="xs:string" />
+      <xs:element name="_coProductType" nillable="true" type="xs:string" />
+      <xs:element name="_complete" nillable="true" type="xs:string" />
+      <xs:element name="_confirmedFlag" nillable="true" type="xs:string" />
+      <xs:element name="_convFactUom" type="xs:decimal" />
+      <xs:element name="_convMulDiv" nillable="true" type="xs:string" />
+      <xs:element name="_customer" nillable="true" type="xs:string" />
+      <xs:element name="_customerName" nillable="true" type="xs:string" />
+      <xs:element name="_dateCalcMethod" nillable="true" type="xs:string" />
+      <xs:element name="_dateJobLstUpd" nillable="true" type="xs:dateTime" />
+      <xs:element name="_decimals" type="xs:decimal" />
+      <xs:element name="_estSourceNum" nillable="true" type="xs:string" />
+      <xs:element name="_estTrailLoad" nillable="true" type="xs:string" />
+      <xs:element name="_expLabCurrent" type="xs:decimal" />
+      <xs:element name="_expLabour" type="xs:decimal" />
+      <xs:element name="_expMatCurrent" type="xs:decimal" />
+      <xs:element name="_expMaterial" type="xs:decimal" />
+      <xs:element name="_grossFlg" nillable="true" type="xs:string" />
+      <xs:element name="_grossQty" type="xs:decimal" />
+      <xs:element name="_grossQtyEnt" type="xs:decimal" />
+      <xs:element name="_hierarchyFlag" nillable="true" type="xs:string" />
+      <xs:element name="_hierarchyJob" nillable="true" type="xs:string" />
+      <xs:element name="_highestOpPosted" type="xs:decimal" />
+      <xs:element name="_holdFlag" nillable="true" type="xs:string" />
+      <xs:element name="_hrsBookToDate1" type="xs:decimal" />
+      <xs:element name="_hrsBookToDate2" type="xs:decimal" />
+      <xs:element name="_hrsBookToDate3" type="xs:decimal" />
+      <xs:element name="_job" nillable="true" type="xs:string" />
+      <xs:element name="_jobClassification" nillable="true" type="xs:string" />
+      <xs:element name="_jobCreatedStruc" nillable="true" type="xs:string" />
+      <xs:element name="_jobDeliveryDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_jobDescription" nillable="true" type="xs:string" />
+      <xs:element name="_jobStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_jobTenderDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_jobType" nillable="true" type="xs:string" />
+      <xs:element name="_labCostToDate1" type="xs:decimal" />
+      <xs:element name="_labCostToDate2" type="xs:decimal" />
+      <xs:element name="_labCostToDate3" type="xs:decimal" />
+      <xs:element name="_labValueIssues1" type="xs:decimal" />
+      <xs:element name="_labValueIssues2" type="xs:decimal" />
+      <xs:element name="_labValueIssues3" type="xs:decimal" />
+      <xs:element name="_labourBilled" type="xs:decimal" />
+      <xs:element name="_lstOrderCreated" nillable="true" type="xs:string" />
+      <xs:element name="_masterJob" nillable="true" type="xs:string" />
+      <xs:element name="_matCostToDate1" type="xs:decimal" />
+      <xs:element name="_matCostToDate2" type="xs:decimal" />
+      <xs:element name="_matCostToDate3" type="xs:decimal" />
+      <xs:element name="_matValueIssues1" type="xs:decimal" />
+      <xs:element name="_matValueIssues2" type="xs:decimal" />
+      <xs:element name="_matValueIssues3" type="xs:decimal" />
+      <xs:element name="_materialBilled" type="xs:decimal" />
+      <xs:element name="_mrpFromJob" nillable="true" type="xs:string" />
+      <xs:element name="_mrpToJob" nillable="true" type="xs:string" />
+      <xs:element name="_narrationNum" type="xs:decimal" />
+      <xs:element name="_nextDetailLine" type="xs:decimal" />
+      <xs:element name="_nextLineHier" type="xs:decimal" />
+      <xs:element name="_nextOpForAll" type="xs:decimal" />
+      <xs:element name="_notionalPart" nillable="true" type="xs:string" />
+      <xs:element name="_nxtLinePartBook" type="xs:decimal" />
+      <xs:element name="_ordEntSource" nillable="true" type="xs:string" />
+      <xs:element name="_origDueDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_pctCompleteFlag" type="xs:decimal" />
+      <xs:element name="_priority" type="xs:decimal" />
+      <xs:element name="_profitPct" type="xs:decimal" />
+      <xs:element name="_prtFactDoc1" nillable="true" type="xs:string" />
+      <xs:element name="_prtFactDoc2" nillable="true" type="xs:string" />
+      <xs:element name="_prtFactDoc3" nillable="true" type="xs:string" />
+      <xs:element name="_prtFactDoc4" nillable="true" type="xs:string" />
+      <xs:element name="_purgeJob" nillable="true" type="xs:string" />
+      <xs:element name="_qtyManufactured" type="xs:decimal" />
+      <xs:element name="_qtyManufacturedEnt" type="xs:decimal" />
+      <xs:element name="_qtyToMake" type="xs:decimal" />
+      <xs:element name="_qtyToMakeEnt" type="xs:decimal" />
+      <xs:element name="_release" nillable="true" type="xs:string" />
+      <xs:element name="_reqPlnFlag" nillable="true" type="xs:string" />
+      <xs:element name="_reservedLotSerFlag" nillable="true" type="xs:string" />
+      <xs:element name="_route" nillable="true" type="xs:string" />
+      <xs:element name="_salesOrder" nillable="true" type="xs:string" />
+      <xs:element name="_salesOrderLine" type="xs:decimal" />
+      <xs:element name="_schEndDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_schEndTime" type="xs:decimal" />
+      <xs:element name="_schStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_schStartTime" type="xs:decimal" />
+      <xs:element name="_scheduleFlag" nillable="true" type="xs:string" />
+      <xs:element name="_sellingPrice" type="xs:decimal" />
+      <xs:element name="_seqCheckReq" nillable="true" type="xs:string" />
+      <xs:element name="_source" nillable="true" type="xs:string" />
+      <xs:element name="_stockCode" nillable="true" type="xs:string" />
+      <xs:element name="_stockDescription" nillable="true" type="xs:string" />
+      <xs:element name="_timeJobLstUpd" type="xs:decimal" />
+      <xs:element name="_timeStamp" nillable="true" type="xs:base64Binary" />
+      <xs:element name="_totQtyScrappedEnt" type="xs:decimal" />
+      <xs:element name="_totalQtyScrapped" type="xs:decimal" />
+      <xs:element name="_traceableType" nillable="true" type="xs:string" />
+      <xs:element name="_uomFlag" nillable="true" type="xs:string" />
+      <xs:element name="_version" nillable="true" type="xs:string" />
+      <xs:element name="_warehouse" nillable="true" type="xs:string" />
+      <xs:element name="_wipCtlGlCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="WipMaster" nillable="true" type="tns:WipMaster" />
+  <xs:complexType name="ArrayOfLotDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LotDetail" nillable="true" type="tns:LotDetail" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLotDetail" nillable="true" type="tns:ArrayOfLotDetail" />
+  <xs:complexType name="LotDetail">
+    <xs:sequence>
+      <xs:element name="_archiveFilename" nillable="true" type="xs:string" />
+      <xs:element name="_bin" nillable="true" type="xs:string" />
+      <xs:element name="_creationDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_drawOfficeNum" nillable="true" type="xs:string" />
+      <xs:element name="_eccDummy" nillable="true" type="xs:string" />
+      <xs:element name="_expiryDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_internalExpiryDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_internalShelfLife" type="xs:decimal" />
+      <xs:element name="_lastTrnDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_lot" nillable="true" type="xs:string" />
+      <xs:element name="_lotHoldFlag" nillable="true" type="xs:string" />
+      <xs:element name="_nextTrnLine" type="xs:decimal" />
+      <xs:element name="_note" nillable="true" type="xs:string" />
+      <xs:element name="_origQtyReceived" type="xs:decimal" />
+      <xs:element name="_productShelfLife" type="xs:decimal" />
+      <xs:element name="_qtyAwaitingCredit" type="xs:decimal" />
+      <xs:element name="_qtyInTransit" type="xs:decimal" />
+      <xs:element name="_qtyOnHand" type="xs:decimal" />
+      <xs:element name="_qtyReserved" type="xs:decimal" />
+      <xs:element name="_qtyToShip" type="xs:decimal" />
+      <xs:element name="_release" nillable="true" type="xs:string" />
+      <xs:element name="_sellByDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_stockCode" nillable="true" type="xs:string" />
+      <xs:element name="_supplierLot" nillable="true" type="xs:string" />
+      <xs:element name="_timeStamp" nillable="true" type="xs:base64Binary" />
+      <xs:element name="_useByDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="_version" nillable="true" type="xs:string" />
+      <xs:element name="_warehouse" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LotDetail" nillable="true" type="tns:LotDetail" />
+  <xs:complexType name="ArrayOfWipJobAllMat">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="WipJobAllMat" nillable="true" type="tns:WipJobAllMat" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfWipJobAllMat" nillable="true" type="tns:ArrayOfWipJobAllMat" />
+  <xs:complexType name="WipJobAllMat">
+    <xs:sequence>
+      <xs:element name="_allocCompleted" nillable="true" type="xs:string" />
+      <xs:element name="_applyCostUom" nillable="true" type="xs:string" />
+      <xs:element name="_assemblyPlace" nillable="true" type="xs:string" />
+      <xs:element name="_autoNarrCode" type="xs:decimal" />
+      <xs:element name="_bin" nillable="true" type="xs:string" />
+      <xs:element name="_bulkIssueItem" nillable="true" type="xs:string" />
+      <xs:element name="_coProductCostVal" nillable="true" type="xs:string" />
+      <xs:element name="_completedJobFlag" nillable="true" type="xs:string" />
+      <xs:element name="_componentType" nillable="true" type="xs:string" />
+      <xs:element name="_convFactUom" type="xs:decimal" />
+      <xs:element name="_convMulDiv" nillable="true" type="xs:string" />
+      <xs:element name="_costUom" nillable="true" type="xs:string" />
+      <xs:element name="_decimals" type="xs:decimal" />
+      <xs:element name="_dockToStock" type="xs:decimal" />
+      <xs:element name="_eccConsumption" nillable="true" type="xs:string" />
+      <xs:element name="_fixedQtyPer" type="xs:decimal" />
+      <xs:element name="_fixedQtyPerEnt" type="xs:decimal" />
+      <xs:element name="_fixedQtyPerFlag" nillable="true" type="xs:string" />
+      <xs:element name="_hierarchyJob1" nillable="true" type="xs:string" />
+      <xs:element name="_hierarchyJob2" nillable="true" type="xs:string" />
+      <xs:element name="_hierarchyJob3" nillable="true" type="xs:string" />
+      <xs:element name="_hierarchyJob4" nillable="true" type="xs:string" />
+      <xs:element name="_hierarchyJob5" nillable="true" type="xs:string" />
+      <xs:element name="_inclScrapOnDoc" nillable="true" type="xs:string" />
+      <xs:element name="_itemNumber" nillable="true" type="xs:string" />
+      <xs:element name="_job" nillable="true" type="xs:string" />
+      <xs:element name="_kitIssueItem" nillable="true" type="xs:string" />
+      <xs:element name="_line" nillable="true" type="xs:string" />
+      <xs:element name="_lineStatus" nillable="true" type="xs:string" />
+      <xs:element name="_netUnitQtyReqd" type="xs:decimal" />
+      <xs:element name="_netUnitQtyReqdEnt" type="xs:decimal" />
+      <xs:element name="_nonConformFlag" nillable="true" type="xs:string" />
+      <xs:element name="_opOffsetFlag" nillable="true" type="xs:string" />
+      <xs:element name="_operationOffset" type="xs:decimal" />
+      <xs:element name="_phantomParent" nillable="true" type="xs:string" />
+      <xs:element name="_qtyBilled" type="xs:decimal" />
+      <xs:element name="_qtyBilledEnt" type="xs:decimal" />
+      <xs:element name="_qtyIssued" type="xs:decimal" />
+      <xs:element name="_qtyIssuedEnt" type="xs:decimal" />
+      <xs:element name="_qtyOutstanding" type="xs:decimal" />
+      <xs:element name="_qtyOutstandingEnt" type="xs:decimal" />
+      <xs:element name="_qtyReserved" type="xs:decimal" />
+      <xs:element name="_qtyReservedEnt" type="xs:decimal" />
+      <xs:element name="_qtyToIssue" type="xs:decimal" />
+      <xs:element name="_qtyToIssueEnt" type="xs:decimal" />
+      <xs:element name="_qtyTotRequired" type="xs:decimal" />
+      <xs:element name="_qtyTotRequiredEnt" type="xs:decimal" />
+      <xs:element name="_refDesignator" nillable="true" type="xs:string" />
+      <xs:element name="_release" nillable="true" type="xs:string" />
+      <xs:element name="_reservedLotQty" type="xs:decimal" />
+      <xs:element name="_reservedLotSerFlag" nillable="true" type="xs:string" />
+      <xs:element name="_reservedSerQty" type="xs:decimal" />
+      <xs:element name="_rollUpCostFlag" nillable="true" type="xs:string" />
+      <xs:element name="_salesOrderInitLine" type="xs:decimal" />
+      <xs:element name="_scrapPercentage" type="xs:decimal" />
+      <xs:element name="_scrapQuantity" type="xs:decimal" />
+      <xs:element name="_scrapQuantityEnt" type="xs:decimal" />
+      <xs:element name="_sequenceNum" nillable="true" type="xs:string" />
+      <xs:element name="_stockCode" nillable="true" type="xs:string" />
+      <xs:element name="_stockDescription" nillable="true" type="xs:string" />
+      <xs:element name="_subJob" nillable="true" type="xs:string" />
+      <xs:element name="_tempTotalOutstandingQty" type="xs:decimal" />
+      <xs:element name="_tempTotalRequiredQty" type="xs:decimal" />
+      <xs:element name="_timeStamp" nillable="true" type="xs:base64Binary" />
+      <xs:element name="_unitCost" type="xs:decimal" />
+      <xs:element name="_unitQtyReqd" type="xs:decimal" />
+      <xs:element name="_unitQtyReqdEnt" type="xs:decimal" />
+      <xs:element name="_uom" nillable="true" type="xs:string" />
+      <xs:element name="_valueBilled" type="xs:decimal" />
+      <xs:element name="_valueIssued" type="xs:decimal" />
+      <xs:element name="_version" nillable="true" type="xs:string" />
+      <xs:element name="_warehouse" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="WipJobAllMat" nillable="true" type="tns:WipJobAllMat" />
+</xs:schema>

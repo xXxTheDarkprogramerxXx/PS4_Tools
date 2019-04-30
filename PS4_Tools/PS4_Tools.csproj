@@ -69,16 +69,16 @@
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LibOrbisPkg, Version=0.1.138.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Downloads\LibOrbisPkg-0.1.138\LibOrbisPkg.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net35\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PARAM.SFO">
       <HintPath>..\..\..\..\GitHub\PS3Tools\PARAM.SFO Editor\PARAM.SFO\bin\Debug\PARAM.SFO.dll</HintPath>
-    </Reference>
-    <Reference Include="SharedMemory, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharedMemory.2.1.1\lib\net35\SharedMemory.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -115,6 +115,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Files\PUP\BlockInfo.cs" />
@@ -123,7 +126,19 @@
     <Compile Include="Files\SELF\llvm.cs" />
     <Compile Include="Files\SELF\Self.cs" />
     <Compile Include="LibOrbis\GP4\Gp4Project.cs" />
+    <Compile Include="LibOrbis\PFS\FlatPathTable.cs" />
+    <Compile Include="LibOrbis\PFS\FSTree.cs" />
+    <Compile Include="LibOrbis\PFS\PfsBuilder.cs" />
+    <Compile Include="LibOrbis\PFS\PFSCWriter.cs" />
+    <Compile Include="LibOrbis\PFS\PfsHeader.cs" />
+    <Compile Include="LibOrbis\PFS\PfsProperties.cs" />
+    <Compile Include="LibOrbis\PKG\LicenseInfo.cs" />
+    <Compile Include="LibOrbis\PKG\PkgWriter.cs" />
+    <Compile Include="LibOrbis\PKG\PkgBuilder.cs" />
+    <Compile Include="LibOrbis\PKG\PkgProperties.cs" />
+    <Compile Include="LibOrbis\RIF\LicenseDat.cs" />
     <Compile Include="LibOrbis\SFO\ParamSfo.cs" />
+    <Compile Include="LibOrbis\Util\CancellationToken.cs" />
     <Compile Include="LibOrbis\Util\Crypto.cs" />
     <Compile Include="LibOrbis\Util\Enums.cs" />
     <Compile Include="LibOrbis\PKG\Entry.cs" />
@@ -133,12 +148,25 @@
     <Compile Include="LibOrbis\PlayGo\Manifest.cs" />
     <Compile Include="LibOrbis\Util\Extensions.cs" />
     <Compile Include="LibOrbis\Util\Keys.cs" />
+    <Compile Include="LibOrbis\Util\MemoryMappedFiles\Enums.cs" />
+    <Compile Include="LibOrbis\Util\MemoryMappedFiles\MemoryMappedFile.cs" />
+    <Compile Include="LibOrbis\Util\MemoryMappedFiles\MemoryMappedFileSecurity.cs" />
+    <Compile Include="LibOrbis\Util\MemoryMappedFiles\MemoryMappedView.cs" />
+    <Compile Include="LibOrbis\Util\MemoryMappedFiles\MemoryMappedViewAccessor.cs" />
+    <Compile Include="LibOrbis\Util\MemoryMappedFiles\MemoryMappedViewStream.cs" />
+    <Compile Include="LibOrbis\Util\MemoryMappedFiles\SafeMemoryMappedFileHandler.cs" />
+    <Compile Include="LibOrbis\Util\MemoryMappedFiles\UnmanagedMemoryAccessor.cs" />
     <Compile Include="LibOrbis\Util\MersenneTwister.cs" />
     <Compile Include="LibOrbis\Util\Net4Extensions.cs" />
     <Compile Include="LibOrbis\Util\Net4Fix.cs" />
+    <Compile Include="LibOrbis\Util\OperationCanceledException.cs" />
+    <Compile Include="LibOrbis\Util\ParallelLoopState.cs" />
+    <Compile Include="LibOrbis\Util\ParallelOptions.cs" />
     <Compile Include="LibOrbis\Util\ReaderBase.cs" />
+    <Compile Include="LibOrbis\Util\SpinWait.cs" />
     <Compile Include="LibOrbis\Util\StreamExtensions.cs" />
     <Compile Include="LibOrbis\Util\SubStream.cs" />
+    <Compile Include="LibOrbis\Util\Volatile.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Media\Atrac9\Atrac9Config.cs" />
     <Compile Include="Media\Atrac9\Atrac9Decoder.cs" />
@@ -169,9 +197,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Util\DDS\BC5Unorm.cs" />
+    <Compile Include="Util\DDS\BlockWindow.cs" />
+    <Compile Include="Util\DDS\cDDS.cs" />
     <Compile Include="Util\DDS\DdsFile.cs" />
     <Compile Include="Util\DDS\DDSImage.cs" />
+    <Compile Include="Util\OffsetStream.cs" />
     <Compile Include="Util\Utils.cs" />
+    <Compile Include="Util\WriterBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -180,6 +212,7 @@
     <None Include="Resources\at9toolDefaultSettingFile.ini.file" />
     <None Include="Resources\ext.zip" />
     <None Include="Resources\param.sfo" />
+    <None Include="Resources\PS2.zip" />
     <None Include="Resources\PS2Classics.gp4" />
   </ItemGroup>
   <ItemGroup>
@@ -191,7 +224,9 @@
   <ItemGroup>
     <None Include="Resources\orbis-pub-cmd.exe" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="LibOrbisPkg.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

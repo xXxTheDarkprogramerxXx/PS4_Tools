@@ -8,6 +8,7 @@ using PS4_Tools.Util;
 using System.Drawing;
 using PS4_Tools.Util.DDS;
 
+
 /*************************************************************************************
  *  Huge thanks for converting this class goes to https://gist.github.com/vmv (VMV) 
  *  no need for external classes !!
@@ -117,6 +118,79 @@ namespace DDSReader
         private System.Drawing.Bitmap m_bitmap = null;
         #endregion
 
+        public enum CompressionMode
+        {
+            /// <summary>
+            /// Use DXT1 compression.
+            /// </summary>
+            Dxt1 = 1,
+
+            /// <summary>
+            /// Use DXT3 compression.
+            /// </summary>
+            Dxt3 = 2,
+
+            /// <summary>
+            /// Use DXT5 compression.
+            /// </summary>
+            Dxt5 = 4,
+        }
+
+        [Flags]
+        public enum CompressionOptions
+        {
+            None = 0,
+
+            /// <summary>
+            /// Use a fast but low quality colour compressor.
+            /// </summary>
+            ColourRangeFit = 1,
+
+            /// <summary>
+            /// Use a slow but high quality colour compressor (the default).
+            /// </summary>
+            ColourClusterFit = 2,
+
+            /// <summary>
+            /// Use a very slow but very high quality colour compressor.
+            /// </summary>
+            ColourIterativeClusterFit = 4,
+
+            /// <summary>
+            /// Alternative implementation of ClusterFit by Ignacio Castano & contributors
+            /// </summary>
+            ColourClusterFitAlt = 8,
+
+            /// <summary>
+            /// Use a perceptual metric for colour error (the default).
+            /// </summary>
+            ColourMetricPerceptual = 256,
+
+            /// <summary>
+            /// Use a uniform metric for colour error.
+            /// </summary>
+            ColourMetricUniform = 512,
+
+            /// <summary>
+            /// Weight the colour by alpha during cluster fit (disabled by default).
+            /// </summary>
+            /// <remarks>
+            /// When doing Cluster compression, the kernel checks the most commonly
+            /// used colors of each block, given more weight to colors more commonly
+            /// used. Given that semitransparent pixels might be less important than
+            /// opaque pixels, we can weight in this behavior. The ideal usage of
+            /// this flag is for processing sprites with semitransparent edges.
+            /// This is NOT AlphaPremultiply.
+            /// </remarks>
+            WeightColourByAlpha = 1024,
+
+            /// <summary>
+            /// Uses multithreading to increase compression speed.
+            /// </summary>
+            UseParallelProcessing = 2048,
+        }
+
+
         public class MipMap
         {
             int width;
@@ -178,108 +252,182 @@ namespace DDSReader
         }
 
 
-        public void Save(string FileLocation)
+        public void Save(Bitmap bitmap,string FileLocation)
         {
-            Save(FileLocation, PixelFormat.DXT1);
+            PS4_Tools.Util.DDS.DDS dds = new DDS(D3DFormat.DDS, bitmap);
+            dds.Save(FileLocation);
         }
 
-        private void Save(string FileLocation,PixelFormat pixeltosave)
-        {
+        /// <summary>
+        /// Save png to DDS
+        /// </summary>
+        /// <param name="FileLocation"></param>
+        /// <param name="pixeltosave"></param>
+        //private void Save(string FileLocation)
+        //{
 
-            //check if file exitst
-            if(File.Exists(FileLocation))
-            {
-               // throw new Exception("File already exists in save location");
-            }
+        //    //check if file exitst
+        //    if(File.Exists(FileLocation))
+        //    {
+        //       // throw new Exception("File already exists in save location");
+        //    }
 
-            int Mips = 0;//set here for defualt
+           
+        //    int Mips = 0;//set here for defualt
 
 
-              //First we need to write the header
-              DDSStruct header;
-            using (var stream = File.Open(FileLocation, FileMode.Create, FileAccess.Write, FileShare.Read))
-            {
-                if (!stream.CanSeek)
-                    throw new ArgumentException("Stream must be seekable");//throw this error we cant seek the stream
+        //      //First we need to write the header
+        //      DDSStruct header;
+        //    using (var stream = File.Open(FileLocation, FileMode.Create, FileAccess.Write, FileShare.Read))
+        //    {
+        //        if (!stream.CanSeek)
+        //            throw new ArgumentException("Stream must be seekable");//throw this error we cant seek the stream
 
-                using (var writer = new BinaryWriter(stream,Encoding.Default))//start binary reader
-                {
+        //        using (var writer = new BinaryWriter(stream,Encoding.Default))//start binary reader
+        //        {
 
-                    //lets write th header of the file
+        //            //lets write th header of the file
 
-                    writer.Write(0x20534444);//write magic "\0PSF" 
+        //            writer.Write(0x20534444);//write magic "\0PSF" 
 
-                    writer.Write(124);//write size needs to be 124?
+        //            writer.Write(124);//write size needs to be 124?
 
-                    writer.Write(0x1 | 0x2 | 0x4 | 0x1000 | (Mips != 0 ? 0x20000 : 0x0));// Flags to denote valid fields: DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT | DDSD_MIPMAPCOUNT
+        //            writer.Write(0x1 | 0x2 | 0x4 | 0x1000 | (Mips != 0 ? 0x20000 : 0x0));// Flags to denote valid fields: DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT | DDSD_MIPMAPCOUNT
                
-                    writer.Write(this.m_bitmap.Height);//height
-                    writer.Write(this.m_bitmap.Width);//width
-                    writer.Write(0);//dwPitchOrLinearSize
-                    writer.Write(0);//dwDepth
-                    writer.Write(Mips == 0 ? 1 : Mips);//dwMipMapCount
-                    // Write reserved
-                    for (int i = 0; i < 11; i++)
-                        writer.Write(0);
-                    //Write PIXELFORMAT
-                    writer.Write(32);//set Pixel format
-                    writer.Write(0x80000);//write flags
+        //            writer.Write(this.m_bitmap.Height);//height
+        //            writer.Write(this.m_bitmap.Width);//width
+        //            writer.Write(0);//dwPitchOrLinearSize
+        //            writer.Write(0);//dwDepth
+        //            writer.Write(Mips == 0 ? 1 : Mips);//dwMipMapCount
+        //            // Write reserved
+        //            for (int i = 0; i < 11; i++)
+        //                writer.Write(0);
+        //            //Write PIXELFORMAT
+        //            writer.Write(32);//set Pixel format
+        //            writer.Write(0x80000);//write flags
 
-                    writer.Write(0);//dwFourCC
-                    writer.Write(16);//dwRGBBitCount
-                    writer.Write(255);//dwRBitMask
-                    writer.Write(0x0000FF00);//dwGBitMask
-                    writer.Write(0);//dwBBitMask
-                    writer.Write(0);//dwABitMask
+        //            writer.Write(0);//dwFourCC
+        //            writer.Write(16);//dwRGBBitCount
+        //            writer.Write(255);//dwRBitMask
+        //            writer.Write(0x0000FF00);//dwGBitMask
+        //            writer.Write(0);//dwBBitMask
+        //            writer.Write(0);//dwABitMask
 
-                    writer.Write(0);//dwCaps
-                    writer.Write(0);//dwCaps2
-                    writer.Write(0);//dwCaps3
-                    writer.Write(0);//dwCaps4
-                    writer.Write(0);//dwReserved2
+        //            writer.Write(0);//dwCaps
+        //            writer.Write(0);//dwCaps2
+        //            writer.Write(0);//dwCaps3
+        //            writer.Write(0);//dwCaps4
+        //            writer.Write(0);//dwReserved2
 
-                    //now we need to write the file info
+        //            //now we need to write the file info
 
-                    var mipBitmaps = GenerateMips(m_bitmap, m_bitmap.Width, m_bitmap.Height);
-                    //var flags = Squish.SquishFlags.kDxt1;
+        //            var mipBitmaps = GenerateMips(m_bitmap, m_bitmap.Width, m_bitmap.Height);
+        //            //var flags = Squish.SquishFlags.kDxt1;
 
-                    List<MipMap> listofmips = new List<MipMap>();
-                    foreach (var mb in mipBitmaps)
-                    {
-                        var mip = new MipMap();
-                        mip.Width = mb.Width;
-                        mip.Height = mb.Height;
+        //            List<MipMap> listofmips = new List<MipMap>();
+        //            foreach (var mb in mipBitmaps)
+        //            {
+        //                var mip = new MipMap();
+        //                mip.Width = mb.Width;
+        //                mip.Height = mb.Height;
 
-                        byte[] data = new byte[mb.Width * mb.Height * 4];
-                        //byte[] dest = new byte[Squish.GetStorageRequirements(mb.Width, mb.Height, flags | Squish.SquishFlags.kColourIterativeClusterFit | Squish.SquishFlags.kWeightColourByAlpha)];
-                        int ii = 0;
-                        for (int y = 0; y < mb.Height; y++)
-                        {
-                            for (int x = 0; x < mb.Width; x++)
-                            {
-                                var p = mb.GetPixel(x, y);
-                                data[ii + 0] = p.R;
-                                data[ii + 1] = p.G;
-                                data[ii + 2] = p.B;
-                                data[ii + 3] = p.A;
+        //                byte[] data = new byte[mb.Width * mb.Height * 4];
+        //                //byte[] dest = new byte[Squish.GetStorageRequirements(mb.Width, mb.Height, flags | Squish.SquishFlags.kColourIterativeClusterFit | Squish.SquishFlags.kWeightColourByAlpha)];
+        //                int ii = 0;
+        //                for (int y = 0; y < mb.Height; y++)
+        //                {
+        //                    for (int x = 0; x < mb.Width; x++)
+        //                    {
+        //                        var p = mb.GetPixel(x, y);
+        //                        data[ii + 0] = p.R;
+        //                        data[ii + 1] = p.G;
+        //                        data[ii + 2] = p.B;
+        //                        data[ii + 3] = p.A;
 
-                                ii += 4;
-                            }
-                        }
+        //                        ii += 4;
+        //                    }
+        //                }
 
-                       byte[] dest = PS4_Tools.Util.DDS.BC5Unorm.Compress(data, (ushort)mb.Width, (ushort)mb.Height, GetMipSize((ushort)mb.Width, (ushort)mb.Height));
-                        //else 
-                        mip.Data = dest;
-                        listofmips.Add(mip);
-                    }
+        //               byte[] dest = PS4_Tools.Util.DDS.BC5Unorm.Compress(data, (ushort)mb.Width, (ushort)mb.Height, GetMipSize((ushort)mb.Width, (ushort)mb.Height));
+        //                //else 
+        //                mip.Data = dest;
+        //                listofmips.Add(mip);
+        //            }
 
-                    for (int i = 0; i < listofmips.Count; i++)
-                    {
-                        writer.Write(listofmips[i].Data);
-                    }
-                }
-            }
-        }
+        //            for (int i = 0; i < listofmips.Count; i++)
+        //            {
+        //                writer.Write(listofmips[i].Data);
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private static void CompressImage(Bitmap srcImage, Byte[] blocks, CompressionMode mode, CompressionOptions options)
+        //{
+        //    // fix any bad flags
+        //    options = options.FixFlags();
+
+        //    int block_width = (srcImage.Width + 3) / 4;
+        //    int block_height = (srcImage.Height + 3) / 4;
+
+        //    // if the number of chunks to process is not very large, we better skip parallel processing
+        //    if (block_width * block_height < 16) options &= ~CompressionOptions.UseParallelProcessing;
+
+        //    if ((options & CompressionOptions.UseParallelProcessing) != 0)
+        //    {
+        //        System.Threading.Tasks.Parallel.For
+        //            (
+        //            0,
+        //            block_height,
+        //            (y, state) =>
+        //            {
+        //                // initialise the block output
+        //                var block = new BlockWindow(blocks, mode);
+
+        //                block.Offset += block.ByteLength * y * block_width;
+
+        //                // build the 4x4 block of pixels
+        //                var sourceRgba = new Byte[16 * 4];
+
+        //                for (int x = 0; x < block_width; x++)
+        //                {
+        //                    int mask = 0;
+        //                    srcImage.CopyBlockTo(x * 4, y * 4, sourceRgba, out mask);
+
+        //                    // compress it into the output
+        //                    block.CompressMasked(sourceRgba, mask, options);
+
+        //                    // advance
+        //                    block.Offset += block.ByteLength;
+        //                }
+        //            }
+        //            );
+        //    }
+        //    else
+        //    {
+        //        // initialise the block output
+        //        var block = new BlockWindow(blocks, mode);
+
+        //        // build the 4x4 block of pixels
+        //        var sourceRgba = new Byte[16 * 4];
+
+        //        // loop over blocks
+        //        for (int y = 0; y < block_height; ++y)
+        //        {
+        //            for (int x = 0; x < block_width; ++x)
+        //            {
+        //                int mask = 0;
+        //                srcImage.CopyBlockTo(x * 4, y * 4, sourceRgba, out mask);
+
+        //                // compress it into the output
+        //                block.CompressMasked(sourceRgba, mask, options);
+
+        //                // advance
+        //                block.Offset += block.ByteLength;
+        //            }
+        //        }
+        //    }
+        //}
 
         public static int GetMipSize(ushort width, ushort height)
         {

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Paths>
+  <Jars></Jars>
+  <ResolvedResourceDirectories>
+    <ResolvedResourceDirectory>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\__library_projects__\FastAndroidCamera\library_project_imports\res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\__library_projects__\Refractored.Controls.CircleImageView\library_project_imports\res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\__library_projects__\SignaturePad\library_project_imports\res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\__library_projects__\ZXingNetMobile\library_project_imports\res</ResolvedResourceDirectory>
+  </ResolvedResourceDirectories>
+  <ResolvedAssetDirectories>
+    <ResolvedAssetDirectory>obj\Debug\__library_projects__\FastAndroidCamera\library_project_imports\assets</ResolvedAssetDirectory>
+    <ResolvedAssetDirectory>obj\Debug\__library_projects__\Refractored.Controls.CircleImageView\library_project_imports\assets</ResolvedAssetDirectory>
+    <ResolvedAssetDirectory>obj\Debug\__library_projects__\SignaturePad\library_project_imports\assets</ResolvedAssetDirectory>
+    <ResolvedAssetDirectory>obj\Debug\__library_projects__\ZXingNetMobile\library_project_imports\assets</ResolvedAssetDirectory>
+  </ResolvedAssetDirectories>
+  <ResolvedEnvironmentFiles />
+  <ResolvedResourceDirectoryStamps>
+    <ResolvedResourceDirectoryStamp>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\__library_projects__\FastAndroidCamera.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\__library_projects__\Refractored.Controls.CircleImageView.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\__library_projects__\SignaturePad.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\__library_projects__\ZXingNetMobile.stamp</ResolvedResourceDirectoryStamp>
+  </ResolvedResourceDirectoryStamps>
+</Paths>

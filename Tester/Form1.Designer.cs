@@ -62,6 +62,9 @@
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.button17 = new System.Windows.Forms.Button();
+            this.button16 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -76,6 +79,7 @@
             this.groupBox11.SuspendLayout();
             this.groupBox12.SuspendLayout();
             this.groupBox13.SuspendLayout();
+            this.groupBox14.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnPUPExtract
@@ -421,16 +425,47 @@
             this.groupBox13.Controls.Add(this.button13);
             this.groupBox13.Location = new System.Drawing.Point(532, 334);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(337, 100);
+            this.groupBox13.Size = new System.Drawing.Size(337, 63);
             this.groupBox13.TabIndex = 35;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Multi Function Testing";
+            // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.button17);
+            this.groupBox14.Controls.Add(this.button16);
+            this.groupBox14.Location = new System.Drawing.Point(532, 403);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Size = new System.Drawing.Size(337, 63);
+            this.groupBox14.TabIndex = 36;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "Rmasterds";
+            // 
+            // button17
+            // 
+            this.button17.Location = new System.Drawing.Point(173, 34);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(161, 23);
+            this.button17.TabIndex = 25;
+            this.button17.Text = "PSPHD Test";
+            this.button17.UseVisualStyleBackColor = true;
+            // 
+            // button16
+            // 
+            this.button16.Location = new System.Drawing.Point(6, 35);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(161, 23);
+            this.button16.TabIndex = 24;
+            this.button16.Text = "PS2 Classics Test";
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.button16_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 506);
+            this.Controls.Add(this.groupBox14);
             this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.groupBox12);
             this.Controls.Add(this.groupBox11);
@@ -458,6 +493,7 @@
             this.groupBox11.PerformLayout();
             this.groupBox12.ResumeLayout(false);
             this.groupBox13.ResumeLayout(false);
+            this.groupBox14.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -498,6 +534,9 @@
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.GroupBox groupBox12;
         private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.Button button17;
+        private System.Windows.Forms.Button button16;
     }
 }
 

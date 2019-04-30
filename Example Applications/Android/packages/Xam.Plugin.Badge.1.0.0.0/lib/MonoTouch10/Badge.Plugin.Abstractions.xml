@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Badge.Plugin.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Badge.Plugin.Abstractions.IBadge">
+            <summary>
+            Interface for changing Badge value
+            </summary>
+        </member>
+        <member name="M:Badge.Plugin.Abstractions.IBadge.ClearBadge">
+            <summary>
+            Clears the badge.
+            </summary>
+        </member>
+        <member name="M:Badge.Plugin.Abstractions.IBadge.SetBadge(System.Int32,System.String)">
+            <summary>
+            Sets the badge.
+            </summary>
+            <param name="badgeNumber">The badge number.</param>
+            <param name="title">The title. Used only by Android</param>
+        </member>
+    </members>
+</doc>

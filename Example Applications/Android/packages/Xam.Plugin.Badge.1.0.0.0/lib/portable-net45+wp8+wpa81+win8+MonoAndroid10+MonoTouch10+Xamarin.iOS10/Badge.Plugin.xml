@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Badge.Plugin</name>
+    </assembly>
+    <members>
+        <member name="T:Badge.Plugin.CrossBadge">
+            <summary>
+            Cross platform Badge implemenations
+            </summary>
+        </member>
+        <member name="P:Badge.Plugin.CrossBadge.Current">
+            <summary>
+            Current settings to use
+            </summary>
+        </member>
+    </members>
+</doc>

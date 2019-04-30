@@ -1,0 +1,9 @@
+int attr civ_border_color 0x7f010001
+int attr civ_border_overlay 0x7f010002
+int attr civ_border_width 0x7f010000
+int attr civ_fill_color 0x7f010003
+int[] styleable CircleImageView { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003 }
+int styleable CircleImageView_civ_border_color 1
+int styleable CircleImageView_civ_border_overlay 2
+int styleable CircleImageView_civ_border_width 0
+int styleable CircleImageView_civ_fill_color 3

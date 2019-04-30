@@ -310,16 +310,16 @@ namespace PS4_Tools
 
         private void WriteRiffHeader(BinaryWriter writer)
         {
-            writer.Write("RIFF");
+            writer.Write(System.Text.Encoding.UTF8.GetBytes("RIFF"));//write URF8 
             writer.Write(RiffChunkSize);
-            writer.Write("WAVE");
+            writer.Write(System.Text.Encoding.UTF8.GetBytes("WAVE"));
         }
 
         private void WriteFmtChunk(BinaryWriter writer)
         {
             // Every chunk should be 2-byte aligned
             writer.BaseStream.Position += writer.BaseStream.Position & 1;
-            writer.Write("fmt ");
+            writer.Write(System.Text.Encoding.UTF8.GetBytes("fmt "));
             writer.Write(FmtChunkSize);
             writer.Write((short)(ChannelCount > 2 ? WaveFormatTags.WaveFormatExtensible : WaveFormatTags.WaveFormatPcm));
             writer.Write((short)ChannelCount);
@@ -341,7 +341,7 @@ namespace PS4_Tools
         {
             writer.BaseStream.Position += writer.BaseStream.Position & 1;
             
-            writer.Write("data");
+            writer.Write(System.Text.Encoding.UTF8.GetBytes("data"));
             writer.Write(DataChunkSize);
 
             switch (Codec)
@@ -359,7 +359,7 @@ namespace PS4_Tools
         private void WriteSmplChunk(BinaryWriter writer)
         {
             writer.BaseStream.Position += writer.BaseStream.Position & 1;
-            writer.Write("smpl");
+            writer.Write(System.Text.Encoding.UTF8.GetBytes("smpl"));
             writer.Write(SmplChunkSize);
             for (int i = 0; i < 7; i++)
                 writer.Write(0);

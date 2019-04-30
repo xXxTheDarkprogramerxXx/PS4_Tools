@@ -55,7 +55,7 @@ namespace Tester
                     //pupfunction.Unpack_PUP(openFileDialog1.FileName, folderDlg.SelectedPath);
                     PS4_Tools.PUP pupfile = new PS4_Tools.PUP();
                     PS4_Tools.PUP.PlaystationUpdateFile pup = pupfile.Read_Pup(openFileDialog1.FileName);
-                    
+                                      
                 }
             }
         }
@@ -141,12 +141,34 @@ namespace Tester
             //here we can view spesific files and there file bytes are there if the need arrises
         }
 
+        #region << Atrac9 player >>
+
+        System.Media.SoundPlayer player;
+        bool Playing = false;
         private void button6_Click(object sender, EventArgs e)
         {
 
+            if (Playing == false)
+            {
+                var bytes = PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Users\3deEchelon\Desktop\PS4\AT9\prelude1.at9");
+                player = new System.Media.SoundPlayer(new MemoryStream(bytes));
+                player.Play();
 
-            var bytes = PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Users\3deEchelon\Desktop\PS4\AT9\ready.at9");
+                button6.Text = "Stop Playing";
+                Playing = true;
+            }
+            else
+            {
+                player.Stop();
+
+                button6.Text = "Play At9";
+                Playing = false;
+            }
+
         }
+
+
+        #endregion << Atrac9 player >>
 
         private void button7_Click(object sender, EventArgs e)
         {
@@ -250,6 +272,11 @@ namespace Tester
                         var update = new PS4_Tools.PUP();
                         var tempfile = update.Read_Pup(openFileDialog1.FileName);
                         break;
+                    case PS4_Tools.Tools.File_Type.ATRAC9:
+                        var bytes = PS4_Tools.Media.Atrac9.LoadAt9(openFileDialog1.FileName);
+                        System.Media.SoundPlayer player = new System.Media.SoundPlayer(new MemoryStream(bytes));
+                        player.Play();
+                        break;
                 }
             }
         }
@@ -260,17 +287,34 @@ namespace Tester
 
 
         }
-
+        public static byte[] ImageToByte(Image img)
+        {
+            using (var stream = new MemoryStream())
+            {
+                img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                return stream.ToArray();
+            }
+        }
         private void button15_Click(object sender, EventArgs e)
         {
             Bitmap btimap = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\pic0.png");
-            PS4_Tools.Image.DDS.CreateDDSFromBitmap(btimap, @"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
+            Stream sm = new FileStream(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\pic0.png", FileMode.Open, FileAccess.Read);
+
+            PS4_Tools.Image.DDS.Windows.CreateDDSFromBitmap(btimap, @"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
             // pictureBox1.Image = item;
 
             //test if dds is corectly saved
 
             var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
             pictureBox1.Image = item;
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            PS4_Tools.PKG.Remastered.PS2_Classics ps2classics = new PS4_Tools.PKG.Remastered.PS2_Classics();
+            Bitmap bit = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\LibHomebrew Compiler\ps2emu\Fake PKG Tools\ps2emu\sce_sys\icon0.png");
+          
+            ps2classics.Create_Single_ISO_PKG(@"C:\Users\3deEchelon\Desktop\PS2\X2 - Wolverine's Revenge (USA).iso", @"C:\Users\3deEchelon\Desktop\PS2\X2 - Wolverine's Revenge (USA).pkg", "X2 - Wolverine's Revenge",bit, @"C:\Users\3deEchelon\Desktop\PS4\LibHomebrew Compiler\ps2emu\Fake PKG Tools\ps2emu\sce_sys\pic1.png");
         }
     }
 }

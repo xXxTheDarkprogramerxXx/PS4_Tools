@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Paths>
+  <ManifestDocuments>
+    <ManifestDocument>obj\Release\__library_projects__\Refractored.Controls.CircleImageView\library_project_imports\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\__library_projects__\Refractored.Controls.CircleImageView\library_project_imports\aapt\AndroidManifest.xml</ManifestDocument>
+  </ManifestDocuments>
+  <NativeLibraries />
+  <Jars>
+    <Jar>obj\Release\__library_projects__\Refractored.Controls.CircleImageView\library_project_imports\bin\classes.jar</Jar>
+    <Jar>obj\Release\__library_projects__\Square.OkHttp\library_project_imports\okhttp-2.4.0.jar</Jar>
+    <Jar>obj\Release\__library_projects__\Square.OkIO\library_project_imports\okio-1.5.0.jar</Jar>
+    <Jar>obj\Release\__library_projects__\Square.Picasso\library_project_imports\picasso-2.5.2.jar</Jar>
+  </Jars>
+</Paths>

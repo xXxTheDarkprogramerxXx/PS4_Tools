@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"><group android:checkableBehavior="single"><item android:id="@+id/nav_home" android:icon="@drawable/home48" android:title="Home" /><item android:id="@+id/nav_messages" android:title="Notifications" android:icon="@drawable/comments48" /><!--android:icon="@layout/custom_action_item_layout"--><!--<item
+        android:id="@+id/nav_friends"
+        android:icon="@drawable/ic_headset"
+        android:title="Friends" />
+    <item
+        android:id="@+id/nav_discussion"
+        android:icon="@drawable/ic_forum"
+        android:title="Discussion" />--></group><item android:title="System"><menu><!--<item
+         android:id="@+id/Account"
+          android:icon="@drawable/User"
+          android:title="Account" />--><item android:id="@+id/action_settings" android:icon="@drawable/support" android:title="Settings" /></menu></item></menu>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Refractored.Controls.CircleImageView</name>
+    </assembly>
+    <members>
+        <member name="T:Refractored.Controls.CircleImageView">
+            <summary>
+            Circle image view.
+            </summary></member>
+        <member name="M:Refractored.Controls.CircleImageView.#ctor(Android.Content.Context)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refractored.Controls.CircleImageView" /> class.
+            </summary>
+            <param name="context">Context.</param></member>
+        <member name="M:Refractored.Controls.CircleImageView.#ctor(Android.Content.Context,Android.Util.IAttributeSet)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refractored.Controls.CircleImageView" /> class.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="attrs">Attrs.</param></member>
+        <member name="M:Refractored.Controls.CircleImageView.#ctor(Android.Content.Context,Android.Util.IAttributeSet,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refractored.Controls.CircleImageView" /> class.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="attrs">Attrs.</param>
+            <param name="defStyle">Def style.</param></member>
+        <member name="M:Refractored.Controls.CircleImageView.Initialize">
+            <summary>
+            Initialize this instance.
+            </summary></member>
+    </members>
+</doc>

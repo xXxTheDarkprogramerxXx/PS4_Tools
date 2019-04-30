@@ -44,6 +44,13 @@ namespace Tester
         private void downloadDLCToolStripMenuItem_Click(object sender, EventArgs e)
         {
             /*Download DLC*/
+            var item = ((PS4_Tools.PKG.Official.StoreItems)dataGridView1.CurrentRow.DataBoundItem);
+            PS4_Tools.PKG.SceneRelated.Create_DLC_FKPG(item.Store_URL, item.Store_Content_Title + ".pkg");
+        }
+
+        private void dataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
         }
     }
 }

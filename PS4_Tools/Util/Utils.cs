@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using Ionic.Zip;
 using System.Drawing.Imaging;
 using System.Linq;
+using static DDSReader.DDSImage;
 
 namespace PS4_Tools.Util
 {
@@ -641,9 +642,9 @@ namespace PS4_Tools.Util
                 return -8;
             return (sbyte)value;
         }
+
+      
     }
-
-
 
     /// <summary>
     ///     Taken from System.Net in 4.0, useful until we move to .NET 4.0 - needed for Client Profile
@@ -909,11 +910,234 @@ namespace PS4_Tools.Util
         }
     }
 
+    public static class StreamExtensions
+    {
+        public static void WriteUInt16LE(this Stream s, ushort i)
+        {
+            byte[] tmp = new byte[2];
+            tmp[0] = (byte)(i & 0xFF);
+            tmp[1] = (byte)((i >> 8) & 0xFF);
+            s.Write(tmp, 0, 2);
+        }
+
+        public static void WriteUInt32LE(this Stream s, uint i)
+        {
+            byte[] tmp = new byte[4];
+            tmp[0] = (byte)(i & 0xFF);
+            tmp[1] = (byte)((i >> 8) & 0xFF);
+            tmp[2] = (byte)((i >> 16) & 0xFF);
+            tmp[3] = (byte)((i >> 24) & 0xFF);
+            s.Write(tmp, 0, 4);
+        }
+
+        public static void WriteUInt64LE(this Stream s, ulong i)
+        {
+            byte[] tmp = new byte[8];
+            tmp[0] = (byte)(i & 0xFF);
+            tmp[1] = (byte)((i >> 8) & 0xFF);
+            tmp[2] = (byte)((i >> 16) & 0xFF);
+            tmp[3] = (byte)((i >> 24) & 0xFF);
+            i >>= 32;
+            tmp[4] = (byte)(i & 0xFF);
+            tmp[5] = (byte)((i >> 8) & 0xFF);
+            tmp[6] = (byte)((i >> 16) & 0xFF);
+            tmp[7] = (byte)((i >> 24) & 0xFF);
+            s.Write(tmp, 0, 8);
+        }
+
+        public static void WriteInt16LE(this Stream s, short i)
+        {
+            s.WriteUInt16LE(unchecked((ushort)i));
+        }
+
+        public static void WriteInt32LE(this Stream s, int i)
+        {
+            s.WriteUInt32LE(unchecked((uint)i));
+        }
+
+        public static void WriteInt64LE(this Stream s, long i)
+        {
+            s.WriteUInt64LE(unchecked((ulong)i));
+        }
+
+        public static void WriteLE(this Stream s, ushort i) => s.WriteUInt16LE(i);
+        public static void WriteLE(this Stream s, uint i) => s.WriteUInt32LE(i);
+        public static void WriteLE(this Stream s, ulong i) => s.WriteUInt64LE(i);
+        public static void WriteLE(this Stream s, short i) => s.WriteInt16LE(i);
+        public static void WriteLE(this Stream s, int i) => s.WriteInt32LE(i);
+        public static void WriteLE(this Stream s, long i) => s.WriteInt64LE(i);
+
+        public static uint ReadUInt32LE(this Stream s) => unchecked((uint)s.ReadInt32LE());
+
+
+        /// <summary>
+        /// Read a signed 32-bit little-endian integer from the stream.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static int ReadInt32LE(this Stream s)
+        {
+            int ret;
+            byte[] tmp = new byte[4];
+            s.Read(tmp, 0, 4);
+            ret = tmp[0] & 0x000000FF;
+            ret |= (tmp[1] << 8) & 0x0000FF00;
+            ret |= (tmp[2] << 16) & 0x00FF0000;
+            ret |= (tmp[3] << 24);
+            return ret;
+        }
+
+        /// <summary>
+        /// Read a null-terminated ASCII string from the given stream.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string ReadASCIINullTerminated(this Stream s, int limit = -1)
+        {
+            StringBuilder sb = new StringBuilder(255);
+            int cur;
+            while ((limit == -1 || sb.Length < limit) && (cur = s.ReadByte()) > 0)
+            {
+                sb.Append((char)cur);
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Read a given number of bytes from a stream into a new byte array.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="count">Number of bytes to read (maximum)</param>
+        /// <returns>New byte array of size &lt;=count.</returns>
+        public static byte[] ReadBytes(this Stream s, int count)
+        {
+            // Size of returned array at most count, at least difference between position and length.
+            int realCount = (int)((s.Position + count > s.Length) ? (s.Length - s.Position) : count);
+            byte[] ret = new byte[realCount];
+            s.Read(ret, 0, realCount);
+            return ret;
+        }
+
+        /// <summary>
+        /// Read a signed 64-bit little-endian integer from the stream.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static long ReadInt64LE(this Stream s)
+        {
+            long ret;
+            byte[] tmp = new byte[8];
+            s.Read(tmp, 0, 8);
+            ret = tmp[4] & 0x000000FFL;
+            ret |= (tmp[5] << 8) & 0x0000FF00L;
+            ret |= (tmp[6] << 16) & 0x00FF0000L;
+            ret |= (tmp[7] << 24) & 0xFF000000L;
+            ret <<= 32;
+            ret |= tmp[0] & 0x000000FFL;
+            ret |= (tmp[1] << 8) & 0x0000FF00L;
+            ret |= (tmp[2] << 16) & 0x00FF0000L;
+            ret |= (tmp[3] << 24) & 0xFF000000L;
+            return ret;
+        }
+
+        /// <summary>
+        /// Read an unsigned 64-bit little-endian integer from the stream.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static ulong ReadUInt64LE(this Stream s) => unchecked((ulong)s.ReadInt64LE());
+
+
+        /// <summary>
+        /// Read an unsigned 16-bit little-endian integer from the stream.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static ushort ReadUInt16LE(this Stream s) => unchecked((ushort)s.ReadInt16LE());
+
+        /// <summary>
+        /// Read a signed 16-bit little-endian integer from the stream.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static short ReadInt16LE(this Stream s)
+        {
+            int ret;
+            byte[] tmp = new byte[2];
+            s.Read(tmp, 0, 2);
+            ret = tmp[0] & 0x00FF;
+            ret |= (tmp[1] << 8) & 0xFF00;
+            return (short)ret;
+        }
+
+        /// <summary>
+        /// Read a signed 8-bit integer from the stream.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static sbyte ReadInt8(this Stream s) => unchecked((sbyte)s.ReadUInt8());
+
+        /// <summary>
+        /// Read an unsigned 8-bit integer from the stream.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static byte ReadUInt8(this Stream s)
+        {
+            byte ret;
+            byte[] tmp = new byte[1];
+            s.Read(tmp, 0, 1);
+            ret = tmp[0];
+            return ret;
+        }
+
+
+    }
 
     public static class ImageExtensions
     {
+        static readonly Byte[] _Data;
+        static readonly int _Width;
+        static readonly int _Height;
+        public static void CopyBlockTo(int x, int y, Byte[] block, out int mask)
+        {
+            mask = 0;
+
+            int targetPixelIdx = 0;
+
+            for (int py = 0; py < 4; ++py)
+            {
+                for (int px = 0; px < 4; ++px)
+                {
+                    // get the source pixel in the image
+                    int sx = x + px;
+                    int sy = y + py;
+
+                    // enable if we're in the image
+                    if (sx < _Width && sy < _Height)
+                    {
+                        // copy the rgba value
+                        int sourcePixelIdx = 4 * (_Width * sy + sx);
+
+                        for (int i = 0; i < 4; ++i) block[targetPixelIdx++] = _Data[sourcePixelIdx++];
+
+                        // enable this pixel
+                        mask |= (1 << (4 * py + px));
+                    }
+                    else
+                    {
+                        // skip this pixel as its outside the image
+                        targetPixelIdx += 4;
+                    }
+                }
+            }
+        }
         public static byte[] ToByteArray(this System.Drawing.Image image, ImageFormat format)
         {
+            if (image == null)
+            {
+                return new byte[1];
+            }
             using (MemoryStream ms = new MemoryStream())
             {
                 image.Save(ms, format);
@@ -922,8 +1146,27 @@ namespace PS4_Tools.Util
         }
     }
 
+    static class ConstantsExtensions
+    {
+        public static CompressionOptions FixFlags(this CompressionOptions flags)
+        {
+            // grab the flag bits            
+            var fit = flags & (CompressionOptions.ColourIterativeClusterFit | CompressionOptions.ColourClusterFit | CompressionOptions.ColourRangeFit | CompressionOptions.ColourClusterFitAlt);
+            var metric = flags & (CompressionOptions.ColourMetricPerceptual | CompressionOptions.ColourMetricUniform);
+            var extra = flags & (CompressionOptions.WeightColourByAlpha | CompressionOptions.UseParallelProcessing);
+
+            // set defaults            
+            if (fit == 0) fit = CompressionOptions.ColourClusterFit;
+            if (metric == 0) metric = CompressionOptions.ColourMetricPerceptual;
+
+            // done
+            return fit | metric | extra;
+        }
+    }
+
     public static class HexBinTemp
     {
+
         public static int DivideByRoundUp(this int value, int divisor)
         {
             return (value + divisor - 1) / divisor;

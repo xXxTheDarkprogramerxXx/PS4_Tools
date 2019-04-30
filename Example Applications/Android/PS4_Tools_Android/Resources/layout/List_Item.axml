@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:gravity="center_vertical">
+  <refractored.controls.CircleImageView
+      android:id="@+id/avatar"
+      android:layout_width="@dimen/list_item_avatar_size"
+      android:layout_height="@dimen/list_item_avatar_size"
+      android:layout_marginRight="16dp"
+      app:civ_border_width="1dp"
+      app:civ_border_color="#FF000000" />
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/linearLayout1"
+      android:weightSum="100">
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="0dp"
+        android:layout_weight="100"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItem" />
+  </LinearLayout>
+</LinearLayout>

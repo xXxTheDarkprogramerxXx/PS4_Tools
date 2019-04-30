@@ -103,6 +103,16 @@ namespace PS4_Tools.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] PS2 {
+            get {
+                object obj = ResourceManager.GetObject("PS2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] PS2Classics {
             get {
                 object obj = ResourceManager.GetObject("PS2Classics", resourceCulture);
