@@ -377,7 +377,7 @@ namespace Tester
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     PS4_Tools.Image.PNG png = new PS4_Tools.Image.PNG();
-                    png.Create_PS4_Compatible_PNG(openFileDialog1.FileName, saveFileDialog1.FileName,1920,1080);
+                    png.Create_PS4_Compatible_PNG(openFileDialog1.FileName, saveFileDialog1.FileName,1080, 1920);
                 }
             }
         }
