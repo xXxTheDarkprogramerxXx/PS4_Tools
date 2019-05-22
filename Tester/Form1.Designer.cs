@@ -65,6 +65,8 @@
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.button17 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
+            this.button18 = new System.Windows.Forms.Button();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -80,6 +82,7 @@
             this.groupBox12.SuspendLayout();
             this.groupBox13.SuspendLayout();
             this.groupBox14.SuspendLayout();
+            this.groupBox15.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnPUPExtract
@@ -460,6 +463,26 @@
             this.button16.UseVisualStyleBackColor = true;
             this.button16.Click += new System.EventHandler(this.button16_Click);
             // 
+            // button18
+            // 
+            this.button18.Location = new System.Drawing.Point(6, 33);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(75, 23);
+            this.button18.TabIndex = 37;
+            this.button18.Text = "Convert";
+            this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.button18_Click);
+            // 
+            // groupBox15
+            // 
+            this.groupBox15.Controls.Add(this.button18);
+            this.groupBox15.Location = new System.Drawing.Point(2, 424);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.Size = new System.Drawing.Size(111, 70);
+            this.groupBox15.TabIndex = 38;
+            this.groupBox15.TabStop = false;
+            this.groupBox15.Text = "PNG Convert";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -473,6 +496,7 @@
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox15);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -494,6 +518,7 @@
             this.groupBox12.ResumeLayout(false);
             this.groupBox13.ResumeLayout(false);
             this.groupBox14.ResumeLayout(false);
+            this.groupBox15.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -537,6 +562,8 @@
         private System.Windows.Forms.GroupBox groupBox14;
         private System.Windows.Forms.Button button17;
         private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.Button button18;
+        private System.Windows.Forms.GroupBox groupBox15;
     }
 }
 

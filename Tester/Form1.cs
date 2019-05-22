@@ -123,6 +123,7 @@ namespace Tester
         private void button4_Click(object sender, EventArgs e)
         {
             // var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.dds");
+            //var byteimage = PS4_Tools.Image.DDS.GetBytesFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.dds");
             var byteimage = PS4_Tools.Image.DDS.GetBytesFromDDS(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\icon0.dds");
             var item = BytesToBitmap(byteimage);
             pictureBox1.Image = item;
@@ -300,7 +301,7 @@ namespace Tester
             Bitmap btimap = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\pic0.png");
             Stream sm = new FileStream(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\pic0.png", FileMode.Open, FileAccess.Read);
 
-            PS4_Tools.Image.DDS.Windows.CreateDDSFromBitmap(btimap, @"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
+            PS4_Tools.Image.DDS.PS4.CreateDDSFromBitmap(btimap, @"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
             // pictureBox1.Image = item;
 
             //test if dds is corectly saved
@@ -315,6 +316,40 @@ namespace Tester
             Bitmap bit = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\LibHomebrew Compiler\ps2emu\Fake PKG Tools\ps2emu\sce_sys\icon0.png");
           
             ps2classics.Create_Single_ISO_PKG(@"C:\Users\3deEchelon\Desktop\PS2\X2 - Wolverine's Revenge (USA).iso", @"C:\Users\3deEchelon\Desktop\PS2\X2 - Wolverine's Revenge (USA).pkg", "X2 - Wolverine's Revenge",bit, @"C:\Users\3deEchelon\Desktop\PS4\LibHomebrew Compiler\ps2emu\Fake PKG Tools\ps2emu\sce_sys\pic1.png");
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            openFileDialog1.Title = "Select PS4 File";
+
+            openFileDialog1.CheckFileExists = true;
+
+            openFileDialog1.CheckPathExists = true;
+
+            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+
+            openFileDialog1.RestoreDirectory = true;
+
+            openFileDialog1.Multiselect = false;
+
+            openFileDialog1.ReadOnlyChecked = true;
+
+            openFileDialog1.ShowReadOnly = true;
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "PS4 PNG Image|*.png";
+                saveFileDialog1.Title = "Save an PS4 Image File";
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    PS4_Tools.Image.PNG png = new PS4_Tools.Image.PNG();
+                    png.Create_PS4_Compatible_PNG(openFileDialog1.FileName,saveFileDialog1.FileName);
+                }
+            }
         }
     }
 }

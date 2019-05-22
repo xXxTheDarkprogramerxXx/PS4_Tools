@@ -540,6 +540,10 @@ namespace DDSReader
         private bool ReadHeader(BinaryReader reader, ref DDSStruct header)
         {
             byte[] signature = reader.ReadBytes(4);
+            if(signature.Length != 4)
+            {
+                throw new Exception("This is not a valid dds file");
+            }
             if (!(signature[0] == 'D' && signature[1] == 'D' && signature[2] == 'S' && signature[3] == ' '))
                 return false;
 

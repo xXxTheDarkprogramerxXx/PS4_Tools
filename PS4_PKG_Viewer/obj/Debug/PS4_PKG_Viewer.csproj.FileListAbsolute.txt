@@ -24,3 +24,14 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_View
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\BigInteger.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\UnityEngine.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\UnityEngine.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\UnityEditor.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\Unity.Cecil.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\Unity.SerializationLogic.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\ExCSS.Unity.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\Unity.DataContract.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\Unity.Legacy.NRefactory.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\Unity.UNetWeaver.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\Unity.CecilTools.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\Unity.Cecil.Pdb.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\Unity.Cecil.Mdb.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Viewer\bin\Debug\UnityEditor.xml

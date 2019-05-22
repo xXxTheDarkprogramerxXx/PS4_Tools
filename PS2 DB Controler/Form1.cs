@@ -137,7 +137,7 @@ namespace PS2_DB_Controler
             foreach (var line in lines)
             {
                 var cols = line.Split(';');
-                if (cols.Count() > 2)
+                if (cols.Count() > 2 && cols.Count() < 4)
                 {
                     //add each line item 
                     //add image
@@ -153,7 +153,7 @@ namespace PS2_DB_Controler
 
 
                         newlist.Add(line + ";" + luckyUrl);
-
+                        File.WriteAllLines(Application.StartupPath + @"\ps2dbnew.d", newlist.ToArray());
 
                         //newlist.Add()
 

@@ -115,7 +115,11 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
+    <Reference Include="UnityEditor">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Editor\Data\Managed\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -202,6 +206,9 @@
     <Compile Include="Util\DDS\DdsFile.cs" />
     <Compile Include="Util\DDS\DDSImage.cs" />
     <Compile Include="Util\OffsetStream.cs" />
+    <Compile Include="Util\Squish\Squish.cs" />
+    <Compile Include="Util\Squish\SquishFlags.cs" />
+    <Compile Include="Util\System.cs" />
     <Compile Include="Util\Utils.cs" />
     <Compile Include="Util\WriterBase.cs" />
   </ItemGroup>

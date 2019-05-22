@@ -71,7 +71,7 @@ namespace PS4_Tools
         internal static string AppCommonPath()
         {
             string rtn = "";
-            if (Util.Utils.isLinux == false)
+            if (Sys.isLinux == false)
             {
                 rtn = System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("PS4_Tools.dll", ""); // Get Location of the execution directory
             }
@@ -541,11 +541,15 @@ namespace PS4_Tools
                 public static void CreateDDSFromStream(byte[] png, string SavePath)
                 {
                     MemoryStream ms = new MemoryStream(png);
-                    Bitmap Bitmap = new Bitmap(ms);
-                    DDSReader.DDSImage img = new DDSReader.DDSImage(Bitmap);
+                   // Bitmap Bitmap = new Bitmap(ms);
+                   // DDSReader.DDSImage img = new DDSReader.DDSImage(Bitmap);
                     UnityEngine.Texture2D dd = LoadTexture(ms);
                     dd.Compress(true);
+
+                    
+                    UnityEditor.EditorUtility.CompressTexture(dd, TextureFormat.DXT1, TextureCompressionQuality.Best);
                     byte[] data = dd.GetRawTextureData();
+                   // dd.GetRawTextureData()
                     //img.Save(Bitmap, SavePath);
                     File.WriteAllBytes(SavePath, data);
                     //img;
@@ -1939,6 +1943,7 @@ namespace PS4_Tools
         private static string dest = "";
 
         #endregion << Vars >>
+
         /// <summary>
         /// Compare Byte by Byte or Array by Array
         /// </summary>
