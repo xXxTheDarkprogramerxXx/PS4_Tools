@@ -324,7 +324,7 @@ namespace Tester
 
             openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            openFileDialog1.Title = "Select PS4 File";
+            openFileDialog1.Title = "Select PS4 File(icon0)";
 
             openFileDialog1.CheckFileExists = true;
 
@@ -343,11 +343,41 @@ namespace Tester
             {
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
                 saveFileDialog1.Filter = "PS4 PNG Image|*.png";
-                saveFileDialog1.Title = "Save an PS4 Image File";
+                saveFileDialog1.Title = "Save an PS4 Image File (icon0)";
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     PS4_Tools.Image.PNG png = new PS4_Tools.Image.PNG();
                     png.Create_PS4_Compatible_PNG(openFileDialog1.FileName,saveFileDialog1.FileName);
+                }
+            }
+            openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            openFileDialog1.Title = "Select PS4 File(pic1)";
+
+            openFileDialog1.CheckFileExists = true;
+
+            openFileDialog1.CheckPathExists = true;
+
+            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+
+            openFileDialog1.RestoreDirectory = true;
+
+            openFileDialog1.Multiselect = false;
+
+            openFileDialog1.ReadOnlyChecked = true;
+
+            openFileDialog1.ShowReadOnly = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "PS4 PNG Image|*.png";
+                saveFileDialog1.Title = "Save an PS4 Image File (pic1)";
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    PS4_Tools.Image.PNG png = new PS4_Tools.Image.PNG();
+                    png.Create_PS4_Compatible_PNG(openFileDialog1.FileName, saveFileDialog1.FileName,1920,1080);
                 }
             }
         }

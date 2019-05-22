@@ -368,6 +368,22 @@ namespace PS4_Tools
             /// </summary>
             /// <param name="inputfile">Original Bitmap Location</param>
             /// <param name="outputfile">Original Bitmap Location</param>
+            public void Create_PS4_Compatible_PNG(string inputfile, string outputfile,int Height = 512,int Width = 512)
+            {
+                //read input file
+                Bitmap returnbmp = new Bitmap(inputfile);
+
+                returnbmp = ResizeImage(returnbmp, Width, Height);//converts the image to the correct size
+                returnbmp = ConvertTo24bpp(returnbmp);//converts image to 24bpp
+
+                returnbmp.Save(outputfile);//saves the file location
+            }
+
+            /// <summary>
+            /// Converts a file location of a bitmap to a ps4 compatible one
+            /// </summary>
+            /// <param name="inputfile">Original Bitmap Location</param>
+            /// <param name="outputfile">Original Bitmap Location</param>
             /// <returns>PS4 Comptatible Bitmap</returns>
             public Bitmap Create_PS4_Compatible_PNG(string inputfile)
             {
