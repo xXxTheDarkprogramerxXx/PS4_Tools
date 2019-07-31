@@ -55,9 +55,6 @@
     <AndroidSupportedAbis>armeabi;armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BadgeView">
-      <HintPath>..\..\..\..\..\..\Downloads\android-viewbadger-Xamarin-master\android-viewbadger-Xamarin-master\bin\Debug\BadgeView.dll</HintPath>
-    </Reference>
     <Reference Include="BigInteger">
       <HintPath>..\..\..\PS4_Tools\bin\Debug\BigInteger.dll</HintPath>
     </Reference>
@@ -69,9 +66,6 @@
     </Reference>
     <Reference Include="DspAdpcm">
       <HintPath>..\..\..\PS4_Tools\bin\Debug\DspAdpcm.dll</HintPath>
-    </Reference>
-    <Reference Include="FastAndroidCamera">
-      <HintPath>..\..\..\..\..\Downloads\zxing\FastAndroidCamera.dll</HintPath>
     </Reference>
     <Reference Include="GameArchives">
       <HintPath>..\..\..\PS4_Tools\bin\Debug\GameArchives.dll</HintPath>
@@ -127,15 +121,9 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\PS4_Tools\bin\Debug\UnityEngine.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Android.Support.Design, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Android.Support.Design.23.2.1\lib\MonoAndroid43\Xamarin.Android.Support.Design.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Android.Support.Tasks.VectorDrawable">
-      <HintPath>..\Special_Mandie\DesignLibrary_Tutorial\packages\Xamarin.Android.Support.Vector.Drawable.23.2.1\build\Xamarin.Android.Support.Tasks.VectorDrawable.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Android.Support.v4.23.2.1\lib\MonoAndroid403\Xamarin.Android.Support.v4.dll</HintPath>
@@ -145,22 +133,9 @@
       <HintPath>..\packages\Xamarin.Android.Support.v7.AppCompat.23.2.1\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xamarin.Android.Support.v7.CardView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Downloads\xamandroidsupportv7cardview-24.2.1.0\xamandroidsupportv7cardview-24.2.1.0\samples\AndroidSupportSample\packages\Xamarin.Android.Support.v7.CardView.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.v7.CardView.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Android.Support.v7.RecyclerView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Android.Support.v7.RecyclerView.23.2.1\lib\MonoAndroid403\Xamarin.Android.Support.v7.RecyclerView.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="ZXing.Net.Mobile.Core">
-      <HintPath>..\..\..\..\..\Downloads\zxing\ZXing.Net.Mobile.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="zxing.portable">
-      <HintPath>..\..\..\..\..\Downloads\zxing\zxing.portable.dll</HintPath>
-    </Reference>
-    <Reference Include="ZXingNetMobile">
-      <HintPath>..\..\..\..\..\Downloads\zxing\ZXingNetMobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

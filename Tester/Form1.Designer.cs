@@ -67,6 +67,7 @@
             this.button16 = new System.Windows.Forms.Button();
             this.button18 = new System.Windows.Forms.Button();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.button19 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -483,11 +484,22 @@
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "PNG Convert";
             // 
+            // button19
+            // 
+            this.button19.Location = new System.Drawing.Point(538, 472);
+            this.button19.Name = "button19";
+            this.button19.Size = new System.Drawing.Size(161, 23);
+            this.button19.TabIndex = 25;
+            this.button19.Text = "Test";
+            this.button19.UseVisualStyleBackColor = true;
+            this.button19.Click += new System.EventHandler(this.button19_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 506);
+            this.Controls.Add(this.button19);
             this.Controls.Add(this.groupBox14);
             this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.groupBox12);
@@ -564,6 +576,7 @@
         private System.Windows.Forms.Button button16;
         private System.Windows.Forms.Button button18;
         private System.Windows.Forms.GroupBox groupBox15;
+        private System.Windows.Forms.Button button19;
     }
 }
 

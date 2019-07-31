@@ -381,5 +381,11 @@ namespace Tester
                 }
             }
         }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            PS4_Tools.Trophy_File tphy = new PS4_Tools.Trophy_File();
+            tphy.Load(File.ReadAllBytes(@"C:\Users\3deEchelon\Downloads\PlayStation 4 Trophies\PlayStation 4 Trophies\Adventures of Pip\data\NPWR09053_00\trophy.img"));
+        }
     }
 }

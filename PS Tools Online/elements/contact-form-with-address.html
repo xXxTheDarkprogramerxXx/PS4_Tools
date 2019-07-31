@@ -1,0 +1,68 @@
+<section class="section section-md bg-gray-light novi-background bg-image">
+  <div class="container">
+    <div class="row justify-content-sm-center justify-content-lg-between spacing-55">
+      <div class="col-sm-10 col-xl-12">
+          <h3>
+            <span class="heading-3">Contact Form</span>
+            with address
+          </h3>
+      </div>
+      <div class="col-sm-10 col-lg-10 col-xl-5">
+        <div class="box-wrap-content-interactive">
+          <div class="box-contacts">
+            <h4>Address</h4>
+            <address>
+              <p>6036 Richmond hwy., Alexandria, VA, 2230</p>
+            </address>
+            <h4>Phone</h4>
+            <ul class="list-0">
+              <li>
+                <a class="link link-sm link-gray-darker" href="callto:#">+1 (409) 987–5874</a>
+              </li>
+              <li>
+                <a class="link link-sm link-gray-darker" href="callto:#">+1 (409) 455–5454</a>
+              </li>
+            </ul>
+            <h4>E-mail</h4>
+            <a class="link-gray" href="mailto:#">info@demolink.org</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-10 col-lg-10 col-xl-6">
+        <form class="rd-mailform text-left" data-form-output="form-output-global" data-form-type="forms" method="post" action="bat/rd-mailform.php">
+          <div class="row spacing-20">
+            <div class="col-sm-6">
+              <div class="form-group form-wrap-validation">
+                <label class="form-label" for="forms-name2">First name</label>
+                <input class="form-control" id="forms-name2" type="text" name="name" data-constraints="@Required"> </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group form-wrap-validation">
+                <label class="form-label" for="forms-last-name2">Last name</label>
+                <input class="form-control" id="forms-last-name2" type="text" name="last-name" data-constraints="@Required"> </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group form-wrap-validation">
+                <label class="form-label" for="forms-email2">E-mail</label>
+                <input class="form-control" id="forms-email2" type="email" name="email" data-constraints="@Email @Required"> </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group form-wrap-validation">
+                <label class="form-label" for="forms-phone2">Phone</label>
+                <input class="form-control" id="forms-phone2" type="text" name="phone" data-constraints="@Numeric @Required"> </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group form-wrap-validation">
+                <label class="form-label" for="forms-message2">Message</label>
+                <textarea class="form-control" id="forms-message2" name="message" data-constraints="@Required"></textarea>
+              </div>
+            </div>
+            <div class="col-sm-6 form-button">
+              <button class="btn btn-primary btn-block btn-effect-ujarak" type="submit">send message</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

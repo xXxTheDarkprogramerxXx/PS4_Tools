@@ -23,7 +23,6 @@ using System.Threading.Tasks;
 using Square.Picasso;
 using Android.Graphics.Drawables;
 using Android.Graphics;
-using ZXing.Mobile;
 using Android.Media;
 
 namespace DesignLibrary_Tutorial
@@ -38,7 +37,7 @@ namespace DesignLibrary_Tutorial
         public static double myLocationLatitude;
         public static double myLocationLongitude;
 
-        public ZXing.Mobile.MobileBarcodeScanner scanner;
+       
 
         MediaPlayer _player;
 
@@ -50,10 +49,6 @@ namespace DesignLibrary_Tutorial
             SetContentView(Resource.Layout.Main);
 
             this.Title = "PS4 Tools";
-
-            MobileBarcodeScanner.Initialize(Application);
-            //add this somewhere something keeps breaking
-            scanner = new ZXing.Mobile.MobileBarcodeScanner();
 
             SupportToolbar toolBar = FindViewById<SupportToolbar>(Resource.Id.toolBar);
             SetSupportActionBar(toolBar);
@@ -89,84 +84,10 @@ namespace DesignLibrary_Tutorial
                         tabs.SetupWithViewPager(viewPager);
                         FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
                         fab.Visibility = ViewStates.Invisible;   
-                        fab.Click += async (o, e) =>
+                        fab.Click += (o, e) =>
                     {
                         View anchor = o as View;
 
-                        var result = await scanner.Scan();
-
-                        if (result != null)
-                        {
-                            var founditem = Fragment1.tripobject.Find(prod => prod._tripno == result.Text);
-                            if (founditem != null)
-                            {
-                                try
-                                {
-                                    _player.Start();
-                                }
-                                catch(System.Exception ex)
-                                {
-                                    //sound player is fucked up
-                                }
-                               
-                                context.RunOnUiThread(() =>
-                                {
-                                    //now we do our other validations here
-                                    for (int i = 0; i < Fragment1.tripobject.Count; i++)
-                                    {
-                                        if (Fragment1.tripobject[i]._tripno.Contains(result.Text))
-                                        {
-                                            Intent intent = new Intent(context, typeof(TripScanner));
-                                            intent.PutExtra(TripScanner.EXTRA_NAME, result.Text);//pass information to the next screen
-
-                                            context.StartActivity(intent);
-                                        }
-                                    }
-                                    if (Fragment1.tripobject.Count == 0)
-                                    {
-                                        Android.Support.V7.App.AlertDialog.Builder completed = new Android.Support.V7.App.AlertDialog.Builder(this);
-                                        completed.SetTitle("WMS POD");
-                                        completed.SetMessage("Invoice not found");
-                                        completed.SetPositiveButton("OK", (senderAlert, args) =>
-                                        {
-
-                                        });
-                                        Dialog completeddialog = completed.Create();
-                                        completeddialog.Show();
-                                        /*Android Seems To Cache These Values*/
-                                        //    progressDialog.Hide();
-                                    }
-                                    Fragment1._adapter.NotifyDataSetChanged();
-                                });
-                            }
-                        }
-                        else
-                        {
-                            Android.Support.V7.App.AlertDialog.Builder completed = new Android.Support.V7.App.AlertDialog.Builder(this);
-                            completed.SetTitle("WMS POD");
-                            completed.SetMessage("Invoice not found");
-                            completed.SetPositiveButton("OK", (senderAlert, args) =>
-                            {
-
-                            });
-                            Dialog completeddialog = completed.Create();
-                            completeddialog.Show();
-                            /*Android Seems To Cache These Values*/
-                            //progressDialog.Hide();
-                        }
-                        /*open camera screen*/
-
-                        //we dont want a snack bar just go to the next screen if the item is applicable
-
-
-                        //Snackbar.Make(anchor, "Yay Snackbar!!", Snackbar.LengthLong)
-                        //        .SetAction("Action", v =>
-                        //        {
-                        //        //Do something here
-                        //        Intent intent = new Intent(fab.Context, typeof(BottomSheetActivity));
-                        //            StartActivity(intent);
-                        //        })
-                        //        .Show();
                     };
 
 

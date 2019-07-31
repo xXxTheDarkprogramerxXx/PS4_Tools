@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -8,80 +7,72 @@
     android:paddingRight="16dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
-
-  <android.support.v7.widget.CardView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/card_margin"
-          android:orientation="vertical"
-          android:weightSum="100">
-
-    <RelativeLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-      <ImageView
-          android:id="@+id/imgvPro"
-          android:layout_width="90dp"
-          android:layout_height="120dp"
-          app:srcCompat="?android:attr/alertDialogIcon" />
-
-      <TextView
-          android:id="@+id/txtTitle"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="100dp"
-          android:text="Title"
-          android:textSize="24sp" />
-
-      <TextView
-          android:id="@+id/txtDescription"
-          android:layout_width="match_parent"
-          android:layout_height="50dp"
-          android:layout_marginLeft="100dp"
-          android:layout_marginTop="40dp"
-          android:text="Description"
-          android:textSize="18sp" />
-
-      <TextView
-          android:id="@+id/txtPrice"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="100dp"
-          android:layout_marginTop="95dp"
-          android:text="R 120.99"
-          android:textColor="@android:color/holo_blue_light"
-          android:textSize="18sp"
-          android:textStyle="bold" />
-      
-      <TextView
-          android:id="@+id/txtDistance"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentEnd="true"
-          android:layout_alignTop="@+id/txtExpire"
-          android:layout_marginLeft="100dp"
-          android:text=""
-          android:textColor="@android:color/holo_blue_light"
-          android:textSize="18sp"
-          android:textStyle="bold" />
-
-      <TextView
-          android:id="@+id/txtExpire"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="190dp"
-          android:layout_marginTop="95dp"
-          android:text="ExpiryDate" />
-      <TextView
-          android:id="@+id/txtDiscount"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentStart="true"
-          android:text=""
-          android:textColor="@android:color/holo_green_light"
-          android:textSize="18sp"
-          android:textStyle="bold" />
-
-
-    </RelativeLayout>
-  </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_margin"
+        android:orientation="vertical"
+        android:weightSum="100">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imgvPro"
+                android:layout_width="90dp"
+                android:layout_height="120dp"
+                app:srcCompat="?android:attr/alertDialogIcon" />
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:text="Title"
+                android:textSize="24sp" />
+            <TextView
+                android:id="@+id/txtDescription"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="40dp"
+                android:text="Description"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/txtPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="95dp"
+                android:text="R 120.99"
+                android:textColor="@android:color/holo_blue_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/txtDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/txtExpire"
+                android:layout_marginLeft="100dp"
+                android:text=""
+                android:textColor="@android:color/holo_blue_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/txtExpire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="95dp"
+                android:text="ExpiryDate" />
+            <TextView
+                android:id="@+id/txtDiscount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text=""
+                android:textColor="@android:color/holo_green_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 </RelativeLayout>

@@ -17,7 +17,6 @@ using System.IO;
 using Android.Content.Res;
 using SupportToolbar = Android.Support.V7.Widget.Toolbar;
 using Android.Support.Design.Widget;
-using ZXing.Mobile;
 using Android.Media;
 
 namespace DesignLibrary_Tutorial
@@ -46,9 +45,6 @@ namespace DesignLibrary_Tutorial
 
         public static bool FirstItem = true;
 
-
-        public ZXing.Mobile.MobileBarcodeScanner scanner;
-
         MediaPlayer _player;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -58,11 +54,6 @@ namespace DesignLibrary_Tutorial
 
             SetContentView(Resource.Layout.Activity_SubCategory);
             act = this;
-
-            //this needs to be initialized somewhere 
-            MobileBarcodeScanner.Initialize(Application);
-            //add this somewhere something keeps breaking
-            scanner = new ZXing.Mobile.MobileBarcodeScanner();
 
             string cheeseName = Intent.GetStringExtra(EXTRA_NAME);
             JobNo = cheeseName;
@@ -242,145 +233,7 @@ namespace DesignLibrary_Tutorial
 
                             new System.Threading.Thread(new System.Threading.ThreadStart(async delegate
                             {
-                                
-
-                                var result = await scanner.Scan();
-
-                                if (result != null)
-                                {
-                                    var founditem = tripdetails.Find(prod => prod._invoice == result.Text);
-                                    if (founditem == null)
-                                    {
-                                        for (int i = 0; i < tripdetails.Count; i++)
-                                        {
-                                            if(tripdetails[i]._invoice == result.Text)
-                                            {
-                                                founditem = tripdetails[i];
-                                            }
-                                        }
-                                    }
-                                    if (founditem != null)
-                                    {
-
-                                        _player.Start();
-                                    //add the text to the item
-                                    EditText mActionText = FindViewById<EditText>(Resource.Id.ActionText);
-                                        act.RunOnUiThread(() =>
-                                        {
-                                            mActionText.Text = result.Text;
-
-                                        //now we do our other validations here
-                                        for (int i = 0; i < tripdetails.Count; i++)
-                                            {
-                                                if (tripdetails[i]._invoice.Contains(result.Text))
-                                                {
-
-                                                    if (FirstItem == true)
-                                                    {
-                                                        WMSScanner.BoolResult addfirstitemtowms = Constants._service.Android_Update_FirstScanDate(Update_Variables.WMSGuid.ToString(), JobNo, founditem._salesorder);
-                                                        if (addfirstitemtowms.Successful == false)
-                                                        {
-                                                            Android.Support.V7.App.AlertDialog.Builder alert = new Android.Support.V7.App.AlertDialog.Builder(act);
-                                                            alert.SetTitle("Error");
-                                                            alert.SetMessage(addfirstitemtowms.Message);
-                                                            alert.SetPositiveButton("OK", (senderAlert, args) =>
-                                                            {
-
-                                                            });
-                                                            Dialog dialog = alert.Create();
-                                                            dialog.Show();
-                                                            FirstItem = true;
-                                                        }
-
-                                                    //post to wms that use can be locked to an order
-                                                    FirstItem = false;
-                                                    }
-                                                    tripdetails.RemoveAt(i);
-
-                                                    WMSScanner.BoolResult SalesOrderTrip = Constants._service.Android_Update_Operator_SalesOrder_On_Trip(Update_Variables.WMSGuid.ToString(), JobNo, founditem._salesorder);
-                                                    if (SalesOrderTrip.Successful == false)
-                                                    {
-                                                        Android.Support.V7.App.AlertDialog.Builder alert = new Android.Support.V7.App.AlertDialog.Builder(act);
-                                                        alert.SetTitle("Error");
-                                                        alert.SetMessage(SalesOrderTrip.Message);
-                                                        alert.SetPositiveButton("OK", (senderAlert, args) =>
-                                                        {
-
-                                                        });
-                                                        Dialog dialog = alert.Create();
-                                                        dialog.Show();
-                                                        FirstItem = false;
-                                                        return;
-                                                    }
-
-                                                    break;
-                                                }
-                                            }
-                                            if (tripdetails.Count == 0)
-                                            {
-                                            //this was the last item
-                                            //scan it out and post it to WMS
-
-                                            WMSScanner.BoolResult LastScan = Constants._service.Android_Update_EndScanDate(Update_Variables.WMSGuid.ToString(), JobNo, founditem._salesorder);
-                                                if (LastScan.Successful == false)
-                                                {
-                                                    Android.Support.V7.App.AlertDialog.Builder alert = new Android.Support.V7.App.AlertDialog.Builder(act);
-                                                    alert.SetTitle("Error");
-                                                    alert.SetMessage(LastScan.Message);
-                                                    alert.SetPositiveButton("OK", (senderAlert, args) =>
-                                                    {
-
-                                                    });
-                                                    Dialog dialog = alert.Create();
-                                                    dialog.Show();
-                                                    FirstItem = false;
-                                                    return;
-                                                }
-
-                                                Android.Support.V7.App.AlertDialog.Builder completed = new Android.Support.V7.App.AlertDialog.Builder(act);
-                                                completed.SetTitle("WMS POD");
-                                                completed.SetMessage("Sales Order Completed");
-                                                completed.SetPositiveButton("OK", (senderAlert, args) =>
-                                                {
-
-                                                });
-                                                Dialog completeddialog = completed.Create();
-                                                completeddialog.Show();
-                                            /*Android Seems To Cache These Values*/
-                                                FirstItem = true;
-                                                act.Finish();
-                                                MainActivity.ReleadData();
-                                            }
-                                            _adapter.NotifyDataSetChanged();
-                                            mActionText.Text = "";
-                                        });
-                                    }
-                                    else
-                                    {
-                                        act.RunOnUiThread(() =>
-                                        {
-                                            Android.Support.V7.App.AlertDialog.Builder alert = new Android.Support.V7.App.AlertDialog.Builder(act);
-                                            alert.SetTitle("WMS Trips");
-                                            alert.SetMessage("Invoice not on Sales Order");
-                                            alert.SetPositiveButton("OK", (senderAlert, args) =>
-                                            {
-
-                                            });
-                                            try
-                                            {
-                                                Dialog dialog = alert.Create();
-                                                dialog.Show();
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                //somehow the elert crashes now
-                                            }
-                                            //_adapter.NotifyDataSetChanged();
-                                        });
-                                    }
-                                }
-
-                            /*open camera screen*/
+                              
                             }))
                             {
                                 Name = "TripOptions"

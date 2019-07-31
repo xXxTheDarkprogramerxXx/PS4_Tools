@@ -1,0 +1,44 @@
+<section class="section section-lg bg-gray-light novi-background bg-image">
+  <div class="container">
+    <div class="row justify-content-center spacing-40">
+      <div class="col-sm-10 col-lg-12">
+        <h3>
+          <span class="heading-3">Contact Form</span>
+        </h3>
+      </div>
+      <div class="col-sm-10 col-xl-6">
+        <form class="rd-mailform" data-form-output="form-output-global" data-form-type="contact" method="post" action="bat/rd-mailform.php">
+          <div class="row row-sm-bottom spacing-20">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <input class="form-control" id="contact-first-name" type="text" name="name" data-constraints="@Required">
+                <label class="form-label" for="contact-first-name">Your name</label>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <input class="form-control" id="contact-phone" type="text" name="phone" data-constraints="@Numeric">
+                <label class="form-label" for="contact-phone">Phone</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <textarea class="form-control" id="contact-message" name="message" data-constraints="@Required"></textarea>
+                <label class="form-label" for="contact-message">Your Message</label>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <input class="form-control" id="contact-email" type="email" name="email" data-constraints="@Email @Required">
+                <label class="form-label" for="contact-email">E-mail</label>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <button class="btn btn-primary btn-block btn-effect-ujarak" type="submit">send message</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
