@@ -301,7 +301,7 @@ namespace Tester
             Bitmap btimap = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\pic0.png");
             Stream sm = new FileStream(@"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\pic0.png", FileMode.Open, FileAccess.Read);
 
-            PS4_Tools.Image.DDS.PS4.CreateDDSFromBitmap(btimap, @"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
+            //PS4_Tools.Image.DDS.PS4.CreateDDSFromBitmap(btimap, @"C:\Users\3deEchelon\Desktop\PS4\psp Decrypt\Sc0\test.dds");
             // pictureBox1.Image = item;
 
             //test if dds is corectly saved

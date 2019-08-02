@@ -51,7 +51,11 @@ using PS4_Tools.Util;
 
 #region << Unity Engine >>
 
+#if UNITY_EDITOR
+
 using UnityEngine;
+
+#endif
 using System.Runtime.InteropServices;
 
 #endregion << Unity Engine >>
@@ -159,7 +163,7 @@ namespace PS4_Tools
     /// </summary>
     public class SELF
     {
-        #region SelfStruct
+#region SelfStruct
        
         /// <summary>
         /// Self Header 
@@ -198,7 +202,7 @@ namespace PS4_Tools
         //    public hilo64_t uncompressed_size = new hilo64_t();
         //}
 
-        #endregion
+#endregion
     }
 
     /// <summary>
@@ -345,7 +349,7 @@ namespace PS4_Tools
                 return bmp;
             }
 
-            #region << Create_PS4_Compatible_PNG >>
+#region << Create_PS4_Compatible_PNG >>
 
             /// <summary>
             /// Converts a file location of a bitmap to a ps4 compatible one
@@ -450,7 +454,7 @@ namespace PS4_Tools
                 return returnbmp.ToByteArray(System.Drawing.Imaging.ImageFormat.Png);
             }
 
-            #endregion << Create_PS4_Compatible_PNG >>
+#endregion << Create_PS4_Compatible_PNG >>
         }
 
         /// <summary>
@@ -458,7 +462,7 @@ namespace PS4_Tools
         /// </summary>
         public class DDS
         {
-            #region << Returns >>
+#region << Returns >>
 
             /// <summary>
             /// Directly save a PNG from a DDS File
@@ -517,8 +521,12 @@ namespace PS4_Tools
 
             #region << Creations >>
 
+#if UNITY_EDITOR
             public class PS4
             {
+
+
+
                 /// <summary>
                 /// Still not ready for release
                 /// </summary>
@@ -624,6 +632,7 @@ namespace PS4_Tools
                     }
                 }
             }
+#endif
 
             public class Windows
             {
@@ -670,6 +679,7 @@ namespace PS4_Tools
                     //img;
                 }
 
+
                 // Merged From linked CopyStream below and Jon Skeet's ReadFully example
                 public static void CopyStream(Stream input, Stream output)
                 {
@@ -690,7 +700,7 @@ namespace PS4_Tools
         /// </summary>
         public class GIMImages
         {
-            #region << Gim >>
+#region << Gim >>
 
             public interface IPixelOrderIterator
             {
@@ -1900,7 +1910,7 @@ namespace PS4_Tools
                 }
             }
 
-            #endregion << Gim >>
+#endregion << Gim >>
         }
 
     }
@@ -1913,7 +1923,7 @@ namespace PS4_Tools
     /// </summary>
     public class RCO
     {
-        #region << Vars >>
+#region << Vars >>
         private static byte[] gimMagic = new byte[16] { 0x4D, 0x49, 0x47, 0x2E, 0x30, 0x30, 0x2E, 0x31, 0x50, 0x53, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, };
         private static byte[] vagEnd = new byte[16] { 0x00, 0x07, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, };
         private static byte[] pngMagic = new byte[16] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52, };
@@ -1958,7 +1968,7 @@ namespace PS4_Tools
         private static string move = "";
         private static string dest = "";
 
-        #endregion << Vars >>
+#endregion << Vars >>
 
         /// <summary>
         /// Compare Byte by Byte or Array by Array
@@ -2062,7 +2072,7 @@ namespace PS4_Tools
                             br.BaseStream.Seek(count, SeekOrigin.Begin);
                             br.Read(wav, 0, 4);
 
-                            #region vagExtract
+#region vagExtract
                             if (CompareBytes(vag, vagMagic))
                             {
                                 Console.Write("Found a VAG File will start to extract...");
@@ -2167,8 +2177,8 @@ namespace PS4_Tools
                                 //ConvertVAG(outFile);
                                 countVag++;
                             }
-                            #endregion vagExtract
-                            #region pngExtract
+#endregion vagExtract
+#region pngExtract
                             else if (CompareBytes(png, pngMagic))
                             {
                                 Console.Write("Found a PNG File will start to extract...");
@@ -2278,8 +2288,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countPNG++;
                             }
-                            #endregion pngExtract
-                            #region cxmlExtract
+#endregion pngExtract
+#region cxmlExtract
                             else if (CompareBytes(cxml, ngCXML))
                             {
                                 Console.Write("Found a CXML File will start to extract...");
@@ -2380,8 +2390,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countCXML++;
                             }
-                            #endregion cxmlExtract
-                            #region ddsExtract
+#endregion cxmlExtract
+#region ddsExtract
                             else if (CompareBytes(dds, ddsMagic))
                             {
                                 Console.Write("Found a DDS File will start to extract...");
@@ -2482,8 +2492,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countDDS++;
                             }
-                            #endregion ddsExtract
-                            #region gtfExtract
+#endregion ddsExtract
+#region gtfExtract
                             else if (CompareBytes(gtf, gtfMagic))
                             {
                                 Console.Write("Found a GTF File will start to extract...");
@@ -2584,8 +2594,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countGTF++;
                             }
-                            #endregion gtfExtract
-                            #region wavExtract
+#endregion gtfExtract
+#region wavExtract
                             else if (CompareBytes(wav, wavMagic))
                             {
                                 Console.Write("Found a WAV File will start to extract...");
@@ -2686,7 +2696,7 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countWAV++;
                             }
-                            #endregion wavExtract
+#endregion wavExtract
                             else
                             {
                                 Console.WriteLine("\nFound a new File which i don't know what to do with !\nPlease contact the Developer @ www.playstationhax.it");
@@ -2702,7 +2712,7 @@ namespace PS4_Tools
                     {
                         while ((i = br.Read(temp, 0, 1)) != 0)
                         {
-                            #region zlibExtract
+#region zlibExtract
                             _zlib = new byte[3];
                             br.BaseStream.Seek(count, SeekOrigin.Begin);
                             br.Read(_zlib, 0, 3);
@@ -2821,7 +2831,7 @@ namespace PS4_Tools
                                 //  ConvertDDS(corExt);
                                 Image.DDS.SavePNGFromDDS(corExt, corExt.Replace(".dds", ".png"));
                             }
-                            #endregion ZlibExtract
+#endregion ZlibExtract
                             // Have we dumped all data?
                             if (dumped == end)
                             {
@@ -2961,7 +2971,7 @@ namespace PS4_Tools
                             br.BaseStream.Seek(count, SeekOrigin.Begin);
                             br.Read(wav, 0, 4);
 
-                            #region vagExtract
+#region vagExtract
                             if (CompareBytes(vag, vagMagic))
                             {
                                 //Console.Write("Found a VAG File will start to extract...");
@@ -3077,8 +3087,8 @@ namespace PS4_Tools
                                 //ConvertVAG(outFile);
                                 countVag++;
                             }
-                            #endregion vagExtract
-                            #region pngExtract
+#endregion vagExtract
+#region pngExtract
                             else if (CompareBytes(png, pngMagic))
                             {
                                 //Console.Write("Found a PNG File will start to extract...");
@@ -3198,8 +3208,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countPNG++;
                             }
-                            #endregion pngExtract
-                            #region cxmlExtract
+#endregion pngExtract
+#region cxmlExtract
                             else if (CompareBytes(cxml, ngCXML))
                             {
                                 //Console.Write("Found a CXML File will start to extract...");
@@ -3309,8 +3319,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countCXML++;
                             }
-                            #endregion cxmlExtract
-                            #region ddsExtract
+#endregion cxmlExtract
+#region ddsExtract
                             else if (CompareBytes(dds, ddsMagic))
                             {
                              //   Console.Write("Found a DDS File will start to extract...");
@@ -3417,8 +3427,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countDDS++;
                             }
-                            #endregion ddsExtract
-                            #region gtfExtract
+#endregion ddsExtract
+#region gtfExtract
                             else if (CompareBytes(gtf, gtfMagic))
                             {
                                 Console.Write("Found a GTF File will start to extract...");
@@ -3519,8 +3529,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countGTF++;
                             }
-                            #endregion gtfExtract
-                            #region wavExtract
+#endregion gtfExtract
+#region wavExtract
                             else if (CompareBytes(wav, wavMagic))
                             {
                                // Console.Write("Found a WAV File will start to extract...");
@@ -3625,7 +3635,7 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countWAV++;
                             }
-                            #endregion wavExtract
+#endregion wavExtract
                             else
                             {
                                 //Console.WriteLine("\nFound a new File which i don't know what to do with !\nPlease contact the Developer @ www.playstationhax.it");
@@ -3641,7 +3651,7 @@ namespace PS4_Tools
                     {
                         while ((i = br.Read(temp, 0, 1)) != 0)
                         {
-                            #region zlibExtract
+#region zlibExtract
                             _zlib = new byte[3];
                             br.BaseStream.Seek(count, SeekOrigin.Begin);
                             br.Read(_zlib, 0, 3);
@@ -3760,7 +3770,7 @@ namespace PS4_Tools
                                 //  ConvertDDS(corExt);
                                 Image.DDS.SavePNGFromDDS(corExt, corExt.Replace(".dds", ".png"));
                             }
-                            #endregion ZlibExtract
+#endregion ZlibExtract
                             // Have we dumped all data?
                             if (dumped == end)
                             {
@@ -3860,7 +3870,7 @@ namespace PS4_Tools
     public class SaveData
     {
       
-        #region << Load Save File Class>>
+#region << Load Save File Class>>
 
         
 
@@ -3992,7 +4002,7 @@ namespace PS4_Tools
         }
 
 
-        #endregion << Load Save File Class>>
+#endregion << Load Save File Class>>
         
 
         /*CFW Propthet's Method This Method still relies on samu to be dumped*/
@@ -4463,7 +4473,7 @@ namespace PS4_Tools
     /// </summary>
     public class Licensing
     {
-        #region << SealedKey >>
+#region << SealedKey >>
         /// <summary>
         /// Everything Inside the PS4/ from PKG's To Save Data Uses a sealed key
         /// </summary>
@@ -4509,11 +4519,11 @@ namespace PS4_Tools
             return sldkey;
         }
 
-        #endregion << SealedKey >>
+#endregion << SealedKey >>
 
-        #region << Rif >>
+#region << Rif >>
 
-        #region << Riff Information >>
+#region << Riff Information >>
         public enum RiffType
         {
             KDS,
@@ -4722,11 +4732,11 @@ namespace PS4_Tools
         }
 
         //public static RIF CreateNewRi
-        #endregion < Riff Informtaiton >>
+#endregion < Riff Informtaiton >>
 
-        #endregion << Rif >> 
+#endregion << Rif >> 
 
-        #region << Act.Dat >>
+#region << Act.Dat >>
 
         public class Act_Dat
         {
@@ -4798,10 +4808,10 @@ namespace PS4_Tools
             return act;
         }
 
-        #endregion << Act.Dat>>
+#endregion << Act.Dat>>
     }
 
-    #region << Files On The PS4 >>
+#region << Files On The PS4 >>
 
     /// <summary>
     /// Content Information Files
@@ -4895,7 +4905,7 @@ namespace PS4_Tools
     }
 
 
-    #endregion << Files On The PS4 >>
+#endregion << Files On The PS4 >>
 
     /*********************************************************
      *          PS4 PKG Reader by maxton  
@@ -4912,7 +4922,7 @@ namespace PS4_Tools
 
     public class PKG
     {
-        #region << Official >>
+#region << Official >>
         public class Official
         {
             /// <summary>
@@ -5230,7 +5240,7 @@ namespace PS4_Tools
                         Regex regex = new Regex("<titlepatch>(.*?)</titlepatch>", RegexOptions.Singleline);
 
                         /*i have commented this out as for some or other reason I can't get the deserielizer to work */
-                        #region << Deserlizers not working >>
+#region << Deserlizers not working >>
                         //var item = DeserializeXMLFileToObject<Update_Structure>(@"C:\Users\3deEchelon\Downloads\CUSA07708-ver.xml");
 
                         //using (XmlReader reader = new XmlNodeReader(xml))
@@ -5257,7 +5267,7 @@ namespace PS4_Tools
 
                         //}
 
-                        #endregion << Deserlizers not working >>
+#endregion << Deserlizers not working >>
                     }
 
                 }
@@ -5449,9 +5459,9 @@ namespace PS4_Tools
             }
         }
 
-        #endregion << Official >>
+#endregion << Official >>
 
-        #region << Scene Related >>
+#region << Scene Related >>
 
         public class SceneRelated
         {
@@ -5744,7 +5754,7 @@ namespace PS4_Tools
 
             }
 
-            #region << UnprotectedPKG >>
+#region << UnprotectedPKG >>
 
             private static string m_pkgfile;
             private static bool m_loaded;
@@ -6306,13 +6316,13 @@ namespace PS4_Tools
                 return pkgreturn;
             }
 
-            #endregion << UnprotectedPKG >>
+#endregion << UnprotectedPKG >>
 
             /// <summary>
             /// POWERED BY MAXTRON
             /// </summary>
 
-            #region << PKG File >>
+#region << PKG File >>
             public class PS4PKGFile
             {
                 public Pkg Package { get; set; }
@@ -6341,7 +6351,7 @@ namespace PS4_Tools
                 public byte[] imageKeyDecrypted { get; set; }
             }
 
-            #endregion << PKG File >>
+#endregion << PKG File >>
 
             public string pkgtable { get; set; }
             //private static PS4_Tools.LibOrbis.PKG.Pkg pkg = null;
@@ -6548,7 +6558,7 @@ namespace PS4_Tools
             }
         }
 
-        #endregion << Scene Related >>
+#endregion << Scene Related >>
 
         /// <summary>
         /// Remastered support class can build psp hd's and ps2 classics
@@ -6612,7 +6622,7 @@ namespace PS4_Tools
 
                         Console.WriteLine("Reading PS2 ISO");
 
-                        #region << CNF Reader >>
+#region << CNF Reader >>
 
                         //start off by reading the ISO FIle
                         //we need to get the control file info
@@ -6651,9 +6661,9 @@ namespace PS4_Tools
                             }
                         }
 
-                        #endregion << CNF Reader >>
+#endregion << CNF Reader >>
 
-                        #region << Set Up Working Directory >>
+#region << Set Up Working Directory >>
 
                         Console.WriteLine("Creating working directory");
 
@@ -6689,9 +6699,9 @@ namespace PS4_Tools
 
                       
 
-                        #endregion << Set Up Wokring Directory >>
+#endregion << Set Up Wokring Directory >>
 
-                        #region << Load and update gp4 and sfo Project >>
+#region << Load and update gp4 and sfo Project >>
                         Console.WriteLine("Loading GP4 Project");
                         var project = SceneRelated.GP4.ReadGP4(Working_Dir + "PS2Classics.gp4");
                         Console.WriteLine("Loading SFO");
@@ -6749,9 +6759,9 @@ namespace PS4_Tools
                         SceneRelated.GP4.SaveGP4(Working_Dir + "PS2Classics.gp4", project);
 
                         Console.WriteLine("Saving GP4");
-                        #endregion << Load GP4 Project >>
+#endregion << Load GP4 Project >>
 
-                        #region << Save Image Files to corresponding locations and also change to correct format >>
+#region << Save Image Files to corresponding locations and also change to correct format >>
 
                         Console.WriteLine("Saving Images");
 
@@ -6765,9 +6775,9 @@ namespace PS4_Tools
                         Bitmap icon1 = ps4icon0.Create_PS4_Compatible_PNG(bitmap);
                         icon1.Save(Working_Dir + @"PS2Emu\sce_sys\pic1.png");
 
-                        #endregion  << Save Image Files to corresponding locations and also change to correct format >>
+#endregion  << Save Image Files to corresponding locations and also change to correct format >>
 
-                        #region << PS2 Config >>
+#region << PS2 Config >>
 
                         Console.WriteLine("Creating Custom PS2 LUA And Config");
                         var textfile = File.ReadAllText(Working_Dir + @"PS2Emu\config-emu-ps4.txt");
@@ -6790,9 +6800,9 @@ namespace PS4_Tools
                         textfile = textfile.Replace(@"#--path-toolingscript=""/app0/patches""", @"--path-toolingscript=""/app0/patches""");//#--path-toolingscript=""/app0/patches"""
                         File.WriteAllText(Working_Dir + @"PS2Emu\config-emu-ps4.txt", textfile);
 
-                        #endregion << Copy over the images >>
+#endregion << Copy over the images >>
 
-                        #region << PS2 ISO copy >>
+#region << PS2 ISO copy >>
                         Console.WriteLine("Moving ISO File This May Take Some Time");
 
                         File.Delete(Working_Dir + @"\PS2Emu\image\disc01.iso");
@@ -6818,7 +6828,7 @@ namespace PS4_Tools
                         new PkgBuilder(PkgProperties.FromGp4(gp4, Working_Dir + "\\")).Write(SaveFileLOcation);
 
 
-                        #endregion << PS2 ISO copy >>
+#endregion << PS2 ISO copy >>
                     }
                     catch (Exception ex)
                     {
@@ -6890,7 +6900,7 @@ namespace PS4_Tools
         /// </summary>
         public class SLB2
         {
-            #region Variables
+#region Variables
             static long slb2BaseOffset = 0x200;
             static long containerSize;
             static long slb2Version;
@@ -6903,7 +6913,7 @@ namespace PS4_Tools
             static long byteCount;
             static long blockCount;
             static string fileName;
-            #endregion Variables
+#endregion Variables
 
             /// <summary>
             /// Reset the major Variables for the next SLB2 Container
