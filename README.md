@@ -15,7 +15,7 @@ PS4 PKG Installer (PKG Store) [Github](https://github.com/xXxTheDarkprogramerxXx
 
 PS4 PKG Installer Andorid [Github](https://github.com/xXxTheDarkprogramerxXx/Store-Remote-Tool-Android)
 
-
+PS4 PKG Tool- By pearlxcore [Github](https://github.com/pearlxcore/PS4-PKG-Tool)
 
 
 ## Example Applications
