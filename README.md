@@ -5,6 +5,19 @@ Collection Of Open Source PS4 Tools all in one Library
 
 Supports Unity
 
+## Projects Currently Running PS4 Tools
+
+PS4 PS2 Classics Manager (Unreleased) [Github](https://github.com/xXxTheDarkprogramerxXx/PS2-Classics-Replacer)
+
+PS4 PS2 Classics GUI [Github](https://github.com/xXxTheDarkprogramerxXx/PS3Tools/tree/master/PS4%20PS2%20Classis%20GUI)
+
+PS4 PKG Installer (PKG Store) [Github](https://github.com/xXxTheDarkprogramerxXx/Store-Remote-Tool)
+
+PS4 PKG Installer Andorid [Github](https://github.com/xXxTheDarkprogramerxXx/Store-Remote-Tool-Android)
+
+PS4 PKG Tool- By pearlxcore [Github](https://github.com/pearlxcore/PS4-PKG-Tool)
+
+
 ## Example Applications
 ### Image Util [![Build status](https://ci.appveyor.com/api/projects/status/ftuj48025au3q3cg?svg=true)](https://ci.appveyor.com/project/xXxTheDarkprogramerxXx/ps4-tools)
 
