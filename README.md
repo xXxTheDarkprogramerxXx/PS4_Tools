@@ -182,3 +182,14 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 
 ## Download
 [Download](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/tag/PS4-Tools-(AppVoyer)) - POWER BY APPVOYER
+
+## Open Source Projects
+### My Neighborhood 
+
+This is an open source version of the PS4 Neighborhood that came with the official psk sdk 
+
+![](https://i.imgur.com/h7wZ6Ta.png)
+
+Not much to say here mainly to be used for developers on our modified ps4's 
+
+To change your console from Normal Retail to a Semi Dev one simply use [LightningMods's Updater](http://psarchive.darksoftware.xyz/UPDATER_BETA.pkg)
