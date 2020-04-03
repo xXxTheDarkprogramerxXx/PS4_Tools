@@ -1,0 +1,13 @@
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\bin\Debug\My Neighborhood(WPF).exe.config
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).csprojResolveAssemblyReference.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\MainWindow.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\MainWindow.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\App.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF)_MarkupCompile.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).g.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My_Neighborhood_WPF_.Properties.Resources.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).csproj.GenerateResource.Cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\bin\Debug\My Neighborhood(WPF).exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\bin\Debug\My Neighborhood(WPF).pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).pdb
