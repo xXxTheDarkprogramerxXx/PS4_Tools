@@ -1,7 +1,10 @@
 
 # My Neighborhood 
 
-This is an open source version (alternative) of the PS4 Neighborhood that came with the official psk sdk 
+This is an open source version (alternative) of the PS4 Neighborhood that came with the official ps4 sdk 
+
+Follow development board on trello 
+https://trello.com/c/DnFTKOsb/58-ps4-neighborhood-open-source
 
 ![](https://i.imgur.com/h7wZ6Ta.png)
 
