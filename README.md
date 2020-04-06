@@ -186,10 +186,26 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 ## Open Source Projects
 ### My Neighborhood 
 
-This is an open source version of the PS4 Neighborhood that came with the official psk sdk 
+This is an open source version (alternative) of the PS4 Neighborhood that came with the official psk sdk 
 
 ![](https://i.imgur.com/h7wZ6Ta.png)
 
-Not much to say here mainly to be used for developers on our modified ps4's 
+#### What can i do with this ?
+
+This is mainly for developer use on any console that has unsigned code enabled and has the corresponding api installed (release to be announced)
+
+With this you can create your own application / games for ps4 homebrew and instead of creating a pkg each time you can simply attach the application / game to your file serving directory and load your current application in real time (that's the idea anyway)
+
+The project is to resemble the official PlayStation 4 Neighborhood without any of the SCE tools
+
+
+#### Requirements 
+
+* API Installed
+* System must be running a semi dev unit (not normal retail)
 
 To change your console from Normal Retail to a Semi Dev one simply use [LightningMods's Updater](http://psarchive.darksoftware.xyz/UPDATER_BETA.pkg)
+
+
+Console output will look similar to this 
+![](https://i.imgur.com/Lu6z9dv.png)
