@@ -1,0 +1,122 @@
+﻿<RibbonWindow x:Class="My_Neighborhood_WPF_.PS4Console"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:My_Neighborhood_WPF_"
+        mc:Ignorable="d"
+        Title="Console" Width="1299.3" Height="480" Icon="Images/favicon (1).ico" WindowStartupLocation="CenterScreen" Loaded="RibbonWindow_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Ribbon x:Name="Ribbon" Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)" Background="White" SelectedIndex="1">
+            <Ribbon.HelpPaneContent>
+                <RibbonButton SmallImageSource="Images/icons8-help-64.png" />
+            </Ribbon.HelpPaneContent>
+            <!--<Ribbon.QuickAccessToolBar>
+                <RibbonQuickAccessToolBar >
+                    <RibbonButton x:Name="QATButton1" 
+                                         SmallImageSource="Images/Hood1.png" />
+                    <RibbonButton x:Name="QATButton2" 
+                                         SmallImageSource="Images/Hood1.png" />
+                </RibbonQuickAccessToolBar>
+            </Ribbon.QuickAccessToolBar>-->
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu SmallImageSource="Images\favicon.ico" Label="File" Visibility="Collapsed" >
+                    <RibbonApplicationMenuItem Header="Hello _Ribbon"
+                                                      x:Name="MenuItem1"
+                                                      ImageSource="Images\Hood1.png"/>
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
+            <RibbonTab x:Name="FileTab" 
+                              Header="File"></RibbonTab>
+            <RibbonTab x:Name="HomeTab"
+                              Header="Home">
+
+                <RibbonGroup x:Name="rgbxClipboard" 
+                                    Header="Clipboard">
+                    <RibbonButton x:Name="btnCopy"
+                                         LargeImageSource="Images\icons8-copy-52.png"
+                                         Label="Copy" />
+                    <RibbonButton x:Name="btnPaste" SmallImageSource="Images\icons8-paste-96.png" Label="Paste"  />
+                    <RibbonButton x:Name="btnSelectAll" SmallImageSource="Images\icons8-check-all-96.png" Label="Select all"  />
+                    <RibbonCheckBox  IsChecked="True" x:Name="btnCopyTimeStamp" Label="Copy time stamp" />
+                </RibbonGroup>
+                <RibbonGroup x:Name="rgbxRun" 
+                                    Header="Processes">
+                    <RibbonButton x:Name="btnClearAll" SmallImageSource="Images\icons8-multiply-52.png" Label="Clear all" Click="btnClearAll_Click"/>
+                    <RibbonButton x:Name="btnRefreshProcesses" SmallImageSource="Images\icons8-update-left-rotation-96.png" Label="Refresh processes" Click="btnRefreshProcesses_Click"/>
+                    <RibbonMenuButton x:Name="btnProcessChanVis" SmallImageSource="Images\icons8-eye-96.png" Label="Process channel visibility" IsEnabled="False">
+                        <RibbonMenuItem></RibbonMenuItem>
+                    </RibbonMenuButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="rgbxTargets" 
+                                    Header="Channel">
+                    <RibbonCheckBox x:Name="cbxWordwrap"
+                                         IsChecked="True"
+                                         Label="Word wrap"  />
+                    <RibbonCheckBox x:Name="cbxshowtime"
+                                         IsChecked="True"
+                                         Label="Show time stamps"  />
+                    <RibbonMenuButton x:Name="txtEscapeChar"
+                                        SmallImageSource="Images\icons8-line-96.png"
+                                         Label="Unknown ESC" >
+                        <RibbonMenuItem></RibbonMenuItem>
+                    </RibbonMenuButton>
+                    <RibbonCheckBox x:Name="cbxEmptyHide"
+                                         IsChecked="True"
+                                         Label="Auto-hide empty channels"  />
+                    <RibbonCheckBox x:Name="cbxPreventoutput"
+                                         IsChecked="False"
+                                         Label="Prevent interleaved output"  />
+                    <RibbonCheckBox x:Name="cbxEchoConsoleimput"
+                                         IsChecked="True"
+                                         Label="Echo console input"  />
+                </RibbonGroup>
+                <RibbonGroup x:Name="rgbxData" 
+                                    Header="Data">
+                    <RibbonButton x:Name="btnPreferences"
+                                         LargeImageSource="Images\icons8-settings-96.png"
+                                         Label="Preferences" />
+                    <RibbonButton x:Name="btnResetlayout"
+                                         SmallImageSource="Images\icons8-layout-96.png"
+                                         Label="Reset layout"  />
+                    <RibbonButton x:Name="btnOpenLogDirectory"
+                                         SmallImageSource="Images\icons8-opened-folder-96.png"
+                                         Label="Open log directory" >
+                    </RibbonButton>
+                    <RibbonMenuButton x:Name="btnTheme"
+                                         SmallImageSource="Images\icons8-change-theme-96.png"
+                                         Label="Theme"  >
+                        <RibbonMenuItem></RibbonMenuItem>
+                    </RibbonMenuButton>
+                </RibbonGroup>
+            </RibbonTab>
+        </Ribbon>
+        <TabControl x:Name="tabControl" Grid.RowSpan="2" Margin="0,138,-0.2,0.4">
+            <TabItem Header="All" Background="Orange">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="422*"/>
+                    </Grid.ColumnDefinitions>
+                    <RichTextBox x:Name="rtbAll" Grid.ColumnSpan="2" Margin="0,0,-0.8,0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
+                        <FlowDocument>
+                            <Paragraph>
+                                <Run Text=""/>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+        <Grid HorizontalAlignment="Left" Height="45" Margin="10,266.6,0,0" Grid.Row="1" VerticalAlignment="Top" Width="1273"/>
+
+    </Grid>
+</RibbonWindow>

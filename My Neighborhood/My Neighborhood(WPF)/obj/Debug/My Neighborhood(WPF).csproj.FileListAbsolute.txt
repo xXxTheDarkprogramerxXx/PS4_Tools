@@ -11,3 +11,41 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Nei
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\bin\Debug\My Neighborhood(WPF).pdb
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).exe
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\My Neighborhood(WPF).exe.config
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\My Neighborhood(WPF).exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\My Neighborhood(WPF).pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).csprojResolveAssemblyReference.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\MainWindow.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\MainWindow.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\App.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF)_MarkupCompile.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).g.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My_Neighborhood_WPF_.Properties.Resources.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF).csproj.GenerateResource.Cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF)_Content.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\Fakekit.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\FluentFTP.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\AddSKU.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\My Neighborhood(WPF)_MarkupCompile.lref
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\AddSKU.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\frmLoadIPS.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\frmLoadIPS.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\DriveLetter.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\DriveLetter.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\Console Output for PlayStation4.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\Console Output for PlayStation4.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\PS4Console.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\PS4Console.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ActiproSoftware.Ribbon.Wpf.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ActiproSoftware.Shared.Wpf.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ActiproSoftware.Ribbon.Wpf.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ActiproSoftware.Shared.Wpf.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\HtmlAgilityPack.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\PARAM.SFO.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\PS4_Tools.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\LiteGuard.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\PrimS.Telnet.NetStandard.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\LiteGuard.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\PrimS.Telnet.NetStandard.xml

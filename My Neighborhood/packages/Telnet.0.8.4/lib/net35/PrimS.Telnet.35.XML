@@ -1,0 +1,560 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PrimS.Telnet.35</name>
+    </assembly>
+    <members>
+        <member name="T:PrimS.Telnet.Client">
+            <inheritdoc />
+            <summary>
+            Basic Telnet client.
+            </summary>
+            <summary>
+            Basic Telnet client.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.Client.TryLogin(System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Tries to login.
+            </summary>
+            <param name="userName">The user name.</param>
+            <param name="password">The password.</param>
+            <param name="loginTimeOutMs">The login time out ms.</param>
+            <param name="terminator">The terminator.</param>
+            <param name="linefeed">The line feed to use. Issue 38: According to RFC 854, CR+LF should be the default a client sends. For backward compatibility \n maintained.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.Client.WriteLine(System.String,System.String)">
+            <summary>
+            Writes the line to the server.
+            </summary>
+            <param name="command">The command.</param>
+            <param name="linefeed">The line feed to use. Issue 38: According to RFC 854, CR+LF should be the default a client sends. For backward compatibility \n maintained.</param>
+        </member>
+        <member name="M:PrimS.Telnet.Client.Write(System.String)">
+            <summary>
+            Writes the specified command to the server.
+            </summary>
+            <param name="command">The command.</param>
+        </member>
+        <member name="M:PrimS.Telnet.Client.Read">
+            <summary>
+            Reads asynchronously from the stream.
+            </summary>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.Client.TerminatedRead(System.String)">
+            <summary>
+            Reads asynchronously from the stream, terminating as soon as the <paramref name="terminator"/> is located.
+            </summary>
+            <param name="terminator">The terminator.</param>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.Client.TerminatedRead(System.Text.RegularExpressions.Regex)">
+            <summary>
+            Reads asynchronously from the stream, terminating as soon as the <paramref name="regex"/> is matched.
+            </summary>
+            <param name="regex">The regex to match.</param>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.Client.TerminatedRead(System.String,System.TimeSpan)">
+            <summary>
+            Reads synchronously from the stream, terminating as soon as the <paramref name="terminator"/> is located.
+            </summary>
+            <param name="terminator">The terminator.</param>
+            <param name="timeout">The timeout.</param>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.Client.TerminatedRead(System.Text.RegularExpressions.Regex,System.TimeSpan)">
+            <summary>
+            Reads synchronously from the stream, terminating as soon as the <paramref name="regex"/> is located.
+            </summary>
+            <param name="regex">The terminator.</param>
+            <param name="timeout">The timeout.</param>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.Client.TerminatedRead(System.String,System.TimeSpan,System.Int32)">
+            <summary>
+            Reads synchronously from the stream, terminating as soon as the <paramref name="terminator"/> is located.
+            </summary>
+            <param name="terminator">The terminator.</param>
+            <param name="timeout">The maximum time to wait.</param>
+            <param name="millisecondSpin">The millisecond spin between each read from the stream.</param>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.Client.TerminatedRead(System.Text.RegularExpressions.Regex,System.TimeSpan,System.Int32)">
+            <summary>
+            Reads synchronously from the stream, terminating as soon as the <paramref name="regex"/> is matched.
+            </summary>
+            <param name="regex">The regex to match.</param>
+            <param name="timeout">The maximum time to wait.</param>
+            <param name="millisecondSpin">The millisecond spin between each read from the stream.</param>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.Client.#ctor(System.String,System.Int32)">
+            <summary>
+            Initialises a new instance of the <see cref="T:PrimS.Telnet.Client"/> class.
+            </summary>
+            <param name="hostname">The hostname.</param>
+            <param name="port">The port.</param>
+        </member>
+        <member name="M:PrimS.Telnet.Client.Read(System.TimeSpan)">
+            <summary>
+            Reads from the stream.
+            </summary>
+            <param name="timeout">The timeout.</param>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="T:PrimS.Telnet.BaseClient">
+            <summary>
+            The base class for Clients.
+            </summary>
+            <summary>
+            The base class for Clients.
+            </summary>
+        </member>
+        <member name="F:PrimS.Telnet.BaseClient.DefaultTimeoutMs">
+            <summary>
+            The default time out ms.
+            </summary>
+        </member>
+        <member name="F:PrimS.Telnet.BaseClient.byteStream">
+            <summary>
+            The byte stream.
+            </summary>
+        </member>
+        <member name="P:PrimS.Telnet.BaseClient.IsConnected">
+            <summary>
+            Gets a value indicating whether this instance is connected.
+            </summary>
+            <value>
+            <c>true</c> if this instance is connected; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:PrimS.Telnet.BaseClient.ByteStream">
+            <summary>
+            Gets the byte stream.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.BaseClient.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.BaseClient.IsTerminatorLocated(System.String,System.String)">
+            <summary>
+            Determines whether the specified terminator has been located.
+            </summary>
+            <param name="terminator">The terminator to search for.</param>
+            <param name="s">The content to search for the <paramref name="terminator"/>.</param>
+            <returns>True if the terminator is located, otherwise false.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.BaseClient.IsRegexLocated(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            Determines whether the specified Regex has been located.
+            </summary>
+            <param name="regex">The Regex to search for.</param>
+            <param name="s">The content to search for the <paramref name="regex"/>.</param>
+            <returns>True if the Regex is matched, otherwise false.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.BaseClient.#ctor(PrimS.Telnet.IByteStream)">
+            <summary>
+            Initialises a new instance of the <see cref="T:PrimS.Telnet.BaseClient"/> class.
+            </summary>
+            <param name="byteStream">The byte stream.</param>
+        </member>
+        <member name="M:PrimS.Telnet.BaseClient.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:PrimS.Telnet.ByteStreamHandler">
+            <summary>
+            Provides core functionality for interacting with the ByteStream.
+            </summary>
+            <summary>
+            Provides core functionality for interacting with the ByteStream.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.ByteStreamHandler.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.ByteStreamHandler.Dispose(System.Boolean)">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:PrimS.Telnet.ByteStreamHandler.RetrieveAndParseResponse(System.Text.StringBuilder)">
+            <summary>
+            Separate TELNET commands from text. Handle non-printable characters.
+            </summary>
+            <param name="sb">The incoming message.</param>
+            <returns>True if response is pending.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.ByteStreamHandler.ReplyToCommand(System.Int32)">
+            <summary>
+            Send TELNET command response to the server.
+            </summary>
+            <param name="inputVerb">The TELNET command we received.</param>
+        </member>
+        <member name="M:PrimS.Telnet.ByteStreamHandler.#ctor(PrimS.Telnet.IByteStream)">
+            <summary>
+            Initialises a new instance of the <see cref="T:PrimS.Telnet.ByteStreamHandler"/> class.
+            </summary>
+            <param name="byteStream">The byteStream to handle.</param>
+        </member>
+        <member name="M:PrimS.Telnet.ByteStreamHandler.Read(System.TimeSpan)">
+            <summary>
+            Reads from the stream.
+            </summary>
+            <param name="timeout">The timeout.</param>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="T:PrimS.Telnet.IByteStream">
+            <summary>
+            Contract of core functionality provided by a ByteStream.
+            </summary>
+        </member>
+        <member name="P:PrimS.Telnet.IByteStream.Available">
+            <summary>
+            Gets the amount of data that has been received from the network and is available to be read.
+            </summary>
+            <value>
+            The number of bytes of data received from the network and available to be read.
+            </value>
+            <exception cref="T:System.Net.Sockets.SocketException">An error occurred when attempting to access the socket. See the Remarks section for more information.</exception>
+            <exception cref="T:System.ObjectDisposedException">The System.Net.Sockets.Socket has been closed.</exception>
+        </member>
+        <member name="P:PrimS.Telnet.IByteStream.Connected">
+            <summary>
+            Gets a value indicating whether this <see cref="T:PrimS.Telnet.IByteStream"/> is connected.
+            </summary>
+            <value>
+              <c>True</c> if connected; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:PrimS.Telnet.IByteStream.ReceiveTimeout">
+            <summary>
+            Gets or sets the amount of time this <see cref="T:PrimS.Telnet.IByteStream"/> will wait to receive data once a read operation is initiated.
+            </summary>
+            <value>
+            The time-out value of the connection in milliseconds. The default value is 0.
+            </value>
+        </member>
+        <member name="M:PrimS.Telnet.IByteStream.Close">
+            <summary>
+            Disposes the instance and requests that the underlying connection be closed.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.IByteStream.ReadByte">
+            <summary>
+            Reads a byte from the stream and advances the position within the stream by one byte, or returns -1 if at the end of the stream.
+            </summary>
+            <returns>The unsigned byte cast to an integer, or -1 if at the end of the stream.</returns>
+            <exception cref="T:System.NotSupportedException">The stream does not support reading.</exception>
+            <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed.</exception>
+        </member>
+        <member name="M:PrimS.Telnet.IByteStream.WriteByte(System.Byte)">
+            <summary>
+            Writes a byte to the current position in the stream and advances the position within the stream by one byte.
+            </summary>
+            <param name="value">The byte to write to the stream.</param>
+            <exception cref="T:System.IO.IOException">An I/O error occurs.</exception>
+            <exception cref="T:System.NotSupportedException">The stream does not support writing, or the stream is already closed.</exception>
+            <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed.</exception>
+        </member>
+        <member name="M:PrimS.Telnet.IByteStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes a sequence of bytes to the current stream, advances the current position within this stream by the number of bytes written.
+            </summary>
+            <param name="buffer">The buffer to write data from.</param>
+            <param name="offset">The zero-based byte offset in buffer from which to begin copying bytes to the stream.</param>
+            <param name="count">The maximum number of bytes to write.</param>
+            <exception cref="T:System.ArgumentNullException">The buffer parameter is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The offset parameter is less than 0.-or- The offset parameter is greater than the length of buffer.-or- The size parameter is less than 0.-or- The size parameter is greater than the length of buffer minus the value of the offset parameter.</exception>
+            <exception cref="T:System.ObjectDisposedException">The stream has been disposed.</exception>
+            <exception cref="T:System.IO.IOException">There was a failure while writing to the network. -or-An error occurred when accessing the socket. See the Remarks section for more information.</exception>
+            <exception cref="T:System.ObjectDisposedException">The System.Net.Sockets.NetworkStream is closed.-or- There was a failure reading from the network.</exception>
+        </member>
+        <member name="M:PrimS.Telnet.IByteStream.Write(System.String)">
+            <summary>
+            Writes a sequence of bytes to the current stream, advances the current position within this stream by the number of bytes written.
+            </summary>
+            <param name="value">The string to write.</param>
+            <exception cref="T:System.ArgumentNullException">The buffer parameter is null.</exception>
+            <exception cref="T:System.ObjectDisposedException">The stream has been disposed.</exception>
+            <exception cref="T:System.IO.IOException">There was a failure while writing to the network. -or-An error occurred when accessing the socket. See the Remarks section for more information.</exception>
+            <exception cref="T:System.ObjectDisposedException">The System.Net.Sockets.NetworkStream is closed.-or- There was a failure reading from the network.</exception>
+        </member>
+        <member name="T:PrimS.Telnet.IByteStreamHandler">
+            <summary>
+            Contract of core functionality required to interact with a ByteStream.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.IByteStreamHandler.Read(System.TimeSpan)">
+            <summary>
+            Reads for up to the specified timeout.
+            </summary>
+            <param name="timeout">The timeout.</param>
+            <returns>Any text read from the stream.</returns>
+        </member>
+        <member name="T:PrimS.Telnet.INetworkStream">
+            <summary>
+            A network stream that can be read and written to.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.INetworkStream.ReadByte">
+            <summary>
+            Reads the next byte.
+            </summary>
+            <returns>The next byte read.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.INetworkStream.WriteByte(System.Byte)">
+            <summary>
+            Writes the byte.
+            </summary>
+            <param name="value">The value to write.</param>
+        </member>
+        <member name="M:PrimS.Telnet.INetworkStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes the specified buffer.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="offset">The offset.</param>
+            <param name="size">The size.</param>
+        </member>
+        <member name="T:PrimS.Telnet.IsNotDeadCodeAttribute">
+            <summary>
+            Suppress IsDeadCode warning.
+            </summary>
+        </member>
+        <member name="T:PrimS.Telnet.ISocket">
+            <summary>
+            A socket to connect to.
+            </summary>
+        </member>
+        <member name="P:PrimS.Telnet.ISocket.Connected">
+            <summary>
+            Gets a value indicating whether this <see cref="T:PrimS.Telnet.ISocket" /> is connected.
+            </summary>
+            <value>
+            <c>true</c> if connected; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:PrimS.Telnet.ISocket.Available">
+            <summary>
+            Gets the available bytes to be read.
+            </summary>
+            <value>
+            The available bytes to be read.
+            </value>
+        </member>
+        <member name="P:PrimS.Telnet.ISocket.ReceiveTimeout">
+            <summary>
+            Gets or sets the receive timeout.
+            </summary>
+            <value>
+            The receive timeout.
+            </value>
+        </member>
+        <member name="M:PrimS.Telnet.ISocket.GetStream">
+            <summary>
+            Gets the stream.
+            </summary>
+            <returns>Network stream socket connected to.</returns>
+        </member>
+        <member name="M:PrimS.Telnet.ISocket.Close">
+            <summary>
+            Closes this instance.
+            </summary>
+        </member>
+        <member name="T:PrimS.Telnet.NetworkStream">
+            <summary>
+            An implementation of a network stream to read from and write to.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.NetworkStream.#ctor(System.Net.Sockets.NetworkStream)">
+            <summary>
+            Initialises a new instance of the <see cref="T:PrimS.Telnet.NetworkStream" /> class.
+            </summary>
+            <param name="stream">The stream.</param>
+        </member>
+        <member name="M:PrimS.Telnet.NetworkStream.ReadByte">
+            <summary>
+            Reads the next byte.
+            </summary>
+            <returns>
+            The next byte read.
+            </returns>
+        </member>
+        <member name="M:PrimS.Telnet.NetworkStream.WriteByte(System.Byte)">
+            <summary>
+            Writes the byte.
+            </summary>
+            <param name="value">The value to write.</param>
+        </member>
+        <member name="M:PrimS.Telnet.NetworkStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes the specified buffer.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="offset">The offset.</param>
+            <param name="size">The size.</param>
+        </member>
+        <member name="M:PrimS.Telnet.NetworkStream.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.NetworkStream.Dispose(System.Boolean)">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:PrimS.Telnet.TcpByteStream">
+            <summary>
+            A ByteStream acting over a TCP channel.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.TcpByteStream.#ctor(System.String,System.Int32)">
+            <summary>
+            Initialises a new instance of the <see cref="T:PrimS.Telnet.TcpByteStream" /> class. 
+            </summary>
+            <param name="hostName">The host name.</param>
+            <param name="port">The port.</param>
+        </member>
+        <member name="M:PrimS.Telnet.TcpByteStream.#ctor(PrimS.Telnet.ISocket)">
+            <summary>
+            Initialises a new instance of the <see cref="T:PrimS.Telnet.TcpByteStream" /> class.
+            </summary>
+            <param name="tcpSocket">The TCP socket.</param>
+        </member>
+        <member name="P:PrimS.Telnet.TcpByteStream.Available">
+            <summary>
+            Gets the amount of data that has been received from the network and is available to be read.
+            </summary>
+            <value>
+            The number of bytes of data received from the network and available to be read.
+            </value>
+        </member>
+        <member name="P:PrimS.Telnet.TcpByteStream.Connected">
+            <summary>
+            Gets a value indicating whether this <see cref="T:PrimS.Telnet.IByteStream" /> is connected.
+            </summary>
+            <value>
+              <c>True</c> if connected; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:PrimS.Telnet.TcpByteStream.ReceiveTimeout">
+            <summary>
+            Gets or sets the amount of time this <see cref="T:PrimS.Telnet.IByteStream" /> will wait to receive data once a read operation is initiated.
+            </summary>
+            <value>
+            The time-out value of the connection in milliseconds. The default value is 0.
+            </value>
+        </member>
+        <member name="M:PrimS.Telnet.TcpByteStream.ReadByte">
+            <summary>
+            Reads a byte from the stream and advances the position within the stream by one byte, or returns -1 if at the end of the stream.
+            </summary>
+            <returns>
+            The unsigned byte cast to an integer, or -1 if at the end of the stream.
+            </returns>
+        </member>
+        <member name="M:PrimS.Telnet.TcpByteStream.WriteByte(System.Byte)">
+            <summary>
+            Writes a byte to the current position in the stream and advances the position within the stream by one byte.
+            </summary>
+            <param name="value">The byte to write to the stream.</param>
+        </member>
+        <member name="M:PrimS.Telnet.TcpByteStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes the specified buffer.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="offset">The offset.</param>
+            <param name="count">The count.</param>
+        </member>
+        <member name="M:PrimS.Telnet.TcpByteStream.Write(System.String)">
+            <summary>
+            Writes the specified command to the stream.
+            </summary>
+            <param name="value">The command.</param>
+        </member>
+        <member name="M:PrimS.Telnet.TcpByteStream.Close">
+            <summary>
+            Disposes the instance and requests that the underlying connection be closed.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.TcpByteStream.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.TcpByteStream.Dispose(System.Boolean)">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <param name="isDisposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:PrimS.Telnet.TcpClient">
+            <summary>
+            A TcpClient to connect to the specified socket.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.TcpClient.#ctor(System.String,System.Int32)">
+            <summary>
+            Initialises a new instance of the <see cref="T:PrimS.Telnet.TcpClient"/> class.
+            </summary>
+            <param name="hostName">The host name.</param>
+            <param name="port">The port.</param>
+        </member>
+        <member name="P:PrimS.Telnet.TcpClient.ReceiveTimeout">
+            <summary>
+            Gets or sets the receive timeout.
+            </summary>
+            <value>
+            The receive timeout.
+            </value>
+        </member>
+        <member name="P:PrimS.Telnet.TcpClient.Connected">
+            <summary>
+            Gets a value indicating whether this <see cref="T:PrimS.Telnet.ISocket" /> is connected.
+            </summary>
+            <value>
+              <c>true</c> if connected; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:PrimS.Telnet.TcpClient.Available">
+            <summary>
+            Gets the available bytes to be read.
+            </summary>
+            <value>
+            The available bytes to be read.
+            </value>
+        </member>
+        <member name="M:PrimS.Telnet.TcpClient.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.TcpClient.Close">
+            <summary>
+            Closes this instance.
+            </summary>
+        </member>
+        <member name="M:PrimS.Telnet.TcpClient.GetStream">
+            <summary>
+            Gets the stream.
+            </summary>
+            <returns>
+            Network stream socket connected to.
+            </returns>
+        </member>
+    </members>
+</doc>

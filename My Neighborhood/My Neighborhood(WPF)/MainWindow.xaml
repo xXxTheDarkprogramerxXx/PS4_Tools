@@ -1,9 +1,10 @@
-﻿<RibbonWindow x:Class="My_Neighborhood_WPF_.MainWindow"
+﻿<RibbonWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon" x:Class="My_Neighborhood_WPF_.MainWindow"
          Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer"
         x:Name="RibbonWindow"
-        Width="1299.3" Height="480" Icon="Images/favicon (1).ico" Loaded="RibbonWindow_Loaded">
+        Width="1299.3" Height="480" Icon="Images/favicon (1).ico" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing">
 
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
@@ -31,7 +32,7 @@
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab x:Name="FileTab" 
-                              Header="File"></RibbonTab>
+                              Header="File"/>
             <RibbonTab x:Name="HomeTab"
                               Header="Home">
                 <RibbonGroup x:Name="rgbxApps" 
@@ -39,115 +40,145 @@
                     <RibbonMenuButton x:Name="btnApps"
                                          LargeImageSource="Images\PS4Logo.png"
                                          Label="Apps" >
-                        <RibbonMenuItem></RibbonMenuItem>
+                        <RibbonMenuItem/>
                     </RibbonMenuButton>
 
 
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxStatus" 
                                     Header="Status">
-                    <RibbonButton x:Name="btnConnect" SmallImageSource="Images\icons8-enter-96.png" Label="Connect" IsEnabled="False"/>
-                    <RibbonButton x:Name="btnDisconnect" SmallImageSource="Images\icons8-export-96.png" Label="Disconnect" IsEnabled="False"/>
+                    <RibbonButton x:Name="btnConnect" SmallImageSource="Images\icons8-enter-96.png" Label="Connect" IsEnabled="False" Click="btnConnect_Click"/>
+                    <RibbonButton x:Name="btnDisconnect" SmallImageSource="Images\icons8-export-96.png" Label="Disconnect" IsEnabled="False" Click="btnDisconnect_Click"/>
                     <RibbonButton x:Name="btnReboot" SmallImageSource="Images\icons8-loader-96.png" Label="Reboot" IsEnabled="False"/>
-                    <RibbonButton SmallImageSource="Images\icons8-shutdown-128 (1).png" Label="Power on" />
-                    <RibbonButton SmallImageSource="Images\icons8-shutdown-128.png" Label="Power off" IsEnabled="False" />
-                    <RibbonButton SmallImageSource="Images\icons8-shutdown-128 (2).png" Label="Rest mode" IsEnabled="False"/>
+                    <RibbonButton x:Name="btnPowerOn" SmallImageSource="Images\icons8-shutdown-128 (1).png" Label="Power on" VerticalAlignment="Top" Click="RibbonButton_Click" />
+                    <RibbonButton x:Name="btnPowerOff" SmallImageSource="Images\icons8-shutdown-128.png" Label="Power off" IsEnabled="False" />
+                    <RibbonButton x:Name="btnRestMode" SmallImageSource="Images\icons8-shutdown-128 (2).png" Label="Rest mode" IsEnabled="False"/>
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxRun" 
                                     Header="Run">
                     <RibbonMenuButton x:Name="btnLoadExe" LargeImageSource="Images\icons8-load-cargo-96.png" Label="Load executables" IsEnabled="False">
-                        <RibbonMenuItem></RibbonMenuItem>
+                        <RibbonMenuItem/>
                     </RibbonMenuButton>
-                    <RibbonMenuButton x:Name="btnLoadApp" LargeImageSource="Images\icons8-window-settings-96.png" Label="Load application" IsEnabled="False"/>
+                    <RibbonButton x:Name="btnLoadApp" LargeImageSource="Images\icons8-window-settings-96.png" Label="Load application" IsEnabled="False" Click="btnLoadApp_Click"/>
                     <RibbonMenuButton x:Name="btnKillProcess" SmallImageSource="Images\icons8-multiply-52.png" Label="Kill process" IsEnabled="False">
-                        <RibbonMenuItem></RibbonMenuItem>
+                        <RibbonMenuItem/>
                     </RibbonMenuButton>
-                    <RibbonMenuButton x:Name="btnCodeDump" SmallImageSource="Images\icons8-processor-96.png" Label="CreateCoreDump" IsEnabled="False">
-                        <RibbonMenuItem></RibbonMenuItem>
+                    <RibbonMenuButton x:Name="btnCodeDump" SmallImageSource="Images\icons8-processor-96.png" Label="Create Core Dump" IsEnabled="False">
+                        <RibbonMenuItem/>
                     </RibbonMenuButton>
-                    <RibbonMenuButton x:Name="btnPkgsEnt" SmallImageSource="Images\icons8-gift-96.png" Label="Kill process" IsEnabled="False">
-                        <RibbonMenuItem></RibbonMenuItem>
+                    <RibbonMenuButton x:Name="btnPkgsEnt" SmallImageSource="Images\icons8-gift-96.png" Label="Packages and entitlments" IsEnabled="False">
+                        <RibbonMenuItem/>
                     </RibbonMenuButton>
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxTargets" 
                                     Header="Targets">
-                    <RibbonMenuButton x:Name="btnAddTarget"
+                    <RibbonButton x:Name="btnAddTarget"
                                          LargeImageSource="Images\icons8-plus-math-52.png"
-                                         Label="Add target" />
-                    <RibbonMenuButton x:Name="btnFilterTarget"
+                                         Label="Add target" Click="btnAddTarget_Click" />
+                    <RibbonButton x:Name="btnFilterTarget"
                                          LargeImageSource="Images\icons8-filter-100.png"
-                                         Label="Filter target" />
+                                         Label="Filter target" Click="btnFilterTarget_Click" />
                     <RibbonMenuButton x:Name="btnGroupTarget"
                                          LargeImageSource="Images\icons8-list-96.png"
                                          Label="Group by">
-                        <RibbonMenuItem></RibbonMenuItem>
+                        <RibbonMenuItem/>
 
                     </RibbonMenuButton>
-                    <RibbonMenuButton x:Name="btnSetDefault"
+                    <RibbonButton x:Name="btnSetDefault"
                                          SmallImageSource="Images\icons8-star-96.png"
-                                         Label="set default target" IsEnabled="False" />
-                    <RibbonMenuButton x:Name="btnRemoveTarget"
+                                         Label="set default target" IsEnabled="False" Click="btnSetDefault_Click" />
+                    <RibbonButton x:Name="btnRemoveTarget"
                                          SmallImageSource="Images\icons8-minus-96.png"
-                                         Label="Remove target" IsEnabled="True" />
-                    <RibbonMenuButton x:Name="btnRefresh"
+                                         Label="Remove target" IsEnabled="True" VerticalAlignment="Top" Click="btnRemoveTarget_Click" />
+                    <RibbonButton x:Name="btnRefresh"
                                          SmallImageSource="Images\icons8-update-left-rotation-96.png"
-                                         Label="Refresh" IsEnabled="True" />
+                                         Label="Refresh" IsEnabled="True" Click="btnRefresh_Click" />
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxData" 
                                     Header="Data">
-                    <RibbonMenuButton x:Name="btnExplore"
+                    <RibbonButton x:Name="btnExplore"
                                          LargeImageSource="Images\icons8-opened-folder-96.png"
-                                         Label="Explore file system" IsEnabled="False" />
-                    <RibbonMenuButton x:Name="btnMapfilesys"
+                                         Label="Explore file system" IsEnabled="False" Click="btnExplore_Click" />
+                    <RibbonButton x:Name="btnMapfilesys"
                                          SmallImageSource="Images\icons8-shared-folder-96.png"
-                                         Label="Map file system" />
-                    <RibbonMenuButton x:Name="btnSetfilserdir"
+                                         Label="Map file system" Click="btnMapfilesys_Click" />
+                    <RibbonButton x:Name="btnSetfilserdir"
                                          SmallImageSource="Images\icons8-list-96.png"
-                                         Label="Set file serving direcotry">
-                    </RibbonMenuButton>
-                    <RibbonMenuButton x:Name="btnCopyfiles"
+                                         Label="Set file serving direcotry" Click="btnSetfilserdir_Click"/>
+                    <RibbonButton x:Name="btnCopyfiles"
                                          SmallImageSource="Images\icons8-opened-folder-96.png"
-                                         Label="Copy file(s)" IsEnabled="False" />
+                                         Label="Copy file(s)" IsEnabled="False" Click="btnCopyfiles_Click" />
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxPSVR" 
                                     Header="PlayStation VR">
-                    <RibbonMenuButton x:Name="btnHMDOn"
+                    <RibbonButton x:Name="btnHMDOn"
                                          SmallImageSource="Images\icons8-shutdown-128 (1).png"
                                          Label="HMD on" IsEnabled="False" />
-                    <RibbonMenuButton x:Name="btnHMDOff"
+                    <RibbonButton x:Name="btnHMDOff"
                                          SmallImageSource="Images\icons8-shutdown-128.png"
                                          Label="HMD off" IsEnabled="False"/>
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxMORE" 
                                     Header="More">
-                    <RibbonMenuButton x:Name="btnPlayGo"
+                    <RibbonButton x:Name="btnPlayGo"
                                          SmallImageSource="Images\icons8-database-96.png"
-                                         Label="Play Go" IsEnabled="False" />
-                    <RibbonMenuButton x:Name="btnTagetSettings"
+                                         Label="Play Go" IsEnabled="False" Click="btnPlayGo_Click" />
+                    <RibbonButton x:Name="btnTagetSettings"
                                          SmallImageSource="Images\icons8-wrench-96 (1).png"
                                          Label="Target Settings" IsEnabled="False"/>
                     <RibbonMenuButton x:Name="btnMore"
                                          SmallImageSource="Images\icons8-wrench-96 (1).png"
                                          Label="More" IsEnabled="False">
-                        <RibbonMenuItem></RibbonMenuItem>
+                        <RibbonMenuItem/>
                     </RibbonMenuButton>
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
-        <ListView x:Name="lstSKU" HorizontalAlignment="Stretch" Margin="10,138,0,0" Grid.RowSpan="2" SizeChanged="lstSKU_SizeChanged" SelectionChanged="lstSKU_SelectionChanged">
+        <ListView x:Name="lstSKU" HorizontalAlignment="Stretch" Margin="10,138,0,0" Grid.RowSpan="2" SizeChanged="lstSKU_SizeChanged" SelectionChanged="lstSKU_SelectionChanged" MouseDoubleClick="lstSKU_MouseDoubleClick">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Refresh"  InputGestureText="F5"/>
+                    <Separator/>
+                    <MenuItem Header="Navigate">
+                        <MenuItem></MenuItem>
+                        <MenuItem></MenuItem>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" Header="Default" DisplayMemberBinding="{Binding Default}" />
                     <GridViewColumn Width="Auto" Header="Target" DisplayMemberBinding="{Binding Target}" />
                     <GridViewColumn Width="Auto" Header="SDK"  DisplayMemberBinding="{Binding SDK}" />
-                    <GridViewColumn Width="Auto" Header="Status"  DisplayMemberBinding="{Binding Status}" />
+                    <GridViewColumn x:Name="actualStatus" Width="Auto" Header="Status" DisplayMemberBinding="{Binding Status}"/>
+                    <GridViewColumn Width="0"  x:Name="StatusProgress" Header="Status">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Foreground="Black" Text="{Binding ProgressName}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="{Binding Height, ElementName=StatusProgress}" Width="{Binding Width, ElementName=StatusProgress}"/>
+                                    <ProgressBar Foreground="Blue" x:Name="pbstatus" Value="{Binding Progress}" Height="{Binding Height, ElementName=StatusProgress}" Width="{Binding Width, ElementName=StatusProgress}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Width="Auto" Header="Address"  DisplayMemberBinding="{Binding Address}" />
                     <GridViewColumn Width="Auto" Header="Power"  DisplayMemberBinding="{Binding Power}" />
-                    <GridViewColumn Width="Auto" Header="File serving directory" DisplayMemberBinding="{Binding FileSerDir}" />
+                    <GridViewColumn Width="Auto" Header="File serving directory" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock><Hyperlink NavigateUri="{Binding FileSerDir}" RequestNavigate="Hyperlink_RequestNavigate"><InlineUIContainer>
+                                             <TextBlock Text="{Binding FileSerDir}"/>
+                                         </InlineUIContainer></Hyperlink></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Width="Auto" Header="Expiration Time" DisplayMemberBinding="{Binding Expire}" />
                     <GridViewColumn Width="Auto" Header="Release Check mode" DisplayMemberBinding="{Binding Release}" />
                 </GridView>
             </ListView.View>
         </ListView>
+      
+
     </Grid>
+    
 </RibbonWindow>

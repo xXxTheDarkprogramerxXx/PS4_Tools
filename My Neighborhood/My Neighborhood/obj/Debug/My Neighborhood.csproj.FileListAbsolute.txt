@@ -9,3 +9,14 @@ c:\users\3deechelon\documents\visual studio 2015\Projects\My Neighborhood\My Nei
 c:\users\3deechelon\documents\visual studio 2015\Projects\My Neighborhood\My Neighborhood\obj\Debug\My Neighborhood.exe
 c:\users\3deechelon\documents\visual studio 2015\Projects\My Neighborhood\My Neighborhood\obj\Debug\My Neighborhood.pdb
 c:\users\3deechelon\documents\visual studio 2015\Projects\My Neighborhood\My Neighborhood\bin\Debug\System.Windows.Forms.Ribbon.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\bin\Debug\My Neighborhood.exe.config
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\bin\Debug\My Neighborhood.exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\bin\Debug\My Neighborhood.pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\bin\Debug\System.Windows.Forms.Ribbon.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\obj\Debug\My Neighborhood.csprojResolveAssemblyReference.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\obj\Debug\My_Neighborhood.Form1.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\obj\Debug\My_Neighborhood.Properties.Resources.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\obj\Debug\My_Neighborhood.PS4Control.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\obj\Debug\My Neighborhood.csproj.GenerateResource.Cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\obj\Debug\My Neighborhood.exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood\obj\Debug\My Neighborhood.pdb

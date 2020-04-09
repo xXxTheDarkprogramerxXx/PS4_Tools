@@ -1,0 +1,13 @@
+﻿<Window x:Class="My_Neighborhood_WPF_.frmLoadIPS"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:My_Neighborhood_WPF_"
+        mc:Ignorable="d"
+        Title="List of IP(s)" Height="317.91" Width="300" Icon="Images/favicon (1).ico" Loaded="Window_Loaded">
+    <Grid>
+        <ListBox x:Name="listBox" MouseDoubleClick="listBox_MouseDoubleClick" />
+
+    </Grid>
+</Window>

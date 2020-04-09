@@ -1,0 +1,128 @@
+﻿<RibbonWindow x:Class="My_Neighborhood_WPF_.Console_Output_for_PlayStation4"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              
+        Title="MainWindow"   x:Name="RibbonWindow"
+        Width="1299.3" Height="480" Icon="Images/favicon (1).ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Ribbon x:Name="Ribbon" Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)" Background="White" SelectedIndex="1">
+            <Ribbon.HelpPaneContent>
+                <RibbonButton SmallImageSource="Images/icons8-help-64.png" />
+            </Ribbon.HelpPaneContent>
+            <!--<Ribbon.QuickAccessToolBar>
+                <RibbonQuickAccessToolBar >
+                    <RibbonButton x:Name="QATButton1" 
+                                         SmallImageSource="Images/Hood1.png" />
+                    <RibbonButton x:Name="QATButton2" 
+                                         SmallImageSource="Images/Hood1.png" />
+                </RibbonQuickAccessToolBar>
+            </Ribbon.QuickAccessToolBar>-->
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu SmallImageSource="Images\favicon.ico" Label="File" Visibility="Collapsed" >
+                    <RibbonApplicationMenuItem Header="Hello _Ribbon"
+                                                      x:Name="MenuItem1"
+                                                      ImageSource="Images\Hood1.png"/>
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
+            <RibbonTab x:Name="FileTab" 
+                              Header="File"></RibbonTab>
+            <RibbonTab x:Name="HomeTab"
+                              Header="Home">
+
+                <RibbonGroup x:Name="rgbxClipboard" 
+                                    Header="Clipboard">
+                    <RibbonButton x:Name="btnCopy"
+                                         LargeImageSource="Images\icons8-copy-52.png"
+                                         Label="Copy" />
+                    <RibbonButton x:Name="btnPaste" SmallImageSource="Images\icons8-paste-96.png" Label="Paste"  />
+                    <RibbonButton x:Name="btnSelectAll" SmallImageSource="Images\icons8-check-all-96.png" Label="Select all"  />
+                    <RibbonCheckBox  IsChecked="True" x:Name="btnCopyTimeStamp" Label="Copy time stamp" />
+                </RibbonGroup>
+                <RibbonGroup x:Name="rgbxRun" 
+                                    Header="Processes">
+                    <RibbonButton x:Name="btnClearAll" SmallImageSource="Images\icons8-multiply-52.png" Label="Clear all" VerticalAlignment="Top" Click="btnClearAll_Click"/>
+                    <RibbonButton x:Name="btnRefreshProcesses" SmallImageSource="Images\icons8-update-left-rotation-96.png" Label="Refresh processes"/>
+                    <RibbonMenuButton x:Name="btnProcessChanVis" SmallImageSource="Images\icons8-multiply-52.png" Label="Kill process" IsEnabled="False">
+                        <RibbonMenuItem></RibbonMenuItem>
+                    </RibbonMenuButton>
+                    <RibbonMenuButton x:Name="btnCodeDump" SmallImageSource="Images\icons8-processor-96.png" Label="Create Core Dump" IsEnabled="False">
+                        <RibbonMenuItem></RibbonMenuItem>
+                    </RibbonMenuButton>
+                    <RibbonMenuButton x:Name="btnPkgsEnt" SmallImageSource="Images\icons8-gift-96.png" Label="Packages and entitlments" IsEnabled="False">
+                        <RibbonMenuItem></RibbonMenuItem>
+                    </RibbonMenuButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="rgbxTargets" 
+                                    Header="Targets">
+                    <RibbonButton x:Name="btnAddTarget"
+                                         LargeImageSource="Images\icons8-plus-math-52.png"
+                                         Label="Add target"  />
+                    <RibbonButton x:Name="btnFilterTarget"
+                                         LargeImageSource="Images\icons8-filter-100.png"
+                                         Label="Filter target"  />
+                    <RibbonMenuButton x:Name="btnGroupTarget"
+                                         LargeImageSource="Images\icons8-list-96.png"
+                                         Label="Group by">
+                        <RibbonMenuItem></RibbonMenuItem>
+
+                    </RibbonMenuButton>
+                    <RibbonButton x:Name="btnSetDefault"
+                                         SmallImageSource="Images\icons8-star-96.png"
+                                         Label="set default target" IsEnabled="False"  />
+                    <RibbonButton x:Name="btnRemoveTarget"
+                                         SmallImageSource="Images\icons8-minus-96.png"
+                                         Label="Remove target" IsEnabled="True" VerticalAlignment="Top"  />
+                    <RibbonButton x:Name="btnRefresh"
+                                         SmallImageSource="Images\icons8-update-left-rotation-96.png"
+                                         Label="Refresh" IsEnabled="True"  />
+                </RibbonGroup>
+                <RibbonGroup x:Name="rgbxData" 
+                                    Header="Data">
+                    <RibbonButton x:Name="btnExplore"
+                                         LargeImageSource="Images\icons8-opened-folder-96.png"
+                                         Label="Explore file system" IsEnabled="False" />
+                    <RibbonButton x:Name="btnMapfilesys"
+                                         SmallImageSource="Images\icons8-shared-folder-96.png"
+                                         Label="Map file system"  />
+                    <RibbonButton x:Name="btnSetfilserdir"
+                                         SmallImageSource="Images\icons8-list-96.png"
+                                         Label="Set file serving direcotry" >
+                    </RibbonButton>
+                    <RibbonButton x:Name="btnCopyfiles"
+                                         SmallImageSource="Images\icons8-opened-folder-96.png"
+                                         Label="Copy file(s)" IsEnabled="False" />
+                </RibbonGroup>
+                <RibbonGroup x:Name="rgbxPSVR" 
+                                    Header="PlayStation VR">
+                    <RibbonButton x:Name="btnHMDOn"
+                                         SmallImageSource="Images\icons8-shutdown-128 (1).png"
+                                         Label="HMD on" IsEnabled="False" />
+                    <RibbonButton x:Name="btnHMDOff"
+                                         SmallImageSource="Images\icons8-shutdown-128.png"
+                                         Label="HMD off" IsEnabled="False"/>
+                </RibbonGroup>
+                <RibbonGroup x:Name="rgbxMORE" 
+                                    Header="More">
+                    <RibbonButton x:Name="btnPlayGo"
+                                         SmallImageSource="Images\icons8-database-96.png"
+                                         Label="Play Go" IsEnabled="False" />
+                    <RibbonButton x:Name="btnTagetSettings"
+                                         SmallImageSource="Images\icons8-wrench-96 (1).png"
+                                         Label="Target Settings" IsEnabled="False"/>
+                    <RibbonMenuButton x:Name="btnMore"
+                                         SmallImageSource="Images\icons8-wrench-96 (1).png"
+                                         Label="More" IsEnabled="False">
+                        <RibbonMenuItem></RibbonMenuItem>
+                    </RibbonMenuButton>
+                </RibbonGroup>
+            </RibbonTab>
+        </Ribbon>
+
+    </Grid>
+</RibbonWindow>
+
