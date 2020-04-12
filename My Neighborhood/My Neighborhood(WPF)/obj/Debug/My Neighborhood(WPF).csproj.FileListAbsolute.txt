@@ -49,3 +49,7 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborh
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\PrimS.Telnet.NetStandard.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\LiteGuard.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\PrimS.Telnet.NetStandard.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\PS4ConsolePages\PrefSettings.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\PS4ConsolePages\SettingsCom.g.cs
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\PS4ConsolePages\PrefSettings.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\PS4ConsolePages\SettingsCom.baml

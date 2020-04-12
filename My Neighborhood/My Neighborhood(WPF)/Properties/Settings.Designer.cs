@@ -34,5 +34,29 @@ namespace My_Neighborhood_WPF_.Properties {
                 this["DefaultName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ConsolePrefCom {
+            get {
+                return ((bool)(this["ConsolePrefCom"]));
+            }
+            set {
+                this["ConsolePrefCom"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ConsolePrefPort {
+            get {
+                return ((string)(this["ConsolePrefPort"]));
+            }
+            set {
+                this["ConsolePrefPort"] = value;
+            }
+        }
     }
 }

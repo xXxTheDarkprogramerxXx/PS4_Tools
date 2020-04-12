@@ -17,6 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PrimS.Telnet;
+using My_Neighborhood_WPF_.Properties;
+using My_Neighborhood_WPF_.SerialApi;
 
 namespace My_Neighborhood_WPF_
 {
@@ -32,14 +34,53 @@ namespace My_Neighborhood_WPF_
         {
             InitializeComponent();
         }
+        #region << Serial Integration >>
 
+        private SerialMonitor Monitor = new SerialMonitor();
+
+        // Token: 0x0200000C RID: 12
+        // (Invoke) Token: 0x06000053 RID: 83
+        private delegate void AppendTextCallback(string text);
+
+        private void OpenMonitor()
+        {
+            this.Monitor.Settings.PortName = Settings.Default.ConsolePrefPort;
+            if (this.Monitor.StartListening())
+            {
+                this.rtbAll.AppendText(string.Format("Connected To Console On Port: {0}\n", this.Monitor.Settings.PortName));
+                return;
+            }
+            this.rtbAll.AppendText(string.Format("Failed To Connect To Console On Port {0}\n", this.Monitor.Settings.PortName));
+        }
+
+        private void OnNewSerialDataReceived(object sender, SerialDataEventArgs e)
+        {
+            string @string = Encoding.UTF8.GetString(e.Data);
+            if (!string.IsNullOrWhiteSpace(@string))
+            {
+                rtbAll.AppendText(@string);
+            }
+        }
+
+        #endregion << Serial Integration >>
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
             rtbAll.Selection.Text = "";
             this.Title = SKU.Target + " [" + SKU.Power + "] - Console Output for PlayStation®4";
-            RefreshProcesses();
-
+            Style noSpaceStyle = new Style(typeof(Paragraph));
+            noSpaceStyle.Setters.Add(new Setter(Paragraph.MarginProperty, new Thickness(0)));
+            rtbAll.Resources.Add(typeof(Paragraph), noSpaceStyle);
+            if (Properties.Settings.Default.ConsolePrefCom == true && Properties.Settings.Default.ConsolePrefPort != "")
+            {
+                this.Monitor.NewSerialDataRecieved += this.OnNewSerialDataReceived;
+                this.Monitor.SetSpeed(false);
+            }
+            else
+            {
+                System.Threading.Thread threadcom = new System.Threading.Thread(() => RefreshProcesses());
+                threadcom.Start();
+            }
 
             //var temp = clients.GetListing();
 
@@ -55,43 +96,48 @@ namespace My_Neighborhood_WPF_
         {
             try
             {
-                rtbAll.SelectAll();
+                if (tc == null)
+                {
+                    tc = new MainWindow.TelnetConnection(SKU.Address, 777);//new connection
+                }
+                // while connected
+                while (tc != null && tc.IsConnected)
+                {
 
-                rtbAll.Selection.Text = "";
-               
-                    using (Client client = new Client(SKU.Address.ToString(), 777, new System.Threading.CancellationToken()))
+                    string hi = tc.Read();
+
+                    // send client input to server
+                    tc.WriteNothing();
+
+                    // display server output
+
+                    if (!String.IsNullOrEmpty(hi) && !String.IsNullOrWhiteSpace(hi) && hi.Length > 3)
                     {
-                        //client.IsConnected;
-                        //(await client.TryLoginAsync("username", "password", 12)).Should().Be(true);
-                        client.TryLoginAsync()
-                        //client.WriteLine("show statistic wan2");
-                        string s = await client.TerminatedReadAsync("END:");
-                        //s.Should().Contain(">");
-                        //s.Should().Contain("WAN2");
-                        //Regex regEx = new Regex("(?!WAN2 total TX: )([0-9.]*)(?! GB ,RX: )([0-9.]*)(?= GB)");
-                        //regEx.IsMatch(s).Should().Be(true);
-                        //MatchCollection matches = regEx.Matches(s);
-                        //decimal tx = decimal.Parse(matches[0].Value);
-                        //decimal rx = decimal.Parse(matches[1].Value);
-                        //(tx + rx).Should().BeLessThan(50);
+                        //Console.Write(hi);
+
+
+
+                        this.Dispatcher.Invoke(() => rtbAll.AppendText(hi));
+                        this.Dispatcher.Invoke(() => rtbAll.ScrollToEnd());
+
                     }
-                
 
-                //telnetClient.Close();
-                //using (Stream stream = await clients.OpenReadAsync(@"/data/Infamous_LOG.txt", FtpDataType.ASCII))
-                //{
 
-                //    rtbAll.Selection.Load(stream, DataFormats.Text);
-                //    rtbAll.ScrollToEnd();
-                //}
+                    // send client input to server
+                    // Console.WriteLine(tc.Read());
+                    //  rtbAll.Selection.Load(rtbAll.Selection.Text, DataFormats.Text);
+                    // tc.WriteLine(prompt);
+
+                }
+
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
 
             }
-
         }
-
+        
+    
 
         private void btnClearAll_Click(object sender, RoutedEventArgs e)
         {
@@ -102,6 +148,13 @@ namespace My_Neighborhood_WPF_
         private void btnRefreshProcesses_Click(object sender, RoutedEventArgs e)
         {
             RefreshProcesses();
+        }
+
+        private void btnPreferences_Click(object sender, RoutedEventArgs e)
+        {
+            My_Neighborhood_WPF_.PS4ConsolePages.PrefSettings prefsettings = new My_Neighborhood_WPF_.PS4ConsolePages.PrefSettings();
+            prefsettings.ShowDialog();
+
         }
     }
 }

@@ -80,7 +80,7 @@
                                     Header="Data">
                     <RibbonButton x:Name="btnPreferences"
                                          LargeImageSource="Images\icons8-settings-96.png"
-                                         Label="Preferences" />
+                                         Label="Preferences" Click="btnPreferences_Click" />
                     <RibbonButton x:Name="btnResetlayout"
                                          SmallImageSource="Images\icons8-layout-96.png"
                                          Label="Reset layout"  />
@@ -106,7 +106,7 @@
                     <RichTextBox x:Name="rtbAll" Grid.ColumnSpan="2" Margin="0,0,-0.8,0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
                         <FlowDocument>
                             <Paragraph>
-                                <Run Text=""/>
+                                <Run x:Name="rtbText" Text=""/>
                             </Paragraph>
                         </FlowDocument>
                     </RichTextBox>

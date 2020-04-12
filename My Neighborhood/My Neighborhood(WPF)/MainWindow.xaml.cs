@@ -84,7 +84,7 @@ namespace My_Neighborhood_WPF_
 
         #region << Classes >>
 
-        public class  TelnetConnection
+        public class TelnetConnection
         {
             TcpClient tcpSocket;
 
@@ -105,6 +105,18 @@ namespace My_Neighborhood_WPF_
 
             }
 
+            public void Disconnect()
+            {
+                try
+                {
+                    tcpSocket.Close();
+                    tcpSocket.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    //MessageBox.Show(ex.ToString());
+                }
+            }
             public void Telnetdis()
             {
 
@@ -150,6 +162,14 @@ namespace My_Neighborhood_WPF_
             {
                 if (!tcpSocket.Connected) return;
                 byte[] buf = System.Text.ASCIIEncoding.ASCII.GetBytes(cmd.Replace("\0xFF", "\0xFF\0xFF"));
+                tcpSocket.GetStream().Write(buf, 0, buf.Length);
+            }
+
+
+            public void WriteNothing()
+            {
+                if (!tcpSocket.Connected) return;
+                byte[] buf = { 0 };
                 tcpSocket.GetStream().Write(buf, 0, buf.Length);
             }
 
@@ -353,8 +373,11 @@ namespace My_Neighborhood_WPF_
                         currentsku.Status = ConnectionStatus.Connected;
                         lstSKU.Items.Refresh();
                         SetSkuUIItems(currentsku);
-
-                        //tc = new TelnetConnection(currentsku.Address, 777);
+                        if (tc != null)
+                        {
+                            tc.Disconnect();
+                        }
+                        tc = new TelnetConnection(currentsku.Address, 777);//this is to be added each time an item is cloecked
                        
 
                     }
@@ -522,6 +545,10 @@ namespace My_Neighborhood_WPF_
                 else
                 {
                     var currentsku = lstSKU.SelectedItem as SKUS;
+                    if (tc != null)
+                    {
+                        tc.Disconnect();
+                    }
                     disconnect(currentsku);
 
                     //once connected load some information 
