@@ -58,6 +58,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.button20 = new System.Windows.Forms.Button();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
@@ -68,6 +69,7 @@
             this.button18 = new System.Windows.Forms.Button();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.button19 = new System.Windows.Forms.Button();
+            this.button21 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -351,6 +353,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.button21);
             this.groupBox6.Controls.Add(this.label2);
             this.groupBox6.Controls.Add(this.button3);
             this.groupBox6.Controls.Add(this.button9);
@@ -384,6 +387,7 @@
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.button20);
             this.groupBox9.Controls.Add(this.button5);
             this.groupBox9.Location = new System.Drawing.Point(6, 176);
             this.groupBox9.Name = "groupBox9";
@@ -391,6 +395,16 @@
             this.groupBox9.TabIndex = 30;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "RCO";
+            // 
+            // button20
+            // 
+            this.button20.Location = new System.Drawing.Point(4, 47);
+            this.button20.Name = "button20";
+            this.button20.Size = new System.Drawing.Size(89, 23);
+            this.button20.TabIndex = 11;
+            this.button20.Text = "Read RCO";
+            this.button20.UseVisualStyleBackColor = true;
+            this.button20.Click += new System.EventHandler(this.button20_Click);
             // 
             // groupBox10
             // 
@@ -483,6 +497,7 @@
             this.groupBox15.TabIndex = 38;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "PNG Convert";
+            this.groupBox15.Enter += new System.EventHandler(this.groupBox15_Enter);
             // 
             // button19
             // 
@@ -493,6 +508,16 @@
             this.button19.Text = "Test";
             this.button19.UseVisualStyleBackColor = true;
             this.button19.Click += new System.EventHandler(this.button19_Click);
+            // 
+            // button21
+            // 
+            this.button21.Location = new System.Drawing.Point(280, 77);
+            this.button21.Name = "button21";
+            this.button21.Size = new System.Drawing.Size(75, 23);
+            this.button21.TabIndex = 22;
+            this.button21.Text = "button21";
+            this.button21.UseVisualStyleBackColor = true;
+            this.button21.Click += new System.EventHandler(this.button21_Click);
             // 
             // Form1
             // 
@@ -510,6 +535,7 @@
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox15);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -577,6 +603,8 @@
         private System.Windows.Forms.Button button18;
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.Button button19;
+        private System.Windows.Forms.Button button20;
+        private System.Windows.Forms.Button button21;
     }
 }
 

@@ -1,0 +1,3 @@
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\UNITY_PS4\PS4_Tools.csprojResolveAssemblyReference.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\UNITY_PS4\PS4_Tools.Properties.Resources.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\UNITY_PS4\PS4_Tools.csproj.GenerateResource.Cache

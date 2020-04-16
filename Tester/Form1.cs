@@ -69,7 +69,7 @@ namespace Tester
         private void Form1_Load(object sender, EventArgs e)
         {
             //button1.PerformClick();
-            MessageBox.Show("This is a community project all items in this toolset was made buy a lot of talented developers throughout the scene\n\nCredits are on the Github repo");
+            MessageBox.Show("This is a community project all items in this toolset was made by a lot of talented developers throughout the scene\n\nCredits are on the Github repo");
 
         }
 
@@ -282,6 +282,11 @@ namespace Tester
             }
         }
 
+        //02 CC D3 46 B4 59 CB 83 50 5E 8E 76 0A 44 D4 57
+        private byte[] devtrophykey = new byte[16] {
+            0x02, 0xCC, 0xD3, 0x46, 0xB4, 0x59, 0xCB, 0x83, 0x50, 0x5E, 0x8E, 0x76, 0x0A, 0x44, 0xD4, 0x56};
+
+
         private void button14_Click(object sender, EventArgs e)
         {
             //Create a RIF File
@@ -320,66 +325,69 @@ namespace Tester
 
         private void button18_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            ImageUtil.Form1 imgutil = new ImageUtil.Form1();
+            imgutil.ShowDialog();
 
-            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.Title = "Select PS4 File(icon0)";
+            //openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            openFileDialog1.CheckFileExists = true;
+            //openFileDialog1.Title = "Select PS4 File(icon0)";
 
-            openFileDialog1.CheckPathExists = true;
+            //openFileDialog1.CheckFileExists = true;
 
-            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+            //openFileDialog1.CheckPathExists = true;
 
-            openFileDialog1.RestoreDirectory = true;
+            //openFileDialog1.Filter = "PS4 File (*.*)|*.*";
 
-            openFileDialog1.Multiselect = false;
+            //openFileDialog1.RestoreDirectory = true;
 
-            openFileDialog1.ReadOnlyChecked = true;
+            //openFileDialog1.Multiselect = false;
 
-            openFileDialog1.ShowReadOnly = true;
-            if(openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filter = "PS4 PNG Image|*.png";
-                saveFileDialog1.Title = "Save an PS4 Image File (icon0)";
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    PS4_Tools.Image.PNG png = new PS4_Tools.Image.PNG();
-                    png.Create_PS4_Compatible_PNG(openFileDialog1.FileName,saveFileDialog1.FileName);
-                }
-            }
-            openFileDialog1 = new OpenFileDialog();
+            //openFileDialog1.ReadOnlyChecked = true;
 
-            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //openFileDialog1.ShowReadOnly = true;
+            //if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            //{
+            //    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            //    saveFileDialog1.Filter = "PS4 PNG Image|*.png";
+            //    saveFileDialog1.Title = "Save an PS4 Image File (icon0)";
+            //    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            //    {
+            //        PS4_Tools.Image.PNG png = new PS4_Tools.Image.PNG();
+            //        png.Create_PS4_Compatible_PNG(openFileDialog1.FileName,saveFileDialog1.FileName);
+            //    }
+            //}
+            //openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.Title = "Select PS4 File(pic1)";
+            //openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            openFileDialog1.CheckFileExists = true;
+            //openFileDialog1.Title = "Select PS4 File(pic1)";
 
-            openFileDialog1.CheckPathExists = true;
+            //openFileDialog1.CheckFileExists = true;
 
-            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+            //openFileDialog1.CheckPathExists = true;
 
-            openFileDialog1.RestoreDirectory = true;
+            //openFileDialog1.Filter = "PS4 File (*.*)|*.*";
 
-            openFileDialog1.Multiselect = false;
+            //openFileDialog1.RestoreDirectory = true;
 
-            openFileDialog1.ReadOnlyChecked = true;
+            //openFileDialog1.Multiselect = false;
 
-            openFileDialog1.ShowReadOnly = true;
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filter = "PS4 PNG Image|*.png";
-                saveFileDialog1.Title = "Save an PS4 Image File (pic1)";
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    PS4_Tools.Image.PNG png = new PS4_Tools.Image.PNG();
-                    png.Create_PS4_Compatible_PNG(openFileDialog1.FileName, saveFileDialog1.FileName,1080, 1920);
-                }
-            }
+            //openFileDialog1.ReadOnlyChecked = true;
+
+            //openFileDialog1.ShowReadOnly = true;
+            //if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            //{
+            //    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            //    saveFileDialog1.Filter = "PS4 PNG Image|*.png";
+            //    saveFileDialog1.Title = "Save an PS4 Image File (pic1)";
+            //    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            //    {
+            //        PS4_Tools.Image.PNG png = new PS4_Tools.Image.PNG();
+            //        png.Create_PS4_Compatible_PNG(openFileDialog1.FileName, saveFileDialog1.FileName,1080, 1920);
+            //    }
+            //}
         }
 
         private void button19_Click(object sender, EventArgs e)
@@ -387,5 +395,46 @@ namespace Tester
             PS4_Tools.Trophy_File tphy = new PS4_Tools.Trophy_File();
             tphy.Load(File.ReadAllBytes(@"C:\Users\3deEchelon\Downloads\PlayStation 4 Trophies\PlayStation 4 Trophies\Adventures of Pip\data\NPWR09053_00\trophy.img"));
         }
+
+        private void groupBox15_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            var file = PS4_Tools.RCO.ReadRco(@"C:\Users\3deEchelon\Desktop\PS4\RCO\Sce.Cdlg.GameCustomData.rco");
+
+            //we write out all files
+
+            for (int i = 0; i < file.FileTable.CXMLFiles.Count; i++)
+            {
+
+            }
+
+
+            PS4_Tools.RCO.DumpRco(@"C:\Users\3deEchelon\Desktop\PS4\RCO\Sce.Cdlg.GameCustomData.rco");
+        }
+
+        private void button21_Click(object sender, EventArgs e)
+        {
+            PS4_Tools.Trophy_File trophy = new PS4_Tools.Trophy_File();
+            Stream stream = new FileStream(@"C:\Users\3deEchelon\Desktop\PS4\Tropy Files\trophy\TROPHY.TRP", FileMode.Open, FileAccess.Read);
+            var trophyfile = trophy.Load(stream);
+
+            for (int i = 0; i < trophyfile.trophyItemList.Count; i++)
+            {
+                var itembytes =trophyfile.ExtractFileToMemory(trophyfile.trophyItemList[i].Name);
+                
+                var reader = new BinaryReader(new MemoryStream(trophyfile.trophyItemList[i].TotalBytes));
+                var IV = new byte[16] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+                var restoffile = reader.ReadBytes((int)(reader.BaseStream.Length - 0x30));
+
+                var items = trophyfile.Decrypt(itembytes, devtrophykey, IV);
+                File.WriteAllBytes(Application.StartupPath + @"\TropyFiles\" + trophyfile.trophyItemList[i].Name, items);
+            }
+            
+        }
+
     }
 }

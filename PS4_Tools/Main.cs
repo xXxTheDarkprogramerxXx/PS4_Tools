@@ -51,7 +51,7 @@ using PS4_Tools.Util;
 
 #region << Unity Engine >>
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_PS4
 
 using UnityEngine;
 
@@ -521,7 +521,7 @@ namespace PS4_Tools
 
             #region << Creations >>
 
-#if UNITY_EDITOR
+#if PS4_UNITY
             public class PS4
             {
 
@@ -4179,7 +4179,7 @@ namespace PS4_Tools
         private string SHA1;//SHA1 PlaceHolder
         private byte[] Bytes;//Bytes Placeholder
 
-        private bool Readbytes; //Bool Read Bytes
+        private bool Readbytes = true; //Bool Read Bytes
 
         TrophyHeader trphy = new TrophyHeader(); //Trophy Header Object
 
@@ -4443,6 +4443,23 @@ namespace PS4_Tools
             return rtn;
         }
 
+        public static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+        public Trophy_File Load(Stream File)
+        {
+            return Load(ReadFully(File));
+        }
         public byte[] ExtractFileToMemory(string filename)
         {
             byte[] result = null;
@@ -4464,6 +4481,44 @@ namespace PS4_Tools
                 }
             }
             return result;
+        }
+
+
+        public byte[] Decrypt(byte[] cipherData, byte[] Key, byte[] IV)
+        {
+            byte[] decryptedData;
+            //string plaintext = null;
+            //MemoryStream ms = new MemoryStream(cipherData);
+
+            RijndaelManaged alg = new RijndaelManaged();
+            alg.KeySize = 128;
+            alg.BlockSize = 128;
+            alg.Key = Key;
+            alg.IV = IV;
+            alg.Mode = CipherMode.CBC;
+            alg.Padding = PaddingMode.Zeros;
+
+            //Array.Copy(Key, 0, IV, 0, IV.Length);
+
+            ICryptoTransform decryptor = alg.CreateDecryptor(alg.Key, alg.IV);
+
+            using (MemoryStream ms = new MemoryStream(cipherData))
+            {
+                using (CryptoStream csDecrypt = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                {
+                    using (StreamReader sw = new StreamReader(csDecrypt))
+                    {
+                        sw.ReadToEnd();
+                        sw.Close();
+                    }
+
+                    csDecrypt.Close();
+                    decryptedData = ms.ToArray();
+                }
+            }
+
+            //byte[] decryptedData = System.Text.Encoding.Unicode.GetBytes(plaintext);
+            return decryptedData;
         }
 
     }

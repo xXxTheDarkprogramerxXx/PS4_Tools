@@ -24,3 +24,5 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\D
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\Debug\Tester.csproj.GenerateResource.Cache
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\Debug\Tester.exe
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\Debug\Tester.pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\bin\Debug\ImageUtil.exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\bin\Debug\ImageUtil.pdb
