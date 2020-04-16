@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon" x:Class="My_Neighborhood_WPF_.MainWindow"
-         Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer"
+         Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)"
         x:Name="RibbonWindow"
         Width="1299.3" Height="480" Icon="Images/favicon (1).ico" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing">
 
@@ -49,10 +49,10 @@
                                     Header="Status">
                     <RibbonButton x:Name="btnConnect" SmallImageSource="Images\icons8-enter-96.png" Label="Connect" IsEnabled="False" Click="btnConnect_Click"/>
                     <RibbonButton x:Name="btnDisconnect" SmallImageSource="Images\icons8-export-96.png" Label="Disconnect" IsEnabled="False" Click="btnDisconnect_Click"/>
-                    <RibbonButton x:Name="btnReboot" SmallImageSource="Images\icons8-loader-96.png" Label="Reboot" IsEnabled="False"/>
+                    <RibbonButton x:Name="btnReboot" SmallImageSource="Images\icons8-loader-96.png" Label="Reboot" IsEnabled="False" Click="btnReboot_Click"/>
                     <RibbonButton x:Name="btnPowerOn" SmallImageSource="Images\icons8-shutdown-128 (1).png" Label="Power on" VerticalAlignment="Top" Click="RibbonButton_Click" />
-                    <RibbonButton x:Name="btnPowerOff" SmallImageSource="Images\icons8-shutdown-128.png" Label="Power off" IsEnabled="False" />
-                    <RibbonButton x:Name="btnRestMode" SmallImageSource="Images\icons8-shutdown-128 (2).png" Label="Rest mode" IsEnabled="False"/>
+                    <RibbonButton x:Name="btnPowerOff" SmallImageSource="Images\icons8-shutdown-128.png" Label="Power off" IsEnabled="False" Click="btnPowerOff_Click" />
+                    <RibbonButton x:Name="btnRestMode" SmallImageSource="Images\icons8-shutdown-128 (2).png" Label="Rest mode" IsEnabled="False" Click="btnRestMode_Click"/>
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxRun" 
                                     Header="Run">
@@ -67,7 +67,7 @@
                         <RibbonMenuItem/>
                     </RibbonMenuButton>
                     <RibbonMenuButton x:Name="btnPkgsEnt" SmallImageSource="Images\icons8-gift-96.png" Label="Packages and entitlments" IsEnabled="False">
-                        <RibbonMenuItem/>
+                        <RibbonButton  x:Name="btnInstallPKG" SmallImageSource="Images\icons8-gift-96.png" Label="Install PKG" Click="btnInstallPKG_Click" />
                     </RibbonMenuButton>
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxTargets" 
@@ -129,12 +129,15 @@
                     <RibbonMenuButton x:Name="btnMore"
                                          SmallImageSource="Images\icons8-wrench-96 (1).png"
                                          Label="More" IsEnabled="False">
-                        <RibbonMenuItem/>
+                        <RibbonButton x:Name="btnChangeColor"
+                                         SmallImageSource="Images\icons8-minus-96.png"
+                                         Label="Change Color" IsEnabled="True" VerticalAlignment="Top" Click="btnChangeColor_Click" />
+
                     </RibbonMenuButton>
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
-        <ListView x:Name="lstSKU" HorizontalAlignment="Stretch" Margin="10,138,0,0" Grid.RowSpan="2" SizeChanged="lstSKU_SizeChanged" SelectionChanged="lstSKU_SelectionChanged" MouseDoubleClick="lstSKU_MouseDoubleClick">
+        <ListView x:Name="lstSKU" VirtualizingStackPanel.IsVirtualizing="False"  HorizontalAlignment="Stretch" Margin="10,138,0,0" Grid.RowSpan="2" SizeChanged="lstSKU_SizeChanged" SelectionChanged="lstSKU_SelectionChanged" MouseDoubleClick="lstSKU_MouseDoubleClick">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Refresh"  InputGestureText="F5"/>
@@ -151,12 +154,14 @@
                     <GridViewColumn Width="Auto" Header="Target" DisplayMemberBinding="{Binding Target}" />
                     <GridViewColumn Width="Auto" Header="SDK"  DisplayMemberBinding="{Binding SDK}" />
                     <GridViewColumn x:Name="actualStatus" Width="Auto" Header="Status" DisplayMemberBinding="{Binding Status}"/>
-                    <GridViewColumn Width="0"  x:Name="StatusProgress" Header="Status">
+                    <GridViewColumn  Width="0"   x:Name="StatusProgress" Header="Status">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <TextBlock Foreground="Black" Text="{Binding ProgressName}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="{Binding Height, ElementName=StatusProgress}" Width="{Binding Width, ElementName=StatusProgress}"/>
                                     <ProgressBar Foreground="Blue" x:Name="pbstatus" Value="{Binding Progress}" Height="{Binding Height, ElementName=StatusProgress}" Width="{Binding Width, ElementName=StatusProgress}"/>
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" Text="{Binding ProgressName}">
+                                       
+                                    </TextBlock>
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

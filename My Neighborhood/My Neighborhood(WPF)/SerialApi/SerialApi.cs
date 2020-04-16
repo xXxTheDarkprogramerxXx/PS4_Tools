@@ -123,22 +123,30 @@ namespace My_Neighborhood_WPF_.SerialApi
         // Token: 0x0600002F RID: 47 RVA: 0x00003790 File Offset: 0x00001990
         private void UpdateBaudRateCollection()
         {
-            this._port = new SerialPort(this.Settings.PortName);
-            this._port.Open();
-            FieldInfo field = this._port.BaseStream.GetType().GetField("commProp", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (field == null)
+            try
             {
-                return;
+                this._port = new SerialPort(this.Settings.PortName);
+                this._port.Open();
+                FieldInfo field = this._port.BaseStream.GetType().GetField("commProp", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (field == null)
+                {
+                    return;
+                }
+                object value = field.GetValue(this._port.BaseStream);
+                field = value.GetType().GetField("dwSettableBaud", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (field == null)
+                {
+                    return;
+                }
+                int possibleBaudRates = (int)field.GetValue(value);
+                this._port.Close();
+                this.Settings.UpdateBaudRateCollection(possibleBaudRates);
             }
-            object value = field.GetValue(this._port.BaseStream);
-            field = value.GetType().GetField("dwSettableBaud", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            if (field == null)
+            catch(Exception ex)
             {
-                return;
+                //probabbly could not open port or something
+               // throw new Exception(ex.Message);
             }
-            int possibleBaudRates = (int)field.GetValue(value);
-            this._port.Close();
-            this.Settings.UpdateBaudRateCollection(possibleBaudRates);
         }
 
         // Token: 0x06000030 RID: 48 RVA: 0x00003838 File Offset: 0x00001A38

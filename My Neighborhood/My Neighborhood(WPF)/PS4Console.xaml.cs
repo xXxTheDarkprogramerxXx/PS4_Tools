@@ -58,7 +58,8 @@ namespace My_Neighborhood_WPF_
             string @string = Encoding.UTF8.GetString(e.Data);
             if (!string.IsNullOrWhiteSpace(@string))
             {
-                rtbAll.AppendText(@string);
+                rtbAll.Dispatcher.Invoke(new Action(() => rtbAll.AppendText(@string)));
+                this.Dispatcher.Invoke(() => rtbAll.ScrollToEnd());
             }
         }
 
@@ -75,6 +76,7 @@ namespace My_Neighborhood_WPF_
             {
                 this.Monitor.NewSerialDataRecieved += this.OnNewSerialDataReceived;
                 this.Monitor.SetSpeed(false);
+                this.OpenMonitor();
             }
             else
             {

@@ -107,6 +107,7 @@
     <Compile Include="SerialApi\SerialApi.cs" />
     <Compile Include="SerialApi\SerialDataEventArg.cs" />
     <Compile Include="SerialApi\SerialSettings.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="Utility.cs" />
     <Page Include="AddSKU.xaml">
       <SubType>Designer</SubType>
@@ -272,6 +273,7 @@
     <Content Include="API\HtmlAgilityPack.dll" />
     <Content Include="API\PARAM.SFO.dll" />
     <Content Include="API\PS4_Tools.dll" />
+    <None Include="Resources\make_fself.exe" />
     <Resource Include="License.txt" />
     <Resource Include="Images\icons8-change-theme-96.png" />
     <Resource Include="Images\icons8-layout-96.png" />

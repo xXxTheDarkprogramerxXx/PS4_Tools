@@ -19,6 +19,7 @@ using Fakekit_API;
 using System.Threading;
 using System.Net.Sockets;
 using System.IO;
+using System.Diagnostics;
 
 namespace My_Neighborhood_WPF_
 {
@@ -253,7 +254,7 @@ namespace My_Neighborhood_WPF_
 
             public ReleaseCheck Release { get; set; }
 
-            public int Progress { get; set; }
+            public double Progress { get; set; }
             public string ProgressName { get; set; }
 
             public string DisplayProgress
@@ -275,10 +276,106 @@ namespace My_Neighborhood_WPF_
 
         }
 
+        private void btnCopyfiles_Click(object sender, RoutedEventArgs e)
+        {
+            var selecteditem = lstSKU.SelectedItem as SKUS;
+            if (selecteditem != null)
+            {
+                //now we do some stuff
+                MessageBoxResult mesgresult = MessageBox.Show("Are you sure you want to copy files from your serving directory to the app/data/ folder ?\nThis will overwrite any existing data", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (mesgresult == MessageBoxResult.Yes)
+                {
+                    string[] allfiles = Directory.GetFiles(selecteditem.FileSerDir, "*.*", SearchOption.AllDirectories);
+
+                    clients.UploadDirectory(selecteditem.FileSerDir, "/data/app/", FtpFolderSyncMode.Update, FtpRemoteExists.Overwrite);//overwrite existing files
+                }
+            }
+        }
+
+        private void btnPlayGo_Click(object sender, RoutedEventArgs e)
+        {
+            //API.attachEboot();
+        }
+
+        private void btnChangeColor_Click(object sender, RoutedEventArgs e)
+        {
+            if (true == false)
+            {
+                API.Change_Light(API.colored_light.Blinking_Blue);//user can change color fo the led bar on console
+            }
+        }
+
+        private void btnPowerOff_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var mess = MessageBox.Show("Are you sure you want to turn off the device ?", "Power off", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (mess == MessageBoxResult.Yes)
+                {
+                    API.POWER_OFF();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void btnReboot_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var mess = MessageBox.Show("Are you sure you want to reboot the device ?", "Reboot", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (mess == MessageBoxResult.Yes)
+                {
+                    API.REBOOT();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void btnRestMode_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var mess = MessageBox.Show("Are you sure you want to suspend the device ?", "Suspend", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (mess == MessageBoxResult.Yes)
+                {
+                    API.SUSPEND_SYSTEM();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void btnInstallPKG_Click(object sender, RoutedEventArgs e)
+        {
+            //Install a pkg selected by the user
+            System.Windows.Forms.OpenFileDialog opendialog = new System.Windows.Forms.OpenFileDialog();
+            opendialog.Filter = "PS4 PKG File (.PKG)| *.PKG";//file type 
+            opendialog.Title = "Select a PS4 PKG file";
+            opendialog.Multiselect = false;
+            opendialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
+            if (opendialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                PS4_Tools.PKG.SceneRelated.Unprotected_PKG pkg = PS4_Tools.PKG.SceneRelated.Read_PKG(opendialog.FileName);
+                if (pkg.PS4_Title != "")
+                {
+                    //install it 
+                    //API.Installpkg();
+                }
+            }
+        }
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
             RefreshData();
+            ExtractResources();
         }
 
         private void lstSKU_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -304,7 +401,8 @@ namespace My_Neighborhood_WPF_
                     btnSetDefault.IsEnabled = false;
                 }
 
-              
+                AutoSizeColumns();
+
 
             }
             catch (Exception ex)
@@ -313,19 +411,72 @@ namespace My_Neighborhood_WPF_
             }
         }
 
+        public void SetProgress(string Text, double Percentage, bool hide = false)
+        {
+            try
+            {
+                actualStatus.Dispatcher.Invoke(new Action(() => actualStatus.Width = 0));
+                StatusProgress.Dispatcher.Invoke(new Action(() => StatusProgress.Width = 250));
+                //just for testing add a progress bar
+                SKUS selecteditem = new SKUS();
+                lstSKU.Dispatcher.Invoke(new Action(() => selecteditem = (SKUS)lstSKU.SelectedItem));
+                selecteditem.Progress = Percentage;
+                selecteditem.ProgressName = Text + " - " + (Math.Round(Percentage, 2)) + "%";
+
+                //SKU_List[0].Progress = Percentage;
+                //SKU_List[0].ProgressName = Text + " - ";
+                //OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+
+                if (hide == true)
+                {
+                    actualStatus.Dispatcher.Invoke(new Action(() => actualStatus.Width = 250));
+                    StatusProgress.Dispatcher.Invoke(new Action(() => StatusProgress.Width = 0));
+                }
+
+                lstSKU.Dispatcher.Invoke(new Action(() => lstSKU.Items.Refresh()));
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void AutoSizeColumns()
+        {
+            GridView gv = lstSKU.View as GridView;
+            if (gv != null)
+            {
+                foreach (var c in gv.Columns)
+                {
+                    // Code below was found in GridViewColumnHeader.OnGripperDoubleClicked() event handler (using Reflector)
+                    // i.e. it is the same code that is executed when the gripper is double clicked
+                    if (double.IsNaN(c.Width))
+                    {
+                        c.Width = c.ActualWidth;
+                    }
+                    c.Width = double.NaN;
+
+                }
+                gv.Columns[4].Width = 0;
+            }
+        }
+
         private void RibbonButton_Click(object sender, RoutedEventArgs e)
         {
-            actualStatus.Width = 0;
-            StatusProgress.Width = 150;
-            //just for testing add a progress bar
-            var selecteditem = (SKUS)lstSKU.SelectedItem;
-            selecteditem.Progress = 50;
-            selecteditem.ProgressName = "Rebooting - ";
+            //actualStatus.Width = 0;
+            //StatusProgress.Width = 150;
+            ////just for testing add a progress bar
+            //var selecteditem = (SKUS)lstSKU.SelectedItem;
+            //selecteditem.Progress = 50;
+            //selecteditem.ProgressName = "Rebooting - ";
 
-            SKU_List[0].Progress = 50;
-            SKU_List[0].ProgressName = "Rebooting - ";
-            //OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            lstSKU.Items.Refresh();
+            //SKU_List[0].Progress = 50;
+            //SKU_List[0].ProgressName = "Rebooting - ";
+            ////OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            //lstSKU.Items.Refresh();
+
+
+            //Well this will obviously not work 
 
         }
 
@@ -351,51 +502,154 @@ namespace My_Neighborhood_WPF_
             {
 
             }
+            else
+            {
+                API.kill(Convert.ToInt32(item.Tag));
+            }
         }
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
-            if (clients == null || !clients.IsConnected || !API.isConnected())
+            try
             {
-                if (lstSKU.SelectedItem == null)
+                if (clients == null || !clients.IsConnected || !API.isConnected())
                 {
+                    if (lstSKU.SelectedItem == null)
+                    {
+
+                    }
+                    else
+                    {
+                        var currentsku = lstSKU.SelectedItem as SKUS;
+                        connect(currentsku);
+
+                        try
+                        {
+                            //once connected load some information 
+                            currentsku.SDK = API.Firmware();
+                            currentsku.Power = SKU_Power_State.On;
+                            currentsku.Status = ConnectionStatus.Connected;
+                            lstSKU.Items.Refresh();
+                            SetSkuUIItems(currentsku);
+                            if (tc != null)
+                            {
+                                tc.Disconnect();
+                            }
+                            tc = new TelnetConnection(currentsku.Address, 777);//this is to be added each time an item is cloecked
+
+
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Already Connected\n");
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private static byte[] ELF_Magic = new byte[] { 127, 69, 76, 70 };
+
+        private void btnLoadApp_Click(object sender, RoutedEventArgs e)
+        {
+            Action<FtpProgress> progress = delegate (FtpProgress p) {
+                if (p.Progress == 1)
+                {
+
+                    // all done!
+                    SetProgress("Copying files", p.Progress);
 
                 }
                 else
                 {
-                    var currentsku = lstSKU.SelectedItem as SKUS;
-                    connect(currentsku);
 
-                    try
+                    //Console.WriteLine(p.Progress / 100 + "%");
+                    SetProgress("Copying files (" + (p.FileIndex + 1) + "/" + p.FileCount + ") ", p.Progress);
+                    // percent done = (p.Progress * 100)
+
+                }
+            };
+
+            List<string> UnityExlusions = new List<string>();
+            UnityExlusions.Add("configuration.ps4path");
+            UnityExlusions.Add("pronunciation.sig");
+            UnityExlusions.Add("pronunciation.xml");
+            UnityExlusions.Add("shareparam.json");
+            FluentFTP.Rules.FtpFileNameRule ftprulesforunity = new FluentFTP.Rules.FtpFileNameRule(false, UnityExlusions);
+            var listofrules = new List<FluentFTP.Rules.FtpRule>();
+            listofrules.Add(ftprulesforunity);
+
+            //load application this we will need to desciss
+            var item = lstSKU.SelectedItem as SKUS;
+
+            SetProgress("Prepping files...", 0);
+
+
+
+            //first we need to see how many items have to be signed dam untiy doesn't sign files
+            SetProgress("Checking file integrity...", 0);
+            var prxfiles = System.IO.Directory.GetFiles(item.FileSerDir, "*.prx", SearchOption.AllDirectories);
+            var ebootfiles = System.IO.Directory.GetFiles(item.FileSerDir, "*.bin", SearchOption.AllDirectories);
+
+            for (int i = 0; i < prxfiles.Length; i++)
+            {
+                BinaryReader prxreader = new BinaryReader(new FileStream(prxfiles[i], FileMode.Open, FileAccess.Read));
+                var bytes = prxreader.ReadBytes(4);
+                if (Util.CompareBytes(bytes, ELF_Magic))
+                {
+                    //items are not signed
+                    SetProgress("Signing " + System.IO.Path.GetFileName(prxfiles[i]), 50);
+                    Orbis_CMD("", "\"" + prxfiles[i] + "\" " + " \"" + prxfiles[i] + "\"");//hopefully it over writes it 
+                }
+
+            }
+
+
+            //API.Launch_APP("XDPX20002"); //Launches a spesific app
+            Task.Factory.StartNew(() =>
+            {
+                List<string> Errors = new List<string>();
+
+                var ftpresult = clients.UploadDirectory(item.FileSerDir, @"/hostapp/app/", FtpFolderSyncMode.Mirror, FtpRemoteExists.Overwrite, FtpVerify.None, listofrules, progress);//all items from file serving directory need to be copied
+                for (int i = 0; i < ftpresult.Count; i++)
+                {
+                    if (ftpresult[i].IsFailed == true)
                     {
-                        //once connected load some information 
-                        currentsku.SDK = API.Firmware();
-                        currentsku.Power = SKU_Power_State.On;
-                        currentsku.Status = ConnectionStatus.Connected;
-                        lstSKU.Items.Refresh();
-                        SetSkuUIItems(currentsku);
-                        if (tc != null)
-                        {
-                            tc.Disconnect();
-                        }
-                        tc = new TelnetConnection(currentsku.Address, 777);//this is to be added each time an item is cloecked
-                       
-
+                        Errors.Add("Error " + ftpresult[i].Exception.InnerException.Message + " on file " + ftpresult[i].LocalPath);
                     }
-                    catch(Exception ex)
+                    if (ftpresult[i].IsSkipped == true)
                     {
-
+                        //Errors.Add("Skipped files " + ftpresult[i].LocalPath);
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Already Connected\n");
-            }
-        }
+                if (Errors.Count == 0)
+                {
+                    SetProgress("", 100, true);
+                }
+                else
+                {
+                    SetProgress("Completed with errors..", 0, false);
+                    string erro = "";
+                    for (int i = 0; i < Errors.Count; i++)
+                    {
+                        erro += Errors[i].ToString() + "\n";
+                    }
+                    MessageBox.Show(erro, "Errors with file uploads", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                //quick check untiy has some funky items that causes error on start up 
+                //to avoid 
+                //we need to delete the following items 
+                //Any 
 
-        private void btnLoadApp_Click(object sender, RoutedEventArgs e)
-        {
-            //load application this we will need to desciss
+                API.Launch_Eboot();
+            });
         }
 
         private void btnFilterTarget_Click(object sender, RoutedEventArgs e)
@@ -567,6 +821,7 @@ namespace My_Neighborhood_WPF_
 
         private void lstSKU_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+
             PS4Console consoleoutput = new PS4Console();
             consoleoutput.SKU = lstSKU.SelectedItem as SKUS;
             consoleoutput.clients = clients;
@@ -600,6 +855,94 @@ namespace My_Neighborhood_WPF_
         #endregion << Methods >>
 
         #region << Functions >>
+
+        public string GetResourceHash()
+        {
+            using (MemoryStream ms = new MemoryStream(Properties.Resources.make_fself))
+            {
+                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+                {
+                    byte[] hash = md5.ComputeHash(ms);
+                    string str = Convert.ToBase64String(hash);
+                    // result for example: WgWKWcyl2YwlF/C8yLU9XQ==
+                    return str;
+                }
+            }
+        }
+        public string GetFileHash(string Path)
+        {
+            using (Stream ms = new FileStream(Path, FileMode.Open, FileAccess.Read))
+            {
+                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+                {
+                    byte[] hash = md5.ComputeHash(ms);
+                    string str = Convert.ToBase64String(hash);
+                    // result for example: WgWKWcyl2YwlF/C8yLU9XQ==
+                    return str;
+                }
+            }
+        }
+        /// <summary>
+        /// Resource extractor class and Md5 has matcher
+        /// </summary>
+        public void ExtractResources()
+        {
+            string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            if (!File.Exists(AppPath + "\\make_fself.exe"))
+            {
+                //System.IO
+                File.WriteAllBytes(AppPath + "\\make_fself.exe", Properties.Resources.make_fself);
+            }
+            else
+            {
+                //we do a has validation 
+                if (GetResourceHash() != GetFileHash(AppPath + "\\make_fself.exe"))
+                {
+                    File.WriteAllBytes(AppPath + "\\make_fself.exe", Properties.Resources.make_fself);
+                }
+            }
+        }
+
+
+        public string Orbis_CMD(string command, string arguments)
+        {
+            string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = AppPath + "make_fself.exe ";
+            start.Arguments = arguments;
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+            start.CreateNoWindow = true;
+            using (System.Diagnostics.Process process = System.Diagnostics.Process.Start(start))
+            {
+                process.ErrorDataReceived += Process_ErrorDataReceived;
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string result = reader.ReadToEnd();
+                    if (result.Contains("already converted from elf file to self file"))
+                    {
+                        System.Windows.Forms.DialogResult dlr = System.Windows.Forms.MessageBox.Show("Already Converted From Elf Error Found.... will be using Orbis-pub-gen for this pkg\n\n Simply Click Build and select the save folder", "Error with an alternative", System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question);
+                        if (dlr == System.Windows.Forms.DialogResult.OK)
+                        {
+                            //this will open up the GP4 Project inside the Utility
+                            // Orbis_Pub__GenCMD("", AppCommonPath() + @"\PS2Emu\" + "PS2Classics.gp4");
+
+                        }
+                    }
+                    else if (result.Contains("ERROR"))
+                    {
+                        System.Windows.Forms.MessageBox.Show(result);
+                    }
+                    return result;
+                }
+            }
+        }
+
+        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            //  throw new NotImplementedException();
+        }
 
         private bool IsMatchAtIndex(String value, String searchArgument, int startIndex)
         {
@@ -654,7 +997,7 @@ namespace My_Neighborhood_WPF_
 
             }
             lstSKU.ItemsSource = SKU_List;
-
+            AutoSizeColumns();
         }
 
         /// <summary>
@@ -896,7 +1239,10 @@ namespace My_Neighborhood_WPF_
             RibbonSeparator ribbonseparatoritem = new RibbonSeparator();
             btnKillProcess.Items.Add(ribbonseparatoritem);
             API.ErrorCode errorcheck = new API.ErrorCode();
-            List<Process> acctiveprocesses = API.getProcesses(out errorcheck);
+            List<Fakekit_API.Process> acctiveprocesses = API.getProcesses(out errorcheck);
+            var temp = API.getModules(out errorcheck);
+            //var check2 = API.getRegions(out errorcheck);
+            //  var check3 = API.getapps(out errorcheck);
             foreach (var item in acctiveprocesses)
             {
                 RibbonMenuItem menuitem = new RibbonMenuItem();
@@ -1002,9 +1348,8 @@ namespace My_Neighborhood_WPF_
 
                 #endregion << More >>
             }
-
+            AutoSizeColumns();
         }
-
 
 
         private void OpenFtp(string folderPath)
@@ -1063,25 +1408,5 @@ namespace My_Neighborhood_WPF_
 
         #endregion << Functions >>
 
-        private void btnCopyfiles_Click(object sender, RoutedEventArgs e)
-        {
-            var selecteditem = lstSKU.SelectedItem as SKUS;
-            if(selecteditem != null)
-            {
-                //now we do some stuff
-                MessageBoxResult mesgresult = MessageBox.Show("Are you sure you want to copy files from your serving directory to the app/data/ folder ?\nThis will overwrite any existing data", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if(mesgresult == MessageBoxResult.Yes)
-                {
-                    string[] allfiles = Directory.GetFiles(selecteditem.FileSerDir, "*.*", SearchOption.AllDirectories);
-
-                    clients.UploadDirectory(selecteditem.FileSerDir, "/data/app/", FtpFolderSyncMode.Update, FtpRemoteExists.Overwrite);//overwrite existing files
-                }
-            }
-        }
-
-        private void btnPlayGo_Click(object sender, RoutedEventArgs e)
-        {
-            //API.attachEboot();
-        }
     }
 }
