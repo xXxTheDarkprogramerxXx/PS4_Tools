@@ -61,7 +61,11 @@ namespace PS4_PKG_Viewer
 
                 }
                 dataGridView2.DataSource = dttemp;
+
+                
             }
+
+           
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
