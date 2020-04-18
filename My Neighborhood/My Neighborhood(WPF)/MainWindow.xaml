@@ -4,7 +4,7 @@
          xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon" x:Class="My_Neighborhood_WPF_.MainWindow"
          Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)"
         x:Name="RibbonWindow"
-        Width="1299.3" Height="480" Icon="Images/favicon (1).ico" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing">
+        Width="1299.3" Height="480" Icon="Images/favicon (1).ico" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing" WindowStartupLocation="CenterScreen">
 
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
@@ -129,9 +129,13 @@
                     <RibbonMenuButton x:Name="btnMore"
                                          SmallImageSource="Images\icons8-wrench-96 (1).png"
                                          Label="More" IsEnabled="False">
+                        
                         <RibbonButton x:Name="btnChangeColor"
                                          SmallImageSource="Images\icons8-minus-96.png"
                                          Label="Change Color" IsEnabled="True" VerticalAlignment="Top" Click="btnChangeColor_Click" />
+                        <RibbonButton x:Name="btnCheckError"
+                                         SmallImageSource="Images\icons8-eye-96.png"
+                                         Label="Check Error" IsEnabled="True" VerticalAlignment="Top" Click="btnCheckError_Click" />
 
                     </RibbonMenuButton>
                 </RibbonGroup>

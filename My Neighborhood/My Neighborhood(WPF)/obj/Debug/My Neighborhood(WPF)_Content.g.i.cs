@@ -13,5 +13,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("api/htmlagilitypack.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("api/param.sfo.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("api/ps4_tools.dll")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("e_sqlite3.dll")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("e_sqlite3.dll")]
 
 

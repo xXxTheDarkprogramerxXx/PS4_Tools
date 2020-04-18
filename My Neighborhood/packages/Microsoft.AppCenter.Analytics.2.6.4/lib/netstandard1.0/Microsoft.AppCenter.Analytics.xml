@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.AppCenter.Analytics</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.AppCenter.Analytics.Analytics">
+            <summary>
+                Analytics feature.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.Analytics.Analytics.IsEnabledAsync">
+            <summary>
+            Check whether the Analytics service is enabled or not.
+            </summary>
+            <returns>A task with result being true if enabled, false if disabled.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.Analytics.Analytics.SetEnabledAsync(System.Boolean)">
+            <summary>
+            Enable or disable the Analytics service.
+            </summary>
+            <returns>A task to monitor the operation.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.Analytics.Analytics.TrackEvent(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+                Track a custom event.
+            </summary>
+            <param name="name">An event name.</param>
+            <param name="properties">Optional properties.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.Analytics.NamespaceDoc">
+            <summary>
+            Analytics SDK module.
+            </summary>
+        </member>
+    </members>
+</doc>

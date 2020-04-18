@@ -19,14 +19,19 @@ namespace My_Neighborhood_WPF_.PS4ConsolePages
     /// </summary>
     public partial class PrefSettings : Window
     {
+        bool Loading = true;
         public PrefSettings()
         {
             InitializeComponent();
+            if (Properties.Settings.Default.ConsolePrefCom == true && Properties.Settings.Default.ConsolePrefPort != "")
+            {
+                chb.IsChecked = true;
+            }
         }
 
         private void chb_Checked(object sender, RoutedEventArgs e)
         {
-            if (chb.IsChecked == true)
+            if (chb.IsChecked == true && Loading == false)
             {
                 var result = MessageBox.Show("This will enable and prefer UART debugging for the PS4 are you sure you want to continue?", "Enable UART", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
                 if (result == MessageBoxResult.Yes)
@@ -40,13 +45,24 @@ namespace My_Neighborhood_WPF_.PS4ConsolePages
                     }
                 }
             }
+           
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if(Properties.Settings.Default.ConsolePrefCom == true && Properties.Settings.Default.ConsolePrefPort != "")
+            Loading = false;
+        }
+
+        private void chb_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (chb.IsChecked == false && Loading == false)
             {
-                chb.IsChecked = true;
+                var result = MessageBox.Show("This will disable UART debugging for the PS4 are you sure you want to continue?", "Disable UART", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Properties.Settings.Default.ConsolePrefCom = false;
+                    Properties.Settings.Default.Save();
+                }
             }
         }
     }

@@ -30,6 +30,9 @@ namespace My_Neighborhood_WPF_
         public MainWindow.SKUS SKU = new MainWindow.SKUS();
         public MainWindow.TelnetConnection tc = null;
         public FtpClient clients = new FtpClient();
+        public bool isOpen = false;
+
+
         public PS4Console()
         {
             InitializeComponent();
@@ -37,7 +40,7 @@ namespace My_Neighborhood_WPF_
         #region << Serial Integration >>
 
         private SerialMonitor Monitor = new SerialMonitor();
-
+        private System.Threading.Thread threadcom;
         // Token: 0x0200000C RID: 12
         // (Invoke) Token: 0x06000053 RID: 83
         private delegate void AppendTextCallback(string text);
@@ -67,6 +70,7 @@ namespace My_Neighborhood_WPF_
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            isOpen = true;
             rtbAll.Selection.Text = "";
             this.Title = SKU.Target + " [" + SKU.Power + "] - Console Output for PlayStation®4";
             Style noSpaceStyle = new Style(typeof(Paragraph));
@@ -80,7 +84,7 @@ namespace My_Neighborhood_WPF_
             }
             else
             {
-                System.Threading.Thread threadcom = new System.Threading.Thread(() => RefreshProcesses());
+                threadcom = new System.Threading.Thread(() => RefreshProcesses());
                 threadcom.Start();
             }
 
@@ -157,6 +161,28 @@ namespace My_Neighborhood_WPF_
             My_Neighborhood_WPF_.PS4ConsolePages.PrefSettings prefsettings = new My_Neighborhood_WPF_.PS4ConsolePages.PrefSettings();
             prefsettings.ShowDialog();
 
+        }
+
+        private void RibbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(threadcom != null)
+            {
+                if(threadcom.IsAlive == true)
+                {
+                    threadcom.Abort();
+                }
+            }
+            isOpen = false;
+        }
+
+        private void btnSelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            rtbAll.SelectAll();
+        }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Clipboard.SetText(rtbAll.Selection.Text);
         }
     }
 }

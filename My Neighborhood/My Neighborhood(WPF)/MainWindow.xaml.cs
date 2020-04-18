@@ -20,6 +20,8 @@ using System.Threading;
 using System.Net.Sockets;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
 
 namespace My_Neighborhood_WPF_
 {
@@ -46,6 +48,9 @@ namespace My_Neighborhood_WPF_
             SGA = 3
         }
 
+        /// <summary>
+        /// Connection Status Enum
+        /// </summary>
         public enum ConnectionStatus
         {
             Connected,
@@ -59,7 +64,7 @@ namespace My_Neighborhood_WPF_
             On,
             Off,
             RestMode,
-            DEAD
+            DEAD//this one is a joke if this comes up on your system im going to cry
         }
 
         public enum ReleaseCheck
@@ -78,7 +83,15 @@ namespace My_Neighborhood_WPF_
         TelnetConnection tc;
         FtpClient clients = new FtpClient();
 
+        /// <summary>
+        /// Listing all SKU's (Target Devices)
+        /// </summary>
         public static List<SKUS> SKU_List = new List<SKUS>();
+
+        /// <summary>
+        /// Elf Header check if its elf its not signed
+        /// </summary>
+        private static byte[] ELF_Magic = new byte[] { 127, 69, 76, 70 };
 
         FtpReply response;
         #endregion << Var's >>
@@ -101,7 +114,7 @@ namespace My_Neighborhood_WPF_
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                 //   MessageBox.Show(ex.ToString());
                 }
 
             }
@@ -276,8 +289,14 @@ namespace My_Neighborhood_WPF_
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCopyfiles_Click(object sender, RoutedEventArgs e)
         {
+            //Copy all existing files from file serving directory to host/app
             var selecteditem = lstSKU.SelectedItem as SKUS;
             if (selecteditem != null)
             {
@@ -294,7 +313,7 @@ namespace My_Neighborhood_WPF_
 
         private void btnPlayGo_Click(object sender, RoutedEventArgs e)
         {
-            //API.attachEboot();
+            //This should open a playgo file if there is one
         }
 
         private void btnChangeColor_Click(object sender, RoutedEventArgs e)
@@ -344,6 +363,7 @@ namespace My_Neighborhood_WPF_
                 var mess = MessageBox.Show("Are you sure you want to suspend the device ?", "Suspend", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (mess == MessageBoxResult.Yes)
                 {
+                    //API.
                     API.SUSPEND_SYSTEM();
                 }
             }
@@ -411,56 +431,6 @@ namespace My_Neighborhood_WPF_
             }
         }
 
-        public void SetProgress(string Text, double Percentage, bool hide = false)
-        {
-            try
-            {
-                actualStatus.Dispatcher.Invoke(new Action(() => actualStatus.Width = 0));
-                StatusProgress.Dispatcher.Invoke(new Action(() => StatusProgress.Width = 250));
-                //just for testing add a progress bar
-                SKUS selecteditem = new SKUS();
-                lstSKU.Dispatcher.Invoke(new Action(() => selecteditem = (SKUS)lstSKU.SelectedItem));
-                selecteditem.Progress = Percentage;
-                selecteditem.ProgressName = Text + " - " + (Math.Round(Percentage, 2)) + "%";
-
-                //SKU_List[0].Progress = Percentage;
-                //SKU_List[0].ProgressName = Text + " - ";
-                //OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-
-                if (hide == true)
-                {
-                    actualStatus.Dispatcher.Invoke(new Action(() => actualStatus.Width = 250));
-                    StatusProgress.Dispatcher.Invoke(new Action(() => StatusProgress.Width = 0));
-                }
-
-                lstSKU.Dispatcher.Invoke(new Action(() => lstSKU.Items.Refresh()));
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        public void AutoSizeColumns()
-        {
-            GridView gv = lstSKU.View as GridView;
-            if (gv != null)
-            {
-                foreach (var c in gv.Columns)
-                {
-                    // Code below was found in GridViewColumnHeader.OnGripperDoubleClicked() event handler (using Reflector)
-                    // i.e. it is the same code that is executed when the gripper is double clicked
-                    if (double.IsNaN(c.Width))
-                    {
-                        c.Width = c.ActualWidth;
-                    }
-                    c.Width = double.NaN;
-
-                }
-                gv.Columns[4].Width = 0;
-            }
-        }
-
         private void RibbonButton_Click(object sender, RoutedEventArgs e)
         {
             //actualStatus.Width = 0;
@@ -507,6 +477,7 @@ namespace My_Neighborhood_WPF_
                 API.kill(Convert.ToInt32(item.Tag));
             }
         }
+
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -519,24 +490,24 @@ namespace My_Neighborhood_WPF_
                     }
                     else
                     {
-                        var currentsku = lstSKU.SelectedItem as SKUS;
-                        connect(currentsku);
-
+                      
                         try
                         {
-                            //once connected load some information 
-                            currentsku.SDK = API.Firmware();
-                            currentsku.Power = SKU_Power_State.On;
-                            currentsku.Status = ConnectionStatus.Connected;
-                            lstSKU.Items.Refresh();
-                            SetSkuUIItems(currentsku);
-                            if (tc != null)
+                            var currentsku = lstSKU.SelectedItem as SKUS;
+                            if (connect(currentsku))
                             {
-                                tc.Disconnect();
+                                //once connected load some information 
+                                currentsku.SDK = API.Firmware();
+                                currentsku.Power = SKU_Power_State.On;
+                                currentsku.Status = ConnectionStatus.Connected;
+                                lstSKU.Items.Refresh();
+                                SetSkuUIItems(currentsku);
+                                if (tc != null)
+                                {
+                                    tc.Disconnect();
+                                }
+                                tc = new TelnetConnection(currentsku.Address, 777);//this is to be added each time an item is cloecked
                             }
-                            tc = new TelnetConnection(currentsku.Address, 777);//this is to be added each time an item is cloecked
-
-
                         }
                         catch (Exception ex)
                         {
@@ -554,8 +525,6 @@ namespace My_Neighborhood_WPF_
 
             }
         }
-
-        private static byte[] ELF_Magic = new byte[] { 127, 69, 76, 70 };
 
         private void btnLoadApp_Click(object sender, RoutedEventArgs e)
         {
@@ -606,7 +575,7 @@ namespace My_Neighborhood_WPF_
                 {
                     //items are not signed
                     SetProgress("Signing " + System.IO.Path.GetFileName(prxfiles[i]), 50);
-                    Orbis_CMD("", "\"" + prxfiles[i] + "\" " + " \"" + prxfiles[i] + "\"");//hopefully it over writes it 
+                    makefself_CMD("", "\"" + prxfiles[i] + "\" " + " \"" + prxfiles[i] + "\"");//hopefully it over writes it 
                 }
 
             }
@@ -744,8 +713,6 @@ namespace My_Neighborhood_WPF_
 
         }
 
-
-
         private static void Process_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
         {
             //throw new NotImplementedException();
@@ -819,93 +786,232 @@ namespace My_Neighborhood_WPF_
             }
         }
 
+       
+        PS4Console consoleoutput = new PS4Console();
         private void lstSKU_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            try
+            {
+                if (consoleoutput.isOpen)
+                {
+                    if(consoleoutput.WindowState == WindowState.Minimized)
+                    {
+                        consoleoutput.WindowState = WindowState.Normal;
+                    }
+                    consoleoutput.Activate();
+                 
+                }
+                else
+                {
+                    consoleoutput = new PS4Console();
+                    consoleoutput.SKU = lstSKU.SelectedItem as SKUS;
+                    consoleoutput.clients = clients;
+                    consoleoutput.tc = tc;
+                    consoleoutput.Show();
+                }
 
-            PS4Console consoleoutput = new PS4Console();
-            consoleoutput.SKU = lstSKU.SelectedItem as SKUS;
-            consoleoutput.clients = clients;
-            consoleoutput.tc = tc;
-            consoleoutput.Show();
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         private void RibbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //disconnect any remaining connections here
-            if (clients.IsConnected || API.isConnected())
+            try
             {
-                for (int i = 0; i < SKU_List.Count; i++)
+                //disconnect any remaining connections here
+                if (clients.IsConnected || API.isConnected())
                 {
-                    if (SKU_List[i].Status == ConnectionStatus.Connected)
+                    for (int i = 0; i < SKU_List.Count; i++)
                     {
-                        var currentsku = SKU_List[i];
-                        disconnect(currentsku);
+                        if (SKU_List[i].Status == ConnectionStatus.Connected)
+                        {
+                            var currentsku = SKU_List[i];
+                            disconnect(currentsku);
 
-                        //once connected load some information 
-                        currentsku.SDK = "";
-                        currentsku.Power = SKU_Power_State.Off;
-                        currentsku.Status = ConnectionStatus.Discconecting;
-                        lstSKU.Items.Refresh();
-                        SetSkuUIItems(currentsku);
+                            //once connected load some information 
+                            currentsku.SDK = "";
+                            currentsku.Power = SKU_Power_State.Off;
+                            currentsku.Status = ConnectionStatus.Discconecting;
+                            lstSKU.Items.Refresh();
+                            SetSkuUIItems(currentsku);
+                        }
                     }
                 }
             }
-
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
+          //  System.Windows.Application.Current.Shutdown();//kill everything
         }
+
+        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            //  throw new NotImplementedException();
+        }
+
         #endregion << Methods >>
 
         #region << Functions >>
+        /// <summary>
+        /// Sets the text and progress on the ListView Grid
+        /// </summary>
+        /// <param name="Text">Text to Display</param>
+        /// <param name="Percentage">Percentage completed</param>
+        /// <param name="hide">If True it hides the status bar and brings back the normal bar</param>
+        public void SetProgress(string Text, double Percentage, bool hide = false)
+        {
+            try
+            {
+                actualStatus.Dispatcher.Invoke(new Action(() => actualStatus.Width = 0));
+                StatusProgress.Dispatcher.Invoke(new Action(() => StatusProgress.Width = 250));
 
+
+                SKUS selecteditem = new SKUS();
+                lstSKU.Dispatcher.Invoke(new Action(() => selecteditem = (SKUS)lstSKU.SelectedItem));
+                selecteditem.Progress = Percentage;
+                selecteditem.ProgressName = Text + " - " + (Math.Round(Percentage, 2)) + "%";
+
+                //SKU_List[0].Progress = Percentage;
+                //SKU_List[0].ProgressName = Text + " - ";
+                //OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+
+                if (hide == true)
+                {
+                    actualStatus.Dispatcher.Invoke(new Action(() => actualStatus.Width = 250));
+                    StatusProgress.Dispatcher.Invoke(new Action(() => StatusProgress.Width = 0));
+                }
+
+                lstSKU.Dispatcher.Invoke(new Action(() => lstSKU.Items.Refresh()));
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
+        }
+
+        /// <summary>
+        /// WPF Auto Size Columns to cells
+        /// </summary>
+        public void AutoSizeColumns()
+        {
+            try
+            {
+                GridView gv = lstSKU.View as GridView;
+                if (gv != null)
+                {
+                    foreach (var c in gv.Columns)
+                    {
+                        // Code below was found in GridViewColumnHeader.OnGripperDoubleClicked() event handler (using Reflector)
+                        // i.e. it is the same code that is executed when the gripper is double clicked
+                        if (double.IsNaN(c.Width))
+                        {
+                            c.Width = c.ActualWidth;
+                        }
+                        c.Width = double.NaN;
+
+                    }
+                    gv.Columns[4].Width = 0;
+                }
+            }
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
+        }
+
+        /// <summary>
+        /// This is to match the resource MD5 hash of make_fself.exe
+        /// </summary>
+        /// <returns></returns>
         public string GetResourceHash()
         {
-            using (MemoryStream ms = new MemoryStream(Properties.Resources.make_fself))
+            try
             {
-                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+                using (MemoryStream ms = new MemoryStream(Properties.Resources.make_fself))
                 {
-                    byte[] hash = md5.ComputeHash(ms);
-                    string str = Convert.ToBase64String(hash);
-                    // result for example: WgWKWcyl2YwlF/C8yLU9XQ==
-                    return str;
+                    using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+                    {
+                        byte[] hash = md5.ComputeHash(ms);
+                        string str = Convert.ToBase64String(hash);
+                        // result for example: WgWKWcyl2YwlF/C8yLU9XQ==
+                        return str;
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex);
+                return "";
+            }
         }
+
+        /// <summary>
+        /// This gets a specific files MD5 hash
+        /// </summary>
+        /// <param name="Path">Path to file</param>
+        /// <returns></returns>
         public string GetFileHash(string Path)
         {
-            using (Stream ms = new FileStream(Path, FileMode.Open, FileAccess.Read))
+            try
             {
-                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+                using (Stream ms = new FileStream(Path, FileMode.Open, FileAccess.Read))
                 {
-                    byte[] hash = md5.ComputeHash(ms);
-                    string str = Convert.ToBase64String(hash);
-                    // result for example: WgWKWcyl2YwlF/C8yLU9XQ==
-                    return str;
+                    using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+                    {
+                        byte[] hash = md5.ComputeHash(ms);
+                        string str = Convert.ToBase64String(hash);
+                        // result for example: WgWKWcyl2YwlF/C8yLU9XQ==
+                        return str;
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex);
+                return "";
+            }
         }
+
         /// <summary>
         /// Resource extractor class and Md5 has matcher
         /// </summary>
         public void ExtractResources()
         {
-            string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            try
+            {
+                string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
 
-            if (!File.Exists(AppPath + "\\make_fself.exe"))
-            {
-                //System.IO
-                File.WriteAllBytes(AppPath + "\\make_fself.exe", Properties.Resources.make_fself);
-            }
-            else
-            {
-                //we do a has validation 
-                if (GetResourceHash() != GetFileHash(AppPath + "\\make_fself.exe"))
+                if (!File.Exists(AppPath + "\\make_fself.exe"))
                 {
+                    //System.IO
                     File.WriteAllBytes(AppPath + "\\make_fself.exe", Properties.Resources.make_fself);
                 }
+                else
+                {
+                    //we do a has validation 
+                    if (GetResourceHash() != GetFileHash(AppPath + "\\make_fself.exe"))
+                    {
+                        File.WriteAllBytes(AppPath + "\\make_fself.exe", Properties.Resources.make_fself);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+
             }
         }
 
-
-        public string Orbis_CMD(string command, string arguments)
+        /// <summary>
+        /// This will call make_fself
+        /// </summary>
+        /// <param name="command">this should not have to be nything right now</param>
+        /// <param name="arguments">Arguments to be called</param>
+        /// <returns></returns>
+        public string makefself_CMD(string command, string arguments)
         {
             string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
             ProcessStartInfo start = new ProcessStartInfo();
@@ -937,12 +1043,7 @@ namespace My_Neighborhood_WPF_
                     return result;
                 }
             }
-        }
-
-        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            //  throw new NotImplementedException();
-        }
+        }      
 
         private bool IsMatchAtIndex(String value, String searchArgument, int startIndex)
         {
@@ -976,28 +1077,34 @@ namespace My_Neighborhood_WPF_
         }
 
 
-
         /// <summary>
         /// Refresh Data from the syetm
         /// </summary>
         /// <param name="noReset"> Skip File Load</param>
         private void RefreshData(bool noReset = false)
         {
-            if (noReset == false)
+            try
             {
-                LoadSKU_S();
-
-                //just disable all information for now
-                for (int i = 0; i < SKU_List.Count; i++)
+                if (noReset == false)
                 {
-                    SKU_List[i].Power = SKU_Power_State.Off;
-                    SKU_List[i].SDK = "";
-                    SKU_List[i].Status = ConnectionStatus.NotConnected;
-                }
+                    LoadSKU_S();
 
+                    //just disable all information for now
+                    for (int i = 0; i < SKU_List.Count; i++)
+                    {
+                        SKU_List[i].Power = SKU_Power_State.Off;
+                        SKU_List[i].SDK = "";
+                        SKU_List[i].Status = ConnectionStatus.NotConnected;
+                    }
+
+                }
+                lstSKU.ItemsSource = SKU_List;
+                AutoSizeColumns();
             }
-            lstSKU.ItemsSource = SKU_List;
-            AutoSizeColumns();
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
         }
 
         /// <summary>
@@ -1005,14 +1112,18 @@ namespace My_Neighborhood_WPF_
         /// </summary>
         public void SaveSKU_S()
         {
-            //delete
-
-            //serialize
-            using (Stream stream = File.Open(System.AppDomain.CurrentDomain.BaseDirectory + @"\MNHL.bin", FileMode.OpenOrCreate))
+            try
             {
-                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                using (Stream stream = File.Open(System.AppDomain.CurrentDomain.BaseDirectory + @"\MNHL.bin", FileMode.OpenOrCreate))
+                {
+                    var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                bformatter.Serialize(stream, SKU_List);
+                    bformatter.Serialize(stream, SKU_List);
+                }
+            }
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex);
             }
         }
 
@@ -1021,139 +1132,78 @@ namespace My_Neighborhood_WPF_
         /// </summary>
         public void LoadSKU_S()
         {
-            if (File.Exists(System.AppDomain.CurrentDomain.BaseDirectory + @"\MNHL.bin"))
+            try
             {
-                //deserialize
-                using (Stream stream = File.Open(System.AppDomain.CurrentDomain.BaseDirectory + @"\MNHL.bin", FileMode.Open))
+                if (File.Exists(System.AppDomain.CurrentDomain.BaseDirectory + @"\MNHL.bin"))
                 {
-                    var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    //deserialize
+                    using (Stream stream = File.Open(System.AppDomain.CurrentDomain.BaseDirectory + @"\MNHL.bin", FileMode.Open))
+                    {
+                        var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                    SKU_List = (List<SKUS>)bformatter.Deserialize(stream);
+                        SKU_List = (List<SKUS>)bformatter.Deserialize(stream);
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex);
             }
         }
 
-
+        /// <summary>
+        /// Check API versions
+        /// </summary>
+        /// <param name="CurrentItem">Current SKU Item</param>
         private void VersionCheck(SKUS CurrentItem)
         {
-
-
-            if (clients == null)
+            try
             {
-
-            }
-            else if (clients.IsConnected && API.isConnected())
-            {
-
-
-                CurrentItem.Status = ConnectionStatus.Connecting;
-                btnConnect.IsEnabled = false;
-
-
-
-
-
-                string version = API.version();
-
-                Console.WriteLine(version);
-                for (int i = 0; i < 2000; i++)
+                if (clients == null)
                 {
-
-                    if (version != client_comp_ver)
-                    {
-                        if (i >= 2000)
-                        {
-
-
-
-
-                            tc.Telnetdis();
-                            MessageBox.Show("This tool is not compatible with the PS4 Fakekit Version\n\nYour Version is: " + client_comp_ver + "\n" + "PS4 Version is: " + version + "\n\n" + "Press OK to Exit");
-                            return;
-                        }
-
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("Verions match\n");
-
-
-                        CurrentItem.Status = ConnectionStatus.Connected;
-                        btnConnect.IsEnabled = false;
-
-                        break;
-                    }
-
-
-
+                    return;
                 }
-            }
-
-
-            /*if (tc == null)
-            {
-
-            }
-            else if (tc.IsConnected)
-            {
-
-                Invoke(new Action(() =>
+                else if (clients.IsConnected && API.isConnected())
                 {
-                    label1.Text = "Connecting";
-                    Connect.Enabled = false;
-                }));
+                    //set the current UI item as connecting
+                    CurrentItem.Status = ConnectionStatus.Connecting;
+                    btnConnect.IsEnabled = false;
+                    lstSKU.Dispatcher.Invoke(new Action(()=> lstSKU.Items.Refresh()));
+                    string version = API.version();
 
-
-
-
-                tc.WriteLine("fakekit_version");
-
-                for (int i = 0; i < 2000; i++)
-                {
-
-                    string  ver = tc.Read();
-
-                    if (StrStr(ver, client_comp_ver) != -1)
+                    Console.WriteLine(version);
+                    for (int i = 0; i < 2000; i++)
                     {
-                        if (i >= 2000)
+                        if (version != client_comp_ver)
                         {
-                            
-
-                            Invoke(new Action(() =>
+                            if (i >= 2000)
                             {
-                                label1.Text = "Disconnected";
-                                Connect.Enabled = false;
-                            }));
-
-                            tc.Telnetdis();
-                            MessageBox.Show("This tool is not compatible with the PS4 Fakekit Version\n\nYour Version is: " + client_comp_ver + "\n" + "PS4 Version is: " + ver + "\n\n" + "Press OK to Exit");
-                            Application.Exit();
+                                tc.Telnetdis();
+                                MessageBox.Show("This tool is not compatible with the PS4 Fakekit Version\n\nYour Version is: " + client_comp_ver + "\n" + "PS4 Version is: " + version + "\n\n" + "Press OK to Exit");
+                                return;
+                            }
                         }
-
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("Verions match\n");
-
-                        Invoke(new Action(() =>
+                        else
                         {
-                            label1.Text = "Connected";
-                            Connect.Enabled = false;
-                        }));
-
-                        break;
+                            Console.WriteLine("Verions match\n");
+                            CurrentItem.Status = ConnectionStatus.Connected;
+                            btnConnect.IsEnabled = false;
+                            break;
+                        }
                     }
-
-
-
                 }
-            }*/
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
         }
 
-
-        private async void connect(SKUS CurrentSKU)
+        /// <summary>
+        /// Connect to a specific SKU
+        /// </summary>
+        /// <param name="CurrentSKU"></param>
+        private bool connect(SKUS CurrentSKU)
         {
 
             thread = System.Threading.Thread.CurrentThread;
@@ -1169,34 +1219,41 @@ namespace My_Neighborhood_WPF_
                 clients.Connect();
 
 
+                if (clients.IsConnected == true)
+                {
+                    API.IP = CurrentSKU.Address;
+                    API.Port = 999;
+                    API.connect();
+                    API.notify("PS4 Connected to Neighborhood on " + Environment.UserName.ToString());
 
-                API.IP = CurrentSKU.Address;
-                API.Port = 999;
-                API.connect();
-                API.notify("PS4 Connected to Neighborhood on " + Environment.UserName.ToString());
 
+                    //Properties.Settings.Default.DefaultName = CurrentSKU.Default;
 
-                //Properties.Settings.Default.DefaultName = CurrentSKU.Default;
+                    //Properties.Settings.Default.Save();
 
-                //Properties.Settings.Default.Save();
+                    VersionCheck(CurrentSKU);
 
-                VersionCheck(CurrentSKU);
+                    return true;
+                }
             }
-            catch
+            catch(Exception ex)
             {
-                // MessageBox.Show(eee.ToString());
                 MessageBox.Show("Cannot Connect!");
-                throw;
-
+                Crashes.TrackError(ex);
+                return false;
             }
 
-
+            return false;
 
 
 
         }
 
-        private async void disconnect(SKUS CurrentSKU)
+        /// <summary>
+        /// Discconect for a specific SKU
+        /// </summary>
+        /// <param name="CurrentSKU"></param>
+        private void disconnect(SKUS CurrentSKU)
         {
 
             thread = System.Threading.Thread.CurrentThread;
@@ -1214,13 +1271,17 @@ namespace My_Neighborhood_WPF_
                 {
                     API.disconnect();
                 }
+
+                if(tc.IsConnected)
+                {
+                    tc.Disconnect();
+                }
             }
-            catch
+            catch(Exception ex)
             {
                 // MessageBox.Show(eee.ToString());
                 MessageBox.Show("Cannot disconnect!");
-                throw;
-
+                Crashes.TrackError(ex);
             }
 
 
@@ -1229,129 +1290,153 @@ namespace My_Neighborhood_WPF_
 
         }
 
+        /// <summary>
+        /// Load a list of Executables for the current SKU
+        /// </summary>
+        /// <param name="CurrentSKU"></param>
         public void LoadExecutables(SKUS CurrentSKU)
         {
-            btnLoadExe.Items.Clear();
-            btnKillProcess.Items.Clear();
-            RibbonMenuItem killallitem = new RibbonMenuItem();
-            killallitem.Header = "Kill all processes";
-            btnKillProcess.Items.Add(killallitem);
-            RibbonSeparator ribbonseparatoritem = new RibbonSeparator();
-            btnKillProcess.Items.Add(ribbonseparatoritem);
-            API.ErrorCode errorcheck = new API.ErrorCode();
-            List<Fakekit_API.Process> acctiveprocesses = API.getProcesses(out errorcheck);
-            var temp = API.getModules(out errorcheck);
-            //var check2 = API.getRegions(out errorcheck);
-            //  var check3 = API.getapps(out errorcheck);
-            foreach (var item in acctiveprocesses)
+            try
             {
-                RibbonMenuItem menuitem = new RibbonMenuItem();
-                menuitem.Click += LoadProcess_Click;
-                menuitem.Header = item.Name + "(" + item.Id + ")";
-                menuitem.Tag = item.Id;
-                btnLoadExe.Items.Add(menuitem);
+                btnLoadExe.Items.Clear();
+                btnKillProcess.Items.Clear();
+                RibbonMenuItem killallitem = new RibbonMenuItem();
+                killallitem.Header = "Kill all processes";
+                btnKillProcess.Items.Add(killallitem);
+                RibbonSeparator ribbonseparatoritem = new RibbonSeparator();
+                btnKillProcess.Items.Add(ribbonseparatoritem);
+                API.ErrorCode errorcheck = new API.ErrorCode();
+                List<Fakekit_API.Process> acctiveprocesses = API.getProcesses(out errorcheck);
+                var temp = API.getModules(out errorcheck);
+                //var check2 = API.getRegions(out errorcheck);
+                //  var check3 = API.getapps(out errorcheck);
+                foreach (var item in acctiveprocesses)
+                {
+                    RibbonMenuItem menuitem = new RibbonMenuItem();
+                    menuitem.Click += LoadProcess_Click;
+                    menuitem.Header = item.Name + "(" + item.Id + ")";
+                    menuitem.Tag = item.Id;
+                    btnLoadExe.Items.Add(menuitem);
+
+                }
+                foreach (var item in acctiveprocesses)
+                {
+                    RibbonMenuItem menuitem = new RibbonMenuItem();
+                    menuitem.Click += KillProcess_Click;
+                    menuitem.Header = item.Name + "(" + item.Id + ")";
+                    menuitem.Tag = item.Id;
+                    btnKillProcess.Items.Add(menuitem);
+
+                }
 
             }
-            foreach (var item in acctiveprocesses)
+            catch(Exception ex)
             {
-                RibbonMenuItem menuitem = new RibbonMenuItem();
-                menuitem.Click += KillProcess_Click;
-                menuitem.Header = item.Name + "(" + item.Id + ")";
-                menuitem.Tag = item.Id;
-                btnKillProcess.Items.Add(menuitem);
-
+                Crashes.TrackError(ex);
             }
-
-
 
         }
 
+        /// <summary>
+        /// This sets the SKU UI Items to Load Executables and Kill Sections
+        /// </summary>
+        /// <param name="currentsku"></param>
         public void SetSkuUIItems(SKUS currentsku)
         {
-            if (currentsku.Status == ConnectionStatus.Connected)
+            try
             {
+                if (currentsku.Status == ConnectionStatus.Connected)
+                {
 
-                #region << Status >>
-                //enable all items that are disabled
-                btnDisconnect.IsEnabled = true;
-                btnConnect.IsEnabled = true;
-                btnReboot.IsEnabled = true;
-                btnPowerOff.IsEnabled = true;
-                btnPowerOn.IsEnabled = true;
-                btnRestMode.IsEnabled = true;
-                btnPowerOn.IsEnabled = true;
-                #endregion << Status >>
+                    #region << Status >>
+                    //enable all items that are disabled
+                    btnDisconnect.IsEnabled = true;
+                    btnConnect.IsEnabled = true;
+                    btnReboot.IsEnabled = true;
+                    btnPowerOff.IsEnabled = true;
+                    btnPowerOn.IsEnabled = true;
+                    btnRestMode.IsEnabled = true;
+                    btnPowerOn.IsEnabled = true;
+                    #endregion << Status >>
 
-                #region << Run >>
+                    #region << Run >>
 
-                btnLoadExe.IsEnabled = true;
-                LoadExecutables(currentsku);
-                btnLoadApp.IsEnabled = true;
-                btnKillProcess.IsEnabled = true;
-                btnCodeDump.IsEnabled = true;
-                btnPkgsEnt.IsEnabled = true;
+                    btnLoadExe.IsEnabled = true;
+                    LoadExecutables(currentsku);
+                    btnLoadApp.IsEnabled = true;
+                    btnKillProcess.IsEnabled = true;
+                    btnCodeDump.IsEnabled = true;
+                    btnPkgsEnt.IsEnabled = true;
 
-                #endregion << Run >>
+                    #endregion << Run >>
 
-                #region << Data >>
+                    #region << Data >>
 
-                btnExplore.IsEnabled = true;
-                btnCopyfiles.IsEnabled = true;
+                    btnExplore.IsEnabled = true;
+                    btnCopyfiles.IsEnabled = true;
 
-                #endregion << Data >>
+                    #endregion << Data >>
 
-                #region << More >>
+                    #region << More >>
 
-                btnPlayGo.IsEnabled = true;
-                btnTagetSettings.IsEnabled = true;
-                btnMore.IsEnabled = true;
+                    btnPlayGo.IsEnabled = true;
+                    btnTagetSettings.IsEnabled = true;
+                    btnMore.IsEnabled = true;
 
-                #endregion << More >>
+                    #endregion << More >>
+                }
+                else
+                {
+
+                    #region << Status >>
+                    //enable all items that are disabled
+                    btnDisconnect.IsEnabled = false;
+                    btnConnect.IsEnabled = true;
+                    btnReboot.IsEnabled = false;
+                    btnPowerOff.IsEnabled = false;
+                    btnPowerOn.IsEnabled = false;
+                    btnRestMode.IsEnabled = false;
+                    btnPowerOn.IsEnabled = false;
+                    #endregion << Status >>
+
+                    #region << Run >>
+
+                    btnLoadExe.IsEnabled = false;
+                    //LoadExecutables(currentsku);
+                    btnLoadApp.IsEnabled = false;
+                    btnKillProcess.IsEnabled = false;
+                    btnCodeDump.IsEnabled = false;
+                    btnPkgsEnt.IsEnabled = false;
+
+                    #endregion << Run >>
+
+                    #region << Data >>
+
+                    btnExplore.IsEnabled = false;
+                    btnCopyfiles.IsEnabled = false;
+
+                    #endregion << Data >>
+
+                    #region << More >>
+
+                    btnPlayGo.IsEnabled = false;
+                    btnTagetSettings.IsEnabled = false;
+                    btnMore.IsEnabled = false;
+
+                    #endregion << More >>
+                }
+                AutoSizeColumns();
             }
-            else
+            catch(Exception ex)
             {
-
-                #region << Status >>
-                //enable all items that are disabled
-                btnDisconnect.IsEnabled = false;
-                btnConnect.IsEnabled = true;
-                btnReboot.IsEnabled = false;
-                btnPowerOff.IsEnabled = false;
-                btnPowerOn.IsEnabled = false;
-                btnRestMode.IsEnabled = false;
-                btnPowerOn.IsEnabled = false;
-                #endregion << Status >>
-
-                #region << Run >>
-
-                btnLoadExe.IsEnabled = false;
-                //LoadExecutables(currentsku);
-                btnLoadApp.IsEnabled = false;
-                btnKillProcess.IsEnabled = false;
-                btnCodeDump.IsEnabled = false;
-                btnPkgsEnt.IsEnabled = false;
-
-                #endregion << Run >>
-
-                #region << Data >>
-
-                btnExplore.IsEnabled = false;
-                btnCopyfiles.IsEnabled = false;
-
-                #endregion << Data >>
-
-                #region << More >>
-
-                btnPlayGo.IsEnabled = false;
-                btnTagetSettings.IsEnabled = false;
-                btnMore.IsEnabled = false;
-
-                #endregion << More >>
+                Crashes.TrackError(ex);
             }
-            AutoSizeColumns();
         }
 
-
+        /// <summary>
+        /// This opens the Windows ftp window
+        /// </summary>
+        /// <param name="folderPath"></param>
         private void OpenFtp(string folderPath)
         {
             try
@@ -1366,47 +1451,16 @@ namespace My_Neighborhood_WPF_
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Crashes.TrackError(ex);
             }
         }
-
-
-        internal static int RunProcess(string fileName, string args, string workingDir)
-        {
-            var startInfo = new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = fileName,
-                Arguments = args,
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true,
-                WorkingDirectory = workingDir
-            };
-
-            using (var process = System.Diagnostics.Process.Start(startInfo))
-            {
-                if (process == null)
-                {
-                    throw new Exception($"Failed to start {startInfo.FileName}");
-                }
-
-                process.OutputDataReceived += Process_OutputDataReceived;
-                process.ErrorDataReceived += (s, e) =>
-                {
-                    if (!string.IsNullOrWhiteSpace(e.Data)) { new Exception(e.Data); }
-                };
-
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-
-                process.WaitForExit();
-
-                return process.ExitCode;
-            }
-        }
-
 
         #endregion << Functions >>
 
+        private void btnCheckError_Click(object sender, RoutedEventArgs e)
+        {
+            CheckError chkerror = new CheckError();
+            chkerror.Show();
+        }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:My_Neighborhood_WPF_"
         mc:Ignorable="d"
-        Title="Console" Width="1299.3" Height="480" Icon="Images/favicon (1).ico" WindowStartupLocation="CenterScreen" Loaded="RibbonWindow_Loaded">
+        Title="Console" Width="1299.3" Height="480" Icon="Images/favicon (1).ico" WindowStartupLocation="CenterScreen" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -40,9 +40,9 @@
                                     Header="Clipboard">
                     <RibbonButton x:Name="btnCopy"
                                          LargeImageSource="Images\icons8-copy-52.png"
-                                         Label="Copy" />
+                                         Label="Copy" Click="btnCopy_Click" />
                     <RibbonButton x:Name="btnPaste" SmallImageSource="Images\icons8-paste-96.png" Label="Paste"  />
-                    <RibbonButton x:Name="btnSelectAll" SmallImageSource="Images\icons8-check-all-96.png" Label="Select all"  />
+                    <RibbonButton x:Name="btnSelectAll" SmallImageSource="Images\icons8-check-all-96.png" Label="Select all" Click="btnSelectAll_Click"  />
                     <RibbonCheckBox  IsChecked="True" x:Name="btnCopyTimeStamp" Label="Copy time stamp" />
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxRun" 

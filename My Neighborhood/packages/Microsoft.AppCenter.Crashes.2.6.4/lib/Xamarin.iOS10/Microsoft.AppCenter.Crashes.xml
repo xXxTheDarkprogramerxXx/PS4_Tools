@@ -1,0 +1,371 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.AppCenter.Crashes</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.AppCenter.Crashes.Crashes">
+            <summary>
+            Crashes service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.Crashes.BindingType">
+            <summary>
+            Internal SDK property not intended for public use.
+            </summary>
+            <value>
+            The iOS SDK Crashes bindings type.
+            </value>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.Crashes._crashesInitializationDelegate">
+            <summary>
+            We keep the reference to avoid it being freed, inlining this object will cause listeners not to be called.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.Crashes._crashesDelegate">
+            <summary>
+            We keep the reference to avoid it being freed, inlining this object will cause listeners not to be called.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.Crashes.LogTag">
+            <summary>
+            Log tag used by the Crashes component.
+            </summary>
+        </member>
+        <member name="E:Microsoft.AppCenter.Crashes.Crashes.SendingErrorReport">
+            <summary>
+            Occurs when an error report is about to be sent.
+            </summary>
+        </member>
+        <member name="E:Microsoft.AppCenter.Crashes.Crashes.SentErrorReport">
+            <summary>
+            Occurs when an error report has been successfully sent.
+            </summary>
+        </member>
+        <member name="E:Microsoft.AppCenter.Crashes.Crashes.FailedToSendErrorReport">
+            <summary>
+            Occurs when an error report has failed to be sent.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.Crashes.ShouldProcessErrorReport">
+            <summary>
+            Set this callback to add custom behavior for determining whether an error report should be processed.
+            Returning false prevents the crash from being reported to the server.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.Crashes.ShouldAwaitUserConfirmation">
+            <summary>
+            Set this callback to add custom behavior for determining whether user confirmation is required to send
+            error reports.
+            </summary>
+            <seealso cref="T:Microsoft.AppCenter.Crashes.ShouldAwaitUserConfirmationCallback"/>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.Crashes.GetErrorAttachments">
+            <summary>
+            Set this callback to attach custom text and/or binaries to an error report.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.Crashes.NotifyUserConfirmation(Microsoft.AppCenter.Crashes.UserConfirmation)">
+            <summary>
+            Notifies SDK with a confirmation to handle the crash report.
+            </summary>
+            <param name="confirmation">A user confirmation. See <see cref="T:Microsoft.AppCenter.Crashes.UserConfirmation"/>.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.Crashes.IsEnabledAsync">
+            <summary>
+            Check whether the Crashes service is enabled or not.
+            </summary>
+            <returns>A task with result being true if enabled, false if disabled.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.Crashes.SetEnabledAsync(System.Boolean)">
+            <summary>
+            Enable or disable the Crashes service.
+            </summary>
+            <returns>A task to monitor the operation.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.Crashes.HasCrashedInLastSessionAsync">
+            <summary>
+            Provides information whether the app crashed in its last session.
+            </summary>
+            <value>
+            Task with result being <c>true</c> if a crash was recorded in the last session, otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.Crashes.GetLastSessionCrashReportAsync">
+            <summary>
+            Gets the crash report generated in the last session if there was a crash.
+            </summary>
+            <value>Crash report from the last session, <c>null</c> if there was no crash in the last session.</value>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.Crashes.HasReceivedMemoryWarningInLastSessionAsync">
+            <summary>
+            Provides information whether the app received memory warning in its last session.
+            </summary>
+            <value> 
+            Task with result being <c>true</c> if a memory warning was recorded in the last session, otherwise <c>false</c>
+            </value>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.Crashes.GenerateTestCrash">
+            <summary>
+            Generates crash for testing purposes.
+            </summary>
+            <remarks>
+            This call has no effect in non debug configuration (such as release).
+            </remarks>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.Crashes.TrackError(System.Exception,System.Collections.Generic.IDictionary{System.String,System.String},Microsoft.AppCenter.Crashes.ErrorAttachmentLog[])">
+            <summary>
+            Track a handled error.
+            </summary>
+            <param name="exception">The .NET exception describing the handled error.</param>
+            <param name="properties">Optional properties.</param>
+            <param name="attachments">Optional attachments.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.ErrorAttachmentLog">
+            <summary>
+            Error attachment for error report.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.ErrorAttachmentLog.AttachmentWithText(System.String,System.String)">
+            <summary>
+            Builds an attachment with text suitable for using in <see cref="F:Microsoft.AppCenter.Crashes.Crashes.GetErrorAttachments"/>.
+            </summary>
+            <returns>Error attachment or <c>null</c> if null text is passed.</returns>
+            <param name="text">Text to attach to the error report.</param>
+            <param name="fileName">File name to use on reports.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.ErrorAttachmentLog.AttachmentWithBinary(System.Byte[],System.String,System.String)">
+            <summary>
+            Builds an attachment with binary suitable for using in <see cref="F:Microsoft.AppCenter.Crashes.Crashes.GetErrorAttachments"/>.
+            </summary>
+            <returns>Error attachment or <c>null</c> if null data is passed.</returns>
+            <param name="data">Binary data.</param>
+            <param name="fileName">File name to use on reports.</param>
+            <param name="contentType">Data MIME type.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.ErrorReport">
+            <summary>
+            Error report containing information about a particular crash.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.ErrorReport.Id">
+            <summary>
+            Gets the report identifier.
+            </summary>
+            <value>UUID for the report.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.ErrorReport.AppStartTime">
+            <summary>
+            Gets the app start time.
+            </summary>
+            <value>Date and time the app started</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.ErrorReport.AppErrorTime">
+            <summary>
+            Gets the app error time.
+            </summary>
+            <value>Date and time the error occured</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.ErrorReport.Device">
+            <summary>
+            Gets the device that the crashed app was being run on.
+            </summary>
+            <value>Device information at the crash time.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.ErrorReport.Exception">
+            <summary>
+            Gets the C# Exception object that caused the crash.
+            </summary>
+            <value>The exception.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.ErrorReport.StackTrace">
+            <summary>
+            Gets the C# exception stack trace captured at crash time.
+            </summary>
+            <value>The exception.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.ErrorReport.AndroidDetails">
+            <summary>
+            Gets details specific to Android.
+            </summary>
+            <value>Android error report details. <c>null</c> if the OS is not Android.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.ErrorReport.iOSDetails">
+            <summary>
+            Gets details specific to iOS.
+            </summary>
+            <value>iOS error report details. <c>null</c> if the OS is not iOS.</value>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.TestCrashException">
+            <summary>
+            Exception type thrown for testing purposes. See <see cref="M:Microsoft.AppCenter.Crashes.Crashes.GenerateTestCrash"/>. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.TestCrashException.#ctor">
+            <summary>
+            Initializes a new instance of the TestCrashException class with a predefined error message.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.Crashes.TestCrashException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Deserialization constructor. Not intended for public use.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.NamespaceDoc">
+            <summary>
+            Crashes SDK module.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.ErrorReportEventArgs">
+            <summary>
+            Event arguments base class for all events that involve an error report.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.ErrorReportEventArgs.Report">
+            <summary>
+            The error report associated with the event.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.SendingErrorReportEventArgs">
+            <summary>
+            Event arguments class for event <see cref="E:Microsoft.AppCenter.Crashes.Crashes.SendingErrorReport"/>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.SentErrorReportEventArgs">
+            <summary>
+            Event arguments class for event <see cref="E:Microsoft.AppCenter.Crashes.Crashes.SentErrorReport"/>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.FailedToSendErrorReportEventArgs">
+            <summary>
+            Event arguments class for event <see cref="E:Microsoft.AppCenter.Crashes.Crashes.FailedToSendErrorReport"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.FailedToSendErrorReportEventArgs.Exception">
+            <summary>
+            The native exception associated with the failure.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.ShouldProcessErrorReportCallback">
+            <summary>
+            Callback type for determining whether a particular error report should be processed.
+            </summary>
+            <returns><c>true</c> if <c>report</c> should be processed.</returns>
+            <param name="report">The error report that is being considered for processing.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.GetErrorAttachmentsCallback">
+            <summary>
+            Callback type for getting error attachments for a particular error report.
+            </summary>
+            <returns>The error attachments to be associated with <c>report</c>.</returns>
+            <param name="report">The error report for which error attachments are to be returned.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.ShouldAwaitUserConfirmationCallback">
+            <summary>
+            Determine whether user confirmation is required to process a report. <see cref="M:Microsoft.AppCenter.Crashes.Crashes.NotifyUserConfirmation(Microsoft.AppCenter.Crashes.UserConfirmation)"/> must be called by yourself./> 
+            </summary>
+            <returns><c>true</c> if sending reports should be confirmed by a user.</returns>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.SendingErrorReportEventHandler">
+            <summary>
+            Handler type for event <see cref="E:Microsoft.AppCenter.Crashes.Crashes.SendingErrorReport"/>.
+            </summary>
+            <param name="sender">This parameter will be <c>null</c> when being sent from the <see cref="T:Microsoft.AppCenter.Crashes.Crashes"/> class and should be ignored. </param>
+            <param name="e">Event arguments. See <see cref="T:Microsoft.AppCenter.Crashes.SendingErrorReportEventArgs"/> for more details.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.SentErrorReportEventHandler">
+            <summary>
+            Handler type for event <see cref="E:Microsoft.AppCenter.Crashes.Crashes.SentErrorReport"/>.
+            </summary>
+            <param name="sender">This parameter will be <c>null</c> when being sent from the <see cref="T:Microsoft.AppCenter.Crashes.Crashes"/> class and should be ignored. </param>
+            <param name="e">Event arguments. See <see cref="T:Microsoft.AppCenter.Crashes.SentErrorReportEventArgs"/> for more details.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.FailedToSendErrorReportEventHandler">
+            <summary>
+            Handler type for event <see cref="E:Microsoft.AppCenter.Crashes.Crashes.FailedToSendErrorReport"/>.
+            </summary>
+            <param name="sender">This parameter will be <c>null</c> when being sent from the <see cref="T:Microsoft.AppCenter.Crashes.Crashes"/> class and should be ignored. </param>
+            <param name="e">Event arguments. See <see cref="T:Microsoft.AppCenter.Crashes.FailedToSendErrorReportEventArgs"/> for more details.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.AndroidErrorDetails">
+            <summary>
+            Error report details pertinent only to devices running Android.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.AndroidErrorDetails.Throwable">
+            <summary>
+            Gets the throwable associated with the Java crash.
+            </summary>
+            <value>The throwable associated with the crash. <c>null</c> if the crash occured in .NET code.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.AndroidErrorDetails.StackTrace">
+            <summary>
+            Gets the stack trace associated with the Java crash.
+            </summary>
+            <value>The stack trace associated with the crash. <c>null</c> if the crash occured in .NET code.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.AndroidErrorDetails.ThreadName">
+            <summary>
+            Gets the name of the thread that crashed.
+            </summary>
+            <value>The name of the thread that crashed.</value>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.iOSErrorDetails">
+            <summary>
+            Error report details pertinent only to devices running iOS.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.iOSErrorDetails.ReporterKey">
+            <summary>
+            Gets the reporter key.
+            </summary>
+            <value>UUID for the app installation on the device.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.iOSErrorDetails.Signal">
+            <summary>
+            Gets the signal that caused the crash.
+            </summary>
+            <value>The signal that caused the crash.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.iOSErrorDetails.ExceptionName">
+            <summary>
+            Gets the name of the exception that triggered the crash, <c>null</c> if the crash was not triggered by an
+            exception.
+            </summary>
+            <value>The name of the exception that triggered the crash.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.iOSErrorDetails.ExceptionReason">
+            <summary>
+            Gets the reason for the exception that triggered the crash, <c>null</c> if the crash was not triggered by an
+            exception.
+            </summary>
+            <value>The reason for the exception causing the crash.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Crashes.iOSErrorDetails.AppProcessIdentifier">
+            <summary>
+            Gets the identifier of the app process that crashed.
+            </summary>
+            <value>The app process identifier.</value>
+        </member>
+        <member name="T:Microsoft.AppCenter.Crashes.UserConfirmation">
+            <summary>
+            User confirmation options for whether to send crash reports.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.UserConfirmation.DontSend">
+            <summary>
+            Do not send the crash report
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.UserConfirmation.Send">
+            <summary>
+            Send the crash report
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.Crashes.UserConfirmation.AlwaysSend">
+            <summary>
+            Send all crash reports
+            </summary>
+        </member>
+    </members>
+</doc>

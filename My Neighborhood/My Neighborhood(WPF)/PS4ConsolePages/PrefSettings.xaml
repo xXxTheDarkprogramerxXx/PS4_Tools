@@ -8,7 +8,7 @@
         Title="PrefSettings" Height="300" Width="300" Icon="/My Neighborhood(WPF);component/Images/favicon (1).ico" Loaded="Window_Loaded">
     <Grid>
         <GroupBox x:Name="groupBox" Header="Preference settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="144" Width="274">
-            <CheckBox x:Name="chb" Content="Enable UART" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="chb_Checked"/>
+            <CheckBox x:Name="chb" Content="Enable UART" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="chb_Checked" Unchecked="chb_Unchecked"/>
 
         </GroupBox>
 

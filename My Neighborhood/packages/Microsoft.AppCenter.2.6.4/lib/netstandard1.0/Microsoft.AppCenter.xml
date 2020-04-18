@@ -1,0 +1,444 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.AppCenter</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.AppCenter.AppCenter">
+            <summary>
+            SDK core used to initialize, start and control specific service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AppCenter.AppCenter.LogLevel">
+            <summary>
+                This property controls the amount of logs emitted by the SDK.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenter.SetUserId(System.String)">
+            <summary>
+                Set the custom user id.
+            </summary>
+            <param name="userId">Custom string to identify user. 256 characters or less.</param>
+        </member>
+        <member name="P:Microsoft.AppCenter.AppCenter.SdkVersion">
+            <summary>
+            Get the current version of AppCenter SDK.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenter.IsEnabledAsync">
+            <summary>
+            Check whether the SDK is enabled or not as a whole.
+            </summary>
+            <returns>A task with result being true if enabled, false if disabled.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenter.SetEnabledAsync(System.Boolean)">
+            <summary>
+                Enable or disable the SDK as a whole. 
+                Updating the state propagates the value to all services that have been started.
+            </summary>
+            <returns>A task to monitor the operation.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenter.GetInstallIdAsync">
+            <summary>
+                Get the unique installation identifier for this application installation on this device.
+            </summary>
+            <remarks>
+                The identifier is lost if clearing application data or uninstalling application.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenter.SetLogUrl(System.String)">
+            <summary>
+                Change the base URL (scheme + authority + port only) used to communicate with the backend.
+            </summary>
+            <param name="logUrl">Base URL to use for server communication.</param>
+        </member>
+        <member name="P:Microsoft.AppCenter.AppCenter.Configured">
+            <summary>
+            Check whether SDK has already been configured or not.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenter.Configure(System.String)">
+            <summary>
+                Configure the SDK.
+                This may be called only once per application process lifetime.
+            </summary>
+            <param name="appSecret">A unique and secret key used to identify the application.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenter.Start(System.Type[])">
+            <summary>
+                Start services.
+                This may be called only once per service per application process lifetime.
+            </summary>
+            <param name="services">List of services to use.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenter.Start(System.String,System.Type[])">
+            <summary>
+                Initialize the SDK with the list of services to start.
+                This may be called only once per application process lifetime.
+            </summary>
+            <param name="appSecret">A unique and secret key used to identify the application.</param>
+            <param name="services">List of services to use.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenter.SetCustomProperties(Microsoft.AppCenter.CustomProperties)">
+            <summary>
+            Set the custom properties.
+            </summary>
+            <param name="customProperties">Custom properties object.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.AppCenterLog">
+            <summary>
+            This class is used to log messages consistent with those emitted by the SDK.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AppCenter.AppCenterLog.LogTag">
+            <summary>
+            The log tag for this SDK. All logs emitted at the SDK level will contain this tag.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Verbose(System.String,System.String)">
+            <summary>
+            Writes a log at the <see cref="F:Microsoft.AppCenter.LogLevel.Verbose"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Debug(System.String,System.String)">
+            <summary>
+            Writes a log at the <see cref="F:Microsoft.AppCenter.LogLevel.Debug"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Info(System.String,System.String)">
+            <summary>
+            Writes a log at the <see cref="F:Microsoft.AppCenter.LogLevel.Info"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Warn(System.String,System.String)">
+            <summary>
+            Writes a log at the <see cref="F:Microsoft.AppCenter.LogLevel.Warn"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Error(System.String,System.String)">
+            <summary>
+            Writes a log at the <see cref="F:Microsoft.AppCenter.LogLevel.Error"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Assert(System.String,System.String)">
+            <summary>
+            Writes a log at the <see cref="F:Microsoft.AppCenter.LogLevel.Assert"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Verbose(System.String,System.String,System.Exception)">
+            <summary>
+            Writes a log and an exception at the <see cref="F:Microsoft.AppCenter.LogLevel.Verbose"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+            <param name="exception">Associated exception.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Debug(System.String,System.String,System.Exception)">
+            <summary>
+            Writes a log and an exception at the <see cref="F:Microsoft.AppCenter.LogLevel.Debug"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+            <param name="exception">Associated exception.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Info(System.String,System.String,System.Exception)">
+            <summary>
+            Writes a log and an exception at the <see cref="F:Microsoft.AppCenter.LogLevel.Info"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+            <param name="exception">Associated exception.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Warn(System.String,System.String,System.Exception)">
+            <summary>
+            Writes a log and an exception at the <see cref="F:Microsoft.AppCenter.LogLevel.Warn"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+            <param name="exception">Associated exception.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Error(System.String,System.String,System.Exception)">
+            <summary>
+            Writes a log and an exception at the <see cref="F:Microsoft.AppCenter.LogLevel.Error"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+            <param name="exception">Associated exception.</param>
+        </member>
+        <member name="M:Microsoft.AppCenter.AppCenterLog.Assert(System.String,System.String,System.Exception)">
+            <summary>
+            Writes a log and an exception at the <see cref="F:Microsoft.AppCenter.LogLevel.Assert"/> level.
+            Note: To track events, use <code>Analytics.TrackEvent</code>.
+            </summary>
+            <param name="tag">Log tag.</param>
+            <param name="message">Message.</param>
+            <param name="exception">Associated exception.</param>
+        </member>
+        <member name="T:Microsoft.AppCenter.AppCenterService">
+            <summary>
+            Contains base functionality for classes that implement IAppCenterService
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.CustomProperties">
+            <summary>
+            Custom properties builder.
+            Collects multiple properties to send in one log.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AppCenter.CustomProperties.Set(System.String,System.String)">
+            <summary>
+            Set the specified property value with the specified key.
+            If the properties previously contained a property for the key, the old value is replaced.
+            </summary>
+            <param name="key">Key with which the specified value is to be set.</param>
+            <param name="value">Value to be set with the specified key.</param>
+            <returns>This instance.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.CustomProperties.Set(System.String,System.DateTime)">
+            <summary>
+            Set the specified property value with the specified key.
+            If the properties previously contained a property for the key, the old value is replaced.
+            </summary>
+            <param name="key">Key with which the specified value is to be set.</param>
+            <param name="value">Value to be set with the specified key.</param>
+            <returns>This instance.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.CustomProperties.Set(System.String,System.Int32)">
+            <summary>
+            Set the specified property value with the specified key.
+            If the properties previously contained a property for the key, the old value is replaced.
+            </summary>
+            <param name="key">Key with which the specified value is to be set.</param>
+            <param name="value">Value to be set with the specified key.</param>
+            <returns>This instance.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.CustomProperties.Set(System.String,System.Int64)">
+            <summary>
+            Set the specified property value with the specified key.
+            If the properties previously contained a property for the key, the old value is replaced.
+            </summary>
+            <param name="key">Key with which the specified value is to be set.</param>
+            <param name="value">Value to be set with the specified key.</param>
+            <returns>This instance.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.CustomProperties.Set(System.String,System.Single)">
+            <summary>
+            Set the specified property value with the specified key.
+            If the properties previously contained a property for the key, the old value is replaced.
+            </summary>
+            <param name="key">Key with which the specified value is to be set.</param>
+            <param name="value">Value to be set with the specified key.</param>
+            <returns>This instance.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.CustomProperties.Set(System.String,System.Double)">
+            <summary>
+            Set the specified property value with the specified key.
+            If the properties previously contained a property for the key, the old value is replaced.
+            </summary>
+            <param name="key">Key with which the specified value is to be set.</param>
+            <param name="value">Value to be set with the specified key.</param>
+            <returns>This instance.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.CustomProperties.Set(System.String,System.Decimal)">
+            <summary>
+            Set the specified property value with the specified key.
+            If the properties previously contained a property for the key, the old value is replaced.
+            </summary>
+            <param name="key">Key with which the specified value is to be set.</param>
+            <param name="value">Value to be set with the specified key.</param>
+            <returns>This instance.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.CustomProperties.Set(System.String,System.Boolean)">
+            <summary>
+            Set the specified property value with the specified key.
+            If the properties previously contained a property for the key, the old value is replaced.
+            </summary>
+            <param name="key">Key with which the specified value is to be set.</param>
+            <param name="value">Value to be set with the specified key.</param>
+            <returns>This instance.</returns>
+        </member>
+        <member name="M:Microsoft.AppCenter.CustomProperties.Clear(System.String)">
+            <summary>
+            Clear the property for the specified key.
+            </summary>
+            <param name="key">Key whose mapping is to be cleared.</param>
+            <returns>This instance.</returns>
+        </member>
+        <member name="T:Microsoft.AppCenter.IAppCenterService">
+            <summary>
+            Represents a module that provides a service through App Center.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.NamespaceDoc">
+            <summary>
+            Core SDK module.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.LogLevel">
+            <summary>
+            Log level threshold for logs emitted by the SDK.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.LogLevel.Verbose">
+            <summary>
+            SDK emits all possible level of logs.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.LogLevel.Debug">
+            <summary>
+            SDK emits debug, info, warn, error and assert logs.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.LogLevel.Info">
+            <summary>
+            SDK emits info, warn, error, and assert logs.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.LogLevel.Warn">
+            <summary>
+            SDK emits warn, error, and assert logs.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.LogLevel.Error">
+            <summary>
+            SDK error and assert logs.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.LogLevel.Assert">
+            <summary>
+            Only assert logs are emitted by SDK.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AppCenter.LogLevel.None">
+            <summary>
+            No log is emitted by SDK.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AppCenter.Device">
+            <summary>
+            Device class to help retrieve device information.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.SdkName">
+            <summary>
+            Gets the name of the SDK.
+            </summary>
+            <value>Name of the SDK. Consists of the name of the SDK and the platform, e.g. "mobilecenter.ios", "mobilecenter.android"</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.SdkVersion">
+            <summary>
+            Gets the SDK version.
+            </summary>
+            <value>Version of the SDK in semver format, e.g. "1.2.0" or "0.12.3-alpha.1".</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.Model">
+            <summary>
+            Gets the device model.
+            </summary>
+            <value>Device model (example: iPad2,3).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.OemName">
+            <summary>
+            Gets the name of the manufacturer.
+            </summary>
+            <value> Device manufacturer (example: HTC).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.OsName">
+            <summary>
+            Gets the name of the OS.
+            </summary>
+            <value>OS name (example: iOS).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.OsVersion">
+            <summary>
+            Gets the OS version.
+            </summary>
+            <value>OS version (example: 9.3.0).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.OsBuild">
+            <summary>
+            Gets the OS build
+            </summary>
+            <value>OS build code (example: LMY47X).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.OsApiLevel">
+            <summary>
+            Gets the OS API level.
+            </summary>
+            <value>API level when applicable like in Android (example: 15).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.Locale">
+            <summary>
+            Gets the locale.
+            </summary>
+            <value>Language code (example: en_US).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.TimeZoneOffset">
+            <summary>
+            Gets the time zone offset.
+            </summary>
+            <value>The offset in minutes from UTC for the device time zone, including daylight savings time.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.ScreenSize">
+            <summary>
+            Gets the size of the screen.
+            </summary>
+            <value>Screen size of the device in pixels (example: 640x480).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.AppVersion">
+            <summary>
+            Gets the application version.
+            </summary>
+            <value>Application version name, e.g. 1.1.0</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.CarrierName">
+            <summary>
+            Gets the name of the carrier.
+            </summary>
+            <value>Carrier name (for mobile devices).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.CarrierCountry">
+            <summary>
+            Gets the carrier country.
+            </summary>
+            <value>Carrier country code (for mobile devices).</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.AppBuild">
+            <summary>
+            Gets the app build.
+            </summary>
+            <value>The app's build number, e.g. 42.</value>
+        </member>
+        <member name="P:Microsoft.AppCenter.Device.AppNamespace">
+            <summary>
+            Gets the app namespace.
+            </summary>
+            <value>The bundle identifier, package identifier, or namespace, depending on what the individual platforms
+            use, e.g.com.microsoft.example.</value>
+        </member>
+    </members>
+</doc>
