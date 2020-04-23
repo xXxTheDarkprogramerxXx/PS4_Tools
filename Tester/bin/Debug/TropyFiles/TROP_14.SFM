@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c0100000000000000990c31106added7d16bffcfb60e51e63573d0f99803309da5fe18da2557b91cab376034c18fce8f3e41082f3fd85856772d733eae8a03de53b99be1ebe281ed8d3bde512516756932516f3c737a56695ac39f65051c24558beda2effccacbadbec5f692ebf8430a8e4411da0d4d5ebc04d79fd61ba0d241d6d3a9290870a7e0874dc0c1b52c405c1f63ba5258749adec69304e49-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>Trophies i DRIVECLUB™</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Tour</name>
+  <detail>DRIVECLUB™ Tour</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#UniteInSpeed</name>
+  <detail>Indsaml alle de andre trophies.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Du får kun én første gang</name>
+  <detail>Gennemfør dit første event.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Klubmenneske</name>
+  <detail>Meld dig ind i en klub eller få en anden til at melde sig ind i en klub, du har oprettet.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>Den første af mange</name>
+  <detail>Vind din første duel.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Denne her er min</name>
+  <detail>Tilpas et køretøj.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Kandidat</name>
+  <detail>Vær på toppen af ranglisten, når tiden løber ud på en individuel udfordring.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>Og således begynder det!</name>
+  <detail>Send en udfordring til en anden spiller.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Nyt niveau!</name>
+  <detail>Nå kørerniveau 2.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>Fem og så derudaf</name>
+  <detail>Nå kørerniveau 5.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>Fremgang</name>
+  <detail>Nå niveau 1 med én præstation.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>Fuld skrue</name>
+  <detail>Fuldfør et punkt til punkt-event med en gennemsnitsfart over 100 mph eller 161 km/t.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Duel</name>
+  <detail>Fuldfør 50 dueller.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>På podiet</name>
+  <detail>Placér dig i top 3 i et 12-personers løb.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>Kofanger ved kofanger</name>
+  <detail>Kør mindst 2000 meter (2187 yards) slipstrømskørsel bag et andet køretøj i ét løb.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Holdindsats</name>
+  <detail>Vær medlem af en klub, som er på klubniveau 10 eller højere.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Sæt dem op, slå dem ned</name>
+  <detail>Slå tre tidsmål i en enkelt tidskørsel.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Langdistance</name>
+  <detail>Kør mindst 300 miles (483 km).</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Nu sker der noget</name>
+  <detail>Nå kørerniveau 15.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Livet begynder</name>
+  <detail>Nå kørerniveau 30.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Fuldt hus</name>
+  <detail>Vind et løb med hver klasse af køretøj: Gadeklasse, baneklasse, sportsklasse, superklasse og hyperklasse.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Uovervindelig</name>
+  <detail>Vind fem af dine egne individuelle udfordringer, efter at have sendt dem til mindst én anden spiller.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Mesterligt</name>
+  <detail>Maksimér en præstation.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Dækafbrænding</name>
+  <detail>Optjen én million driftpoint i alt.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Rent bord</name>
+  <detail>I et løb for 12 spillere skal du ende på podiet, uden at tabe berømmelse på grund af sammenstød med konkurrenter.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Livstid</name>
+  <detail>Kør mindst 1000 miles (1610 km) som klubmedlem.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Velkommen til grænsen</name>
+  <detail>Nå kørerniveau 50.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Æres den, som æres bør</name>
+  <detail>Maksimér en af hver spil-, spiltyper- køretøjs- og event-præstation.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Begynder-trophy</name>
+  <detail>Vind begivenheden "Begynder-trophy" i Tour.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Amatør-trophy</name>
+  <detail>Vind begivenheden "Amatør-trophy" i Tour.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Semipro-trophy</name>
+  <detail>Vind begivenheden "Semipro-trophy" i Tour.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Det professionelle trophy</name>
+  <detail>Vind begivenheden "Det professionelle trophy" i Tour.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>Legende-trophy</name>
+  <detail>Vind begivenheden "Legende-trophy" i Tour.</detail>
+ </trophy>
+</trophyconf>
+

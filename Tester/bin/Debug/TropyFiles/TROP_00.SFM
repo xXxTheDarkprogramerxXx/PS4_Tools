@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c0100000000000000c533e5f8ef73c89535bd9990900a23894d3773918d25a11689d6f626a68bb6e85b4c2c34aff067c26c3ecbd7e5dd3d157c1ab5b2957683237dfd6b56cdb5cd3c7bec505dd3886b37783fbf285aef11270098d8bd908567b373c835f234800fa324785befcf11c5d843ae8e366919c07f4ff5f67ff793379de6a0d5b93544af9d916623898c1e41a513ee87cb83f58a1ac34350d8-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>DRIVECLUB™のトロフィー</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Tour</name>
+  <detail>DRIVECLUB™ Tour</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>プラチナライセンス</name>
+  <detail>他のすべてのトロフィーを獲得する</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>最初の一歩</name>
+  <detail>初めてイベントをクリアする</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>クラブマン</name>
+  <detail>クラブがアクティブになる</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>初勝利</name>
+  <detail>初めてフェイスオフに勝利する</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>改造屋</name>
+  <detail>マシンをカスタマイズする</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>競争者</name>
+  <detail>ドライバーチャレンジが期限切れした時にランキングのトップにランクインしている</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>宣戦布告</name>
+  <detail>他のプレイヤーにチャレンジを送る</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>レベルアップ!</name>
+  <detail>ドライバーレベル2に昇格する</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>レベルGo!</name>
+  <detail>ドライバーレベル5に昇格する</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>昇進</name>
+  <detail>いずれかのメダルを取得する</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>スピードマニア</name>
+  <detail>ポイント・ツー・ポイントイベントを平均速度100mphまたは161km/h以上でクリアする</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>フェイスオフ</name>
+  <detail>フェイスオフを50回戦う</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>表彰台の上</name>
+  <detail>12人対戦のレースで3位以内にゴールイン</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>スリップストリーム</name>
+  <detail>ひとつのイベントでいずれかのマシンを2000メートルまたは2187ヤード以上スリップストリームで追う</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>チームワーク</name>
+  <detail>クラブレベル10以上のクラブに所属する</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>記録総塗り替え</name>
+  <detail>タイムアタックにて1つのコースを連続でプレイして3回ターゲットタイムを上回る</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>長距離ドライバー</name>
+  <detail>300マイルまたは483キロメートル以上走行する</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>波起こし</name>
+  <detail>ドライバーレベル15に昇格する</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>旅の始まり</name>
+  <detail>ドライバーレベル30に昇格する</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>フルハウス</name>
+  <detail>すべてのマシンクラスでレースに勝利する</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>最強伝説</name>
+  <detail>他のプレイヤー1人以上にドライバーチャレンジを5つ送信して勝利する</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>熟達者</name>
+  <detail>ひとつのメダルをすべてうめる</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>ドリフトマニア</name>
+  <detail>合計100万のドリフトポイントを獲得する</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>パーフェクトドライバー</name>
+  <detail>12人対戦のレースで他のプレイヤーと接触してポイントを失うことなくゴールインし表彰台に立つ</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>運命共同体</name>
+  <detail>ひとつのクラブで最低1000マイルまたは1610キロメートル以上走行する</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>頂点へようこそ</name>
+  <detail>ドライバーレベル50に昇格する</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>凄腕ドライバー</name>
+  <detail>メダルカテゴリ内のマシン、ゲームプレイ、ゲームモード、イベントのどれか1種類のメダルを全て集める</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>ルーキー</name>
+  <detail>ルーキートロフィーのツアーイベントに勝利する</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>アマチュア</name>
+  <detail>アマチュアトロフィーのツアーイベントに勝利する</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>セミプロ</name>
+  <detail>セミプロトロフィーのツアーイベントに勝利する</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>プロフェショナル</name>
+  <detail>プロフェショナルトロフィーのツアーイベントに勝利する</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>レジェンド</name>
+  <detail>レジェンドトロフィーのツアーイベントに勝利する</detail>
+ </trophy>
+</trophyconf>
+

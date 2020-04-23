@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000000dc4bb3279fa75cdb287872a5c17bd6a529bd8db2369d5f39204e956e08717ea0e9b64d5325d7026d5a1e53928bb201a182f1deb2a7c7479f52e5b15b3789bef68dcb16cb4a60a4e9830198d67f679dff69acdaa2e190a2c8563978a61a3d90ef329c7e85039d2fafd751c3d0b2407f01250dfbeda10420f17a3cf0d13853185b8d9338db087750a1fb4be9518e6ed4d90462679-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>DRIVECLUB™ 獎盃</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ 巡迴賽</name>
+  <detail>DRIVECLUB™ 巡迴賽</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#極速收藏家</name>
+  <detail>收集其他所有的獎盃。</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>一生只有一次機會</name>
+  <detail>完成你的第一場賽事。</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>壯大俱樂部</name>
+  <detail>加入某間俱樂部，或讓其他人加入你所建立的俱樂部。</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>好的開始</name>
+  <detail>通過你的第一場對抗賽。</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>這部車是我的</name>
+  <detail>自訂一部車輛。</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>競爭者</name>
+  <detail>在個人挑戰賽中衝刺到最後一刻，登上排行榜的冠軍寶座。</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>開戰吧！</name>
+  <detail>向另一位玩家提出挑戰。</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>升級！</name>
+  <detail>達到車手等級 2。</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>5級，並持續進步</name>
+  <detail>達到車手等級 5。</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>有所進展</name>
+  <detail>有一項榮譽達到等級 1。</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>極速高手</name>
+  <detail>以 100 MPH 或 161 KPH 的平均速度完成定點賽事。</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>對抗賽</name>
+  <detail>完成 50 場對抗賽。</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>名列前茅</name>
+  <detail>在 12 人競賽中進入前 3 名。</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>緊追不捨</name>
+  <detail>在單場賽事中，對其他車輛進行跟車至少 2000 公尺 (2187碼) 距離。</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>團隊合作</name>
+  <detail>加入等級在 10 以上的俱樂部。</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>各個擊破</name>
+  <detail>在單個計時賽階段中超越 3 個目標時間。</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>長距離</name>
+  <detail>駕駛至少 300 英里 (483 公里) 距離。</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>襲捲而來</name>
+  <detail>達到車手等級 15。</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>生涯開始</name>
+  <detail>達到車手等級 30。</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>滿堂彩</name>
+  <detail>駕駛以下系列車款各贏得一場比賽：掀背車、性能車、跑車、超跑和高級超跑。</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>無與倫比</name>
+  <detail>至少向一名玩家提出你自己建立的個人挑戰賽，並贏得 5 場勝利。</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>學有專精</name>
+  <detail>一項榮譽達到最高等級。</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>大出風頭</name>
+  <detail>累積共一百萬點甩尾分數。</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>完美優勝</name>
+  <detail>完成 12 人競賽並進入前 3 名，且不曾因為與其他對手碰撞而損失任何聲望。</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>佔盡便宜</name>
+  <detail>以俱樂部成員的身分至少駕駛 1000 英里 (1610 公里) 距離。</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>挑戰極限</name>
+  <detail>達到車手等級 50。</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>登峰造極</name>
+  <detail>遊戲、遊戲模式、車輛和賽事各種類的其中一項榮譽達到最高等級。</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>新手盃</name>
+  <detail>在巡迴賽的「新手盃」賽事中贏得勝利。</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>業餘盃</name>
+  <detail>在巡迴賽的「業餘盃」賽事中贏得勝利。</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>半職業盃</name>
+  <detail>在巡迴賽的「半職業盃」賽事中贏得勝利。</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>專業盃</name>
+  <detail>在巡迴賽的「專業盃」賽事中贏得勝利。</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>傳奇盃</name>
+  <detail>在巡迴賽的「傳奇盃」賽事中贏得勝利。</detail>
+ </trophy>
+</trophyconf>
+

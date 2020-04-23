@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000004a597d2cf566e03c98a03e6d024113c72dde57d36a5caad749fd5e0755a1ee555b406cc9dae40e11d332b2f615d65476f1fcfbfbccb3b978be3718bd2434589a9da0e62346f6cd7188f88af3a6104e9c2a44ccea2d3f07afbaf3d9c2065fa10ce0b7871326727fd8a8e09cd947b3c7edde5dc73906ec2e22b86102906d81c0545948f0e21f32337e17b1f67764feac0a144a78b1-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>DRIVECLUB™-Trophäen</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Tour</name>
+  <detail>DRIVECLUB™ Tour</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#ImTempoVereint</name>
+  <detail>Sammle alle anderen Trophäen.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Es gibt nur ein erstes Mal</name>
+  <detail>Schließe deine erste Veranstaltung ab.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Club-Vertreter</name>
+  <detail>Tritt einem Club bei oder lass jemanden einem Club beitreten, den du gegründet hast.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>Erste von vielen</name>
+  <detail>Gewinne dein erstes Duell.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Das gehört mir</name>
+  <detail>Passe ein Fahrzeug an.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Herausforderer</name>
+  <detail>Führe die Bestenliste an, wenn die Zeit bei einer Solo-Herausforderung abläuft.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>Mögen die Spiele beginnen!</name>
+  <detail>Sende einem anderen Spieler eine Herausforderung.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Stufenaufstieg!</name>
+  <detail>Erreiche Fahrerstufe 2.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>5 und mehr</name>
+  <detail>Erreiche Fahrerstufe 5.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>Fortschritt</name>
+  <detail>Erreiche Stufe 1 mit einer Auszeichnung.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>100 Sachen</name>
+  <detail>Schließe eine „Punkt zu Punkt“-Veranstaltung mit einer Durchschnittsgeschwindigkeit von 100 mph oder 161 km/h ab.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Duell</name>
+  <detail>Schließe 50 Duelle ab.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>Siegertreppchen</name>
+  <detail>Komme in einem Rennen mit 12 Spielern unter die Top 3.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>Stoßstange an Stoßstange</name>
+  <detail>Fahre in einer einzelnen Veranstaltung mindestens 2000 Meter (2187 yards) im Windschatten eines anderen Fahrzeugs.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Teamarbeit</name>
+  <detail>Sei Mitglied in einem Club mit der Club-Stufe 10 oder höher.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Abgeräumt</name>
+  <detail>Schlage 3 Zielzeiten in einer einzigen Zeitrennen-Session.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Langstrecke</name>
+  <detail>Fahre mindestens 300 Meilen (483 Kilometer).</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Hohe Wellen schlagen</name>
+  <detail>Erreiche Fahrerstufe 15.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Lebensanfang</name>
+  <detail>Erreiche Fahrerstufe 30.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Full House</name>
+  <detail>Gewinne ein Rennen in jeder Fahrzeugklasse: Kompaktsportwagen, Performance, Sport, Super und Hyper.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Unschlagbar</name>
+  <detail>Gewinne 5 deiner eigenen Solo-Herausforderungen, nachdem du sie an mindestens einen weiteren Spieler gesendet hast.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Meisterschaft</name>
+  <detail>Erreiche bei einer Auszeichnung das Maximum.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Wahn-flitz-ig</name>
+  <detail>Sammle insgesamt eine Million Driftpunkte.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Saubere Leistung</name>
+  <detail>Erreiche bei einem Rennen mit 12 Spielern einen Podiumsplatz, ohne Ruhm durch Kollisionen mit anderen Teilnehmern zu verlieren.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Lebenslänglich</name>
+  <detail>Fahre als Club-Mitglied mindestens 1000 Meilen (1610 Kilometer).</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Willkommen am Limit</name>
+  <detail>Erreiche Fahrerstufe 50.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Ehre, wem Ehre gebührt</name>
+  <detail>Erreiche das Maximum einer Auszeichnung für jeweils eine Fahrzeug-Klasse, eine Gameplay-Art, einen Spielmodus und eine Veranstaltungsart.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Die Rookie-Trophäe</name>
+  <detail>Gewinne die Rookie-Trophäe im Tour-Modus.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Die Amateur-Trophäe</name>
+  <detail>Gewinne die Amateur-Trophäe im Tour-Modus.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Die Semi-Pro-Trophäe</name>
+  <detail>Gewinne die Semi-Pro-Trophäe im Tour-Modus.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Die Professional-Trophäe</name>
+  <detail>Gewinne die Professional-Trophäe im Tour-Modus.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>Die Legend-Trophäe</name>
+  <detail>Gewinne die Legend-Trophäe im Tour-Modus.</detail>
+ </trophy>
+</trophyconf>
+

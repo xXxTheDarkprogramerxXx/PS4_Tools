@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c0100000000000000460f60ed6048fe67ccacb4d93f5c73626cf9dfff0c1777ba8ccfea7844549f2a587edd917d09d38b2a4e2be3b977080f8f4487b3eaac4d29d4f729a512d8e869d54c6a2c19f8bc23031f520e64a2c4ba6b18ba792a53713dfaad7af4e67fe320cb75fc6648b2331d0f6c676e1ed25ca4dd2ae373c54f0ce3553b7c4deb1c153349200954e41ac15553cee182ad0208fce326037d-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>DRIVECLUB™ 트로피</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ 투어</name>
+  <detail>DRIVECLUB™ 투어</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#UniteInSpeed</name>
+  <detail>다른 트로피를 모두 수집하십시오.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>첫 번째는 한 번뿐</name>
+  <detail>첫 번째 이벤트를 완료하십시오.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>클럽맨</name>
+  <detail>클럽에 가입하거나 본인이 만든 클럽에 다른 사람을 가입시키십시오.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>좋은 시작</name>
+  <detail>첫 번째 맞대결에서 이기십시오.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>이건 내 거야</name>
+  <detail>자동차를 개인 설정하십시오.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>도전자</name>
+  <detail>드라이버 챌린지에서 시간이 종료될 때 순위표 1위를 차지하십시오.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>대전 개시!</name>
+  <detail>다른 플레이어에게 챌린지를 보내십시오.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>레벨 업!</name>
+  <detail>레벨 2 드라이버로 승급하십시오.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>5부터 카운트</name>
+  <detail>레벨 5 드라이버로 승급하십시오.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>행진</name>
+  <detail>메달 하나에서 레벨 1을 달성하십시오.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>100마일 질주</name>
+  <detail>평균 속도 100mph 또는 161km/h로 포인트 투 포인트 이벤트를 완료하십시오.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>맞대결</name>
+  <detail>맞대결 50개를 완료하십시오.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>입상대 위에서</name>
+  <detail>12명이 참가한 레이스에서 3위 내로 완주하십시오.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>추격자</name>
+  <detail>하나의 이벤트에서 다른 자동차를 최소 2000미터 (2187 야드) 이상 드래프트하십시오.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>팀워크</name>
+  <detail>클럽 레벨 10 이상 클럽의 멤버가 되십시오.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>뛰는 자 위에 나는 자</name>
+  <detail>싱글 플레이 시간 도전 이벤트에서 목표 시간 3개를 경신하십시오.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>장거리</name>
+  <detail>최소 300마일(483km)을 주행하십시오.</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>파란을 일으키다</name>
+  <detail>레벨 15 드라이버가 되십시오.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>생명의 시작</name>
+  <detail>레벨 30 드라이버가 되십시오.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>풀 하우스</name>
+  <detail>핫 해치, 퍼포먼스, 스포츠, 슈퍼 및 하이퍼 클래스 자동차로 레이스에서 우승하십시오.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>무적</name>
+  <detail>최소 다른 플레이어 한 명에게 개인 챌린지를 보내 총 5번 이기십시오.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>달인</name>
+  <detail>메달 하나를 끝까지 완수하십시오.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>난폭 운전자</name>
+  <detail>드리프트 점수합계 1,000,000점을 달성하십시오.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>깔끔한 완주</name>
+  <detail>12인 레이스에서 다른 자동차와의 접촉으로 인한 명성 손실 없이 입상대에 오르십시오.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>영원한 친구</name>
+  <detail>클럽 소속으로 최소 1,000마일(1,610km)을 주행하십시오.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>한계에 달한 자</name>
+  <detail>50레벨 드라이버가 되십시오.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>마땅히 자격을 갖춘 자</name>
+  <detail>게임 플레이, 게임 모드, 자동차, 이벤트 메달을 각 한 가지씩 끝까지 도달하십시오.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>루키 트로피</name>
+  <detail>투어의 ‘루키 트로피’ 이벤트에서 승리하십시오.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>아마추어 트로피</name>
+  <detail>투어의 ‘아마추어 트로피’ 이벤트에서 승리하십시오.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>세미 프로 트로피</name>
+  <detail>투어의 ‘세미 프로 트로피’ 이벤트에서 승리하십시오.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>프로 트로피</name>
+  <detail>투어의 ‘프로 트로피’ 이벤트에서 승리하십시오.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>레전드 트로피</name>
+  <detail>투어의 ‘레전드 트로피’ 이벤트에서 승리하십시오.</detail>
+ </trophy>
+</trophyconf>
+

@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000004d1e024fb634fe6d0218ab42a0c6021a4cb5c8ef3ad335aa38192833f2147bd8d22196c5b2f8c3e73f8953279f45479f64b997ab1544cac7fb76ac498b986ad33a92eca99e145709f4a160aaa4013b580fb1cf1f3171bcb13be710005f8ae3d1ae7e680613be254acba08e286cfce001c64eb27ad8fa25f81478e7005439693670ec3460d1d15fd18f06bdbb2775a1eb9e0672e1-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>Trofea DRIVECLUB™</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Tour</name>
+  <detail>DRIVECLUB™ Tour</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#wSzybkościSiła</name>
+  <detail>Zbierz wszystkie inne trofea.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Pierwszy raz się pamięta</name>
+  <detail>Ukończ pierwsze zawody.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Klubowicz</name>
+  <detail>Dołącz do klubu lub poczekaj, aż ktoś dołączy do twojego.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>Pierwszy z wielu</name>
+  <detail>Wygraj pierwszy pojedynek.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Ten jest mój</name>
+  <detail>Spersonalizuj samochód.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Zawodnik</name>
+  <detail>Kiedy skończy się czas w wyzwaniu indywidualnym, bądź na szczycie tabeli.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>To dopiero początek!</name>
+  <detail>Rzuć wyzwanie innemu graczowi.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Awans!</name>
+  <detail>Osiągnij 2. poziom kierowcy.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>5 i jedziemy dalej</name>
+  <detail>Osiągnij 5. poziom kierowcy.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>Postępy</name>
+  <detail>Osiągnij poziom 1. z jednym wyróżnieniem.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>Szaleniec</name>
+  <detail>Ukończ zawody z punktu A do B ze średnią prędkością 100 mph lub 161 km/h.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Pojedynek</name>
+  <detail>Ukończ 50 pojedynków.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>Na podium</name>
+  <detail>Zdobądź jedno z 3 pierwszych miejsc w wyścigu dla 12 graczy.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>Jazda na ogonie</name>
+  <detail>Siedź na ogonie innego samochodu przez co najmniej 2000 metrów (2187 jardów) w jednych zawodach.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Praca zespołowa</name>
+  <detail>Zostań członkiem klubu, który osiągnie przynajmniej 10. poziom.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Do trzech razy sztuka</name>
+  <detail>Pokonaj 3 wyznaczone czasy w jednej sesji próby czasowej.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Długi dystans</name>
+  <detail>Przejedź przynajmniej 300 mil (483 km).</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Na fali</name>
+  <detail>Osiągnij 15. poziom kierowcy.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Życie dopiero się zaczyna</name>
+  <detail>Osiągnij 30. poziom kierowcy.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Poker królewski</name>
+  <detail>Zwycięż w wyścigu każdą klasą samochodu: hot hatchem, wyczynowym, sportowym, super i hiper.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Nie do pokonania</name>
+  <detail>Wygraj 5 własnych wyzwań indywidualnych po wysłaniu ich przynajmniej do 1 gracza.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Mistrzostwo</name>
+  <detail>Osiągnij maksymalny poziom jednego wyróżnienia.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Ryzykant</name>
+  <detail>Zdobądź 1 milion punktów driftu.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Czysta jazda</name>
+  <detail>W wyścigu na 12 graczy traf na podium, nie tracąc sławy z powodu kolizji z innymi zawodnikami.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Na całe życie</name>
+  <detail>Przejedź przynajmniej 1000 mil (1610 km) jako członek klubu.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Witamy na granicy</name>
+  <detail>Osiągnij 50. poziom kierowcy.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Trzeba przyznać</name>
+  <detail>Osiągnij maksymalny poziom jednego z wyróżnień w każdej kategorii: rozgrywki, trybu gry, samochodu i zawodów.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Trofeum rekruta</name>
+  <detail>Wygraj zawody „Trofeum rekruta” w Tour.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Trofeum amatora</name>
+  <detail>Wygraj zawody „Trofeum amatora” w Tour.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Trofeum średnio zaawansowanego</name>
+  <detail>Wygraj zawody „Trofeum średnio zaawansowanego” w Tour.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Trofeum zawodowca</name>
+  <detail>Wygraj zawody „Trofeum zawodowca” w Tour.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>Trofeum legendy</name>
+  <detail>Wygraj zawody „Trofeum legendy” w Tour.</detail>
+ </trophy>
+</trophyconf>
+

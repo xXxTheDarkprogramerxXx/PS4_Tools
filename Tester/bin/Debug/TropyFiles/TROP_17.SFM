@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c010000000000000009241a7eb5581c90c67491cfd2cac57e43fb8b1149d559f4d40a728c877c5f604867684fdb92b0ecae6212fcea896b6fe09d7c002d00f8d251038f0f1a2904247704963d79d7b3aafba2edd1efa234b068266ae0f07a18618275d14bd1be2e245accaeff311f31c54a1ab149a62f48337a0e2ec4fbc363813283096bfd8758087c2ccd0593087f889a1426db8da1a84ed33b9892-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>Troféus de DRIVECLUB™</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Tour</name>
+  <detail>DRIVECLUB™ Tour</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#UnidosPelaVelocidade</name>
+  <detail>Colete todos os outros troféus.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Você Só Tem Uma Primeira Vez</name>
+  <detail>Complete seu primeiro Evento.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Homem do Clube</name>
+  <detail>Entre para um Clube, ou faça alguém entrar para um Clube que você criou.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>Primeiro de Muitos</name>
+  <detail>Vença o seu primeiro Confronto.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Esse Aqui É Meu</name>
+  <detail>Personalize um carro.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Competidor</name>
+  <detail>Quando o tempo expirar em um Desafio Solo, esteja no topo da classificação.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>E Então Começa!</name>
+  <detail>Envie um Desafio para outro jogador.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Subiu de Nível</name>
+  <detail>Alcance o Nível 2 de Piloto.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>5 e Contando</name>
+  <detail>Alcance o Nível 5 de Piloto.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>Progresso</name>
+  <detail>Alcance o Nível 1 com uma Glória.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>Sempre A Cem</name>
+  <detail>Complete um evento Ponto a Ponto com uma velocidade média de 100 mph ou 161 km/h.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Confronto</name>
+  <detail>Complete 50 Confrontos.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>No Pódio</name>
+  <detail>Fique em qualquer uma das 3 primeiras posições durante uma corrida de 12 jogadores.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>De Ponta a Ponta</name>
+  <detail>Faça draft em outro veículo por pelo menos 2000 metros (2187 jardas) em um único evento.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Trabalho Em Equipe</name>
+  <detail>Seja membro de um Clube que está no Nível de Clube 10 ou maior.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Organizar e Derrubar</name>
+  <detail>Supere 3 tempos alvos em uma única sessão Contra o Tempo.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Longa Distância</name>
+  <detail>Dirija por pelo menos 300 milhas (483 km).</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Agitando</name>
+  <detail>Alcance o Nível 15 de Piloto.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>A Vida Começa</name>
+  <detail>Alcance o Nível 30 de Piloto.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Mão Cheia</name>
+  <detail>Vença uma corrida com cada classe de carro: Hot Hatch, Performance, Esporte, Super e Hiper.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Invencível</name>
+  <detail>Vença 5 de seus próprios Desafios Solo após enviá-los para pelo menos um outro jogador.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Maestria</name>
+  <detail>Maximize uma Glória.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Maluquice</name>
+  <detail>Acumule 1 milhão de pontos de drift no total.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Tudo Limpo</name>
+  <detail>Em uma corrida de 12 jogadores, termine no pódio sem perder Fama por colidir com adversários.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Ferrenho</name>
+  <detail>Dirija por pelo menos 1000 milhas (1610 km) enquanto Membro de um Clube.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Bem-Vindo Ao Limite</name>
+  <detail>Alcance o Nível 50 de Piloto.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Crédito A Quem Merece</name>
+  <detail>Maximize uma das Glórias de cada categoria: Jogabilidade, Modo de Jogo, Carro e Evento.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>O Troféu de Novato</name>
+  <detail>Vença o evento "O Troféu de Novato" no Tour.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>O Troféu de Amador</name>
+  <detail>Vença o evento "O Troféu de Amador" no Tour.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>O Troféu de Semi-Pro</name>
+  <detail>Vença o evento "O Troféu de Semi-Pro" no Tour.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>O Troféu de Profissional</name>
+  <detail>Vença o evento "O Troféu de Profissional" no Tour.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>O Troféu de Lenda</name>
+  <detail>Vença o evento "O Troféu de Lenda" no Tour.</detail>
+ </trophy>
+</trophyconf>
+

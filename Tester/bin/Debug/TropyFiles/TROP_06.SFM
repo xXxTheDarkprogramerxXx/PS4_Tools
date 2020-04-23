@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000009b62bb5ae807ff3a82bed96a1edf748f35b6951b3c7b22abe6a2d382f0633e6c5a5b50596e751cab8ecde2a150af2cad1f803fd9e79b22c05ea9667e30a1ffa923b1d6e7b58f5b94473ce59e63abd35c5b6b472e214159fbeba41b29921b6386c77d053b93b17667a265718766fd295f208b6651426f858ba210b1ed65f2d5892503b65e2ffa97d375e981791e37d7ec3d767102-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>Trofeeën voor DRIVECLUB™</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Tour</name>
+  <detail>DRIVECLUB™ Tour</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#EénInSnelheid</name>
+  <detail>Verzamel alle andere trofeeën.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Er is maar één eerste keer</name>
+  <detail>Voltooi je eerste event.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Clubman</name>
+  <detail>Word lid van een club, of laat iemand lid worden van een club die jij gemaakt hebt.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>Dit is nog maar het begin</name>
+  <detail>Win je eerste face-off.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Deze is van mij</name>
+  <detail>Pas een auto aan.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Strijder</name>
+  <detail>Sta aan de top van het klassement als de timer van een solo-uitdaging afloopt.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>En zo begint het!</name>
+  <detail>Stuur een uitdaging naar een andere speler.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Niveau omhoog!</name>
+  <detail>Haal coureursniveau 2.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>Dat is 5</name>
+  <detail>Haal coureursniveau 5.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>Voortgang</name>
+  <detail>Haal niveau 1 met één waardering.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>Snelle bezorging</name>
+  <detail>Voltooi een punt-naar-punt-event met een gemiddelde snelheid van 100 mijl/u of 161 km/u.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Face-off</name>
+  <detail>Voltooi 50 face-offs.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>Op het podium</name>
+  <detail>Eindig in de top 3 tijdens een race met 12 spelers.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>Bumperklever</name>
+  <detail>Rij minstens 2000 meter (2187 yard) in de slipstream van een andere auto tijdens één event.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Teamwork</name>
+  <detail>Wees lid van een club met clubniveau 10 of hoger.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Blijven doorscheuren</name>
+  <detail>Versla 3 doeltijden in één tijdritsessie.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Lange afstand</name>
+  <detail>Leg minstens 300 mijl (483 km) af.</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Je reputatie groeit</name>
+  <detail>Haal coureursniveau 15.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Het leven kan beginnen</name>
+  <detail>Haal coureursniveau 30.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Full House</name>
+  <detail>Win een race in elke autoklasse: Hot hatch, Performance, Sport, Super en Hyper.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Onverslaanbaar</name>
+  <detail>Win 5 van je eigen solo-uitdagingen nadat je ze naar ten minste één andere speler hebt gestuurd.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Meesterlijk</name>
+  <detail>Behaal het maximum voor een waardering.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Gekkenwerk</name>
+  <detail>Haal in totaal 1 miljoen driftpunten.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Proper</name>
+  <detail>In een race met 12 spelers, finish op het podium zonder enige roem te verliezen door botsingen met andere deelnemers.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Gezelligheid</name>
+  <detail>Rij minstens 1000 mijl (1610 km) als clublid.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Welkom bij het einde</name>
+  <detail>Haal coureursniveau 50.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Je hebt het verdiend</name>
+  <detail>Behaal het maximum voor één gameplay-, speltypen-, auto- en eventwaardering.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>De groentjestrofee</name>
+  <detail>Win het Tour-event de groentjestrofee.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>De amateurtrofee</name>
+  <detail>Win het Tour-event de amateurtrofee.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>De semiproftrofee</name>
+  <detail>Win het Tour-event de semiproftrofee.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>De professionaltrofee</name>
+  <detail>Win het Tour-event de professionaltrofee.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>De legendetrofee</name>
+  <detail>Win het Tour-event de legendetrofee.</detail>
+ </trophy>
+</trophyconf>
+

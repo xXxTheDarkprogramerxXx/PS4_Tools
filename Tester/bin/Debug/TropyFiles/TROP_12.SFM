@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c0100000000000000b14b2872f28193fc51f30bfcb293a488f19fcbe426382ce712c0473967aa65b3dac127d88db9144f04e729c8f3add0e215d05cf10230199055e64b453fe292ecd1fbdde71cf6b376f7a68eafbe4c22145da48fa55eb68234cb1642d80ed7eb4e33d9464e6e544e11ee49864f79817e4e22a0233257081eedf8591b3e43cf83a71075ad33d78a80e90a906f0efe10a0bcf11e3fcd-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>DRIVECLUB™-trophyt</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Kiertue</name>
+  <detail>DRIVECLUB™ Kiertue</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#UniteInSpeed</name>
+  <detail>Kerää kaikki muut trophyt.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Ensikertoja on vain yksi</name>
+  <detail>Läpäise ensimmäinen osakilpailusi.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Klubissa viihtyvä</name>
+  <detail>Liity klubiin tai hanki jäsen luomaasi klubiin.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>Ensimmäinen monista</name>
+  <detail>Voita ensimmäinen yhteenottosi.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Tämä on minun</name>
+  <detail>Kustomoi ajoneuvoa.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Haastaja</name>
+  <detail>Kun soolohaasteen aika loppuu, ole tulostaulun kärjessä.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>Niin se alkaa!</name>
+  <detail>Lähetä haaste toiselle pelaajalle.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Uusi taso!</name>
+  <detail>Saavuta kuljettajataso 2.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>Viisi ja jatkuu vain</name>
+  <detail>Saavuta kuljettajataso 5.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>Edistys</name>
+  <detail>Saavuta taso 1 yhdellä meriitillä.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>Vauhtihirmu</name>
+  <detail>Läpäise Pisteestä pisteeseen-osakilpailu 100 mph:n eli 161 km/h:n keskinopeudella.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Yhteenotto</name>
+  <detail>Läpäise 50 yhteenottoa.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>Palkintokorokkeella</name>
+  <detail>Sijoitu 3 parhaan joukkoon 12 pelaajan kisassa.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>Keula kiinni perässä</name>
+  <detail>Peesaa toista ajoneuvoa vähintään 2000 metriä (2187 jaardia) yhden osakilpailun aikana.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Ryhmätyötä</name>
+  <detail>Ole jäsenenä klubissa, jonka klubitaso on vähintään 10.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Nosta pystyyn, kaada kumoon</name>
+  <detail>Alita 3 tavoiteaikaa yhdessä aika-ajoistunnossa.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Pitkä matka</name>
+  <detail>Aja vähintään 300 mailia (483 km).</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Maine kasvaa</name>
+  <detail>Saavuta kuljettajataso 15.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Elämä alkaa</name>
+  <detail>Saavuta kuljettajataso 30.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Täyskäsi</name>
+  <detail>Voita kisa kussakin ajoneuvoluokassa: hot hatch, performance, urheilu, super ja hyper.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Voittamaton</name>
+  <detail>Voita 5 omaa soolohaastettasi, jotka olet lähettänyt ainakin yhdelle toiselle pelaajalle.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Mestaruus</name>
+  <detail>Nosta jokin meriitti maksimitasolle.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Vauhtihullu</name>
+  <detail>Kerää yhteensä miljoona luisupistettä.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Virheetöntä jälkeä</name>
+  <detail>Päädy palkintokorokkeelle 12 pelaajan kisassa ja älä menetä mainepisteitä ajoneuvotörmäyksistä johtuen.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Elinkautisjäsen</name>
+  <detail>Aja vähintään 1 000 mailia (1 610 km) klubijäsenenä.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Tervetuloa rajalle</name>
+  <detail>Saavuta kuljettajataso 50.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Kiitos sinne, minne se kuuluu</name>
+  <detail>Nosta yksi peli-, pelimuoto-, ajoneuvo- ja osakilpailumeriitti maksimitasolle.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Aloittelija-trophy</name>
+  <detail>Voita kiertueen Aloittelija-trophy-osakilpailu.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Amatööri-trophy</name>
+  <detail>Voita kiertueen Amatööri-trophy-osakilpailu.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Puoliammattilais-trophy</name>
+  <detail>Voita kiertueen Puoliammattilais-trophy-osakilpailu.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Ammattilais-trophy</name>
+  <detail>Voita kiertueen Ammattilais-trophy-osakilpailu.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>Legenda-trophy</name>
+  <detail>Voita kiertueen Legenda-trophy-osakilpailu.</detail>
+ </trophy>
+</trophyconf>
+

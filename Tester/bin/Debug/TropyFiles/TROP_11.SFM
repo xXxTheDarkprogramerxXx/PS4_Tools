@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000005f33051dd941f8af41c20573eade1b91a66c351d8f6121e2f8c2521daff7d2b41f38383e716f288de9f512b6873594d82fd086cfa28c674adfea11b3237388771af819b61b07dda498cd08cc2ee83e8e4ea744f57aecbc05c265dbee02b5c230454ec3159dc72258b7c4c73f99627c3ba4b641577ba3c509b3e847ce1e1efb7ab53e5d6e4c305c180f6b9cd0bcccfd967a131b8d-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>驾驶俱乐部</title-name>
+ <title-detail>驾驶俱乐部 獎盃</title-detail>
+ <group id="001">
+  <name>驾驶俱乐部 巡回赛</name>
+  <detail>驾驶俱乐部 巡回赛</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#极速收藏家</name>
+  <detail>收集其他所有的奖杯。</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>一生只有一次机会</name>
+  <detail>完成你的第一场赛事。</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>壮大俱乐部</name>
+  <detail>加入某间俱乐部，或让其他人加入你所建立的俱乐部。</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>好的开始</name>
+  <detail>通过你的第一场对抗赛。</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>这部车是我的</name>
+  <detail>定制一部车辆。</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>竞争者</name>
+  <detail>在车手挑战赛中冲刺到最后一刻，登上排行榜的冠军宝座。</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>开战吧！</name>
+  <detail>向另一位玩家发送挑战赛。</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>升级！</name>
+  <detail>达到车手等级 2。</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>5 级，继续努力</name>
+  <detail>达到车手等级 5。</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>有所进展</name>
+  <detail>有一项荣誉达到等级 1。</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>极速高手</name>
+  <detail>以 100 MPH 或 161 KM/H 的平均速度完成定点赛事。</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>对抗赛</name>
+  <detail>完成 50 场对抗赛。</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>名列前茅</name>
+  <detail>在 12 人竞赛中进入前 3 名。</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>紧追不舍</name>
+  <detail>在单场赛事中，对其他车辆进行跟车至少 2000 公尺（2187 码）距离。</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>团队合作</name>
+  <detail>加入等级在 10 以上的俱乐部。</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>各个击破</name>
+  <detail>在单个计时赛阶段中超越 3 个目标时间。</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>长距离</name>
+  <detail>驾驶至少 300 英里（483 公里）距离。</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>兴风作浪</name>
+  <detail>达到车手等级 15。</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>生涯开始</name>
+  <detail>达到车手等级 30。</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>满堂彩</name>
+  <detail>驾驶以下系列车款各赢得一场比赛：掀背车、性能车、跑车、超跑和高级超跑。</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>无与伦比</name>
+  <detail>至少向一名玩家提出你自己建立的个人挑战赛，并赢得 5 场胜利。</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>学有专精</name>
+  <detail>一项荣誉达到最高等级。</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>大出风头</name>
+  <detail>累积共一百万点漂移分数。</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>完美优胜</name>
+  <detail>完成 12 人竞赛并进入前 3 名，且不曾因为与其他对手碰撞而损失任何声望。</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>占尽便宜</name>
+  <detail>作为俱乐部成员至少驾驶 1000 英里（1610 公里）距离。</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>挑战极限</name>
+  <detail>达到车手等级 50。</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>登峰造极</name>
+  <detail>游戏、游戏模式、车辆和赛事各种类的其中一项荣誉达到最高等级。</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>新手奖杯</name>
+  <detail>在巡回赛中赢得“新手奖杯”赛事。</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>业余奖杯</name>
+  <detail>在巡回赛中赢得“业余奖杯”赛事。</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>半职业奖杯</name>
+  <detail>在巡回赛中赢得“半职业奖杯”赛事。</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>职业奖杯</name>
+  <detail>在巡回赛中赢得“职业奖杯”赛事。</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>传奇奖杯</name>
+  <detail>在巡回赛中赢得“传奇奖杯”赛事。</detail>
+ </trophy>
+</trophyconf>
+

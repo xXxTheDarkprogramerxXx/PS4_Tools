@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000002a24b2c8bc724e82fac5329ca0032444a268b04e0a8e891afa8a9d6f638054b3c964bd3646f3df81f176328d71851958607c1bde6658576a49da76e2739a390f162d5c721b818bdc23afeaa8b19ad87337f03977d232a4affe4a70ec7db3fd0fafe7e0e81d663d0986f80a511e46bb8a41cefabc0cf7f6152878d99e28f78cd956cf337061e402576cc4f99bf5aba2429c8a4c6c-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>Trophées pour DRIVECLUB™</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Solo</name>
+  <detail>DRIVECLUB™ Solo</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#UniteInSpeed</name>
+  <detail>Obtenez tous les autres trophées.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Toute première fois</name>
+  <detail>Terminez votre première épreuve.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Bienvenue au club</name>
+  <detail>Rejoignez un club ou créez votre propre club avec au moins un autre membre.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>Esprit de compétition</name>
+  <detail>Remportez votre premier challenge.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Tuning</name>
+  <detail>Personnalisez un véhicule.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Concurrent</name>
+  <detail>Trouvez-vous en haut du classement à la fin du temps imparti d'un défi individuel.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>Même pas cap !</name>
+  <detail>Lancez un défi à un autre joueur.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Gain de niveau !</name>
+  <detail>Atteignez le niveau 2 de pilote.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>Au moins 5</name>
+  <detail>Atteignez le niveau 5 de pilote.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>Progrès</name>
+  <detail>Atteignez le niveau 1 avec une distinction.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>À fond la caisse</name>
+  <detail>Terminez une course de rallye avec une vitesse moyenne de 100 mph (161 km/h).</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Record battu</name>
+  <detail>Terminez 50 challenges.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>Sur le podium</name>
+  <detail>Terminez dans le top 3 d'une course à 12 joueurs.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>Profiteur</name>
+  <detail>Prenez l'aspiration d'un autre véhicule sur au moins 2 000 mètres (2 187 yards) dans une épreuve simple.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Travail d'équipe</name>
+  <detail>Appartenez à un club de niveau 10 ou plus.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Strike !</name>
+  <detail>Battez 3 temps cibles en une seule session de Contre-la-montre.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Longue distance</name>
+  <detail>Parcourez au moins 300 miles (483 km).</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Faire des vagues</name>
+  <detail>Atteignez le niveau 15 de pilote.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Début de carrière</name>
+  <detail>Atteignez le niveau 30 de pilote.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Main pleine !</name>
+  <detail>Remportez une course avec chaque classe de véhicule : hatchback sportive, haute performance, sport, super et hyper.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Imbattable</name>
+  <detail>Remportez 5 de vos Défis Individuels après les avoir envoyés à au moins un autre joueur.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Maîtrise</name>
+  <detail>Maximisez une distinction.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Terrain glissant</name>
+  <detail>Accumulez un total d'1 million de points de drift.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Pas touche</name>
+  <detail>Dans une course à 12 joueurs, finissez sur le podium sans perdre de points de réputation en percutant vos adversaires.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Membre à vie</name>
+  <detail>Parcourez au moins 1 000 miles (1 610 km) en tant que membre de club.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Au top</name>
+  <detail>Atteignez le niveau 50 de pilote.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Joueur distingué</name>
+  <detail>Maximisez une distinction de chaque catégorie : Jeu, Modes de jeu, Véhicules et Épreuves.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Trophée débutant</name>
+  <detail>Remportez l'épreuve "Trophée débutant" en mode Solo.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Trophée amateur</name>
+  <detail>Remportez l'épreuve "Trophée amateur" en mode Solo.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Trophée semi-professionnel</name>
+  <detail>Remportez l'épreuve "Trophée semi-professionnel" en mode Solo.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Trophée professionnel</name>
+  <detail>Remportez l'épreuve "Trophée professionnel" en mode Solo.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>Trophée des légendes</name>
+  <detail>Remportez l'épreuve "Trophée des légendes" en mode Solo.</detail>
+ </trophy>
+</trophyconf>
+

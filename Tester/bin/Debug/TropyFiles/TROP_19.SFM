@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000005cbe7fe4eca012ddcc44d00b118df3d046d8b8ab2678269744dcfa3ee0127db4ad61007e62d2aa63804e31001e66728388764db923b8a03dcce89a94bc46ed23fe66833c3630458d0aa6f198a0a578afe5de0f468ab5793399c56dd34214da386349015610b849a91a5f2d5feac09cbfe66bee0862756007fbf47123111628bcea5592b79458bcea4fcabbc81b498373f41f1a5c-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>DRIVECLUB™ Kupaları</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Tur</name>
+  <detail>DRIVECLUB™ Tur</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#HızdaBirleş</name>
+  <detail>Diğer Kupaların tümünü topla.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Yalnızca Bir İlk Seferin Var</name>
+  <detail>İlk Etkinliğini tamamla.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Kulüp Adamı</name>
+  <detail>Bir Kulübe katıl ya da oluşturduğun bir Kulübe birisinin katılmasını sağla.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>Birçoğunun İlki</name>
+  <detail>İlk Karşılaşma'nı kazan.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Bu Benimki</name>
+  <detail>Bir aracı özelleştir.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Yarışmacı</name>
+  <detail>Bir Sürücü Kapışması'nda zaman dolduğunda, puan tablosunun en üstünde sen ol.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>Ve İşte Başlıyor!</name>
+  <detail>Başka bir oyuncuya bir Kapışma gönder.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Seviye Yükseldi!</name>
+  <detail>2. Sürücü Seviyesine ulaş.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>5 ve Artarak Devam Ediyor</name>
+  <detail>5. Sürücü Seviyesine ulaş.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>İlerleme</name>
+  <detail>Bir Onur Ödülü ile 1. Seviyeye ulaş.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>Bas Gaza</name>
+  <detail>100 mil ya da 161 km/s ortalama hız ile bir noktadan noktaya etkinliğini tamamla.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Karşılaşma</name>
+  <detail>50 Karşılaşma tamamla.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>Podyumda</name>
+  <detail>Bir 12 oyunculu yarış esnasında ilk 3 sıranın birinde bulun.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>Tampon Tampona</name>
+  <detail>Bir etkinlikte başka bir aracı en az 2000 metre (2187 yard) çekimle.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Ekip Çalışması</name>
+  <detail>10. Kulüp Seviyesi ya da üstünde bir Kulübün üyesi ol.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Teker Teker Devir</name>
+  <detail>Tek bir Zamana Karşı oturumunda 3 Hedef Süreyi geç.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Uzun Mesafe</name>
+  <detail>En az 300 mil (483 km) yol kat et.</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Dalgalar Yaratmak</name>
+  <detail>15. Sürücü Seviyesine ulaş.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Hayat Başlıyor</name>
+  <detail>30. Sürücü Seviyesine ulaş.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Kapalı Gişe</name>
+  <detail>Her sınıftan araç ile bir Yarış kazan: Sportif Hatchback, Performans, Spor, Süper ve Hiper.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Yenilmez</name>
+  <detail>Kendi oluşturduğun 5 Sürücü Kapışması'nı en az bir farklı oyuncuya gönderdikten sonra kazan.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Ustalık</name>
+  <detail>Bir Onur Ödülü'nü en yüksek dereceye çıkart.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Kaygan Zemin</name>
+  <detail>Toplamda 1 milyon Drift Puanı kazan.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Temizlik</name>
+  <detail>Bir 12 oyunculu yarışta, diğer araçlara temas ederek Ün kaybetmeden podyum derecesinde yarışı bitir.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Cankurtaran</name>
+  <detail>Bir Kulüp Üyesi olarak en az 1000 mil (1610 km) yol kat et.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Sınıra Hoş Geldin</name>
+  <detail>50. Sürücü Seviyesine ulaş.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Hakkını Vermeli</name>
+  <detail>Her Oynanış, Oyun Modu, Araç ve Etkinlik Onur Ödülü'nden birini maksimuma çıkar.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Acemi Kupası</name>
+  <detail>Tur'da 'Acemi Kupası' etkinliğini kazan.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Amatör Kupası</name>
+  <detail>Tur'da 'Amatör Kupası' etkinliğini kazan.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Yarı Profesyonel Kupası</name>
+  <detail>Tur'da 'Yarı Profesyonel Kupası' etkinliğini kazan.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Profesyonel Kupası</name>
+  <detail>Tur'da 'Profesyonel Kupası' etkinliğini kazan.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>Efsane Kupası</name>
+  <detail>Tur'da 'Efsane Kupası' etkinliğini kazan.</detail>
+ </trophy>
+</trophyconf>
+

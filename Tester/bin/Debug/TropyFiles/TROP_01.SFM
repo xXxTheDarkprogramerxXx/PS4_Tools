@@ -1,0 +1,66 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c010000000000000018bbe8d0aec3250c12655e6a5481614bfb72ce9e718566057e2896b90607fa2092b5f1d894d567023567cc2af2d55d2791fe8cb6838f367713463d4cd90484098439c6e92d5b4869fd497dd36e1f7a6e1d373332b7dddcb0e007d3772fe9c22e2669c86ccc51dd8b1b4964fee126e89b2d92a27e4d4efbe0d8cfe1a04ba0745d50415aab9503dc59d8431ae4af685ca7d1777285-->
+<trophyconf version="1.1" platform="ps4" policy="freemium">
+ <npcommid>NPWR04914_00</npcommid>
+ <trophyset-version>01.00</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>THE PLAYROOM</title-name>
+ <title-detail>Have fun finding all trophies hidden in THE PLAYROOM!</title-detail>
+ <trophy id="000" hidden="yes" ttype="B" pid="-1">
+  <name>Lovely meeting you!</name>
+  <detail>Release ASOBI into your room.</detail>
+ </trophy>
+ <trophy id="001" hidden="yes" ttype="S" pid="-1">
+  <name>Eye for an eye</name>
+  <detail>Punch ASOBI and let him hit you back.</detail>
+ </trophy>
+ <trophy id="002" hidden="yes" ttype="B" pid="-1">
+  <name>Honey, I'm home!</name>
+  <detail>Make ASOBI lonely and return to him!</detail>
+ </trophy>
+ <trophy id="003" hidden="yes" ttype="B" pid="-1">
+  <name>Boo!</name>
+  <detail>Play "Peek-a-boo" with the AR Bots.</detail>
+ </trophy>
+ <trophy id="004" hidden="yes" ttype="S" pid="-1">
+  <name>Flight of the Bot</name>
+  <detail>Send an AR Bot flying against the screen.</detail>
+ </trophy>
+ <trophy id="005" hidden="yes" ttype="B" pid="-1">
+  <name>Secret Night Club</name>
+  <detail>Create a little beat routine for the AR Bots to dance to.</detail>
+ </trophy>
+ <trophy id="006" hidden="yes" ttype="S" pid="-1">
+  <name>Lights out!</name>
+  <detail>Turn the lights off inside the AR Bots' home.</detail>
+ </trophy>
+ <trophy id="007" hidden="yes" ttype="B" pid="-1">
+  <name>Wait! Is it one, two, and we go on three?</name>
+  <detail>Stay synched up and release the AR Hockey playfield.</detail>
+ </trophy>
+ <trophy id="008" hidden="yes" ttype="S" pid="-1">
+  <name>Super Rally!</name>
+  <detail>Make a rally last more than 10 hits.</detail>
+ </trophy>
+ <trophy id="009" hidden="yes" ttype="B" pid="-1">
+  <name>Lightning Speed!</name>
+  <detail>Score by using a boost attack.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="-1">
+  <name>Don't try this at home...</name>
+  <detail>Splash the screen during a celebration.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="G" pid="-1">
+  <name>Master of THE PLAYROOM</name>
+  <detail>Find all of THE PLAYROOM trophies.</detail>
+ </trophy>
+</trophyconf>
+
+
+
+
+
+
+
+
+
+

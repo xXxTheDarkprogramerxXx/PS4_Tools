@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c0100000000000000bb2b9739f5dda567c0679613f874c692e5ffef64634d2dc912611c546b673a52074da6b88e202444ea326b3aa1e5c27849297805b417c5f590e1b342938a9faddcde4fbcffec4feb52b9778553a3b901a0c302e9b595e65c50353bfd429d9ce0f6cc6162d040b3cfa22169f687ea2a7dcbf94703a2d82da48e629e759ad958430633905ccaa099846fdcf0d827943f304f8eed66-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>Trophies for DRIVECLUB™</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Tour</name>
+  <detail>DRIVECLUB™ Tour</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#UniteInSpeed</name>
+  <detail>Samle alle andre trophies.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Du får bare én første sjanse</name>
+  <detail>Fullfør ditt første arrangement.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Klubbtype</name>
+  <detail>Bli med i en klubb, eller rekrutter noen andre til en klubb du har opprettet.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>Den første av mange</name>
+  <detail>Vinn din første duell.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Denne er min</name>
+  <detail>Tilpass et kjøretøy.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Utfordrer</name>
+  <detail>Stå øverst på resultatlista når tiden går ut for en soloutfordring.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>Og det er i gang!</name>
+  <detail>Send en utfordring til en annen spiller.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Du gikk opp et nivå!</name>
+  <detail>Nå førernivå 2.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>5 og på vei opp</name>
+  <detail>Nå førernivå 5.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>Fremdrift</name>
+  <detail>Nå nivå 1 med en utmerkelse.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>Råkjøring</name>
+  <detail>Fullfør et punkt til punkt-løp med en gjennomsnittsfart på 100 mph eller 161 km/t.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Duell</name>
+  <detail>Fullfør 50 dueller.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>På podiet</name>
+  <detail>Fullfør blant de tre beste i et løp med 12 spillere.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>Pust i nakken</name>
+  <detail>Draft bak et annet kjøretøy i minst 2000 meter (2187 yards) i et løp.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Lagarbeid</name>
+  <detail>Vær medlem i en klubb som er på nivå 10 eller høyere.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Still dem opp - slå dem ned!</name>
+  <detail>Slå tre tider i et enkelt tidsløp.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Langdistanse</name>
+  <detail>Kjør i minst 300 miles (483 km).</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Gjør seg bemerket</name>
+  <detail>Nå førernivå 15.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Livet begynner</name>
+  <detail>Nå førernivå 30.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Fullt hus</name>
+  <detail>Vinn et løp i hver kjøretøyklasse: Kompaktsportskjøretøy, fartskjøretøy, sportskjøretøy, superkjøretøy og hyperkjøretøy.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Uslåelig</name>
+  <detail>Vinn fem av dine egne soloutfordringer etter at du har sendt dem til minst én annen spiller.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Mesterbrev</name>
+  <detail>Nå helt til topps i en utmerkelse.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Råneren</name>
+  <detail>Skaff deg 1 million drifting-poeng.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Ikke rør meg!</name>
+  <detail>Fullfør blant topp tre i et løp med 12 spillere, uten å miste rykte på grunn av kollisjoner med konkurrentene dine.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>På livstid</name>
+  <detail>Kjør minst 1000 miles (1610 km) som klubbmedlem.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Velkommen til topps</name>
+  <detail>Nå førernivå 50.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Æres den som æres skal</name>
+  <detail>Ta en spill-, spillmodus-, kjøretøy-, og arrangementsutmerkelse til maks.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Nybegynner Trophy</name>
+  <detail>Vinn arrangementet "Nybegynner Trophy" i Tour.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>Amatør Trophy</name>
+  <detail>Vinn arrangementet "Amatør Trophy" i Tour.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Halvproff Trophy</name>
+  <detail>Vinn arrangementet "Halvproff Trophy" i Tour.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>Profesjonell Trophy</name>
+  <detail>Vinn arrangementet "Profesjonell Trophy" i Tour.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>Legende Trophy</name>
+  <detail>Vinn arrangementet "Legende Trophy" i Tour.</detail>
+ </trophy>
+</trophyconf>
+

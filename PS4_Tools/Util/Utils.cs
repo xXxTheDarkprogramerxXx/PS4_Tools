@@ -8,6 +8,8 @@ using Ionic.Zip;
 using System.Drawing.Imaging;
 using System.Linq;
 using static DDSReader.DDSImage;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace PS4_Tools.Util
 {
@@ -59,7 +61,7 @@ namespace PS4_Tools.Util
         /// <param name="binData2">integer array of the integer data to read or write</param>
         /// <param name="offset">Otional, used for the "both" methode to deffine a offset to start to read from a file. If you do not wan't to read from the begin use this var to tell the Routine to jump to your deffined offset.</param>
         /// <param name="count">Optional, also used for the "both" methode to deffine to only to read a specific byte count and not till the end of the file.</param>
-        public static void ReadWriteData(string fileToUse, string fileToUse2 = "", string methodReadOrWriteOrBoth = "",  string methodBinaryOrInteger = "",  byte[] binData = null, int binData2 = 0,  long offset = 0,  long count = 0)
+        public static void ReadWriteData(string fileToUse, string fileToUse2 = "", string methodReadOrWriteOrBoth = "", string methodBinaryOrInteger = "", byte[] binData = null, int binData2 = 0, long offset = 0, long count = 0)
         {
             byte[] readBuffer;
             string caseSwitch = methodReadOrWriteOrBoth;
@@ -278,10 +280,46 @@ namespace PS4_Tools.Util
             //return reader.ReadUInt32();
         }
 
+        public static ulong ReadUInt64(object stream)
+        {
+            byte[] array = new byte[8];
+            Type type = null;
+            string memberName = "Read";
+            object[] array2 = new object[]
+            {
+                array,
+                0,
+                8
+            };
+            object[] arguments = array2;
+            string[] argumentNames = null;
+            Type[] typeArguments = null;
+            bool[] array3 = new bool[]
+            {
+                true,
+                false,
+                false
+            };
+            //NewLateBinding.LateCall(stream, type, memberName, arguments, argumentNames, typeArguments, array3, true);
+            //if (array3[0])
+            //{
+            //    array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
+            //}
+
+            array = ((BinaryReader)stream).ReadBytes(array.Length);
+
+            Array.Reverse(array, 0, 8);
+            return BitConverter.ToUInt64(array, 0);
+
+            //string temp = "";
+            //BinaryReader reader = (BinaryReader)stream;
+            ////throw new Exception("sfasda");
+            //return reader.ReadUInt32();
+        }
 
         public static ushort ReadUInt16(object stream)
         {
-            byte[] array = new byte[4];
+            byte[] array = new byte[2];
             Type type = null;
             string memberName = "Read";
             object[] array2 = new object[]
@@ -379,7 +417,7 @@ namespace PS4_Tools.Util
         public static byte[] ReadByte(object stream, int legth)
         {
 
-            
+
 
             byte[] array = new byte[checked(legth - 1 + 1)];
             Type type = null;
@@ -403,14 +441,14 @@ namespace PS4_Tools.Util
             //if (array3[0])
             //{
             //    array = (byte[])Conversions.ChangeType(RuntimeHelpers.GetObjectValue(array2[0]), typeof(byte[]));
-                
+
             //}
             array = ((BinaryReader)stream).ReadBytes(array.Length);
             //File.WriteAllBytes(@"C:\Temp\Testing\tropy.trp", array);
             return array;
         }
 
-         public static System.Drawing.Bitmap BytesToBitmap(byte[] ImgBytes)
+        public static System.Drawing.Bitmap BytesToBitmap(byte[] ImgBytes)
         {
             System.Drawing.Bitmap result = null;
             if (ImgBytes != null)
@@ -461,7 +499,7 @@ namespace PS4_Tools.Util
             }
         }
 
-         public static string HexToString(string hex)
+        public static string HexToString(string hex)
         {
             //StringBuilder stringBuilder = new StringBuilder(hex.Length / 2);
             //int num = 0;
@@ -643,7 +681,7 @@ namespace PS4_Tools.Util
             return (sbyte)value;
         }
 
-      
+
     }
 
     /// <summary>
@@ -1337,6 +1375,122 @@ namespace PS4_Tools.Util
             //so we do that manually if necessary
             output.SetLength(Math.Max(outputSize * inputCount, output.Length));
         }
-    }
 
+        #region << Trophy File >>
+
+        public static byte[] decryptCBC128(this byte[] orginaldata, byte[] key, byte[] iv)
+        {
+            RijndaelManaged AES = new RijndaelManaged();
+            AES.Mode = CipherMode.CBC;
+            AES.Padding = PaddingMode.None;
+            AES.KeySize = 128;
+            AES.Key = key.SubArray(0, 16);
+            AES.IV = iv.SubArray(0, 16);
+            ICryptoTransform transform = AES.CreateDecryptor();
+            byte[] outputData = transform.TransformFinalBlock(orginaldata, 0, orginaldata.Length);
+            return outputData;
+        }
+
+        public static byte[] encryptCBC128(this byte[] orginaldata, byte[] key, byte[] iv)
+        {
+            RijndaelManaged AES = new RijndaelManaged();
+            AES.Mode = CipherMode.CBC;
+            AES.Padding = PaddingMode.None;
+            AES.KeySize = 128;
+            AES.Key = key.SubArray(0, 16);
+            AES.IV = iv.SubArray(0, 16);
+            ICryptoTransform transform = AES.CreateEncryptor();
+            byte[] outputData = transform.TransformFinalBlock(orginaldata, 0, orginaldata.Length);
+            return outputData;
+        }
+
+        public static T[] SubArray<T>(this T[] data, int index, int length)
+        {
+            T[] result = new T[length];
+            Array.Copy(data, index, result, 0, length);
+            return result;
+        }
+
+        public static string ToHexString(this byte[] data)
+        {
+            return BitConverter.ToString(data).Replace("-", "");
+        }
+
+        public static byte[] ToByteArray(this string hex)
+        {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
+        }
+
+        public static string ArrayToString<T>(this T[] array)
+        {
+            StringBuilder builder = new StringBuilder("[");
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                if (i != 0) builder.Append(",");
+                builder.Append(array[i]);
+            }
+            builder.Append("]");
+            return builder.ToString();
+        }
+
+        public static T ToStruct<T>(this byte[] ptr)
+        {
+            GCHandle handle = GCHandle.Alloc(ptr, GCHandleType.Pinned);
+            T ret = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
+            handle.Free();
+            return ret;
+        }
+
+        public static byte[] StructToBytes<T>(this T obj)
+        {
+            byte[] buffer = new byte[Marshal.SizeOf(typeof(T))];
+            GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            Marshal.StructureToPtr(obj, handle.AddrOfPinnedObject(), false);
+            handle.Free();
+            return buffer;
+        }
+
+        public static short ChangeEndian(this short val)
+        {
+            byte[] arr = BitConverter.GetBytes(val);
+            Array.Reverse(arr);
+            return BitConverter.ToInt16(arr, 0);
+        }
+
+        public static int ChangeEndian(this int val)
+        {
+            byte[] arr = BitConverter.GetBytes(val);
+            Array.Reverse(arr);
+            return BitConverter.ToInt32(arr, 0);
+        }
+
+        public static uint ChangeEndian(this uint val)
+        {
+            byte[] arr = BitConverter.GetBytes(val);
+            Array.Reverse(arr);
+            return BitConverter.ToUInt32(arr, 0);
+        }
+
+        public static long ChangeEndian(this long val)
+        {
+            byte[] arr = BitConverter.GetBytes(val);
+            Array.Reverse(arr);
+            return BitConverter.ToInt64(arr, 0);
+        }
+
+        public static ulong ChangeEndian(this ulong val)
+        {
+            byte[] arr = BitConverter.GetBytes(val);
+            Array.Reverse(arr);
+            return BitConverter.ToUInt64(arr, 0);
+        }
+
+        #endregion << Trophy File >>
+    }
 }
+    
+
+

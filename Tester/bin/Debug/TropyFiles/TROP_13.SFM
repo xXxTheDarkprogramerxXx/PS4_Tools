@@ -1,0 +1,141 @@
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000005a8932d08252dbafed72d768189abe289a77665ab2a76a04547af450cd825eec262d3bf027b9c6d3464f49480241583af7cd6df76ac908f399bcefb752fde4782a07c682bb88482e4554dd6f676fde941aafd240e1dd61b6951de0f1dd5ecb96ceed9248f8bc6e716e2f777d524e775361db7bcabde89e7a200cf6d715473c158470b7c80275fdd05b47d9f114ee3b22b09a42f3-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR05254_00</npcommid>
+ <trophyset-version>01.04</trophyset-version>
+ <parental-level license-area="default">0</parental-level>
+ <title-name>DRIVECLUB™</title-name>
+ <title-detail>Trophies för DRIVECLUB™</title-detail>
+ <group id="001">
+  <name>DRIVECLUB™ Tour</name>
+  <detail>DRIVECLUB™ Tour</detail>
+ </group>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>#FörenadeIFart</name>
+  <detail>Samla alla de andra Trophies.</detail>
+ </trophy>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Det finns bara en första gång</name>
+  <detail>Genomför ditt första evenemang.</detail>
+ </trophy>
+ <trophy id="002" hidden="no" ttype="B" pid="000">
+  <name>Klubbanhängare</name>
+  <detail>Gå med i en klubb, eller få någon att gå med i en klubb som du har skapat.</detail>
+ </trophy>
+ <trophy id="003" hidden="no" ttype="B" pid="000">
+  <name>De första stegen</name>
+  <detail>Vinn din första duell.</detail>
+ </trophy>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>Den här är min</name>
+  <detail>Specialanpassa en bil.</detail>
+ </trophy>
+ <trophy id="005" hidden="no" ttype="B" pid="000">
+  <name>Utmanare</name>
+  <detail>Var högst upp på ledartavlan när tiden går ut för en soloutmaning.</detail>
+ </trophy>
+ <trophy id="006" hidden="no" ttype="B" pid="000">
+  <name>Det var så det började!</name>
+  <detail>Skicka en utmaning till en annan spelare.</detail>
+ </trophy>
+ <trophy id="007" hidden="no" ttype="B" pid="000">
+  <name>Mot nya höjder</name>
+  <detail>Nå förarnivå 2.</detail>
+ </trophy>
+ <trophy id="008" hidden="no" ttype="B" pid="000">
+  <name>Första fem</name>
+  <detail>Nå förarnivå 5.</detail>
+ </trophy>
+ <trophy id="009" hidden="no" ttype="B" pid="000">
+  <name>Framsteg</name>
+  <detail>Nå nivå 1 med en bedrift.</detail>
+ </trophy>
+ <trophy id="010" hidden="yes" ttype="B" pid="000">
+  <name>Tonnage</name>
+  <detail>Klara ett punkt till punkt-evenemang med en snittfart på 100 mph eller 161 km/h.</detail>
+ </trophy>
+ <trophy id="011" hidden="no" ttype="S" pid="000">
+  <name>Duell</name>
+  <detail>Klara 50 dueller.</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>På prispallen</name>
+  <detail>Kom bland de tre bästa i en 12-spelartävling.</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="S" pid="000">
+  <name>Snålskjuts</name>
+  <detail>Slipstreama bakom en annan bil i minst 2000 meter (2187 yard) i ett och samma evenemang.</detail>
+ </trophy>
+ <trophy id="014" hidden="yes" ttype="S" pid="000">
+  <name>Lagarbete</name>
+  <detail>Var medlem av en klubb som är på klubbnivå 10 eller högre.</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="S" pid="000">
+  <name>Ställ upp dem och slå ned dem</name>
+  <detail>Slå 3 måltider under ett enda tidsträningspass.</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="S" pid="000">
+  <name>Långdistans</name>
+  <detail>Kör minst 300 miles (483 km).</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Hängiven</name>
+  <detail>Nå förarnivå 15.</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Livet börjar</name>
+  <detail>Nå förarnivå 30.</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="S" pid="000">
+  <name>Garaget fullt</name>
+  <detail>Vinn en tävling med en bil från var och en av följande klasser: GTI, prestanda, sport, super och hyper.</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="G" pid="000">
+  <name>Oslagbar</name>
+  <detail>Vinn 5 av dina egna soloutmaningar efter att ha skickat dem till minst en annan spelare.</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="G" pid="000">
+  <name>Mästarklass</name>
+  <detail>Ta en bedrift till max.</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="G" pid="000">
+  <name>Sladdis</name>
+  <detail>Skaffa totalt 1 miljon driftingpoäng.</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="G" pid="000">
+  <name>Rent spel</name>
+  <detail>Hamna på prispallen i ett 12-spelarlopp utan att förlora berömmelse på grund av fordonskollisioner.</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Livstidsmedlem</name>
+  <detail>Kör minst 1 000 miles/1 610 km som en klubbmedlem.</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="G" pid="000">
+  <name>Välkommen till yttersta gränsen</name>
+  <detail>Nå förarnivå 50.</detail>
+ </trophy>
+ <trophy id="026" hidden="no" ttype="G" pid="000">
+  <name>Ära den som äras bör</name>
+  <detail>Ta en tävlingsbedrift, spellägesbedrift, bilbedrift och en evenemangsbedrift till max.</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>The Rookie Trophy</name>
+  <detail>Vinn evenemanget The Rookie Trophy i Touren.</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
+  <name>The Amateur Trophy</name>
+  <detail>Vinn evenemanget The Amateur Trophy i Touren.</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>The Semi-Pro Trophy</name>
+  <detail>Vinn evenemanget The Semi-Pro Trophy i Touren.</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
+  <name>The Professional Trophy</name>
+  <detail>Vinn evenemanget The Professional Trophy i Touren.</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
+  <name>The Legend Trophy</name>
+  <detail>Vinn evenemanget The Legend Trophy i Touren.</detail>
+ </trophy>
+</trophyconf>
+									

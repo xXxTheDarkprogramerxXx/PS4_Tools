@@ -55,7 +55,7 @@ namespace Tester
                     //pupfunction.Unpack_PUP(openFileDialog1.FileName, folderDlg.SelectedPath);
                     PS4_Tools.PUP pupfile = new PS4_Tools.PUP();
                     PS4_Tools.PUP.PlaystationUpdateFile pup = pupfile.Read_Pup(openFileDialog1.FileName);
-                                      
+
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace Tester
         {
             //PS4_Tools.PKG.ReadPKG(@"C:\Users\3deEchelon\Desktop\IV0002-HXHB00111_00-DUMPFUN000000000-A0100-V0100.pkg");
 
-         }
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -78,21 +78,21 @@ namespace Tester
             //string path 
 
             //set base directory for PS4 project
-            PS4_Tools.PKG.SceneRelated.GP4.Psproject project =   PS4_Tools.PKG.SceneRelated.GP4.ReadGP4(@"C:\Users\3deEchelon\Documents\Sony\Crash Bandcioot Twinsanity.gp4");
-            if(project.Fmt != "gp4")
+            PS4_Tools.PKG.SceneRelated.GP4.Psproject project = PS4_Tools.PKG.SceneRelated.GP4.ReadGP4(@"C:\Users\3deEchelon\Documents\Sony\Crash Bandcioot Twinsanity.gp4");
+            if (project.Fmt != "gp4")
             {
                 MessageBox.Show("This is not a valid PS4 Project");
                 return;
             }
 
             //lets read the pkg content info 
-            if(project.Volume.Package.Passcode.Length != 32)
+            if (project.Volume.Package.Passcode.Length != 32)
             {
                 MessageBox.Show("Passcode Lentgh is not valid");
             }
 
 
-            
+
 
             //to save a gp4 
 
@@ -101,7 +101,7 @@ namespace Tester
 
         private void button3_Click(object sender, EventArgs e)
         {
-            
+
             /*Intigration with Maxtron's LibOrbis has begun */
 
             var temp = PS4_Tools.PKG.SceneRelated.ReadPKG(@"C:\Users\3deEchelon\Desktop\PS4\Batman.RETURN.TO.ARKHAM.ARKHAM.ASYLUM.PS4-DUPLEX\Batman.Return.to.Arkham.Arkham.Asylum.PS4-DUPLEX\duplex-batman.return.to.arkham.arkham.asylum\Batman.Return.to.Arkham.Arkham.Asylum.PS4-DUPLEX.pkg");
@@ -173,7 +173,7 @@ namespace Tester
 
         private void button7_Click(object sender, EventArgs e)
         {
-            var item =PS4_Tools.PKG.Official.CheckForUpdate(textBox1.Text);
+            var item = PS4_Tools.PKG.Official.CheckForUpdate(textBox1.Text);
 
             /*TitleID Patch Data Is Avaiavle Here*/
 
@@ -201,7 +201,7 @@ namespace Tester
             PS4_PKG_Viewer.Form1 formmain = new PS4_PKG_Viewer.Form1();
             formmain.ShowDialog();
         }
-         
+
         private void button10_Click(object sender, EventArgs e)
         {
             /*Lets try and work with some savedata*/
@@ -223,7 +223,7 @@ namespace Tester
             /*Rif Loaded*/
             // string Content_ID = System.Text.Encoding.ASCII.GetString(rifitem.Content_ID);
 
-            lblExtrInfo.Text = "Rif information" + "\r\n"; 
+            lblExtrInfo.Text = "Rif information" + "\r\n";
 
             lblExtrInfo.Text += @"Content ID : " + rifitem.Content_ID + "\r\n" + "\r\n";
             //lblExtrInfo.Text += @"Content Type : " + System.Text.Encoding.UTF8.GetString(rifitem.DRM_Type) + "\r\n" + "\r\n";
@@ -284,8 +284,15 @@ namespace Tester
 
         //02 CC D3 46 B4 59 CB 83 50 5E 8E 76 0A 44 D4 57
         private byte[] devtrophykey = new byte[16] {
-            0x02, 0xCC, 0xD3, 0x46, 0xB4, 0x59, 0xCB, 0x83, 0x50, 0x5E, 0x8E, 0x76, 0x0A, 0x44, 0xD4, 0x56};
+            2, 204, 211, 70, 180, 89, 203, 131, 80, 94, 142, 118, 10, 68, 212, 87};
 
+        private byte[] devtrophykey1 = new byte[16] {
+            0x02, 0xCC, 0xD3, 0x46, 0xB4, 0x59, 0xCB, 0x83, 0x50, 0x5E, 0x8E, 0x76, 0x0A, 0x44, 0xD4, 0x57};
+
+        private byte[] retailtrophykey = new byte[16]
+        {
+            0x21,0xF4,0x1A,0x6B,0xAD,0x8A,0x1D,0x3E,0xCA,0x7A,0xD5,0x86,0xC1,0x01,0xB7,0xA9
+        };
 
         private void button14_Click(object sender, EventArgs e)
         {
@@ -319,8 +326,8 @@ namespace Tester
         {
             PS4_Tools.PKG.Remastered.PS2_Classics ps2classics = new PS4_Tools.PKG.Remastered.PS2_Classics();
             Bitmap bit = new Bitmap(@"C:\Users\3deEchelon\Desktop\PS4\LibHomebrew Compiler\ps2emu\Fake PKG Tools\ps2emu\sce_sys\icon0.png");
-          
-            ps2classics.Create_Single_ISO_PKG(@"C:\Users\3deEchelon\Desktop\PS2\X2 - Wolverine's Revenge (USA).iso", @"C:\Users\3deEchelon\Desktop\PS2\X2 - Wolverine's Revenge (USA).pkg", "X2 - Wolverine's Revenge",bit, @"C:\Users\3deEchelon\Desktop\PS4\LibHomebrew Compiler\ps2emu\Fake PKG Tools\ps2emu\sce_sys\pic1.png");
+
+            ps2classics.Create_Single_ISO_PKG(@"C:\Users\3deEchelon\Desktop\PS2\X2 - Wolverine's Revenge (USA).iso", @"C:\Users\3deEchelon\Desktop\PS2\X2 - Wolverine's Revenge (USA).pkg", "X2 - Wolverine's Revenge", bit, @"C:\Users\3deEchelon\Desktop\PS4\LibHomebrew Compiler\ps2emu\Fake PKG Tools\ps2emu\sce_sys\pic1.png");
         }
 
         private void button18_Click(object sender, EventArgs e)
@@ -416,24 +423,103 @@ namespace Tester
             PS4_Tools.RCO.DumpRco(@"C:\Users\3deEchelon\Desktop\PS4\RCO\Sce.Cdlg.GameCustomData.rco");
         }
 
+        public static string getBetween(string strSource, string strStart, string strEnd)
+        {
+            int Start, End;
+            if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+            {
+                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                End = strSource.IndexOf(strEnd, Start);
+                return strSource.Substring(Start, End - Start);
+            }
+            else
+            {
+                return "";
+            }
+        }
+
         private void button21_Click(object sender, EventArgs e)
         {
-            PS4_Tools.Trophy_File trophy = new PS4_Tools.Trophy_File();
-            Stream stream = new FileStream(@"C:\Users\3deEchelon\Desktop\PS4\Tropy Files\trophy\TROPHY.TRP", FileMode.Open, FileAccess.Read);
-            var trophyfile = trophy.Load(stream);
 
-            for (int i = 0; i < trophyfile.trophyItemList.Count; i++)
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            openFileDialog1.Title = "Select PS4 Trophy File";
+
+            openFileDialog1.CheckFileExists = true;
+
+            openFileDialog1.CheckPathExists = true;
+
+            openFileDialog1.Filter = "PS4 File (TROPHY.TRP)|TROPHY.TRP";
+
+            openFileDialog1.RestoreDirectory = true;
+
+            openFileDialog1.Multiselect = false;
+
+            openFileDialog1.ReadOnlyChecked = true;
+
+            openFileDialog1.ShowReadOnly = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                var itembytes =trophyfile.ExtractFileToMemory(trophyfile.trophyItemList[i].Name);
-                
-                var reader = new BinaryReader(new MemoryStream(trophyfile.trophyItemList[i].TotalBytes));
-                var IV = new byte[16] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-                var restoffile = reader.ReadBytes((int)(reader.BaseStream.Length - 0x30));
+                PS4_Tools.Trophy_File trophy = new PS4_Tools.Trophy_File();
+                Stream stream = new FileStream(openFileDialog1.FileName, FileMode.Open, FileAccess.Read);
+                var trophyfile = trophy.Load(stream);
 
-                var items = trophyfile.Decrypt(itembytes, devtrophykey, IV);
-                File.WriteAllBytes(Application.StartupPath + @"\TropyFiles\" + trophyfile.trophyItemList[i].Name, items);
+                PS4_Tools.TROPHY.TROPCONF tconf;
+                PS4_Tools.TROPHY.TROPTRNS tpsn;
+                PS4_Tools.TROPHY.TROPUSR tusr;
+
+                DateTime ps3Time = new DateTime(2008, 1, 1);
+                DateTime randomEndTime = DateTime.Now;
+
+                string NPCOMID = "";
+                string Diroftrpy = Path.GetDirectoryName(openFileDialog1.FileName);
+                if (File.Exists(Diroftrpy + @"\TRPPARAM.INI"))
+                {
+                    string inifile = File.ReadAllText(Diroftrpy + @"\TRPPARAM.INI");
+                    NPCOMID = getBetween(inifile, "NPCOMMID=", "TROPAPPVER=");
+                    if (NPCOMID == "")
+                    {
+                        MessageBox.Show("Can not find NPCOMMID");
+                        return;
+                    }
+                    NPCOMID = NPCOMID.TrimEnd();
+                }
+                for (int i = 0; i < trophyfile.trophyItemList.Count; i++)
+                {
+                    var itembytes = trophyfile.ExtractFileToMemory(trophyfile.trophyItemList[i].Name);
+                    byte[] itemcontainer = null;
+                    try
+                    {
+
+                        itemcontainer = PS4_Tools.Trophy_File.ESFM.LoadAndDecrypt(itembytes, NPCOMID);
+                        File.WriteAllBytes(Application.StartupPath + @"\TropyFiles\" + trophyfile.trophyItemList[i].Name.Replace(".ESFM", ".SFM"), itemcontainer);
+
+                    }
+                    catch
+                    {
+                        File.WriteAllBytes(Application.StartupPath + @"\TropyFiles\" + trophyfile.trophyItemList[i].Name, itembytes);
+                    }
+                    //now we implement unlock all !
+                    //okay lets begin
+
+                    if (trophy.trophyItemList[i].Name == "TROPCONF.ESFM")
+                    {
+                        tconf = new PS4_Tools.TROPHY.TROPCONF(itemcontainer);
+                    }
+                    if (trophy.trophyItemList[i].Name == "TROPTRNS.DAT")
+                    {
+                        tpsn = new PS4_Tools.TROPHY.TROPTRNS(itemcontainer);
+                    }
+                    if (trophy.trophyItemList[i].Name == "TROPUSR.DAT")
+                    {
+                        tusr = new PS4_Tools.TROPHY.TROPUSR(itemcontainer);
+                    }
+                }
+                MessageBox.Show("Trophy File Extraction and decryption completed");
             }
-            
+
+
         }
 
     }
