@@ -27,3 +27,13 @@ To change your console from Normal Retail to a Semi Dev one simply use [Lightnin
 
 Console output will look similar to this 
 ![](https://i.imgur.com/Lu6z9dv.png)
+
+## What's included 
+Recently added is the make_fslef function since unity does not sign any of its files we needed to sign the prx's and eboot to have it function correctly
+
+## Credits
+[LightningMods](https://twitter.com/LightningMods_/) - For the incredible api provided to make all of this possible and alot of input
+
+Myself for the UI and other feutures
+
+
