@@ -180,6 +180,7 @@ var item = PS4_Tools.Image.DDS.GetBitmapFromDDS(@"C:\Users\3deEchelon\Desktop\PS
 * [IDC](https://github.com/idc) - His PS4 Pup Extractor and other work he has done
 * [Leecherman](https://sites.google.com/site/theleecherman/) - His tools are always a great reference for me and does some great work
 * [Thealexbarney](https://github.com/Thealexbarney) - His great research done on atrac9 files and decoding them 
+* [RedEye-32](https://github.com/Red-EyeX32) - His help on getting ESFM decrypted (files inside of trophies)
 
 ## Download
 [Download](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/tag/PS4-Tools-(AppVoyer)) - POWER BY APPVOYER
