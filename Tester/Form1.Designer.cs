@@ -70,6 +70,10 @@
             this.button18 = new System.Windows.Forms.Button();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.button19 = new System.Windows.Forms.Button();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.button23 = new System.Windows.Forms.Button();
+            this.txtspitter = new System.Windows.Forms.TextBox();
+            this.txtspitout = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -86,6 +90,7 @@
             this.groupBox13.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox15.SuspendLayout();
+            this.groupBox16.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnPUPExtract
@@ -519,11 +524,50 @@
             this.button19.UseVisualStyleBackColor = true;
             this.button19.Click += new System.EventHandler(this.button19_Click);
             // 
+            // groupBox16
+            // 
+            this.groupBox16.Controls.Add(this.txtspitout);
+            this.groupBox16.Controls.Add(this.txtspitter);
+            this.groupBox16.Controls.Add(this.button23);
+            this.groupBox16.Location = new System.Drawing.Point(875, 13);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(337, 194);
+            this.groupBox16.TabIndex = 34;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Other";
+            // 
+            // button23
+            // 
+            this.button23.Location = new System.Drawing.Point(95, 50);
+            this.button23.Name = "button23";
+            this.button23.Size = new System.Drawing.Size(161, 23);
+            this.button23.TabIndex = 25;
+            this.button23.Text = "Spit";
+            this.button23.UseVisualStyleBackColor = true;
+            this.button23.Click += new System.EventHandler(this.button23_Click);
+            // 
+            // txtspitter
+            // 
+            this.txtspitter.Location = new System.Drawing.Point(7, 21);
+            this.txtspitter.Multiline = true;
+            this.txtspitter.Name = "txtspitter";
+            this.txtspitter.Size = new System.Drawing.Size(324, 22);
+            this.txtspitter.TabIndex = 26;
+            // 
+            // txtspitout
+            // 
+            this.txtspitout.Location = new System.Drawing.Point(6, 86);
+            this.txtspitout.Multiline = true;
+            this.txtspitout.Name = "txtspitout";
+            this.txtspitout.Size = new System.Drawing.Size(324, 94);
+            this.txtspitout.TabIndex = 27;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(881, 506);
+            this.ClientSize = new System.Drawing.Size(1227, 506);
+            this.Controls.Add(this.groupBox16);
             this.Controls.Add(this.button19);
             this.Controls.Add(this.groupBox14);
             this.Controls.Add(this.groupBox13);
@@ -557,6 +601,8 @@
             this.groupBox13.ResumeLayout(false);
             this.groupBox14.ResumeLayout(false);
             this.groupBox15.ResumeLayout(false);
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -605,6 +651,10 @@
         private System.Windows.Forms.Button button19;
         private System.Windows.Forms.Button button20;
         private System.Windows.Forms.Button button21;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private System.Windows.Forms.TextBox txtspitout;
+        private System.Windows.Forms.TextBox txtspitter;
+        private System.Windows.Forms.Button button23;
     }
 }
 

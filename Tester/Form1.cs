@@ -450,7 +450,7 @@ namespace Tester
 
             openFileDialog1.CheckPathExists = true;
 
-            openFileDialog1.Filter = "PS4 File (TROPHY.TRP)|TROPHY.TRP";
+            openFileDialog1.Filter = "PS4 Retail File (TROPHY.TRP)|TROPHY.TRP";
 
             openFileDialog1.RestoreDirectory = true;
 
@@ -522,5 +522,28 @@ namespace Tester
 
         }
 
+        private void button23_Click(object sender, EventArgs e)
+        {
+            string myspitstring = txtspitter.Text.Replace(" ","").Replace("\r\n","");
+
+
+            string str = myspitstring;
+            int chunkSize = 2;
+            int stringLength = str.Length;
+            txtspitout.Text = "";
+            int count = 0;
+            for (int i = 0; i < stringLength; i += chunkSize)
+            {
+                if (i + chunkSize > stringLength) chunkSize = stringLength - i;
+                //Console.WriteLine(str.Substring(i, chunkSize));
+                txtspitout.Text += "0x" + str.Substring(i, chunkSize) + " , ";
+                count++;
+            }
+            txtspitout.Text =txtspitout.Text.ToUpper();
+            txtspitout.Text = txtspitout.Text.Replace("X", "x");
+            txtspitter.Text = count.ToString();
+
+
+        }
     }
 }

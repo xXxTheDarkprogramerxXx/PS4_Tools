@@ -38,7 +38,7 @@ namespace PS4_PKG_Viewer
                 textBox1.Text = opendialog.FileName;
                 pictureBox1.Image = BytesToBitmap(PS4_PKG.Image);
                 label2.Text = PS4_PKG.PS4_Title;
-
+                dataGridView3.DataSource = null;
                 DataTable dttemp = new DataTable();
                 dttemp.Columns.Add("PARAM");
                 dttemp.Columns.Add("VALUE");
@@ -62,7 +62,28 @@ namespace PS4_PKG_Viewer
                 }
                 dataGridView2.DataSource = dttemp;
 
-                
+                var items = PS4_PKG.Header.DisplayInfo();
+                //PS4_Tools.PKG.SceneRelated.ExtarctPKG(opendialog.FileName);
+                for (int i = 0; i < items.Count; i++)
+                {
+                    listBox1.Items.Add(items[i]);
+                }
+
+                //for (int i = 0; i < PS4_PKG.Entires.Length; i++)
+                //{
+                //    listBox2.Items.Add(PS4_PKG.Entires[i].id.ToString() + PS4_PKG.Entires[0].size.ToString() + PS4_PKG.Entires[0].offset.ToString() + PS4_PKG.Entires[i].is_encrypted.ToString() + PS4_PKG.Entires[i].key_index);
+                //}
+                BindingSource source = new BindingSource();
+                List<PS4_Tools.Util.PS4PkgUtil.PackageEntry> listofitems = new List<PS4_Tools.Util.PS4PkgUtil.PackageEntry>();
+                for (int i = 0; i < PS4_PKG.Entires.Length; i++)
+                {
+                    listofitems.Add(PS4_PKG.Entires[i]);
+                    source.Add(PS4_PKG.Entires[i]);
+                }
+          
+                dataGridView3.AutoGenerateColumns = true;
+               
+                dataGridView3.DataSource = source;
             }
 
            
@@ -71,6 +92,21 @@ namespace PS4_PKG_Viewer
         private void pictureBox1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView3_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
+        }
+
+        private void extarctPKGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PS4_Tools.PKG.SceneRelated.ExtarctPKG(textBox1.Text);
         }
     }
 }
