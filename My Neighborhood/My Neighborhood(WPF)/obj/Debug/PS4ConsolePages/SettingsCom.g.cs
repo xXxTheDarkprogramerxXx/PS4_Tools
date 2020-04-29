@@ -9,6 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Microsoft.Windows.Controls;
 using My_Neighborhood_WPF_.PS4ConsolePages;
 using System;
 using System.Diagnostics;

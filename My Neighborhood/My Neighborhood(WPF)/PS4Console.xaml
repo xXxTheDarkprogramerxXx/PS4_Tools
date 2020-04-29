@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:My_Neighborhood_WPF_"
         mc:Ignorable="d"
-        Title="Console" Width="1299.3" Height="480" Icon="Images/favicon (1).ico" WindowStartupLocation="CenterScreen" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing">
+        Title="Console" Width="1299.3" Height="480" Icon="Images/Obris.ico" WindowStartupLocation="CenterScreen" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

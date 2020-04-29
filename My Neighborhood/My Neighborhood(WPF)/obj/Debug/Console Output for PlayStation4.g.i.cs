@@ -9,6 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Microsoft.Windows.Controls;
 using System;
 using System.Diagnostics;
 using System.Windows;

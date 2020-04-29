@@ -22,13 +22,15 @@ using System.IO;
 using System.Diagnostics;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
+using MahApps.Metro.Controls;
+using MahApps.Metro;
 
 namespace My_Neighborhood_WPF_
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : RibbonWindow
+    public partial class MainWindow : MetroWindow
     {
         #region << Var's >>
 
@@ -278,7 +280,7 @@ namespace My_Neighborhood_WPF_
 
         #endregion << Classes >>
 
-        #region << Methods >>
+        #region << Events >>
         public MainWindow()
         {
             InitializeComponent();
@@ -845,7 +847,7 @@ namespace My_Neighborhood_WPF_
             {
                 Crashes.TrackError(ex);
             }
-          //  System.Windows.Application.Current.Shutdown();//kill everything
+            System.Windows.Application.Current.Shutdown();//kill everything
         }
 
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
@@ -853,7 +855,7 @@ namespace My_Neighborhood_WPF_
             //  throw new NotImplementedException();
         }
 
-        #endregion << Methods >>
+        #endregion << Events >>
 
         #region << Functions >>
         /// <summary>
@@ -1461,6 +1463,84 @@ namespace My_Neighborhood_WPF_
         {
             CheckError chkerror = new CheckError();
             chkerror.Show();
+        }
+
+        public void SwitchTheme()
+        {
+            SolidColorBrush brushWhite = new SolidColorBrush(Colors.White);
+            SolidColorBrush brushCusBlack = new SolidColorBrush(Color.FromRgb(37, 37, 38));
+            SolidColorBrush brushBlack = new SolidColorBrush(Colors.Black);
+            var app = (App)Application.Current;
+
+            Tuple<AppTheme, Accent> appStyle = ThemeManager.DetectAppStyle(Application.Current);
+            //just apply them theme settings
+            switch (Properties.Settings.Default.DefaultTheme)
+            {
+                case (int)ThemeChooser.White:
+
+                    //  app.ChangeTheme(new Uri("/Themes/ExpressionLight.xaml"));
+                    //  Ribbon.Foreground = brushBlack;
+                    //  Ribbon.Background = brushWhite;
+
+                    //  Ribbon.BorderBrush = brushBlack;
+                    //   //Ribbon.MouseOverBackground = 
+                    ////Ribbon.MouseOverBorderBrush = "Coral"
+                    ////Ribbon.PressedBackground = "LightGreen"
+                    ////Ribbon.PressedBorderBrush = "Green"
+                    ////Ribbon.CheckedBackground = "LightBlue"
+                    ////Ribbon.CheckedBorderBrush = "Blue"
+                    ////Ribbon.FocusedBackground = "LightSlateGray"
+                    ////Ribbon.FocusedBorderBrush = "SlateBlue"
+                    //        lstSKU.Foreground = brushBlack;
+                    //  lstSKU.Background = brushWhite;
+
+
+
+                    // now set the Green accent and dark theme
+                    ThemeManager.ChangeAppStyle(Application.Current,
+                                                ThemeManager.GetAccent("Cobalt"),
+                                                ThemeManager.GetAppTheme("BaseLight")); // or appStyle.Item1
+
+                    break;
+                case (int)(ThemeChooser.Dark):
+
+                    //Ribbon.Foreground = brushWhite;
+                    //Ribbon.Background = brushCusBlack;
+                    //lstSKU.Foreground = brushWhite;
+                    //lstSKU.Background = brushCusBlack;
+                    //Ribbon.BorderBrush = brushWhite;
+                    //Uri dictUri = new Uri(@"/Themes/ExpressionDark.xaml", UriKind.Relative);
+                    //app.ChangeTheme(dictUri);
+                  
+                    // now set the Green accent and dark theme
+                    ThemeManager.ChangeAppStyle(Application.Current,
+                                                ThemeManager.GetAccent("Cobalt"),
+                                                ThemeManager.GetAppTheme("BaseDark")); // or appStyle.Item1
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public enum ThemeChooser
+        {
+            White = 0,
+            Dark = 1,
+            //add more here
+        }
+
+        private void bthThemeDefualt_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.DefaultTheme = (int)ThemeChooser.White;
+            Properties.Settings.Default.Save();
+            SwitchTheme();
+        }
+
+        private void btnThemeDark_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.DefaultTheme = (int)ThemeChooser.Dark;
+            Properties.Settings.Default.Save();
+            SwitchTheme();
         }
     }
 }

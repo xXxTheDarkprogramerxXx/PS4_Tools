@@ -1,21 +1,27 @@
-﻿<RibbonWindow
+﻿<Controls:MetroWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon" x:Class="My_Neighborhood_WPF_.MainWindow"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        x:Class="My_Neighborhood_WPF_.MainWindow"
          Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)"
-        x:Name="RibbonWindow"
-        Width="1299.3" Height="480" Icon="Images/favicon (1).ico" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing" WindowStartupLocation="CenterScreen">
+        x:Name="RibbonWindow" UseLayoutRounding="True" 
+        Topmost="False"
+        ShowTitleBar="True" 
 
+    ShowCloseButton="True" 
+    ShowMaxRestoreButton="True" 
+    ShowMinButton="True"
+        Width="1299.3" Height="480" Icon="Images/Obris.ico" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing" WindowStartupLocation="CenterScreen">
+   
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <Ribbon x:Name="Ribbon" Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)" Background="White" SelectionChanged="Ribbon_SelectionChanged" SelectedIndex="1">
-            <Ribbon.HelpPaneContent>
-                <RibbonButton SmallImageSource="Images/icons8-help-64.png" />
-            </Ribbon.HelpPaneContent>
+        <Ribbon Visibility="Visible" x:Name="Ribbon" Foreground="Black" Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)" Background="White" SelectionChanged="Ribbon_SelectionChanged" SelectedIndex="1">
+            <!--<Ribbon.HelpPaneContent>
+                <RibbonButton  SmallImageSource="Images/icons8-help-64.png" />
+            </Ribbon.HelpPaneContent>-->
             <!--<Ribbon.QuickAccessToolBar>
                 <RibbonQuickAccessToolBar >
                     <RibbonButton x:Name="QATButton1" 
@@ -128,8 +134,18 @@
                                          Label="Target Settings" IsEnabled="False"/>
                     <RibbonMenuButton x:Name="btnMore"
                                          SmallImageSource="Images\icons8-wrench-96 (1).png"
-                                         Label="More" IsEnabled="False">
-                        
+                                         Label="More" IsEnabled="True">
+                        <RibbonMenuButton x:Name="btnTheme"
+                                         SmallImageSource="Images\icons8-wrench-96 (1).png"
+                                         Label="Theme" IsEnabled="True">
+                            <RibbonButton x:Name="bthThemeDefualt"
+                                         SmallImageSource="Images\icons8-minus-96.png"
+                                         Label="White Theme" IsEnabled="True" VerticalAlignment="Top" Click="bthThemeDefualt_Click" />
+                            <RibbonButton x:Name="btnThemeDark"
+                                         SmallImageSource="Images\icons8-minus-96.png"
+                                         Label="Dark Theme" IsEnabled="True" VerticalAlignment="Top" Click="btnThemeDark_Click" />
+                        </RibbonMenuButton>
+
                         <RibbonButton x:Name="btnChangeColor"
                                          SmallImageSource="Images\icons8-minus-96.png"
                                          Label="Change Color" IsEnabled="True" VerticalAlignment="Top" Click="btnChangeColor_Click" />
@@ -141,7 +157,7 @@
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
-        <ListView x:Name="lstSKU" VirtualizingStackPanel.IsVirtualizing="False"  HorizontalAlignment="Stretch" Margin="10,138,0,0" Grid.RowSpan="2" SizeChanged="lstSKU_SizeChanged" SelectionChanged="lstSKU_SelectionChanged" MouseDoubleClick="lstSKU_MouseDoubleClick">
+        <ListView x:Name="lstSKU" VirtualizingStackPanel.IsVirtualizing="False"  HorizontalAlignment="Stretch" Margin="0,138,-0.2,0.4" Grid.RowSpan="2" SizeChanged="lstSKU_SizeChanged" SelectionChanged="lstSKU_SelectionChanged" MouseDoubleClick="lstSKU_MouseDoubleClick">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Refresh"  InputGestureText="F5"/>
@@ -190,4 +206,4 @@
 
     </Grid>
     
-</RibbonWindow>
+</Controls:MetroWindow>

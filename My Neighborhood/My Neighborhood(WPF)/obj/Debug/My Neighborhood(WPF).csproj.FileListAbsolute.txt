@@ -38,10 +38,6 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborh
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\Console Output for PlayStation4.baml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\PS4Console.g.cs
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\PS4Console.baml
-C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ActiproSoftware.Ribbon.Wpf.dll
-C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ActiproSoftware.Shared.Wpf.dll
-C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ActiproSoftware.Ribbon.Wpf.xml
-C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ActiproSoftware.Shared.Wpf.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\HtmlAgilityPack.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\PARAM.SFO.dll
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\PS4_Tools.dll
@@ -97,3 +93,14 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborh
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\System.Diagnostics.DiagnosticSource.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\CheckError.g.cs
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\CheckError.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\Themes\Expression\Common.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\Themes\Expression\Dark.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\Themes\Expression\Light.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\obj\Debug\App.baml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ControlzEx.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\MahApps.Metro.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\ControlzEx.pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\MahApps.Metro.pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\MahApps.Metro.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\RibbonControlsLibrary.dll

@@ -9,6 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Microsoft.Windows.Controls;
 using My_Neighborhood_WPF_;
 using System;
 using System.Diagnostics;
