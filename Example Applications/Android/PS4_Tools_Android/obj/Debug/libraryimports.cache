@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Paths>
   <ManifestDocuments>
-    <ManifestDocument>obj\Debug\lp\10\jl\AndroidManifest.xml</ManifestDocument>
-    <ManifestDocument>obj\Debug\lp\10\jl\aapt\AndroidManifest.xml</ManifestDocument>
-    <ManifestDocument>obj\Debug\lp\10\jl\manifest\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Debug\lp\11\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Debug\lp\11\jl\aapt\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Debug\lp\11\jl\manifest\AndroidManifest.xml</ManifestDocument>
   </ManifestDocuments>
   <NativeLibraries />
   <Jars>
-    <Jar>obj\Debug\lp\10\jl\bin\classes.jar</Jar>
-    <Jar>obj\Debug\lp\12\jl\okhttp-2.4.0.jar</Jar>
-    <Jar>obj\Debug\lp\13\jl\okio-1.5.0.jar</Jar>
-    <Jar>obj\Debug\lp\14\jl\picasso-2.5.2.jar</Jar>
+    <Jar>obj\Debug\lp\11\jl\bin\classes.jar</Jar>
+    <Jar>obj\Debug\lp\13\jl\okhttp-2.4.0.jar</Jar>
+    <Jar>obj\Debug\lp\14\jl\okio-1.5.0.jar</Jar>
+    <Jar>obj\Debug\lp\15\jl\picasso-2.5.2.jar</Jar>
   </Jars>
 </Paths>

@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Paths>
   <Jars>
-    <Jar>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\10\jl\bin\classes.jar</Jar>
-    <Jar>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\12\jl\okhttp-2.4.0.jar</Jar>
-    <Jar>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\13\jl\okio-1.5.0.jar</Jar>
-    <Jar>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\14\jl\picasso-2.5.2.jar</Jar>
+    <Jar>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\11\jl\bin\classes.jar</Jar>
+    <Jar>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\13\jl\okhttp-2.4.0.jar</Jar>
+    <Jar>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\14\jl\okio-1.5.0.jar</Jar>
+    <Jar>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\15\jl\picasso-2.5.2.jar</Jar>
   </Jars>
   <ResolvedResourceDirectories>
-    <ResolvedResourceDirectory>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\10\jl\res</ResolvedResourceDirectory>
     <ResolvedResourceDirectory>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\11\jl\res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\12\jl\res</ResolvedResourceDirectory>
   </ResolvedResourceDirectories>
   <ResolvedAssetDirectories>
-    <ResolvedAssetDirectory>obj\Debug\lp\10\jl\assets</ResolvedAssetDirectory>
     <ResolvedAssetDirectory>obj\Debug\lp\11\jl\assets</ResolvedAssetDirectory>
+    <ResolvedAssetDirectory>obj\Debug\lp\12\jl\assets</ResolvedAssetDirectory>
   </ResolvedAssetDirectories>
   <ResolvedEnvironmentFiles />
   <ResolvedResourceDirectoryStamps>
-    <ResolvedResourceDirectoryStamp>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\10.stamp</ResolvedResourceDirectoryStamp>
     <ResolvedResourceDirectoryStamp>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\11.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Android\PS4_Tools_Android\obj\Debug\lp\12.stamp</ResolvedResourceDirectoryStamp>
   </ResolvedResourceDirectoryStamps>
 </Paths>

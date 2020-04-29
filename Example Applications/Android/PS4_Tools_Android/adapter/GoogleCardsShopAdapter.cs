@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace DesignLibrary_Tutorial.adapter
 {
-    public class GoogleCardsShopAdapter : IFilterable
+    public class GoogleCardsShopAdapter :Java.Lang.Object,IFilterable
     {
 
         //    private LayoutInflater mInflater;

@@ -194,5 +194,10 @@ namespace ImageUtil
             PS4_Tools.Image.DDS.SavePNGFromDDS(txtDDSLoc.Text, txtPNGSave.Text);
             MessageBox.Show("Done");
         }
+
+        public void CreateDDS()
+        {
+            //PS4_Tools.Image.DDS.Windows.
+        }
     }
 }

@@ -343,7 +343,7 @@ namespace DesignLibrary_Tutorial
         {
             ImageView imageView = FindViewById<ImageView>(Resource.Id.backdrop);
 
-            imageView.SetImageResource(Resource.Drawable.cransblack);
+            imageView.SetImageResource(Resource.Drawable.ps4_tools);
         }
 
         public static string GetIp()

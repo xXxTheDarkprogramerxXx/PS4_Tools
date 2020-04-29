@@ -115,6 +115,8 @@
       <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Mono\lib\mono\2.0-api\System.Drawing.dll</HintPath>
     </Reference>
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
@@ -143,6 +145,7 @@
     <Compile Include="CS\CustomObjetcs.cs" />
     <Compile Include="CS\ServiceWrapper.cs" />
     <Compile Include="CS\Update_Variables.cs" />
+    <Compile Include="Fragments\pkg_fragment.cs" />
     <Compile Include="Fragments\PupFragment.cs" />
     <Compile Include="Fragments\SettingsFragment.cs" />
     <Compile Include="Login.cs" />
@@ -251,6 +254,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\PODAdrianLayout.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\pkg_layout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <None Include="Web References\WMSScanner\ActionMasterResult.datasource">
@@ -838,25 +844,13 @@
     </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\logo.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\CranswickTransperant.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Web References\WMSScanner\WMSService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\cranswicklogo2015.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Xml\system_settings.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Xml\pref_with_action.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\cransblack.gif" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\if_aperture_alt_118749.png" />
@@ -887,6 +881,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\ps4_tools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Plugin.FilePicker\Plugin.FilePicker.csproj">
+      <Project>{51031f3d-61d9-4906-99f1-935f46671f48}</Project>
+      <Name>Plugin.FilePicker</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Android.Support.Vector.Drawable.23.2.1\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\packages\Xamarin.Android.Support.Vector.Drawable.23.2.1\build\Xamarin.Android.Support.Vector.Drawable.targets')" />

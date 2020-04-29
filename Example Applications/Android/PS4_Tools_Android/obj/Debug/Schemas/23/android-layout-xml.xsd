@@ -5,7 +5,7 @@
   <xs:import schemaLocation="schemas.android.com.tools.xsd" namespace="http://schemas.android.com/tools" />
   <xs:annotation>
     <xs:documentation>v23</xs:documentation>
-    <xs:documentation>2019-04-30 08:43:43 PM</xs:documentation>
+    <xs:documentation>2020-04-14 03:06:12 PM</xs:documentation>
   </xs:annotation>
   <xs:group name="any-view">
     <xs:choice>
@@ -82,9 +82,6 @@
       <xs:element ref="HorizontalScrollView" />
       <xs:element ref="SearchView" />
       <xs:element ref="fragment" />
-      <xs:element ref="com.readystatesoftware.viewbadger.BadgeView" />
-      <xs:element ref="ZXing.Mobile.ZXingSurfaceView" />
-      <xs:element ref="ZXing.Mobile.ZxingOverlayView" />
       <xs:element ref="Xamarin.Controls.SignaturePadView" />
       <xs:element ref="Xamarin.Controls.SignaturePadCanvasView" />
       <xs:element ref="android.support.design.widget.VisibilityAwareImageButton" />
@@ -136,7 +133,6 @@
       <xs:element ref="android.support.v7.widget.ActionBarContainer" />
       <xs:element ref="android.support.v7.widget.AbsActionBarView" />
       <xs:element ref="android.support.v7.widget.Toolbar" />
-      <xs:element ref="android.support.v7.widget.CardView" />
       <xs:element ref="android.support.v7.widget.RecyclerView" />
       <xs:element ref="de.hdodenhof.circleimageview.CircleImageView" />
       <xs:element ref="Refractored.Controls.CircleImageView" />
@@ -274,7 +270,7 @@
   </xs:complexType>
   <xs:element name="View" type="View">
     <xs:annotation>
-      <xs:documentation>Attributes that can be used with android.view.View or any of its subclasses. Also see .ViewGroup_Layout for attributes that are processed by the view's parent.</xs:documentation>
+      <xs:documentation>Runtime Type: android.view.View</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="View">
@@ -366,9 +362,10 @@
     <xs:attribute ref="android:foregroundTintMode" />
     <xs:attribute ref="android:scrollIndicators" />
     <xs:attribute ref="tools:visibility" />
-    <xs:attribute ref="android:layout_gravity" />
     <xs:attribute ref="android:layout_width" />
     <xs:attribute ref="android:layout_height" />
+    <xs:attribute ref="android:layout_weight" />
+    <xs:attribute ref="android:layout_gravity" />
     <xs:attribute ref="android:layout_margin" />
     <xs:attribute ref="android:layout_marginLeft" />
     <xs:attribute ref="android:layout_marginTop" />
@@ -489,7 +486,7 @@
   </xs:complexType>
   <xs:element name="ViewGroup" type="ViewGroup">
     <xs:annotation>
-      <xs:documentation>Attributes that can be used with a android.view.ViewGroup or any of its subclasses. Also see .ViewGroup_Layout for attributes that this class processes in its children.</xs:documentation>
+      <xs:documentation>Runtime Type: android.view.ViewGroup</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="ViewGroup">
@@ -704,7 +701,7 @@
   </xs:complexType>
   <xs:element name="ViewStub" type="ViewStub">
     <xs:annotation>
-      <xs:documentation>A android.view.ViewStub lets you lazily include other XML layouts inside your application at runtime.</xs:documentation>
+      <xs:documentation>Runtime Type: android.view.ViewStub</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="ViewStub">
@@ -984,7 +981,7 @@
   </xs:complexType>
   <xs:element name="android.gesture.GestureOverlayView" type="android.gesture.GestureOverlayView">
     <xs:annotation>
-      <xs:documentation>GestureOverlayView specific attributes. These attributes are used to configure a GestureOverlayView from XML.</xs:documentation>
+      <xs:documentation>Runtime Type: android.gesture.GestureOverlayView</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="android.gesture.GestureOverlayView">
@@ -1061,7 +1058,7 @@
   </xs:complexType>
   <xs:element name="SlidingDrawer" type="SlidingDrawer">
     <xs:annotation>
-      <xs:documentation>SlidingDrawer specific attributes. These attributes are used to configure a SlidingDrawer from XML.</xs:documentation>
+      <xs:documentation>Runtime Type: android.widget.SlidingDrawer</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="SlidingDrawer">
@@ -1416,7 +1413,7 @@
   </xs:complexType>
   <xs:element name="fragment" type="fragment">
     <xs:annotation>
-      <xs:documentation>Attributes that can be used with &lt;fragment&gt; tags inside of the layout of an Activity. This instantiates the given android.app.Fragment and inserts its content view into the current location in the layout.</xs:documentation>
+      <xs:documentation>Runtime Type: android.app.Fragment</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="fragment">
@@ -1432,9 +1429,10 @@
     <xs:attribute ref="android:fragmentAllowEnterTransitionOverlap" />
     <xs:attribute ref="android:fragmentAllowReturnTransitionOverlap" />
     <xs:attribute ref="tools:layout" />
-    <xs:attribute ref="android:layout_gravity" />
     <xs:attribute ref="android:layout_width" />
     <xs:attribute ref="android:layout_height" />
+    <xs:attribute ref="android:layout_weight" />
+    <xs:attribute ref="android:layout_gravity" />
     <xs:attribute ref="android:layout_margin" />
     <xs:attribute ref="android:layout_marginLeft" />
     <xs:attribute ref="android:layout_marginTop" />
@@ -1443,47 +1441,6 @@
     <xs:attribute ref="android:layout_marginStart" />
     <xs:attribute ref="android:layout_marginEnd" />
     <xs:attribute ref="android:style" />
-  </xs:complexType>
-  <xs:element name="com.readystatesoftware.viewbadger.BadgeView" type="com.readystatesoftware.viewbadger.BadgeView">
-    <xs:annotation>
-      <xs:documentation>Runtime Type: Com.Readystatesoftware.Viewbadger.BadgeView</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:complexType name="com.readystatesoftware.viewbadger.BadgeView">
-    <xs:complexContent mixed="false">
-      <xs:extension base="TextView">
-        <xs:attribute ref="android:textEditSuggestionContainerLayout" />
-        <xs:attribute ref="android:textEditSuggestionHighlightStyle" />
-        <xs:attribute ref="android:pointerIcon" />
-        <xs:attribute ref="android:forceHasOverlappingRendering" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ZXing.Mobile.ZXingSurfaceView" type="ZXing.Mobile.ZXingSurfaceView">
-    <xs:annotation>
-      <xs:documentation>Runtime Type: ZXing.Mobile.ZXingSurfaceView</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:complexType name="ZXing.Mobile.ZXingSurfaceView">
-    <xs:complexContent mixed="false">
-      <xs:extension base="SurfaceView">
-        <xs:attribute ref="android:pointerIcon" />
-        <xs:attribute ref="android:forceHasOverlappingRendering" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ZXing.Mobile.ZxingOverlayView" type="ZXing.Mobile.ZxingOverlayView">
-    <xs:annotation>
-      <xs:documentation>Runtime Type: ZXing.Mobile.ZxingOverlayView</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:complexType name="ZXing.Mobile.ZxingOverlayView">
-    <xs:complexContent mixed="false">
-      <xs:extension base="View">
-        <xs:attribute ref="android:pointerIcon" />
-        <xs:attribute ref="android:forceHasOverlappingRendering" />
-      </xs:extension>
-    </xs:complexContent>
   </xs:complexType>
   <xs:element name="Xamarin.Controls.SignaturePadView" type="Xamarin.Controls.SignaturePadView">
     <xs:annotation>
@@ -1518,8 +1475,19 @@
   <xs:complexType name="Xamarin.Controls.SignaturePadCanvasView">
     <xs:complexContent mixed="false">
       <xs:extension base="FrameLayout">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1531,8 +1499,19 @@
   <xs:complexType name="android.support.design.widget.VisibilityAwareImageButton">
     <xs:complexContent mixed="false">
       <xs:extension base="ImageButton">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1544,15 +1523,19 @@
   <xs:complexType name="android.support.design.widget.TextInputLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="LinearLayout">
-        <xs:attribute ref="app:hintTextAppearance" />
-        <xs:attribute ref="app:hintEnabled" />
-        <xs:attribute ref="app:errorEnabled" />
-        <xs:attribute ref="app:errorTextAppearance" />
-        <xs:attribute ref="app:counterEnabled" />
-        <xs:attribute ref="app:counterMaxLength" />
-        <xs:attribute ref="app:counterTextAppearance" />
-        <xs:attribute ref="app:counterOverflowTextAppearance" />
-        <xs:attribute ref="app:hintAnimationEnabled" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1566,8 +1549,24 @@
       <xs:extension base="EditText">
         <xs:attribute ref="android:textEditSuggestionContainerLayout" />
         <xs:attribute ref="android:textEditSuggestionHighlightStyle" />
+        <xs:attribute ref="android:autoSizeTextType" />
+        <xs:attribute ref="android:autoSizeStepGranularity" />
+        <xs:attribute ref="android:autoSizePresetSizes" />
+        <xs:attribute ref="android:autoSizeMinTextSize" />
+        <xs:attribute ref="android:autoSizeMaxTextSize" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1579,22 +1578,19 @@
   <xs:complexType name="android.support.design.widget.TabLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="HorizontalScrollView">
-        <xs:attribute ref="app:tabIndicatorColor" />
-        <xs:attribute ref="app:tabIndicatorHeight" />
-        <xs:attribute ref="app:tabContentStart" />
-        <xs:attribute ref="app:tabBackground" />
-        <xs:attribute ref="app:tabMode" />
-        <xs:attribute ref="app:tabGravity" />
-        <xs:attribute ref="app:tabMinWidth" />
-        <xs:attribute ref="app:tabMaxWidth" />
-        <xs:attribute ref="app:tabTextAppearance" />
-        <xs:attribute ref="app:tabTextColor" />
-        <xs:attribute ref="app:tabSelectedTextColor" />
-        <xs:attribute ref="app:tabPaddingStart" />
-        <xs:attribute ref="app:tabPaddingTop" />
-        <xs:attribute ref="app:tabPaddingEnd" />
-        <xs:attribute ref="app:tabPaddingBottom" />
-        <xs:attribute ref="app:tabPadding" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1606,8 +1602,19 @@
   <xs:complexType name="android.support.design.widget.TabLayout.TabView">
     <xs:complexContent mixed="false">
       <xs:extension base="LinearLayout">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1619,8 +1626,19 @@
   <xs:complexType name="android.support.design.widget.TabLayout.SlidingTabStrip">
     <xs:complexContent mixed="false">
       <xs:extension base="LinearLayout">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1632,8 +1650,19 @@
   <xs:complexType name="android.support.design.widget.TabItem">
     <xs:complexContent mixed="false">
       <xs:extension base="View">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1645,13 +1674,19 @@
   <xs:complexType name="android.support.design.widget.NavigationView">
     <xs:complexContent mixed="false">
       <xs:extension base="FrameLayout">
-        <xs:attribute ref="app:elevation" />
-        <xs:attribute ref="app:menu" />
-        <xs:attribute ref="app:itemIconTint" />
-        <xs:attribute ref="app:itemTextColor" />
-        <xs:attribute ref="app:itemBackground" />
-        <xs:attribute ref="app:itemTextAppearance" />
-        <xs:attribute ref="app:headerLayout" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1663,14 +1698,19 @@
   <xs:complexType name="android.support.design.widget.FloatingActionButton">
     <xs:complexContent mixed="false">
       <xs:extension base="ImageButton">
-        <xs:attribute ref="app:backgroundTint" />
-        <xs:attribute ref="app:backgroundTintMode" />
-        <xs:attribute ref="app:rippleColor" />
-        <xs:attribute ref="app:fabSize" />
-        <xs:attribute ref="app:elevation" />
-        <xs:attribute ref="app:pressedTranslationZ" />
-        <xs:attribute ref="app:borderWidth" />
-        <xs:attribute ref="app:useCompatPadding" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1682,8 +1722,19 @@
   <xs:complexType name="android.support.design.widget.AppBarLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="LinearLayout">
-        <xs:attribute ref="app:elevation" />
-        <xs:attribute ref="app:expanded" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1695,8 +1746,19 @@
   <xs:complexType name="android.support.design.widget.CoordinatorLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
-        <xs:attribute ref="app:keylines" />
-        <xs:attribute ref="app:statusBarBackground" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1708,8 +1770,19 @@
   <xs:complexType name="android.support.design.widget.Snackbar.SnackbarLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="LinearLayout">
-        <xs:attribute ref="app:elevation" />
-        <xs:attribute ref="app:maxActionInlineWidth" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1721,20 +1794,19 @@
   <xs:complexType name="android.support.design.widget.CollapsingToolbarLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="FrameLayout">
-        <xs:attribute ref="app:expandedTitleMargin" />
-        <xs:attribute ref="app:expandedTitleMarginStart" />
-        <xs:attribute ref="app:expandedTitleMarginTop" />
-        <xs:attribute ref="app:expandedTitleMarginEnd" />
-        <xs:attribute ref="app:expandedTitleMarginBottom" />
-        <xs:attribute ref="app:expandedTitleTextAppearance" />
-        <xs:attribute ref="app:collapsedTitleTextAppearance" />
-        <xs:attribute ref="app:contentScrim" />
-        <xs:attribute ref="app:statusBarScrim" />
-        <xs:attribute ref="app:toolbarId" />
-        <xs:attribute ref="app:collapsedTitleGravity" />
-        <xs:attribute ref="app:expandedTitleGravity" />
-        <xs:attribute ref="app:titleEnabled" />
-        <xs:attribute ref="app:title" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1746,7 +1818,19 @@
   <xs:complexType name="android.support.design.internal.ScrimInsetsFrameLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="FrameLayout">
-        <xs:attribute ref="app:insetForeground" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1758,8 +1842,19 @@
   <xs:complexType name="android.support.design.internal.NavigationMenuView">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1771,8 +1866,19 @@
   <xs:complexType name="android.support.design.internal.NavigationMenuItemView">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1784,7 +1890,19 @@
   <xs:complexType name="android.support.design.internal.ForegroundLinearLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
-        <xs:attribute ref="app:foregroundInsidePadding" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1796,8 +1914,19 @@
   <xs:complexType name="android.support.v4.widget.Space">
     <xs:complexContent mixed="false">
       <xs:extension base="View">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1809,8 +1938,19 @@
   <xs:complexType name="android.support.v4.widget.SlidingPaneLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1823,8 +1963,19 @@
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
         <xs:attribute ref="tools:openDrawer" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1836,8 +1987,20 @@
   <xs:complexType name="android.support.v4.widget.ContentLoadingProgressBar">
     <xs:complexContent mixed="false">
       <xs:extension base="ProgressBar">
+        <xs:attribute ref="android:min" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1849,8 +2012,19 @@
   <xs:complexType name="android.support.v4.widget.SwipeRefreshLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1862,8 +2036,19 @@
   <xs:complexType name="android.support.v4.widget.NestedScrollView">
     <xs:complexContent mixed="false">
       <xs:extension base="FrameLayout">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1875,8 +2060,19 @@
   <xs:complexType name="android.support.v4.view.PagerTitleStrip">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1888,8 +2084,19 @@
   <xs:complexType name="android.support.v4.view.PagerTabStrip">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1901,8 +2108,19 @@
   <xs:complexType name="android.support.v4.view.ViewPager">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1914,8 +2132,19 @@
   <xs:complexType name="android.support.v4.app.FragmentTabHost">
     <xs:complexContent mixed="false">
       <xs:extension base="TabHost">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1927,8 +2156,19 @@
   <xs:complexType name="android.support.v7.view.menu.ExpandedMenuView">
     <xs:complexContent mixed="false">
       <xs:extension base="ListView">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1940,8 +2180,19 @@
   <xs:complexType name="android.support.v7.view.menu.ListMenuItemView">
     <xs:complexContent mixed="false">
       <xs:extension base="LinearLayout">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1953,8 +2204,19 @@
   <xs:complexType name="android.support.v7.widget.ViewStubCompat">
     <xs:complexContent mixed="false">
       <xs:extension base="View">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1966,13 +2228,26 @@
   <xs:complexType name="android.support.v7.widget.SwitchCompat">
     <xs:complexContent mixed="false">
       <xs:extension base="CompoundButton">
-        <xs:attribute ref="app:track" />
-        <xs:attribute ref="app:thumbTextPadding" />
-        <xs:attribute ref="app:switchTextAppearance" />
-        <xs:attribute ref="app:switchMinWidth" />
-        <xs:attribute ref="app:switchPadding" />
-        <xs:attribute ref="app:splitTrack" />
-        <xs:attribute ref="app:showText" />
+        <xs:attribute ref="android:textEditSuggestionContainerLayout" />
+        <xs:attribute ref="android:textEditSuggestionHighlightStyle" />
+        <xs:attribute ref="android:autoSizeTextType" />
+        <xs:attribute ref="android:autoSizeStepGranularity" />
+        <xs:attribute ref="android:autoSizePresetSizes" />
+        <xs:attribute ref="android:autoSizeMinTextSize" />
+        <xs:attribute ref="android:autoSizeMaxTextSize" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1984,19 +2259,19 @@
   <xs:complexType name="android.support.v7.widget.SearchView">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
-        <xs:attribute ref="app:layout" />
-        <xs:attribute ref="app:iconifiedByDefault" />
-        <xs:attribute ref="app:queryHint" />
-        <xs:attribute ref="app:defaultQueryHint" />
-        <xs:attribute ref="app:closeIcon" />
-        <xs:attribute ref="app:goIcon" />
-        <xs:attribute ref="app:searchIcon" />
-        <xs:attribute ref="app:searchHintIcon" />
-        <xs:attribute ref="app:voiceIcon" />
-        <xs:attribute ref="app:commitIcon" />
-        <xs:attribute ref="app:suggestionRowLayout" />
-        <xs:attribute ref="app:queryBackground" />
-        <xs:attribute ref="app:submitBackground" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2011,8 +2286,24 @@
         <xs:attribute ref="android:popupTheme" />
         <xs:attribute ref="android:textEditSuggestionContainerLayout" />
         <xs:attribute ref="android:textEditSuggestionHighlightStyle" />
+        <xs:attribute ref="android:autoSizeTextType" />
+        <xs:attribute ref="android:autoSizeStepGranularity" />
+        <xs:attribute ref="android:autoSizePresetSizes" />
+        <xs:attribute ref="android:autoSizeMinTextSize" />
+        <xs:attribute ref="android:autoSizeMaxTextSize" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2024,8 +2315,19 @@
   <xs:complexType name="android.support.v7.widget.ScrollingTabContainerView">
     <xs:complexContent mixed="false">
       <xs:extension base="HorizontalScrollView">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2037,8 +2339,19 @@
   <xs:complexType name="android.support.v7.widget.ScrollingTabContainerView.TabView">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2050,8 +2363,19 @@
   <xs:complexType name="android.support.v7.widget.ListViewCompat">
     <xs:complexContent mixed="false">
       <xs:extension base="ListView">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2063,8 +2387,19 @@
   <xs:complexType name="android.support.v7.widget.ListPopupWindow.DropDownListView">
     <xs:complexContent mixed="false">
       <xs:extension base="ListView">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2076,10 +2411,19 @@
   <xs:complexType name="android.support.v7.widget.LinearLayoutCompat">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
-        <xs:attribute ref="app:measureWithLargestChild" />
-        <xs:attribute ref="app:divider" />
-        <xs:attribute ref="app:showDividers" />
-        <xs:attribute ref="app:dividerPadding" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2091,8 +2435,19 @@
   <xs:complexType name="android.support.v7.widget.FitWindowsLinearLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="LinearLayout">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2104,8 +2459,19 @@
   <xs:complexType name="android.support.v7.widget.FitWindowsFrameLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="FrameLayout">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2119,8 +2485,24 @@
       <xs:extension base="TextView">
         <xs:attribute ref="android:textEditSuggestionContainerLayout" />
         <xs:attribute ref="android:textEditSuggestionHighlightStyle" />
+        <xs:attribute ref="android:autoSizeTextType" />
+        <xs:attribute ref="android:autoSizeStepGranularity" />
+        <xs:attribute ref="android:autoSizePresetSizes" />
+        <xs:attribute ref="android:autoSizeMinTextSize" />
+        <xs:attribute ref="android:autoSizeMaxTextSize" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2132,8 +2514,19 @@
   <xs:complexType name="android.support.v7.widget.ContentFrameLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="FrameLayout">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2145,7 +2538,19 @@
   <xs:complexType name="android.support.v7.widget.ButtonBarLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="LinearLayout">
-        <xs:attribute ref="app:allowStacking" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2157,8 +2562,19 @@
   <xs:complexType name="android.support.v7.widget.ActivityChooserView">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
-        <xs:attribute ref="app:initialActivityCount" />
-        <xs:attribute ref="app:expandActivityOverflowButtonDrawable" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2170,8 +2586,19 @@
   <xs:complexType name="android.support.v7.widget.ActivityChooserView.InnerLayout">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2183,8 +2610,19 @@
   <xs:complexType name="android.support.v7.widget.ActionMenuView">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2196,8 +2634,19 @@
   <xs:complexType name="android.support.v7.widget.ActionBarContainer">
     <xs:complexContent mixed="false">
       <xs:extension base="FrameLayout">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2209,8 +2658,19 @@
   <xs:complexType name="android.support.v7.widget.AbsActionBarView">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
         <xs:attribute ref="android:pointerIcon" />
         <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2222,51 +2682,19 @@
   <xs:complexType name="android.support.v7.widget.Toolbar">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
-        <xs:attribute ref="app:titleTextAppearance" />
-        <xs:attribute ref="app:subtitleTextAppearance" />
-        <xs:attribute ref="app:title" />
-        <xs:attribute ref="app:subtitle" />
-        <xs:attribute ref="app:titleMargins" />
-        <xs:attribute ref="app:titleMarginStart" />
-        <xs:attribute ref="app:titleMarginEnd" />
-        <xs:attribute ref="app:titleMarginTop" />
-        <xs:attribute ref="app:titleMarginBottom" />
-        <xs:attribute ref="app:contentInsetStart" />
-        <xs:attribute ref="app:contentInsetEnd" />
-        <xs:attribute ref="app:contentInsetLeft" />
-        <xs:attribute ref="app:contentInsetRight" />
-        <xs:attribute ref="app:maxButtonHeight" />
-        <xs:attribute ref="app:collapseIcon" />
-        <xs:attribute ref="app:collapseContentDescription" />
-        <xs:attribute ref="app:popupTheme" />
-        <xs:attribute ref="app:navigationIcon" />
-        <xs:attribute ref="app:navigationContentDescription" />
-        <xs:attribute ref="app:logo" />
-        <xs:attribute ref="app:logoDescription" />
-        <xs:attribute ref="app:titleTextColor" />
-        <xs:attribute ref="app:subtitleTextColor" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="android.support.v7.widget.CardView" type="android.support.v7.widget.CardView">
-    <xs:annotation>
-      <xs:documentation>Runtime Type: Android.Support.V7.Widget.CardView</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:complexType name="android.support.v7.widget.CardView">
-    <xs:complexContent mixed="false">
-      <xs:extension base="FrameLayout">
-        <xs:attribute ref="app:cardBackgroundColor" />
-        <xs:attribute ref="app:cardCornerRadius" />
-        <xs:attribute ref="app:cardElevation" />
-        <xs:attribute ref="app:cardMaxElevation" />
-        <xs:attribute ref="app:cardUseCompatPadding" />
-        <xs:attribute ref="app:cardPreventCornerOverlap" />
-        <xs:attribute ref="app:contentPadding" />
-        <xs:attribute ref="app:contentPaddingLeft" />
-        <xs:attribute ref="app:contentPaddingRight" />
-        <xs:attribute ref="app:contentPaddingTop" />
-        <xs:attribute ref="app:contentPaddingBottom" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2278,11 +2706,20 @@
   <xs:complexType name="android.support.v7.widget.RecyclerView">
     <xs:complexContent mixed="false">
       <xs:extension base="ViewGroup">
-        <xs:attribute ref="app:layoutManager" />
-        <xs:attribute ref="app:spanCount" />
-        <xs:attribute ref="app:reverseLayout" />
-        <xs:attribute ref="app:stackFromEnd" />
         <xs:attribute ref="tools:listitem" />
+        <xs:attribute ref="android:paddingHorizontal" />
+        <xs:attribute ref="android:paddingVertical" />
+        <xs:attribute ref="android:autofillMode" />
+        <xs:attribute ref="android:autofillHints" />
+        <xs:attribute ref="android:importantForAutofill" />
+        <xs:attribute ref="android:pointerIcon" />
+        <xs:attribute ref="android:forceHasOverlappingRendering" />
+        <xs:attribute ref="android:tooltipText" />
+        <xs:attribute ref="android:keyboardNavigationCluster" />
+        <xs:attribute ref="android:__removed0" />
+        <xs:attribute ref="android:nextClusterForward" />
+        <xs:attribute ref="android:__removed1" />
+        <xs:attribute ref="android:focusedByDefault" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

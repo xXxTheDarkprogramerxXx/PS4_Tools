@@ -59,8 +59,8 @@ namespace DesignLibrary_Tutorial
                 .SetContentTitle("Sample Notification")
                 .SetContentText("Hello World! This is my first notification!")
                 .SetDefaults(NotificationDefaults.Sound | NotificationDefaults.Vibrate)
-                .SetSmallIcon(Resource.Drawable.logo)
-                .SetLargeIcon(BitmapFactory.DecodeResource(context.Resources, Resource.Drawable.logo));
+                .SetSmallIcon(Resource.Drawable.ps4_tools)
+                .SetLargeIcon(BitmapFactory.DecodeResource(context.Resources, Resource.Drawable.ps4_tools));
 
             builder.SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone));
 

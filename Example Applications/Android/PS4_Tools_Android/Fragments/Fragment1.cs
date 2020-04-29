@@ -18,6 +18,8 @@ using Square.Picasso;
 using Java.Net;
 using System.IO;
 using Xamarin.Controls;
+using Plugin.FilePicker.Abstractions;
+using Plugin.FilePicker;
 
 namespace DesignLibrary_Tutorial.Fragments
 {
@@ -76,7 +78,7 @@ namespace DesignLibrary_Tutorial.Fragments
             context = this.Context;
             act = this.Activity;
             SetUpRecyclerView(recyclerView);
-
+           
             return recyclerView;
         }
 

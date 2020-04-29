@@ -7,6 +7,7 @@ HtmlAgilityPack
 ICSharpCode.SharpZipLib
 Newtonsoft.Json
 PARAM.SFO
+Plugin.FilePicker
 PS4_Tools
 Refractored.Controls.CircleImageView
 SignaturePad

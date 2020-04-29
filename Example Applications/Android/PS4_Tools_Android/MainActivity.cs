@@ -24,10 +24,12 @@ using Square.Picasso;
 using Android.Graphics.Drawables;
 using Android.Graphics;
 using Android.Media;
+using Plugin.FilePicker.Abstractions;
+using Plugin.FilePicker;
 
 namespace DesignLibrary_Tutorial
 {
-    [Activity(Label = "PS4 Tools", Theme = "@style/Theme.DesignDemo")]
+    [Activity(Label = "PS4 Tools", Theme = "@style/Theme.DesignDemo",ScreenOrientation =Android.Content.PM.ScreenOrientation.Landscape)]
     public class MainActivity : AppCompatActivity
     {
         private DrawerLayout mDrawerLayout;
@@ -83,10 +85,56 @@ namespace DesignLibrary_Tutorial
 
                         tabs.SetupWithViewPager(viewPager);
                         FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
-                        fab.Visibility = ViewStates.Invisible;   
-                        fab.Click += (o, e) =>
+                        fab.Visibility = ViewStates.Visible;
+                        fab.Click += async (o, e) =>
                     {
                         View anchor = o as View;
+
+                        string PKGLocation;
+                        System.IO.Stream stream;
+                        try
+                        {
+                            FileData fileData = await CrossFilePicker.Current.PickFile();
+                            if (fileData == null)
+                            {
+                                return;
+                            }
+
+                            string fileName = fileData.FileName;
+                            //string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
+                            PKGLocation = fileData.FilePath;
+
+                            //test to make sure file is not URI file 
+
+                            if (PKGLocation.ToUpper().Contains("CONTENT://"))
+                            {
+                                stream = new System.IO.MemoryStream(fileData.DataArray);
+                                //path needs to be made from a stream
+                                var pkgfile = PS4_Tools.PKG.SceneRelated.Read_PKG(stream);
+                                //ImageView pbPkg = FindViewById<ImageView>(Resource.Id.PKGIcon);
+                                //pbPkg.SetImageBitmap(BytesToBitmap(pkgfile.Image));
+                                //TextView lblPackageInfo = FindViewById<TextView>(Resource.Id.txtPKGInfo);
+                                //lblPackageInfo.Text = pkgfile.PS4_Title + "\n" + pkgfile.PKG_Type.ToString() + "\n" +
+                                //                      pkgfile.Param.TitleID; //display whatever info youd like here
+                            }
+                            else
+                            {
+
+                                var pkgfile = PS4_Tools.PKG.SceneRelated.Read_PKG(PKGLocation);
+                                //ImageView pbPkg = FindViewById<ImageView>(Resource.Id.PKGIcon);
+                                //pbPkg.SetImageBitmap(BytesToBitmap(pkgfile.Image));
+                                //TextView lblPackageInfo = FindViewById<TextView>(Resource.Id.txtPKGInfo);
+                                //lblPackageInfo.Text = pkgfile.PS4_Title + "\n" + pkgfile.PKG_Type.ToString() + "\n" +
+                                //                      pkgfile.Param.TitleID; //display whatever info youd like here
+                            }
+
+                            System.Console.WriteLine("File name chosen: " + fileName);
+                            //System.Console.WriteLine("File data: " + contents);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            System.Console.WriteLine("Exception choosing file: " + ex.ToString());
+                        }
 
                     };
 
@@ -96,15 +144,15 @@ namespace DesignLibrary_Tutorial
                         ImageView imguser = usermenu.FindViewById<ImageView>(Resource.Id.imgViewHeader);
 
                         //replace image from cheese to cranswick logo
-                        imguser.SetImageResource(Resource.Drawable.cransblack);
+                        imguser.SetImageResource(Resource.Drawable.ps4_tools);
 
                         //do the image click event 
 
                         imguser.Click += delegate
                         {
-                        //Intent intent = new Intent(this, typeof(Account));
-                        //StartActivity(intent);
-                    };
+                            //Intent intent = new Intent(this, typeof(Account));
+                            //StartActivity(intent);
+                        };
 
                         //set the user pic
                         //Picasso.With(this)
@@ -121,11 +169,15 @@ namespace DesignLibrary_Tutorial
                         timer.Elapsed += Timer_Elapsed;
                         timer.Enabled = true;
                     }
-                    catch(System.Exception ex)
+                    catch (System.Exception ex)
                     {
                         string errormessage = ex.Message;
                     }
                 });
+
+
+               
+
             })).Start();
         }
 

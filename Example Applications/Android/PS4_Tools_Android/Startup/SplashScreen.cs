@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace DesignLibrary_Tutorial.Startup
 {
-    [Activity(Label = "PS4 Tools", Icon = "@drawable/logo", Theme = "@style/SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "PS4 Tools", Icon = "@drawable/ps4_tools", Theme = "@style/SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class SplashScreen : Activity, ISharedPreferencesOnSharedPreferenceChangeListener
     {
         #region << Permisions>>

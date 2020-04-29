@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="25"
-                android:src="@drawable/cranswicktransperant" />
+                android:src="@drawable/ps4_tools" />
             <EditText
                 android:id="@+id/txtUsername"
                 android:layout_width="match_parent"
