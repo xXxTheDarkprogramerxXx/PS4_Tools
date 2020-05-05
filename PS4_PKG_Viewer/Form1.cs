@@ -36,9 +36,10 @@ namespace PS4_PKG_Viewer
             {
                 PS4_Tools.PKG.SceneRelated.Unprotected_PKG PS4_PKG = PS4_Tools.PKG.SceneRelated.Read_PKG(opendialog.FileName);
                 textBox1.Text = opendialog.FileName;
-                pictureBox1.Image = BytesToBitmap(PS4_PKG.Image);
+                pictureBox1.Image = BytesToBitmap(PS4_PKG.Icon);
                 label2.Text = PS4_PKG.PS4_Title;
                 dataGridView3.DataSource = null;
+                label3.Text = PS4_PKG.Content_ID;
                 DataTable dttemp = new DataTable();
                 dttemp.Columns.Add("PARAM");
                 dttemp.Columns.Add("VALUE");
@@ -107,6 +108,11 @@ namespace PS4_PKG_Viewer
         private void extarctPKGToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PS4_Tools.PKG.SceneRelated.ExtarctPKG(textBox1.Text);
+        }
+
+        private void extractAndDecryptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

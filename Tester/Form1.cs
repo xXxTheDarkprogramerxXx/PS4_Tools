@@ -545,5 +545,13 @@ namespace Tester
 
 
         }
+
+        private void button22_Click(object sender, EventArgs e)
+        {
+            PS4_Tools.Trophy_File trphy = new PS4_Tools.Trophy_File();
+            var item= trphy.SealedTrophy(File.ReadAllBytes(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\trophy\data\NPWR04914_00\trophy.img"), File.ReadAllBytes(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\trophy\data\NPWR04914_00\sealedkey"));
+            File.WriteAllBytes("testdecypt.dat", item);
+
+        }
     }
 }

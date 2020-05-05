@@ -236,6 +236,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Structs.cs" />
     <Compile Include="TROPHY\Redo.cs" />
     <Compile Include="TROPHY\TROPCONF.cs" />
     <Compile Include="TROPHY\TROPTRNS.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Util\DDS\DDSImage.cs" />
     <Compile Include="Util\OffsetStream.cs" />
     <Compile Include="Util\PS4PkgUtil.cs" />
+    <Compile Include="Util\SCEUtil.cs" />
     <Compile Include="Util\Squish\Squish.cs" />
     <Compile Include="Util\Squish\SquishFlags.cs" />
     <Compile Include="Util\System.cs" />

@@ -32,6 +32,34 @@ namespace PS4_Tools.Util
             return bytes.ToArray();
         }
 
+        public static DateTime FromUnixTime(long unixTime)
+        {
+            return epoch.AddSeconds(unixTime);
+        }
+        private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        /// <summary>
+        /// Gets a filesize in a human readble format
+        /// </summary>
+        /// <param name="FileSize"></param>
+        /// <returns></returns>
+        public static string GetHumanReadable(double FileSize)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            double len = FileSize;
+            int order = 0;
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len = len / 1024;
+            }
+
+            // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
+            // show a single decimal place, and no space.
+            string result = String.Format("{0:0.##} {1}", len, sizes[order]);
+            return result;
+        }
+
         /// <summary>
         /// Converts a Littel Endian Hex Decimal value to a Integer Decimal value
         /// </summary>

@@ -71,9 +71,10 @@
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.button19 = new System.Windows.Forms.Button();
             this.groupBox16 = new System.Windows.Forms.GroupBox();
-            this.button23 = new System.Windows.Forms.Button();
-            this.txtspitter = new System.Windows.Forms.TextBox();
             this.txtspitout = new System.Windows.Forms.TextBox();
+            this.txtspitter = new System.Windows.Forms.TextBox();
+            this.button23 = new System.Windows.Forms.Button();
+            this.button22 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -358,6 +359,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.button22);
             this.groupBox6.Controls.Add(this.button21);
             this.groupBox6.Controls.Add(this.label2);
             this.groupBox6.Controls.Add(this.button3);
@@ -372,9 +374,9 @@
             // 
             // button21
             // 
-            this.button21.Location = new System.Drawing.Point(275, 83);
+            this.button21.Location = new System.Drawing.Point(230, 83);
             this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(75, 23);
+            this.button21.Size = new System.Drawing.Size(120, 23);
             this.button21.TabIndex = 22;
             this.button21.Text = "Trophy";
             this.button21.UseVisualStyleBackColor = true;
@@ -536,6 +538,22 @@
             this.groupBox16.TabStop = false;
             this.groupBox16.Text = "Other";
             // 
+            // txtspitout
+            // 
+            this.txtspitout.Location = new System.Drawing.Point(6, 86);
+            this.txtspitout.Multiline = true;
+            this.txtspitout.Name = "txtspitout";
+            this.txtspitout.Size = new System.Drawing.Size(324, 94);
+            this.txtspitout.TabIndex = 27;
+            // 
+            // txtspitter
+            // 
+            this.txtspitter.Location = new System.Drawing.Point(7, 21);
+            this.txtspitter.Multiline = true;
+            this.txtspitter.Name = "txtspitter";
+            this.txtspitter.Size = new System.Drawing.Size(324, 22);
+            this.txtspitter.TabIndex = 26;
+            // 
             // button23
             // 
             this.button23.Location = new System.Drawing.Point(95, 50);
@@ -546,21 +564,15 @@
             this.button23.UseVisualStyleBackColor = true;
             this.button23.Click += new System.EventHandler(this.button23_Click);
             // 
-            // txtspitter
+            // button22
             // 
-            this.txtspitter.Location = new System.Drawing.Point(7, 21);
-            this.txtspitter.Multiline = true;
-            this.txtspitter.Name = "txtspitter";
-            this.txtspitter.Size = new System.Drawing.Size(324, 22);
-            this.txtspitter.TabIndex = 26;
-            // 
-            // txtspitout
-            // 
-            this.txtspitout.Location = new System.Drawing.Point(6, 86);
-            this.txtspitout.Multiline = true;
-            this.txtspitout.Name = "txtspitout";
-            this.txtspitout.Size = new System.Drawing.Size(324, 94);
-            this.txtspitout.TabIndex = 27;
+            this.button22.Location = new System.Drawing.Point(230, 54);
+            this.button22.Name = "button22";
+            this.button22.Size = new System.Drawing.Size(120, 23);
+            this.button22.TabIndex = 23;
+            this.button22.Text = "Trophy enc";
+            this.button22.UseVisualStyleBackColor = true;
+            this.button22.Click += new System.EventHandler(this.button22_Click);
             // 
             // Form1
             // 
@@ -655,6 +667,7 @@
         private System.Windows.Forms.TextBox txtspitout;
         private System.Windows.Forms.TextBox txtspitter;
         private System.Windows.Forms.Button button23;
+        private System.Windows.Forms.Button button22;
     }
 }
 

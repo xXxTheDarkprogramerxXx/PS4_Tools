@@ -684,14 +684,103 @@ namespace PS4_Tools.Util
                 writer.Close();
                 return ms.ToArray();
             }
-            
+
+
+            public static byte[] RSA2048Decrypt(byte[] ciphertext)
+            {
+                RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+                rsa.ImportParameters(param);
+                return rsa.Decrypt(ciphertext, false);
+            }
+
+
+            /// <summary>
+            /// Decrypts the EKPFS for a fake PKG. Will not work on non-fake PKGs.
+            /// </summary>
+            /// <param name="pkg"></param>
+            /// <param name="passcode"></param>
+            /// <returns>The EKPFS if successful; null otherwise</returns>
+            //public byte[] GetEkpfs()
+            //{
+            //    try
+            //    {
+            //        var dk3 = RSA2048Decrypt(EntryKeys.Keys[3].key, RSAKeyset.PkgDerivedKey3Keyset);
+            //        var iv_key = Sha256(ImageKey.meta.GetBytes().Concat(dk3).ToArray());
+            //        var imageKeyDecrypted = ImageKey.FileData.Clone() as byte[];
+            //        Crypto.AesCbcCfb128Decrypt(
+            //          imageKeyDecrypted,
+            //          imageKeyDecrypted,
+            //          imageKeyDecrypted.Length,
+            //          iv_key.Skip(16).Take(16).ToArray(),
+            //          iv_key.Take(16).ToArray());
+            //        return Crypto.RSA2048Decrypt(imageKeyDecrypted, RSAKeyset.FakeKeyset);
+            //    }
+            //    catch
+            //    {
+            //        return null;
+            //    }
+            //}
+
         };
+
+        public  static byte[] Decrypt(byte[] entryBytes, byte[] keySeed, PackageEntry entry)
+        {
+            var iv_key = Sha256(
+                   entry.ToArray()
+                   .Concat(keySeed)
+                   .ToArray());
+            var tmp = new byte[entryBytes.Length];
+            AesCbcCfb128Decrypt(tmp, entryBytes, tmp.Length, iv_key.Skip(16).Take(16).ToArray(), iv_key.Take(16).ToArray());
+            return tmp;
+        }
+
+        public static void CopyStream(Stream input, Stream output)
+        {
+            byte[] buffer = new byte[32768];
+            int read;
+            while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                output.Write(buffer, 0, read);
+            }
+        }
+
+        public static int AesCbcCfb128Decrypt(byte[] @out, byte[] @in, int size, byte[] key, byte[] iv)
+        {
+            var cipher = new AesManaged
+            {
+                Mode = CipherMode.CBC,
+                KeySize = 128,
+                Key = key,
+                IV = iv,
+                Padding = PaddingMode.None,
+                BlockSize = 128,
+            };
+            var tmp = new byte[size];
+            using (var ct_stream = new MemoryStream(@in))
+            using (var pt_stream = new MemoryStream(tmp))
+            using (var dec = cipher.CreateDecryptor(key, iv))
+            using (var s = new CryptoStream(ct_stream, dec, CryptoStreamMode.Read))
+            {
+                CopyStream(s, pt_stream);
+                //s(pt_stream);
+            }
+            Buffer.BlockCopy(tmp, 0, @out, 0, tmp.Length);
+            return 0;
+        }
+
         public static byte[] Sha256(byte[] buffer, int offset, int length)
         {
             SHA256Managed sha = new SHA256Managed();
             sha.TransformFinalBlock(buffer, offset, length);
             return sha.Hash;
         }
+        public static byte[] Sha256(byte[] data) => SHA256.Create().ComputeHash(data);
+        public static byte[] Sha256(Stream data)
+        {
+            data.Position = 0;
+            return SHA256.Create().ComputeHash(data);
+        }
+
 
         public static byte[] Decrypt(byte[] data)
         {

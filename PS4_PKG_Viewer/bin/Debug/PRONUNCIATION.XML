@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<gamePackage>
+  <language id="00" modified="0">
+    <speechRecognitionWords>
+      <text display="1">ジャックンダクスターツー</text>
+      <pronunciation>j a Q k u N d a k u s u t aL ts uL</pronunciation>
+    </speechRecognitionWords>
+  </language>
+  <language id="01" modified="0">
+    <speechRecognitionWords>
+      <text display="1">jak two</text>
+      <pronunciation>jh ae k ___ t uw</pronunciation>
+    </speechRecognitionWords>
+    <speechRecognitionWords>
+      <text display="1">jak two</text>
+      <pronunciation>jh ax k ___ t uw</pronunciation>
+    </speechRecognitionWords>
+  </language>
+  <language id="18" modified="0">
+    <speechRecognitionWords>
+      <text display="1">jak two renegade</text>
+      <pronunciation>jh ae k ___ t uw ___ r eh n ih g ey d</pronunciation>
+    </speechRecognitionWords>
+    <speechRecognitionWords>
+      <text display="1">jak two renegade</text>
+      <pronunciation>jh ae k ___ t uw ___ r eh n ax g ey d</pronunciation>
+    </speechRecognitionWords>
+    <speechRecognitionWords>
+      <text display="0">jak two</text>
+      <pronunciation>jh ae k ___ t uw</pronunciation>
+    </speechRecognitionWords>
+    <speechRecognitionWords>
+      <text display="0">jak two</text>
+      <pronunciation>jh k ___ t uw</pronunciation>
+    </speechRecognitionWords>
+  </language>
+</gamePackage>

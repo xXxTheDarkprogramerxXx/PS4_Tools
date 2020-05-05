@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS Tools Online", "PS Tools
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageUtil", "Example Applications\Windows\ImageUtil\ImageUtil\ImageUtil.csproj", "{9F7B58E5-2540-4583-88DA-EDAAEE8063F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCOMage", "RCOMage\RCOMage.csproj", "{F6C7E31D-0038-42E1-AE1A-67D995E209B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Android Mono|Any CPU = Android Mono|Any CPU
@@ -94,6 +96,14 @@ Global
 		{9F7B58E5-2540-4583-88DA-EDAAEE8063F0}.PS4 Unity|Any CPU.Build.0 = PS4 Unity|Any CPU
 		{9F7B58E5-2540-4583-88DA-EDAAEE8063F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F7B58E5-2540-4583-88DA-EDAAEE8063F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.Android Mono|Any CPU.ActiveCfg = Release|Any CPU
+		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.Android Mono|Any CPU.Build.0 = Release|Any CPU
+		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.PS4 Unity|Any CPU.ActiveCfg = Release|Any CPU
+		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.PS4 Unity|Any CPU.Build.0 = Release|Any CPU
+		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

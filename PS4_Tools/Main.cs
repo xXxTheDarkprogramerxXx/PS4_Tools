@@ -1929,6 +1929,7 @@ namespace PS4_Tools
                 private static byte[] vagEnd = new byte[16] { 0x00, 0x07, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, };
                 private static byte[] pngMagic = new byte[16] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52, };
                 private static byte[] ngrcoMagic = new byte[8] { 0x52, 0x43, 0x4F, 0x46, 0x10, 0x01, 0x00, 0x00, };
+                private static byte[] rcoMagic = new byte[4] { 0x52, 0x43, 0x4F, 0x46 };
                 private static byte[] ngCXML = new byte[8] { 0x52, 0x43, 0x53, 0x46, 0x10, 0x01, 0x00, 0x00, };
                 private static byte[] vagMagic = new byte[8] { 0x56, 0x41, 0x47, 0x70, 0x00, 0x02, 0x00, 0x01, };
                 private static byte[] ddsMagic = new byte[4] { 0x44, 0x44, 0x53, 0x20, };
@@ -2883,43 +2884,30 @@ namespace PS4_Tools
             try
             {
                 // Reading Header
-                byte[] magic = new byte[8];
-                byte[] offset = new byte[4];
+                byte[] magic = new byte[4];
+                byte[] Tree_Table_Offset = new byte[4];
                 string outFile = "notDefined";
                 using (BinaryReader br = new BinaryReader(new FileStream(File, FileMode.Open, FileAccess.Read)))
                 {
+                    //Read the header with all needed offsets
+                    rco.Header = ReadHeader(br);
+                    //Tree Table
+                    //Array reversed
+                    //Start Offset 
+                    br.BaseStream.Position = (long)rco.Header.Tree_Table_Offset;//go to start of table
+                    var treetable= br.ReadBytes((int)rco.Header.Tree_Table_Size);//read size
 
-
-                    // Check Magic
-                    //Console.Write("Checking Header....");
-                    br.Read(magic, 0, 8);
-
-                    if (!CompareBytes(magic, ngrcoMagic))
-                    {
-                        //Console.WriteLine("ERROR: That is not a valid NextGen RCO!\nExiting now...");
-                        //Environment.Exit(0);
-                        throw new Exception("ERROR: That is not a valid NextGen RCO!");
-                    }
-
-                    //Console.Write("Magic OK!\nThat's a NextGen RCO :)\n");
-                    //create folder in which to extact 
-                    //if it exists delete the dam thing xD
-                    //if (Directory.Exists(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File)))
-                    //{
-                    //    PS4_Tools.DeleteDirectory(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File));
-                    //}
-                    //Directory.CreateDirectory(PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File));
-
-                    //baseDir = PS4_Tools.AppCommonPath() + Path.GetFileNameWithoutExtension(File) + @"\";
+                    //now reverse 
+                    Array.Reverse(treetable);
 
                     // Get Data Table Offset and Length
                     //Console.Write("Reading Offset and Length of Data Table...");
-                    offset = new byte[4];
+                    Tree_Table_Offset = new byte[4];
                     byte[] eof = new byte[4];
                     br.BaseStream.Seek(0x48, SeekOrigin.Begin);
-                    br.Read(offset, 0, 4);
+                    Tree_Table_Offset = br.ReadBytes(4);
                     br.Read(eof, 0, 4);
-                    Array.Reverse(offset);
+                    Array.Reverse(Tree_Table_Offset);
                     Array.Reverse(eof);
                     //Console.Write("done!\n");
                     //Console.WriteLine("Readed Hex value of Offset: 0x" + BitConverter.ToString(offset).Replace("-", ""));
@@ -2928,7 +2916,7 @@ namespace PS4_Tools
                     // Check for zlib Header '0x78DA' (compression level=9) or VAG & PNG files and write to file
 
                     end = Convert.ToInt32(BitConverter.ToString(eof).Replace("-", ""), 16);
-                    count = Convert.ToInt32(BitConverter.ToString(offset).Replace("-", ""), 16);
+                    count = Convert.ToInt32(BitConverter.ToString(Tree_Table_Offset).Replace("-", ""), 16);
                     //Console.WriteLine("Offset to start from: " + count + " bytes");
                     //Console.WriteLine("Size to Dump: " + end + " bytes");
                     //Console.WriteLine("Searching for ZLib Compressed (Vita) or Non-Compressed (PS4) Files...");
@@ -3811,10 +3799,120 @@ namespace PS4_Tools
 
         //stil working on the rco file archive type
 
+        public struct RCOFileHeader
+        {
+            public byte[] MAGIC;
+            public byte[] Version;
+            public ulong Tree_Table_Offset;
+            public ulong Tree_Table_Size;
+            public ulong ID_String_Table_Offset;
+            public ulong ID_String_Table_Size;
+            public ulong ID_Integer_Table_Offset;
+            public ulong ID_Intiger_Table_Size;
+            public ulong String_Table_Offset;
+            public ulong String_Table_Size;
+            public uint Overlapping;
+            public uint empty; //???
+            public ulong Styles_ID_Intiger_Table_Offset;
+            public ulong Styles_ID_Initger_Table_Size;
+            public ulong Intiger_Array_Table_Offset;
+            public ulong Intiger_Array_Table_Size;
+            public ulong Float_Array_Table_Offset;
+            public ulong Float_Array_Table_Size;
+            public ulong File_Table_Offset;
+            public ulong File_Table_Size;
+
+            public List<string> ToList()
+            {
+                List<string> items = new List<string>();
+
+                items.Add("MAGIC:" + Encoding.ASCII.GetString(MAGIC));
+                items.Add("Version:" + Util.Utils.byteArrayToHexString(Version));
+                items.Add("Tree Table Offset:" + Tree_Table_Offset.ToString("X"));
+                items.Add("Tree Table Size:" + Tree_Table_Size.ToString("X"));
+                items.Add("ID_String_Table_Offset:" + ID_String_Table_Offset.ToString("X"));
+                items.Add("ID_String_Table_Size:" + ID_String_Table_Size.ToString("X"));
+                items.Add("ID_Integer_Table_Offset:" + ID_Integer_Table_Offset.ToString("X"));
+                items.Add("ID_Intiger_Table_Size:" + ID_Intiger_Table_Size.ToString("X"));
+                items.Add("String_Table_Offset:" + String_Table_Offset.ToString("X"));
+                items.Add("String_Table_Size:" + String_Table_Size.ToString("X"));
+                items.Add("Overlapping:" + Overlapping.ToString("X"));
+                items.Add("empty:" + empty.ToString("X"));
+                items.Add("Styles_ID_Intiger_Table_Offset:" + Styles_ID_Intiger_Table_Offset.ToString("X"));
+                items.Add("Styles_ID_Initger_Table_Size:" + Styles_ID_Initger_Table_Size.ToString("X"));
+                items.Add("Intiger_Array_Table_Offset:" + Intiger_Array_Table_Offset.ToString("X"));
+                items.Add("Intiger_Array_Table_Size:" + Intiger_Array_Table_Size.ToString("X"));
+                items.Add("Float_Array_Table_Offset:" + Float_Array_Table_Offset.ToString("X"));
+                items.Add("Float_Array_Table_Size:" + Float_Array_Table_Size.ToString("X"));
+                items.Add("File_Table_Offset:" + File_Table_Offset.ToString("X"));
+                items.Add("File_Table_Size:" + File_Table_Size.ToString("X"));
+                return items;
+            }
+            
+        }
+
+        public struct Tree_Table
+        {
+            public byte[] Root_Element; //size of 4 (offset within String Table in this case <resource>
+            public uint Attribute_Counter;
+            public uint Parent;
+            public uint Prevoius_Borhter;
+            public uint Next_Brother;
+            
+
+        }
+
+        private static RCOFileHeader ReadHeader(BinaryReader br)
+        {
+            // Check Magic
+            //Console.Write("Checking Header....");
+            RCOFileHeader rco = new RCOFileHeader();
+            byte[] magic = br.ReadBytes(4);//just want the header not the version incase sony changes this down the line
+
+
+
+            if (!Util.Utils.CompareBytes(magic, rcoMagic))
+            {
+                //Console.WriteLine("ERROR: That is not a valid NextGen RCO!\nExiting now...");
+                //Environment.Exit(0);
+                throw new Exception("ERROR: That is not a valid NextGen RCO!");
+            }
+            rco.MAGIC = magic;//else we set the magic
+
+            //read version information 
+            rco.Version = br.ReadBytes(4);
+            Array.Reverse(rco.Version);//just reverse the array so its human readable
+
+            rco.Tree_Table_Offset = br.ReadUInt32();
+            rco.Tree_Table_Size = br.ReadUInt32();
+            rco.ID_String_Table_Offset = br.ReadUInt32();
+            rco.ID_String_Table_Size = br.ReadUInt32();
+            rco.ID_Integer_Table_Offset = br.ReadUInt32();
+            rco.ID_Intiger_Table_Size = br.ReadUInt32();
+            rco.String_Table_Offset = br.ReadUInt32();
+            rco.String_Table_Size = br.ReadUInt32();
+            rco.Overlapping = br.ReadUInt32();
+            rco.empty = br.ReadUInt32();
+            rco.Styles_ID_Intiger_Table_Offset = br.ReadUInt32();
+            rco.Styles_ID_Initger_Table_Size = br.ReadUInt32();
+            rco.Intiger_Array_Table_Offset = br.ReadUInt32();
+            rco.Intiger_Array_Table_Size = br.ReadUInt32();
+            rco.Float_Array_Table_Offset = br.ReadUInt32();
+            rco.Float_Array_Table_Size = br.ReadUInt32();
+            rco.File_Table_Offset = br.ReadUInt32();
+            rco.File_Table_Size = br.ReadUInt32();
+
+            return rco;
+        }
+
         public struct RCOFile
         {
-            public byte[] MAGIC;/*Magic needs to be validated*/
-            public byte[] Offset;/*Offset information*/
+            internal byte[] MAGIC;/*Magic needs to be validated*/
+            internal byte[] Version;/*Version	0x04	0x04	00 00 01 10*	CXML version '1.10'*/
+            internal byte[] Offset;/*Offset information*/
+
+            public RCOFileHeader Header;
+
             public FileTable FileTable;
         }
 
@@ -3870,246 +3968,32 @@ namespace PS4_Tools
     /// </summary>
     public class SaveData
     {
-      
+
         #region << Load Save File Class>>
 
-        
-
-                /// <summary>
-                /// Load a Save File
-                /// </summary>
-                /// <param name="filelocation">Save File Location on disk</param>
-                /// <param name="Sealedkeylocation">Selaed Key Location On Disk</param>
-                public static void LoadSaveData(string filelocation, string Sealedkeylocation)
-                {
-                    /*Load the sealed key from the file*/
-                    Licensing.Sealedkey sldkey = Licensing.LoadSealedKey(Sealedkeylocation);
-                    // Declare CspParmeters and RsaCryptoServiceProvider
-                    // objects with global scope of your Form class.
-                    CspParameters cspp = new CspParameters();
-                    RSACryptoServiceProvider rsa;
-
-                    // Key container name for
-                    // private/public key value pair.
-                    const string keyName = "SonyKey";
-
-                    //Create Keys
-                    //Label label1 = new Label();
-                    // Stores a key pair in the key container.
-                    cspp.KeyContainerName = keyName;
-                    rsa = new RSACryptoServiceProvider(cspp);
-                    rsa.PersistKeyInCsp = true;
-                    if (rsa.PublicOnly == true)
-                        Console.WriteLine( "Key: " + cspp.KeyContainerName + " - Public Only");
-                    else
-                        Console.WriteLine("Key: " + cspp.KeyContainerName + " - Full Key Pair");
-
-                    if (rsa == null)
-                        throw new Exception("Key not set.");
-                    else
-                    {
-                        // Display a dialog box to select the encrypted file.
-
-                        string fName = filelocation;
-                        if (fName != null)
-                        {
-                            FileInfo fi = new FileInfo(fName);
-                            string name = fi.Name;
-                            // Create instance of Rijndael for
-                            // symetric decryption of the data.
-                            RijndaelManaged rjndl = new RijndaelManaged();
-                           // rjndl.KeySize = 256;
-                           // rjndl.BlockSize = 256;
-                            rjndl.Mode = CipherMode.CFB;
-
-                            // Use FileStream objects to read the encrypted
-                            // file (inFs) and save the decrypted file (outFs).
-                            using (FileStream inFs = new FileStream(fName, FileMode.Open))
-                            {
-
-                                // Create the byte arrays for
-                                // the encrypted Rijndael key,
-                                // the IV, and the cipher text.
-                                byte[] KeyEncrypted = sldkey.KEY;
-                                byte[] IV = sldkey.IV;
-
-                                /*Read Save File Header*/
-                                inFs.Seek(0, SeekOrigin.Begin);
-                                byte[] HeaderSave = new byte[116];/*Header info*/
-                                /*Encrypted Block 1*/
-                                byte[] Block1 = new byte[49154];
-                                byte[] Block2 = new byte[9501855];/*This is all testing*/
-
-                                inFs.Read(HeaderSave, 0, 116);
-                                inFs.Seek(117, SeekOrigin.Begin);
-                                inFs.Read(Block1, 0, Block1.Length);
-                               inFs.Seek(Block1.Length + 1, SeekOrigin.Begin);
-                                inFs.Read(Block2, 0, Block2.Length);
-                        
-                                /*The Rest is save info*/
-
-                                // Use RSACryptoServiceProvider
-                                // to decrypt the Rijndael key.
-                                //byte[] KeyDecrypted = rsa.Decrypt(KeyEncrypted, false);
-                                /*If im not mistaken the ps4 has already got this key decrypted for us*/
-
-                                // Decrypt the key.
-                                ICryptoTransform transform = rjndl.CreateDecryptor(KeyEncrypted, IV);
-
-                                // Decrypt the cipher text from
-                                // from the FileSteam of the encrypted
-                                // file (inFs) into the FileStream
-                                // for the decrypted file (outFs).
-
-                                string outFile = fName + ".dec";
-                                using (FileStream outFs = new FileStream(outFile, FileMode.Create))
-                                {
-
-                                    int count = 0;
-                                    int offset = 0;
-
-                                    // blockSizeBytes can be any arbitrary size.
-                                    int blockSizeBytes = rjndl.BlockSize / 8;
-                                    byte[] data = new byte[blockSizeBytes];
 
 
-                                    // By decrypting a chunk a time,
-                                    // you can save memory and
-                                    // accommodate large files.
+        /// <summary>
+        /// Load a Save File
+        /// </summary>
+        /// <param name="filelocation">Save File Location on disk</param>
+        /// <param name="Sealedkeylocation">Selaed Key Location On Disk</param>
+        public static void LoadSaveData(string filelocation, string Sealedkeylocation)
+        {
+            /*Load the sealed key from the file*/
+            Licensing.Sealedkey sldkey = Licensing.LoadSealedKey(Sealedkeylocation);
 
-                                    // Start at the beginning
-                                    // of the cipher text.
-                                    //inFs.Seek(startC, SeekOrigin.Begin);
-                                    using (CryptoStream outStreamDecrypted = new CryptoStream(outFs, transform, CryptoStreamMode.Write))
-                                    {
-                                        do
-                                        {
-                                            count = Block1[blockSizeBytes];
-                                            offset += count;
-                                            outStreamDecrypted.Write(data, 0, count);
-
-                                        }
-                                        while (count > 0);
-
-                                        outStreamDecrypted.FlushFinalBlock();
-                                        outStreamDecrypted.Close();
-                                    }
-                                    outFs.Close();
-                                }
-                                inFs.Close();
-                            }
-                        }
-                    }
-                }
+            Doit(Sealedkeylocation, filelocation, filelocation + "_Decrypt");
+        }
 
 
         #endregion << Load Save File Class>>
-        
-
-        /*CFW Propthet's Method This Method still relies on samu to be dumped*/
-        private static bool sceSblSsMemcmpConsttime(byte[] a, byte[] b, int len, int offsetA = 0, int offsetB = 0)
-        {
-            for (int i = 0; i < len; i++)
-            {
-                if (a[i + offsetA] != b[i + offsetB])
-                    return false;
-            }
-
-            return true;
-        }
-
-        private static bool sceSblSsMemcmpConsttime(byte[] a, string b, int len, int offsetA = 0)
-        {
-            return ASCIIEncoding.ASCII.GetString(a, offsetA, len) == b;
-        }
-
-         private static void sceSblSsMemset(byte[] buffer, byte val, int len)
-        {
-            for (int i = 0; i < len; i++)
-            {
-                buffer[i] = val;
-            }
-        }
-
-        private static void Sha256Hmac(byte[] sha256HmacResult, byte[] enc, int datalen, byte[] sha256hmacKey, int keylen)
-        {
-            using (HMACSHA256 hmac = new HMACSHA256(sha256hmacKey))
-            {
-                var result = hmac.ComputeHash(enc, 0, datalen);
-                Buffer.BlockCopy(result, 0, sha256HmacResult, 0, sha256HmacResult.Length);
-            }
-        }
-
-        private static long sceSblSsDecryptSealedKey(byte[] enc, byte[] dec)
-        {
-            long errorCode = -2146499562;
-
-            if (enc != null && dec != null)
-            {
-                errorCode = -2146499532;
-                if (sceSblSsMemcmpConsttime(enc, "pfsSKKey", 8))
-                {
-                    errorCode = -2146499538;
-                    byte[] sha256hmacKey = new byte[16];
-                    short keyVersion = (short)enc[8];
-                    Console.WriteLine("Usering Keyset Version {0}", keyVersion);
-                    var allKeybytes = File.ReadAllBytes(string.Format("savedatamasterhashkey{0}.bin", keyVersion));
-                    Buffer.BlockCopy(allKeybytes, 0, sha256hmacKey, 0, 16);
-
-                    byte[] sha256HmacResult = new byte[32];
-                    Sha256Hmac(sha256HmacResult, enc, 0x40, sha256hmacKey, 0x10);
-                    errorCode = -2146499531;
-                    if (sceSblSsMemcmpConsttime(sha256HmacResult, enc, 32, 0, 64))
-                    {
-                        Console.WriteLine("HMAC Check... Success!");
-                        byte[] iv = new byte[16];
-                        Buffer.BlockCopy(enc, 16, iv, 0, iv.Length);
-
-                        byte[] encryptedKey = new byte[32];
-                        Buffer.BlockCopy(enc, 32, encryptedKey, 0, 32);
-
-                        using (AesManaged aes = new AesManaged())
-                        {
-                            byte[] aesKey = new byte[16];
-                            allKeybytes = File.ReadAllBytes(string.Format("savedatamasterkey{0}.bin", keyVersion));
-                            Buffer.BlockCopy(allKeybytes, 0, aesKey, 0, 16);
-
-                            aes.Mode = CipherMode.CBC;
-                            aes.IV = iv;
-                            aes.KeySize = 128;
-                            aes.Key = aesKey;
-                            aes.Padding = PaddingMode.None;
-                            var stream = new MemoryStream();
-                            using (var decryptor = aes.CreateDecryptor())
-                            {
-                                using (var cryptoStream = new CryptoStream(stream, decryptor, CryptoStreamMode.Write))
-                                {
-                                    using (var writer = new BinaryWriter(cryptoStream))
-                                    {
-                                        writer.Write(encryptedKey);
-                                    }
-                                }
-                            }
-                            byte[] cipherBytes = stream.ToArray();
-                            Buffer.BlockCopy(cipherBytes, 0, dec, 0, 32);
-                        }
-                        errorCode = 0;
-                    }
-                    else
-                    {
-                        Console.WriteLine("HMAC Check... Failure!");
-                    }
-                }
-            }
-
-            return errorCode;
-        }
 
         public static void Doit(string SealedKey,string SaveFile,string FileDecrypt)
         {
             var bytes = File.ReadAllBytes(SealedKey);
             byte[] dec = new byte[32];
-            sceSblSsDecryptSealedKey(bytes, dec);
+            SCEUtil.sceSblSsDecryptSealedKey(bytes, dec);
 
             Console.WriteLine("Your PFS Key is {0}", BitConverter.ToString(dec).Replace("-", string.Empty));
 
@@ -4138,34 +4022,9 @@ namespace PS4_Tools
 
                 byte[] cipherBytes = stream.ToArray();
                 Console.WriteLine("PFS Save Content:");
-                Console.WriteLine(UTF8Encoding.UTF8.GetString(cipherBytes));
+                //Console.WriteLine(UTF8Encoding.UTF8.GetString(cipherBytes));
+                File.WriteAllBytes(FileDecrypt, cipherBytes);
             }
-
-            // TODO Reverse SAMU for Decryption of PFS File System
-            /*            using (AesManaged aes = new AesManaged())
-                        {
-                            aes.Mode = CipherMode.CBC;
-                            aes.IV = iv;
-                            aes.KeySize = 256;
-                            aes.Key = dec;
-                            aes.Padding = PaddingMode.None;
-                            var stream = new MemoryStream();
-                            using (var decryptor = aes.CreateDecryptor())
-                            {
-                                using (var cryptoStream = new CryptoStream(stream, decryptor, CryptoStreamMode.Write))
-                                {
-                                    using (var writer = new BinaryWriter(cryptoStream))
-                                    {
-                                        writer.Write(save);
-                                    }
-                                }
-                            }
-
-                            byte[] cipherBytes = stream.ToArray();
-                            Console.WriteLine("PFS Save Content:");
-                            Console.WriteLine(UTF8Encoding.UTF8.GetString(cipherBytes));
-                        }*/
-
             Console.ReadLine();
         }
     }
@@ -4176,9 +4035,6 @@ namespace PS4_Tools
     /// </summary>
     public class Trophy_File
     {
-
-
-
 
         /*SHA1*/
         private string SHA1;//SHA1 PlaceHolder
@@ -4488,6 +4344,38 @@ namespace PS4_Tools
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Reads a sealed trophy file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+
+        public byte[] SealedTrophy(byte[] file,byte[] SealedKey)
+        {
+            //first we need to decrypt the trophy 
+            //i think these keys should allow a decrypt
+            Licensing.Sealedkey keyload = Licensing.LoadSealedKey(SealedKey);
+            
+
+            var bytes = SealedKey;
+            byte[] dec = new byte[32];
+            //this should be how sony does it 
+            SCEUtil.sceSblSsDecryptSealedKey(bytes, dec);
+
+            Console.WriteLine("Your PFS Key is {0}", BitConverter.ToString(dec).Replace("-", string.Empty));
+
+            var save = file;
+            byte[] iv = new byte[16];
+            Buffer.BlockCopy(bytes, 16, iv, 0, iv.Length);
+
+            byte[] decryptionkey = PS4PkgUtil.DecryptAes(PS4Keys.KernelKeys.SealedKey.Keyset1.Key, keyload.IV, keyload.KEY);
+            Console.WriteLine("Your PFS Key is {0}", BitConverter.ToString(decryptionkey).Replace("-", string.Empty));
+            return PS4PkgUtil.DecryptAes(keyload.KEY, keyload.IV, file);
+
+
+            return null;
         }
 
         /// <summary>
@@ -6076,8 +5964,34 @@ namespace PS4_Tools
                     }
                 }       
 
+                public string Content_ID
+                {
+                    get
+                    {
+                        return Header.pkg_content_id;
+                    }
+                }
+
+                public string Size
+                {
+                    get
+                    {
+                        return Util.Utils.GetHumanReadable(Header.pkg_size);
+                    }
+                }
+
+
+                public string BuildDate
+                {
+                    get
+                    {
+                        return Util.Utils.FromUnixTime(Header.pkg_version_date).ToString();
+                    }
+                }           
                 
             }
+
+
 
 
             public class PS4_Struct
@@ -6188,41 +6102,9 @@ namespace PS4_Tools
                 public byte[] digest_body_digest;//[0x20];  // 0x160 - sha256 digest for main table
             }
 
-            public class Proctected_PKG
-            {
-                /*Param.SFO*/
-                public Param_SFO.PARAM_SFO Param { get; set; }
-                /*Trophy File*/
-                public Trophy_File Trophy_File { get; set; }
-                /*PKG Image*/
-                public byte[] Image { get; set; }
-                /// <summary>
-                /// PS4 Icon Image
-                /// </summary>
-                public byte[] Icon { get; set; }
-
-                /*PKG State (Fake ? Offcial */
-
-                public PKG_State PKGState { get; set; }
-
-                public PKGType PKG_Type
-                {
-                    get
-                    {
-                        return GetPkgType(Param.Category);
-                        //return PKGType.Unknown;
-                    }
-                }
-
-                public string PS4_Title
-                {
-                    get
-                    {
-                        return Param.Title;
-                    }
-                }
-            }
-
+            /// <summary>
+            /// Just to match PKG Magic
+            /// </summary>
             private static byte[] PKG_Magic = new byte[]{ 0x7F, 0x43, 0x4E, 0x54 };
 
             /// <summary>
@@ -6232,181 +6114,9 @@ namespace PS4_Tools
             /// <returns>PKG With Unprotected_PKG Structure</returns>
             public static Unprotected_PKG Read_PKG(string pkgfile)
             {
-                Unprotected_PKG pkgreturn = new Unprotected_PKG();
-                m_loaded = false;
-                sfo_byte = null;
-                icon_byte = null;
-                pic_byte = null;
-                trp_byte = null;
-                image_byte = null;
-                
-                if (!File.Exists(pkgfile))
-                {
-                    throw new Exception("File not found!");
-                }
-                List<Names> list = new List<Names>();
-
-                //doing a bit more documentation for users so rewriting items 
-                //byte is 00 70 61 72 61 6D 2E 73 66 6F in every pkg file ever (well if it has a sfo)
-                byte[] param_sfo = new byte[]
-                {
-                    0,
-                    112,
-                    97,
-                    114,
-                    97,
-                    109,
-                    46,
-                    115,
-                    102,
-                    111,
-                    0
-                };
-                StringBuilder stringBuilder = new StringBuilder();
-                using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(pkgfile)))
-                {
-                    /*Check PS4 File Header*/
-                    Byte[] PKGFileHeader = binaryReader.ReadBytes(4);
-                    if (!Util.Utils.CompareBytes(PKGFileHeader, PKG_Magic))/*If Files Match*/
-                    {
-                        //fail
-                        /*Lets be Honnest id actually want a universal solution ps3/psp2/psp pkg's all in one spot 
-                         This will also be used in my other project*/
-
-                        throw new Exception("This is not a valid ps4 pkg");
-                    }
-
-                    binaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
-                    pkgreturn.Header = ReadHeader(binaryReader);
-                    PS4_Struct ps4struct = pkgreturn.Header;
-
-                    binaryReader.BaseStream.Seek(9216, SeekOrigin.Begin);//go to a specific offset
-                    byte[] data = PS4PkgUtil.Decrypt(binaryReader.ReadBytes(256));//simple decrypt
-
-
-                    binaryReader.BaseStream.Seek(ps4struct.pkg_table_offset, SeekOrigin.Begin);
-
-                    //This came from Red-EyeX32
-                    //made some adjustments
-
-                    PS4PkgUtil.PackageEntry[] entry = new PS4PkgUtil.PackageEntry[ps4struct.pkg_entry_count];
-                    for (int i = 0; i < ps4struct.pkg_entry_count; ++i)
-                    {
-                        entry[i].id = Util.Utils.ReadUInt32(binaryReader);
-                        entry[i].filename_offset = Util.Utils.ReadUInt32(binaryReader);
-                        entry[i].flags1 = Util.Utils.ReadUInt32(binaryReader);
-                        entry[i].flags2 = Util.Utils.ReadUInt32(binaryReader);
-                        entry[i].offset = Util.Utils.ReadUInt32(binaryReader);
-                        entry[i].size = Util.Utils.ReadUInt32(binaryReader);
-                        entry[i].padding = binaryReader.ReadBytes(8);
-
-                        entry[i].key_index = ((entry[i].flags2 & 0xF000) >> 12);
-                        entry[i].is_encrypted = ((entry[i].flags1 & 0x80000000) != 0) ? true : false;
-                    }
-
-                    pkgreturn.Entires = entry;
-                    string temp = Encoding.ASCII.GetString(data);
-
-                    binaryReader.BaseStream.Seek(0x077, SeekOrigin.Begin);
-                    ushort pkgtype = Util.Utils.ReadUInt16(binaryReader);//custom read offset 119 this will tll us if its debug or retail
-
-                    //from the offset table we need to read the name
-
-                    for (int i = 0; i < ps4struct.pkg_entry_count; i++)
-                    {
-                        try
-                        {
-                            bool is_encrypted = entry[i].is_encrypted;
-                            if (is_encrypted)
-                            {
-                                byte[] entry_data = new byte[64];
-                                Array.Copy(entry[i].ToArray(), entry_data, 32);
-                                Array.Copy(data, 0, entry_data, 32, 32);
-                                byte[] iv = new byte[16];
-                                byte[] key = new byte[16];
-                                byte[] hash = PS4PkgUtil.Sha256(entry_data, 0, entry_data.Length);
-                                Array.Copy(hash, 0, iv, 0, 16);
-                                Array.Copy(hash, 16, key, 0, 16);
-                                binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
-                                byte[] file_data = PS4PkgUtil.DecryptAes(key, iv, binaryReader.ReadBytes((int)entry[i].size));
-                                entry[i].file_data = file_data;
-                                // File.WriteAllBytes(pkgfile + "_" + entry[j].CustomName, file_data);
-                            }
-                            else
-                            {
-                                //else it should just be a simple read
-                                binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
-                                byte[] file_data = binaryReader.ReadBytes((int)entry[i].size);
-                                entry[i].file_data = file_data;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-                    }
-
-
-                    for (int i = 0; i < entry.Length; i++)
-                    {
-                        if (entry[i].CustomName == PS4PkgUtil.EntryId.PARAM_SFO.ToString())
-                        {
-                            //we have param
-                            sfo_byte = entry[i].file_data;
-                        }
-                        if (entry[i].CustomName == PS4PkgUtil.EntryId.ICON0_PNG.ToString())
-                        {
-                            icon_byte = entry[i].file_data;
-                        }
-                        if (entry[i].CustomName == PS4PkgUtil.EntryId.PIC0_PNG.ToString())
-                        {
-                            image_byte = entry[i].file_data;
-                        }
-
-                        if (entry[i].CustomName == PS4PkgUtil.EntryId.TROPHY__TROPHY00_TRP.ToString())
-                        {
-                            trp_byte = entry[i].file_data;
-                        }
-                    }
-
-                    if (sfo_byte != null && sfo_byte.Length > 0)
-                    {
-                        Param_SFO.PARAM_SFO psfo = new Param_SFO.PARAM_SFO(sfo_byte);
-                        pkgreturn.Param = psfo;
-                    }
-                    if (icon_byte != null && icon_byte.Length > 0)
-                    {
-                        pkgreturn.Icon = icon_byte;
-                    }
-                    else if (trp_byte != null && trp_byte.Length > 0)
-                    {
-                        Trophy_File trpreader = new Trophy_File();
-                        trpreader.Load(trp_byte);
-                        icon_byte = trpreader.ExtractFileToMemory("ICON0.PNG");
-                        if (icon_byte != null && icon_byte.Length > 0)
-                        {
-                            pkgreturn.Icon = icon_byte;
-                        }
-                    }
-                    if (image_byte != null && image_byte.Length > 0)
-                    {
-                        pkgreturn.Image = image_byte;
-                    }
-
-                    if (trp_byte != null && trp_byte.Length > 0)
-                    {
-                        Trophy_File trpreader = new Trophy_File();
-                        //trpreader.Load(trp_byte);
-                        pkgreturn.Trophy_File = trpreader.Load(trp_byte);
-                    }
-                    pkgreturn.PKGState = (pkgtype == 6666) ? PKG_State.Fake : ((pkgtype == 7747) ? PKG_State.Officail_DP : PKG_State.Official);
-
-                }
-                m_loaded = true;
-                return pkgreturn;
+                FileStream fs = new FileStream(pkgfile, FileMode.Open, FileAccess.Read);
+                return Read_PKG(fs);
             }
-
-
 
             private static PS4_Struct ReadHeader(BinaryReader binaryReader)
             {
@@ -6522,6 +6232,11 @@ namespace PS4_Tools
                         entry[i].is_encrypted = ((entry[i].flags1 & 0x80000000) != 0) ? true : false;
                     }
 
+                    //create extacted directory
+                    if(!Directory.Exists(Path.GetDirectoryName(pkgfile) + "\\Extracted\\"))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(pkgfile) + "\\Extracted\\");
+                    }
 
                     for (int i = 0; i < ps4struct.pkg_entry_count; i++)
                     {
@@ -6530,18 +6245,39 @@ namespace PS4_Tools
                             bool is_encrypted = entry[i].is_encrypted;
                             if (is_encrypted)
                             {
-                                byte[] entry_data = new byte[64];
-                                Array.Copy(entry[i].ToArray(), entry_data, 32);
-                                Array.Copy(data, 0, entry_data, 32, 32);
-                                byte[] iv = new byte[16];
-                                byte[] key = new byte[16];
-                                byte[] hash = PS4PkgUtil.Sha256(entry_data, 0, entry_data.Length);
-                                Array.Copy(hash, 0, iv, 0, 16);
-                                Array.Copy(hash, 16, key, 0, 16);
-                                binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
-                                byte[] file_data = PS4PkgUtil.DecryptAes(key, iv, binaryReader.ReadBytes((int)entry[i].size));
-                                entry[i].file_data = file_data;
-                                 File.WriteAllBytes(pkgfile + "_" + entry[i].CustomName, file_data);
+                                //testing image key stuff here
+                                if (entry[i].CustomName == PS4PkgUtil.EntryId.IMAGE_KEY.ToString())
+                                {
+                                    //var file_data = PS4PkgUtil.Decrypt(entry[i].file_data,entry[i].);
+                                    //string CustomName = entry[i].CustomName;
+                                    //var lastComma = CustomName.LastIndexOf('_');
+                                    //if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
+
+                                    //File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
+                                }
+                                else
+                                {
+
+                                    /*byte[] EnteryHolder = entry[i].ToArray();
+                                    byte[] entry_data = new byte[EnteryHolder.Length];*/
+                                    byte[] entry_data = new byte[64];
+                                    Array.Copy(entry[i].ToArray(), entry_data, 32);
+                                    Array.Copy(data, 0, entry_data, 32, 32);
+                                    byte[] iv = new byte[16];
+                                    byte[] key = new byte[16];
+                                    byte[] hash = PS4PkgUtil.Sha256(entry_data, 0, entry_data.Length);
+                                    Array.Copy(hash, 0, iv, 0, 16);
+                                    Array.Copy(hash, 16, key, 0, 16);
+                                    binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
+                                    byte[] file_data = PS4PkgUtil.DecryptAes(key, iv, binaryReader.ReadBytes((int)entry[i].size));
+                                    entry[i].file_data = file_data;
+                                    //File.WriteAllBytes(pkgfile + "_" + entry[i].CustomName, file_data);
+                                    string CustomName = entry[i].CustomName;
+                                    var lastComma = CustomName.LastIndexOf('_');
+                                    if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
+
+                                    File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
+                                }
                             }
                             else
                             {
@@ -6549,7 +6285,11 @@ namespace PS4_Tools
                                 binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
                                 byte[] file_data = binaryReader.ReadBytes((int)entry[i].size);
                                 entry[i].file_data = file_data;
-                                File.WriteAllBytes(pkgfile + "_" + entry[i].CustomName, file_data);
+                                string CustomName = entry[i].CustomName;
+                                var lastComma = CustomName.LastIndexOf('_');
+                                if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
+
+                                File.WriteAllBytes(Path.GetDirectoryName(pkgfile)+"\\Extracted\\"+ CustomName, file_data);
                             }
                         }
                         catch (Exception ex)
@@ -6569,28 +6309,14 @@ namespace PS4_Tools
             public static Unprotected_PKG Read_PKG(Stream pkgfile)
             {
                 Unprotected_PKG pkgreturn = new Unprotected_PKG();
+
                 m_loaded = false;
                 sfo_byte = null;
                 icon_byte = null;
                 pic_byte = null;
                 trp_byte = null;
+                image_byte = null;
 
-                List<Names> list = new List<Names>();
-                byte[] array = new byte[]
-                {
-                    0,
-                    112,
-                    97,
-                    114,
-                    97,
-                    109,
-                    46,
-                    115,
-                    102,
-                    111,
-                    0
-                };
-                StringBuilder stringBuilder = new StringBuilder();
                 using (BinaryReader binaryReader = new BinaryReader(pkgfile))
                 {
                     /*Check PS4 File Header*/
@@ -6598,176 +6324,141 @@ namespace PS4_Tools
                     if (!Util.Utils.CompareBytes(PKGFileHeader, PKG_Magic))/*If Files Match*/
                     {
                         //fail
+                        /*Lets be Honnest id actually want a universal solution ps3/psp2/psp pkg's all in one spot 
+                         This will also be used in my other project*/
+
                         throw new Exception("This is not a valid ps4 pkg");
                     }
-                    binaryReader.BaseStream.Seek(24L, SeekOrigin.Begin);
-                    uint num = Util.Utils.ReadUInt32(binaryReader);
-                    uint num2 = Util.Utils.ReadUInt32(binaryReader);
-                    binaryReader.BaseStream.Seek(44L, SeekOrigin.Begin);
-                    uint num3 = Util.Utils.ReadUInt32(binaryReader);
-                    binaryReader.BaseStream.Seek(64L, SeekOrigin.Begin);
-                    string text = Util.Utils.ReadASCIIString(binaryReader, 36);
-                    binaryReader.BaseStream.Seek(119L, SeekOrigin.Begin);
-                    ushort num4 = Util.Utils.ReadUInt16(binaryReader);
-                    Dictionary<long, long> dictionary;
-                    uint num5;
-                    uint num6;
-                    checked
+
+                    binaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
+                    pkgreturn.Header = ReadHeader(binaryReader);
+                    PS4_Struct ps4struct = pkgreturn.Header;
+
+                    binaryReader.BaseStream.Seek(9216, SeekOrigin.Begin);//go to a specific offset
+                    byte[] data = PS4PkgUtil.Decrypt(binaryReader.ReadBytes(256));//simple decrypt
+
+
+                    binaryReader.BaseStream.Seek(ps4struct.pkg_table_offset, SeekOrigin.Begin);
+
+                    //This came from Red-EyeX32
+                    //made some adjustments
+
+                    PS4PkgUtil.PackageEntry[] entry = new PS4PkgUtil.PackageEntry[ps4struct.pkg_entry_count];
+                    for (int i = 0; i < ps4struct.pkg_entry_count; ++i)
                     {
-                        binaryReader.BaseStream.Seek((long)(unchecked((ulong)num) + 176UL), SeekOrigin.Begin);
-                        dictionary = new Dictionary<long, long>();
-                        num5 = Util.Utils.ReadUInt32(binaryReader);
-                        num6 = Util.Utils.ReadUInt32(binaryReader);
-                        binaryReader.BaseStream.Seek(binaryReader.BaseStream.Position + 24L, SeekOrigin.Begin);
+                        entry[i].id = Util.Utils.ReadUInt32(binaryReader);
+                        entry[i].filename_offset = Util.Utils.ReadUInt32(binaryReader);
+                        entry[i].flags1 = Util.Utils.ReadUInt32(binaryReader);
+                        entry[i].flags2 = Util.Utils.ReadUInt32(binaryReader);
+                        entry[i].offset = Util.Utils.ReadUInt32(binaryReader);
+                        entry[i].size = Util.Utils.ReadUInt32(binaryReader);
+                        entry[i].padding = binaryReader.ReadBytes(8);
+
+                        entry[i].key_index = ((entry[i].flags2 & 0xF000) >> 12);
+                        entry[i].is_encrypted = ((entry[i].flags1 & 0x80000000) != 0) ? true : false;
                     }
-                    do
+
+                    pkgreturn.Entires = entry;
+                    string temp = Encoding.ASCII.GetString(data);
+
+                    binaryReader.BaseStream.Seek(0x077, SeekOrigin.Begin);
+                    ushort pkgtype = Util.Utils.ReadUInt16(binaryReader);//custom read offset 119 this will tll us if its debug or retail
+
+                    //from the offset table we need to read the name
+
+                    for (int i = 0; i < ps4struct.pkg_entry_count; i++)
                     {
-                        dictionary.Add((long)((ulong)num5), (long)((ulong)num6));
-                        num5 = Util.Utils.ReadUInt32(binaryReader);
-                        num6 = Util.Utils.ReadUInt32(binaryReader);
-                        binaryReader.BaseStream.Seek(checked(binaryReader.BaseStream.Position + 24L), SeekOrigin.Begin);
+                        try
+                        {
+                            bool is_encrypted = entry[i].is_encrypted;
+                            if (is_encrypted)
+                            {
+                                byte[] entry_data = new byte[64];
+                                Array.Copy(entry[i].ToArray(), entry_data, 32);
+                                Array.Copy(data, 0, entry_data, 32, 32);
+                                byte[] iv = new byte[16];
+                                byte[] key = new byte[16];
+                                byte[] hash = PS4PkgUtil.Sha256(entry_data, 0, entry_data.Length);
+                                Array.Copy(hash, 0, iv, 0, 16);
+                                Array.Copy(hash, 16, key, 0, 16);
+                                binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
+                                byte[] file_data = PS4PkgUtil.DecryptAes(key, iv, binaryReader.ReadBytes((int)entry[i].size));
+                                entry[i].file_data = file_data;
+                                // File.WriteAllBytes(pkgfile + "_" + entry[j].CustomName, file_data);
+                            }
+                            else
+                            {
+                                //else it should just be a simple read
+                                binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
+                                byte[] file_data = binaryReader.ReadBytes((int)entry[i].size);
+                                entry[i].file_data = file_data;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
                     }
-                    while ((ulong)(checked(num5 + num6)) > 0UL);
-                    checked
+
+
+                    for (int i = 0; i < entry.Length; i++)
                     {
-                        int num8 = 0;
-                        try
+                        if (entry[i].CustomName == PS4PkgUtil.EntryId.PARAM_SFO.ToString())
                         {
-                            foreach (KeyValuePair<long, long> keyValuePair in dictionary)
-                            {
-                                try
-                                {
-                                    binaryReader.BaseStream.Seek(keyValuePair.Key, SeekOrigin.Begin);
-                                    uint num7 = binaryReader.ReadUInt32();
-                                    binaryReader.BaseStream.Seek(keyValuePair.Key, SeekOrigin.Begin);
-                                    if (unchecked((ulong)num7) == 1179865088UL && sfo_byte == null)
-                                    {
-                                        sfo_byte = Util.Utils.ReadByte(binaryReader, (int)keyValuePair.Value);
-                                        break;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                                num8++;
-                            }
+                            //we have param
+                            sfo_byte = entry[i].file_data;
                         }
-                        finally
+                        if (entry[i].CustomName == PS4PkgUtil.EntryId.ICON0_PNG.ToString())
                         {
-                            Dictionary<long, long>.Enumerator enumerator2 = new Dictionary<long, long>.Enumerator();
-                            ((IDisposable)enumerator2).Dispose();
+                            icon_byte = entry[i].file_data;
                         }
-                        try
+                        if (entry[i].CustomName == PS4PkgUtil.EntryId.PIC0_PNG.ToString())
                         {
-                            try
-                            {
-                                foreach (KeyValuePair<long, long> keyValuePair2 in dictionary)
-                                {
-                                    binaryReader.BaseStream.Seek(keyValuePair2.Key, SeekOrigin.Begin);
-                                    if (Util.Utils.Contain(binaryReader.ReadBytes(array.Length), array))
-                                    {
-                                        binaryReader.BaseStream.Seek(keyValuePair2.Key, SeekOrigin.Begin);
-                                        byte[] array2 = binaryReader.ReadBytes((int)keyValuePair2.Value);
-                                        int num9 = 1;
-                                        int num10 = array2.Length - 1;
-                                        for (int i = num9; i <= num10; i++)
-                                        {
-                                            if (array2[i] == 0)
-                                            {
-                                                list.Add(new Names(list.Count, (ulong)dictionary.Keys.ElementAtOrDefault(num8), (ulong)dictionary.Values.ElementAtOrDefault(num8), stringBuilder.ToString()));
-                                                num8++;
-                                                stringBuilder = new StringBuilder();
-                                            }
-                                            stringBuilder.Append(Util.Utils.HexToString(Util.Utils.Hex(array2[i])));
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                            finally
-                            {
-                                Dictionary<long, long>.Enumerator enumerator3 = new Dictionary<long, long>.Enumerator();
-                                ((IDisposable)enumerator3).Dispose();
-                            }
+                            image_byte = entry[i].file_data;
                         }
-                        catch (Exception ex2)
+                        if (entry[i].CustomName == PS4PkgUtil.EntryId.PIC1_PNG.ToString())
                         {
+                            image_byte = entry[i].file_data;
                         }
-                        try
+
+                        if (entry[i].CustomName == PS4PkgUtil.EntryId.TROPHY__TROPHY00_TRP.ToString())
                         {
-                            foreach (Names names in list)
-                            {
-                                /*List Of names*/
-                            }
+                            trp_byte = entry[i].file_data;
                         }
-                        finally
-                        {
-                            List<Names>.Enumerator enumerator4 = new List<Names>.Enumerator();
-                            ((IDisposable)enumerator4).Dispose();
-                        }
-                        Names names2 = list.Find((Names b) => b.Name == "param.sfo");
-                        if (names2 != null)
-                        {
-                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
-                            sfo_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
-                        }
-                        names2 = list.Find((Names b) => b.Name == "icon0.png");
-                        if (names2 != null)
-                        {
-                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
-                            icon_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
-                        }
-                        else
-                        {
-                            names2 = list.Find((Names b) => b.Name == "icon1.png");
-                            if (names2 != null)
-                            {
-                                binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
-                                icon_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
-                            }
-                        }
-                        names2 = list.Find((Names b) => b.Name == "trophy/trophy00.trp");
-                        if (names2 != null)
-                        {
-                            binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
-                            trp_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
-                        }
-                        else
-                        {
-                            names2 = list.Find((Names b) => b.Name == "trophy/trophy01.trp");
-                            if (names2 != null)
-                            {
-                                binaryReader.BaseStream.Seek((long)names2.Offset, SeekOrigin.Begin);
-                                trp_byte = Util.Utils.ReadByte(binaryReader, (int)names2.Size);
-                            }
-                        }
-                        if (sfo_byte != null && sfo_byte.Length > 0)
-                        {
-                            Param_SFO.PARAM_SFO psfo = new Param_SFO.PARAM_SFO(sfo_byte);
-                            pkgreturn.Param = psfo;
-                        }
+                    }
+
+                    if (sfo_byte != null && sfo_byte.Length > 0)
+                    {
+                        Param_SFO.PARAM_SFO psfo = new Param_SFO.PARAM_SFO(sfo_byte);
+                        pkgreturn.Param = psfo;
+                    }
+                    if (icon_byte != null && icon_byte.Length > 0)
+                    {
+                        pkgreturn.Icon = icon_byte;
+                    }
+                    else if (trp_byte != null && trp_byte.Length > 0)
+                    {
+                        Trophy_File trpreader = new Trophy_File();
+                        trpreader.Load(trp_byte);
+                        icon_byte = trpreader.ExtractFileToMemory("ICON0.PNG");
                         if (icon_byte != null && icon_byte.Length > 0)
                         {
-                            pkgreturn.Image = icon_byte;
+                            pkgreturn.Icon = icon_byte;
                         }
-                        else if (trp_byte != null && trp_byte.Length > 0)
-                        {
-                            Trophy_File trpreader = new Trophy_File();
-                            trpreader.Load(trp_byte);
-                            icon_byte = trpreader.ExtractFileToMemory("ICON0.PNG");
-                            if (icon_byte != null && icon_byte.Length > 0)
-                            {
-                                pkgreturn.Image = icon_byte;
-                            }
-                        }
-                        if (trp_byte != null && trp_byte.Length > 0)
-                        {
-                            Trophy_File trpreader = new Trophy_File();
-                            //trpreader.Load(trp_byte);
-                            pkgreturn.Trophy_File = trpreader.Load(trp_byte);
-                        }
-                        pkgreturn.PKGState = (num4 == 6666) ? PKG_State.Fake : ((num4 == 7747) ? PKG_State.Officail_DP : PKG_State.Official);
                     }
+                    if (image_byte != null && image_byte.Length > 0)
+                    {
+                        pkgreturn.Image = image_byte;
+                    }
+
+                    if (trp_byte != null && trp_byte.Length > 0)
+                    {
+                        Trophy_File trpreader = new Trophy_File();
+                        //trpreader.Load(trp_byte);
+                        pkgreturn.Trophy_File = trpreader.Load(trp_byte);
+                    }
+                    pkgreturn.PKGState = (pkgtype == 6666) ? PKG_State.Fake : ((pkgtype == 7747) ? PKG_State.Officail_DP : PKG_State.Official);
+
                 }
                 m_loaded = true;
                 return pkgreturn;
@@ -7721,6 +7412,7 @@ namespace PS4_Tools
             PLAYGO,
             ATRAC9,
             UpdateFile,
+            RCOFile,
             Unkown,
         }
 
