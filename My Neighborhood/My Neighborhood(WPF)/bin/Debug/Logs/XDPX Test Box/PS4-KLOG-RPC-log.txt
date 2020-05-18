@@ -1,0 +1,169 @@
+[SceShellCore] Libc Heap Status: free 49%, in-use 3099.1 KB, trend +5.0 KB/min, peak 3476.7 KB, when 2912 [sec]
+[SceNetEv] PERIODIC_DOWNLOAD_INTERVAL_SEC={86400} contentId={8}, serviceName={netev}
+[SceNetEv] start DownloadFile, contentId={8}, serviceName={netev}
+[SceNetEv] ifModifiedSince={Mon, 25 Jan 2016 05:28:30 +0000}
+[SceNetEv] W:\Build\J02080965\vsh\shell\shell_core\netev\netev_http_client.cpp(132) Get: NETEV_ISOK::0x8041013d
+[SceNetEv] W:\Build\J02080965\vsh\shell\shell_core\netev\netev_manager.cpp(345) DownloadFile: NETEV_ISOK::0x8041013d
+[SceNetEv] W:\Build\J02080965\vsh\shell\shell_core\netev\netev_manager.cpp(493) Run: NETEV_CONTINUE::0x8041013d
+[SceNetEv] PERIODIC_CHECK_INTERVAL_SEC={480}
+[SceShellCore] Libc Heap Status: free 49%, in-use 3098.7 KB, trend +1.7 KB/min, peak 3476.7 KB, when 2943 [sec]
+[SceHidConfigService] PERIODIC_DOWNLOAD_INTERVAL_SEC={86400} elapsed={2945} isFirstTime={1}
+[SceHidConfigService] start DownloadFile
+[SceHidConfigService] DownloadFile : [RevokeList]
+[SceHidConfigService] ifModifiedSince={Fri, 09 Mar 2018 03:55:47 +0000}
+[SceHidConfigService] SERVER_URL={http://ps4-system.sec.np.dl.playstation.net/ps4-system/hid_config/np/v00/hid_config.env}
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\http_client.cpp(132) Get: HCS_ISOK::0x8041013d
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\hid_config_service_manager.cpp(241) DownloadFile: HCS_ISOK::0x8041013d
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\hid_config_service_manager.cpp(314) Run: HCS_CONTINUE::0x8041013d
+[SceHidConfigService] PERIODIC_CHECK_INTERVAL_SEC={420}
+[SceHidConfigService] PERIODIC_DOWNLOAD_INTERVAL_SEC={86400} elapsed={2945} isFirstTime={1}
+[SceHidConfigService] start DownloadFile
+[SceHidConfigService] VerifySignature : size: total(610), signature(256), message(354) [byte]
+[SceHidConfigService] VerifySignature : pass
+[SceHidConfigService] DownloadFile : [UsbPower]
+[SceHidConfigService] ifModifiedSince={Wed, 29 Jun 2016 12:34:35 +0000}
+[SceHidConfigService] SERVER_URL={http://ps4-system.sec.np.dl.playstation.net/ps4-system/hidusbpower/np/v00/hidusbpower.env}
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\http_client.cpp(132) Get: HCS_ISOK::0x8041013d
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\hid_config_service_manager.cpp(241) DownloadFile: HCS_ISOK::0x8041013d
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\hid_config_service_manager.cpp(314) Run: HCS_CONTINUE::0x8041013d
+[SceHidConfigService] PERIODIC_CHECK_INTERVAL_SEC={420}
+[Fakekit FTP] new client has joined 4
+[Fakekit FTP] Waiting for incoming connections...
+Client thread 4 started!
+Received 16 bytes from client number 4:
+	4> USER anonymous
+Received 16 bytes from client number 4:
+	4> PASS anonymous
+Received 6 bytes from client number 4:
+	4> FEAT
+Received 6 bytes from client number 4:
+	4> SYST
+[Fakekit] Connection accepted
+cl_nmb 4
+clientParams->cl_nmb 4
+[Fakekit] Thread created
+[Fakekit][client 4] RPC command notify() called
+[Fakekit-notify] Message Type Id: 222, Length: 43, Message: PS4 Connected to Neighborhood on 3deEchelon
+[Fakekit][client 4] RPC command fakekit_version() called
+ --> [INFO][Issued by Client 4] RPC command fakekit_version
+[Fakekit][client 4] RPC command getFirmware() called
+[Fakekit-getFirmware] Firmware: 5.05 [HEN]
+[Fakekit][client 4] RPC command getProcesses() called
+	[Fakekit-getProcesses] Process - Id: 0, Name: kernel
+	[Fakekit-getProcesses] Process - Id: 1, Name: mini-syscore.elf
+	[Fakekit-getProcesses] Process - Id: 2, Name: SceHidAuth
+	[Fakekit-getProcesses] Process - Id: 3, Name: SceHidMain
+	[Fakekit-getProcesses] Process - Id: 4, Name: SceCameraDriverMain
+	[Fakekit-getProcesses] Process - Id: 5, Name: SceCameraSdma
+	[Fakekit-getProcesses] Process - Id: 6, Name: SceHdmiEvent
+	[Fakekit-getProcesses] Process - Id: 7, Name: SceIccNotification
+	[Fakekit-getProcesses] Process - Id: 8, Name: SceSflash
+	[Fakekit-getProcesses] Process - Id: 9, Name: SceGbeMskCtrl
+	[Fakekit-getProcesses] Process - Id: 10, Name: SceAudit
+	[Fakekit-getProcesses] Process - Id: 11, Name: idle
+	[Fakekit-getProcesses] Process - Id: 12, Name: intr
+	[Fakekit-getProcesses] Process - Id: 13, Name: geom
+	[Fakekit-getProcesses] Process - Id: 14, Name: SceYarrow
+	[Fakekit-getProcesses] Process - Id: 15, Name: SceXptThrd
+	[Fakekit-getProcesses] Process - Id: 16, Name: SceIccnvs
+	[Fakekit-getProcesses] Process - Id: 17, Name: SceMd0
+	[Fakekit-getProcesses] Process - Id: 18, Name: SceIccThermal
+	[Fakekit-getProcesses] Process - Id: 19, Name: SceDaThrd
+	[Fakekit-getProcesses] Process - Id: 20, Name: SceDaAtcev
+	[Fakekit-getProcesses] Process - Id: 21, Name: SceSbram
+	[Fakekit-getProcesses] Process - Id: 22, Name: SceTrswIntr
+	[Fakekit-getProcesses] Process - Id: 23, Name: SceTrswReq
+	[Fakekit-getProcesses] Process - Id: 24, Name: SceTrswCtrl
+	[Fakekit-getProcesses] Process - Id: 25, Name: SceBtDriver
+	[Fakekit-getProcesses] Process - Id: 26, Name: ScePagedaemonX
+	[Fakekit-getProcesses] Process - Id: 27, Name: ScePagedaemonX
+	[Fakekit-getProcesses] Process - Id: 28, Name: SceVmdaemon
+	[Fakekit-getProcesses] Process - Id: 29, Name: SceBufdaemon0
+	[Fakekit-getProcesses] Process - Id: 30, Name: SceBufdaemon1
+	[Fakekit-getProcesses] Process - Id: 31, Name: SceBufdaemon2
+	[Fakekit-getProcesses] Process - Id: 32, Name: SceSyncer
+	[Fakekit-getProcesses] Process - Id: 33, Name: SceVnlru
+	[Fakekit-getProcesses] Process - Id: 34, Name: SceSwd
+	[Fakekit-getProcesses] Process - Id: 35, Name: usb
+	[Fakekit-getProcesses] Process - Id: 36, Name: SceSysAvControl.elf
+	[Fakekit-getProcesses] Process - Id: 38, Name: SceSysCore.elf
+	[Fakekit-getProcesses] Process - Id: 39, Name: orbis_audiod.elf
+	[Fakekit-getProcesses] Process - Id: 40, Name: GnmCompositor.elf
+	[Fakekit-getProcesses] Process - Id: 41, Name: SceShellCore
+	[Fakekit-getProcesses] Process - Id: 43, Name: SceShellUI
+	[Fakekit-getProcesses] Process - Id: 44, Name: SceAvCapture
+	[Fakekit-getProcesses] Process - Id: 45, Name: SceGameLiveStreamin
+	[Fakekit-getProcesses] Process - Id: 46, Name: ScePartyDaemon
+	[Fakekit-getProcesses] Process - Id: 47, Name: SceVideoCoreServer
+	[Fakekit-getProcesses] Process - Id: 48, Name: SceRemotePlay
+	[Fakekit-getProcesses] Process - Id: 49, Name: SceCloudClientDaemo
+	[Fakekit-getProcesses] Process - Id: 50, Name: SceSpZeroConf
+	[Fakekit-getProcesses] Process - Id: 51, Name: SceSocialScreenMgr
+	[Fakekit-getProcesses] Process - Id: 52, Name: SceMusicCoreServer
+	[Fakekit-getProcesses] Process - Id: 53, Name: fs_cleaner.elf
+	[Fakekit-getProcesses] Process - Id: 54, Name: SceVdecProxy.elf
+	[Fakekit-getProcesses] Process - Id: 55, Name: SceVencProxy.elf
+	[Fakekit-getProcesses] Process - Id: 56, Name: SecureUIProcess.sel
+	[Fakekit-getProcesses] Process - Id: 57, Name: SecureWebProcess.se
+	[Fakekit-getProcesses] Process - Id: 58, Name: orbis-jsc-compiler.
+	[Fakekit-getProcesses] Process - Id: 59, Name: SceSpkService
+	[Fakekit-getProcesses] Process - Id: 64, Name: WebBrowserUIProcess
+	[Fakekit-getProcesses] Process - Id: 65, Name: WebProcess.self
+	[Fakekit-getProcesses] Process - Id: 66, Name: eboot.bin
+[Fakekit][client 4] RPC command getModules() called
+	[Fakekit-getModules] Found 49 modules
+	[Fakekit-getModules] Module - Id: 0, Name: eboot.bin, Code Size: 0x14c000, Data Size: 0xaa0000
+	[Fakekit-getModules] Module - Id: 8193, Name: libkernel.sprx, Code Size: 0x4c000, Data Size: 0x38000
+	[Fakekit-getModules] Module - Id: 2, Name: libSceLibcInternal.sprx, Code Size: 0x104000, Data Size: 0x20000
+	[Fakekit-getModules] Module - Id: 13, Name: libSceSysmodule.sprx, Code Size: 0xc000, Data Size: 0xc000
+	[Fakekit-getModules] Module - Id: 15, Name: libSceFios2.prx, Code Size: 0x5c000, Data Size: 0x12c000
+	[Fakekit-getModules] Module - Id: 16, Name: libc.prx, Code Size: 0xd8000, Data Size: 0x1c000
+	[Fakekit-getModules] Module - Id: 26, Name: libSceNet.sprx, Code Size: 0x34000, Data Size: 0x114000
+	[Fakekit-getModules] Module - Id: 41, Name: libSceIpmi.sprx, Code Size: 0xc000, Data Size: 0x14000
+	[Fakekit-getModules] Module - Id: 42, Name: libSceMbus.sprx, Code Size: 0xc000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 43, Name: libSceRegMgr.sprx, Code Size: 0x4000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 44, Name: libSceRtc.sprx, Code Size: 0x8000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 45, Name: libSceAvSetting.sprx, Code Size: 0xc000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 46, Name: libSceVideoOut.sprx, Code Size: 0x18000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 47, Name: libSceGnmDriver.sprx, Code Size: 0xc000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 49, Name: libSceAudioOut.sprx, Code Size: 0x18000, Data Size: 0x8000
+	[Fakekit-getModules] Module - Id: 50, Name: libSceAudioIn.sprx, Code Size: 0x8000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 53, Name: libSceAjm.sprx, Code Size: 0x4000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 54, Name: libScePad.sprx, Code Size: 0xc000, Data Size: 0x8000
+	[Fakekit-getModules] Module - Id: 55, Name: libSceCamera.sprx, Code Size: 0x14000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 58, Name: libSceNetCtl.sprx, Code Size: 0x8000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 60, Name: libSceHttp.sprx, Code Size: 0x34000, Data Size: 0x8000
+	[Fakekit-getModules] Module - Id: 62, Name: libSceSsl.sprx, Code Size: 0x50000, Data Size: 0x8000
+	[Fakekit-getModules] Module - Id: 65, Name: libSceNpCommon.sprx, Code Size: 0x38000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 66, Name: libSceNpManager.sprx, Code Size: 0x3c000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 119, Name: libSceNpWebApi.sprx, Code Size: 0x18000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 120, Name: libSceSaveData.sprx, Code Size: 0x44000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 121, Name: libSceSystemService.sprx, Code Size: 0x3c000, Data Size: 0xc000
+	[Fakekit-getModules] Module - Id: 137, Name: libSceUserService.sprx, Code Size: 0x10000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 138, Name: libSceCommonDialog.sprx, Code Size: 0x4000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 140, Name: libSceSysUtil.sprx, Code Size: 0x4000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 141, Name: libSceRazorCpu.sprx, Code Size: 0x8000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 143, Name: libSceFreeTypeOl.sprx, Code Size: 0x80000, Data Size: 0x10000
+	[Fakekit-getModules] Module - Id: 144, Name: libSceFreeTypeOt.sprx, Code Size: 0x68000, Data Size: 0xc000
+	[Fakekit-getModules] Module - Id: 145, Name: libSceImeDialog.sprx, Code Size: 0x8000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 146, Name: libSceAudiodec.sprx, Code Size: 0x8000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 147, Name: libScePngDec.sprx, Code Size: 0xc000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 148, Name: libSceVdecSavc.sprx, Code Size: 0x88000, Data Size: 0x28000
+	[Fakekit-getModules] Module - Id: 149, Name: libSceVdecCore.sprx, Code Size: 0x90000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 150, Name: libSceVideodec.sprx, Code Size: 0x4000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 151, Name: libSceAvPlayer.sprx, Code Size: 0x50000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 152, Name: libSceMsgDialog.sprx, Code Size: 0x4000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 154, Name: libSceSaveDataDialog.sprx, Code Size: 0x1c000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 156, Name: libSceScreenShot.sprx, Code Size: 0x4000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 157, Name: libSceSysCore.sprx, Code Size: 0x8000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 158, Name: libSceSysUtil.sprx, Code Size: 0x4000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 159, Name: libSceDipsw.sprx, Code Size: 0x4000, Data Size: 0x4000
+	[Fakekit-getModules] Module - Id: 160, Name: libSceSystemService.sprx, Code Size: 0x3c000, Data Size: 0xc000
+	[Fakekit-getModules] Module - Id: 161, Name: libSceAppInstUtil.sprx, Code Size: 0xc000, Data Size: 0x8000
+	[Fakekit-getModules] Module - Id: 163, Name: libSceAppContent.sprx, Code Size: 0x8000, Data Size: 0x8000
+[Fakekit KLOG] Connection accepted
+[SceShellUI] I/PSM.UI : [FirstClear] : ClearFrameBuffer=False
+[SceShellCore] Libc Heap Status: free 49%, in-use 3101.8 KB, trend +1.3 KB/min, peak 3476.7 KB, when 2974 [sec]
+[SceShellUI] I/PSM.UI : [NoDraw] : ClearFrameBuffer=False
+[Fakekit][client 4] RPC command notify() called
+[Fakek

@@ -875,6 +875,133 @@ namespace My_Neighborhood_WPF_
             //  throw new NotImplementedException();
         }
 
+        private void btnCheckError_Click(object sender, RoutedEventArgs e)
+        {
+            CheckError chkerror = new CheckError();
+            chkerror.Show();
+        }
+
+
+        private void bthThemeDefualt_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.DefaultTheme = (int)ThemeChooser.White;
+            Properties.Settings.Default.Save();
+            SwitchTheme();
+        }
+
+        private void btnThemeDark_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.DefaultTheme = (int)ThemeChooser.Dark;
+            Properties.Settings.Default.Save();
+            SwitchTheme();
+        }
+
+        #region << Context Menu Strip >>
+
+        private void cmbReboot_Checked(object sender, RoutedEventArgs e)
+        {
+            btnReboot.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+
+
+        private void cmbPowerOn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void cmbPowerOff_Click(object sender, RoutedEventArgs e)
+        {
+            btnPowerOff.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void cmbPowerRest_Click(object sender, RoutedEventArgs e)
+        {
+            btnRestMode.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void cmbConnect_Click(object sender, RoutedEventArgs e)
+        {
+            btnConnect.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void cmbDiscconect_Click(object sender, RoutedEventArgs e)
+        {
+            btnDisconnect.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void cmbSetFileSerDir_Click(object sender, RoutedEventArgs e)
+        {
+            btnSetfilserdir.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void cmbSetDefualt_Click(object sender, RoutedEventArgs e)
+        {
+            btnSetDefault.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void cmbImportTargetSettings_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void cmbExportargetSettings_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Your kidding right ?", "", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            //TODO :: Activate devkit ?
+        }
+
+        private void cmbDelete_Click(object sender, RoutedEventArgs e)
+        {
+            btnRemoveTarget.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void cmbRename_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO :: Rename a target
+        }
+
+        private void cmbInstallPkg_Click(object sender, RoutedEventArgs e)
+        {
+            btnInstallPKG.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            //TODO :: Pakage uninstall
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            btnPkgsEnt.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        {
+            btnPkgsEnt.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void cmbCopyFiles_Click(object sender, RoutedEventArgs e)
+        {
+            btnCopyfiles.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        private void cmbPlayGo_Click(object sender, RoutedEventArgs e)
+        {
+            btnPlayGo.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
+
+        #endregion << Context Menu Strip
+
         #endregion << Events >>
 
         #region << Functions >>
@@ -1342,12 +1469,22 @@ namespace My_Neighborhood_WPF_
             try
             {
                 btnLoadExe.Items.Clear();
+                cmbLoadExe.Items.Clear();
                 btnKillProcess.Items.Clear();
+                cmbKillProcess.Items.Clear();
                 RibbonMenuItem killallitem = new RibbonMenuItem();
                 killallitem.Header = "Kill all processes";
                 btnKillProcess.Items.Add(killallitem);
+                MenuItem killmenuitem = new MenuItem();
+                killmenuitem.Header = "Kill all processes";
+                cmbKillProcess.Items.Add(killmenuitem);
+
                 RibbonSeparator ribbonseparatoritem = new RibbonSeparator();
                 btnKillProcess.Items.Add(ribbonseparatoritem);
+
+                Separator menuitemseperator = new Separator();
+                cmbKillProcess.Items.Add(menuitemseperator);
+
                 API.ErrorCode errorcheck = new API.ErrorCode();
                 List<Fakekit_API.Process> acctiveprocesses = API.getProcesses(out errorcheck);
                 var temp = API.getModules(out errorcheck);
@@ -1361,6 +1498,12 @@ namespace My_Neighborhood_WPF_
                     menuitem.Tag = item.Id;
                     btnLoadExe.Items.Add(menuitem);
 
+                    MenuItem newmenuitem = new MenuItem();
+                    newmenuitem.Click += LoadProcess_Click;
+                    newmenuitem.Header = item.Name + "(" + item.Id + ")";
+                    newmenuitem.Tag = item.Id;
+                    cmbLoadExe.Items.Add(newmenuitem);
+
                 }
                 foreach (var item in acctiveprocesses)
                 {
@@ -1370,6 +1513,11 @@ namespace My_Neighborhood_WPF_
                     menuitem.Tag = item.Id;
                     btnKillProcess.Items.Add(menuitem);
 
+                    MenuItem newmenuitem = new MenuItem();
+                    newmenuitem.Click += KillProcess_Click;
+                    newmenuitem.Header = item.Name + "(" + item.Id + ")";
+                    newmenuitem.Tag = item.Id;
+                    cmbKillProcess.Items.Add(newmenuitem);
                 }
 
             }
@@ -1427,6 +1575,29 @@ namespace My_Neighborhood_WPF_
                     btnMore.IsEnabled = true;
 
                     #endregion << More >>
+
+                    #region << Context memu >>
+
+                    //cmbConnect.IsEnabled = true;
+                    cmbCopy.IsEnabled = true;
+                    cmbCopyFiles.IsEnabled = true;
+                    cmbDelete.IsEnabled = true;
+                    cmbDiscconect.IsEnabled = true;
+                    cmbExportargetSettings.IsEnabled = true;
+                    cmbImportTargetSettings.IsEnabled = true;
+                    cmbInstallPkg.IsEnabled = true;
+                    cmbKillProcess.IsEnabled = true;
+                    cmbNav.IsEnabled = true;
+                    cmbPlayGo.IsEnabled = true;
+                    cmbPowerOff.IsEnabled = true;
+                    cmbPowerOn.IsEnabled = true;
+                    cmbPowerRest.IsEnabled = true;
+                    cmbReboot.IsEnabled = true;
+                    cmbScreenshot.IsEnabled = true;
+                    cmbLoadExe.IsEnabled = true;
+
+
+                    #endregion << Context Menu >>
                 }
                 else
                 {
@@ -1467,6 +1638,28 @@ namespace My_Neighborhood_WPF_
                     btnMore.IsEnabled = false;
 
                     #endregion << More >>
+
+                    #region << Context memu >>
+
+                    //cmbConnect.IsEnabled = true;
+                    cmbCopy.IsEnabled = false;
+                    cmbCopyFiles.IsEnabled = false;
+                    cmbDelete.IsEnabled = false;
+                    cmbDiscconect.IsEnabled = false;
+                    cmbExportargetSettings.IsEnabled = false;
+                    cmbImportTargetSettings.IsEnabled = false;
+                    cmbInstallPkg.IsEnabled = false;
+                    cmbKillProcess.IsEnabled = false;
+                    cmbNav.IsEnabled = false;
+                    cmbPlayGo.IsEnabled = false;
+                    cmbPowerOff.IsEnabled = false;
+                    cmbPowerOn.IsEnabled = false;
+                    cmbPowerRest.IsEnabled = false;
+                    cmbReboot.IsEnabled = false;
+                    cmbScreenshot.IsEnabled = false;
+                    cmbLoadExe.IsEnabled = false;
+
+                    #endregion << Context Menu >>
                 }
                 AutoSizeColumns();
             }
@@ -1498,13 +1691,6 @@ namespace My_Neighborhood_WPF_
             }
         }
 
-        #endregion << Functions >>
-
-        private void btnCheckError_Click(object sender, RoutedEventArgs e)
-        {
-            CheckError chkerror = new CheckError();
-            chkerror.Show();
-        }
 
         public void SwitchTheme()
         {
@@ -1552,7 +1738,7 @@ namespace My_Neighborhood_WPF_
                     //Ribbon.BorderBrush = brushWhite;
                     //Uri dictUri = new Uri(@"/Themes/ExpressionDark.xaml", UriKind.Relative);
                     //app.ChangeTheme(dictUri);
-                  
+
                     // now set the Green accent and dark theme
                     ThemeManager.ChangeAppStyle(Application.Current,
                                                 ThemeManager.GetAccent("Cobalt"),
@@ -1570,18 +1756,6 @@ namespace My_Neighborhood_WPF_
             //add more here
         }
 
-        private void bthThemeDefualt_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.DefaultTheme = (int)ThemeChooser.White;
-            Properties.Settings.Default.Save();
-            SwitchTheme();
-        }
-
-        private void btnThemeDark_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.DefaultTheme = (int)ThemeChooser.Dark;
-            Properties.Settings.Default.Save();
-            SwitchTheme();
-        }
+        #endregion << Functions >>
     }
 }

@@ -160,9 +160,9 @@
         <ListView x:Name="lstSKU" VirtualizingStackPanel.IsVirtualizing="False"  HorizontalAlignment="Stretch" Margin="0,138,-0.2,0.4" Grid.RowSpan="2" SizeChanged="lstSKU_SizeChanged" SelectionChanged="lstSKU_SelectionChanged" MouseDoubleClick="lstSKU_MouseDoubleClick">
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Refresh"  InputGestureText="F5"/>
+                    <MenuItem Header="Refresh" InputGestureText="F5"/>
                     <Separator/>
-                    <MenuItem Header="Navigate">
+                    <MenuItem  x:Name="cmbNav" Header="Navigate" IsEnabled="False">
                         <MenuItem></MenuItem>
                         <MenuItem></MenuItem>
                     </MenuItem>
@@ -176,49 +176,49 @@
                             <MenuItem Header="No installed applications found"></MenuItem>
                         </MenuItem>
                     </MenuItem>
-                    <MenuItem Header="Take Screenshot" ></MenuItem>
+                    <MenuItem x:Name="cmbScreenshot" IsEnabled="False" Header="Take Screenshot" ></MenuItem>
                     <Separator/>
-                    <MenuItem Header="Reboot" ></MenuItem>
-                    <MenuItem Header="Power on" ></MenuItem>
-                    <MenuItem Header="Power off" ></MenuItem>
-                    <MenuItem Header="Rest mode" ></MenuItem>
+                    <MenuItem x:Name="cmbReboot" IsEnabled="False" Header="Reboot" Click="cmbReboot_Checked"></MenuItem>
+                    <MenuItem  x:Name="cmbPowerOn" IsEnabled="False" Header="Power on" Click="cmbPowerOn_Click" ></MenuItem>
+                    <MenuItem x:Name="cmbPowerOff" IsEnabled="False" Header="Power off" Click="cmbPowerOff_Click" ></MenuItem>
+                    <MenuItem x:Name="cmbPowerRest" IsEnabled="False" Header="Rest mode" Click="cmbPowerRest_Click" ></MenuItem>
                     <Separator/>
-                    <MenuItem Header="Connect" ></MenuItem>
-                    <MenuItem Header="Disconnect" ></MenuItem>
+                    <MenuItem x:Name="cmbConnect" Header="Connect" Click="cmbConnect_Click" ></MenuItem>
+                    <MenuItem x:Name="cmbDiscconect" IsEnabled="False" Header="Disconnect" Click="cmbDiscconect_Click" ></MenuItem>
                     <Separator/>
-                    <MenuItem Header="Set file serving directory..." ></MenuItem>
-                    <MenuItem Header="Set default" ></MenuItem>
+                    <MenuItem x:Name="cmbSetFileSerDir" Header="Set file serving directory..." Click="cmbSetFileSerDir_Click" ></MenuItem>
+                    <MenuItem x:Name="cmbSetDefualt" Header="Set default" Click="cmbSetDefualt_Click" ></MenuItem>
                     <Separator/>
-                    <MenuItem Header="Import target settings..." ></MenuItem>
-                    <MenuItem Header="Export target settings..." ></MenuItem>
+                    <MenuItem x:Name="cmbImportTargetSettings" Header="Import target settings..." IsEnabled="False" Click="cmbImportTargetSettings_Click" ></MenuItem>
+                    <MenuItem x:Name="cmbExportargetSettings" Header="Export target settings..." IsEnabled="False" Click="cmbExportargetSettings_Click"></MenuItem>
                     <Separator/>
-                    <MenuItem Header="System update..." ></MenuItem>
-                    <MenuItem Header="Activate..." ></MenuItem>
+                    <MenuItem Header="System update..." IsEnabled="False" Click="MenuItem_Click"></MenuItem>
+                    <MenuItem Header="Activate..." IsEnabled="False" Click="MenuItem_Click_1"></MenuItem>
                     <Separator></Separator>
-                    <MenuItem Header="Delete"  InputGestureText="Delete"></MenuItem>
-                    <MenuItem Header="Rename"  InputGestureText="F2"></MenuItem>
+                    <MenuItem x:Name="cmbDelete" Header="Delete"  InputGestureText="Delete" IsEnabled="False" Click="cmbDelete_Click"></MenuItem>
+                    <MenuItem x:Name="cmbRename" Header="Rename"  InputGestureText="F2" IsEnabled="False" Click="cmbRename_Click"></MenuItem>
                     <Separator></Separator>
-                    <MenuItem Header="Install package" ></MenuItem>
-                    <MenuItem Header="Unistall package..." ></MenuItem>
-                    <MenuItem Header="Manage installed packages..." ></MenuItem>
-                    <MenuItem Header="Manage installed entitlements..." ></MenuItem>
+                    <MenuItem x:Name="cmbInstallPkg" Header="Install package" IsEnabled="False" Click="cmbInstallPkg_Click" ></MenuItem>
+                    <MenuItem Header="Uninstall package..." IsEnabled="False" Click="MenuItem_Click_2" ></MenuItem>
+                    <MenuItem Header="Manage installed packages..." IsEnabled="False" Click="MenuItem_Click_3" ></MenuItem>
+                    <MenuItem Header="Manage installed entitlements..." IsEnabled="False" Click="MenuItem_Click_4" ></MenuItem>
                     <Separator></Separator>
-                    <MenuItem Header="Copy file(s)..." >
+                    <MenuItem x:Name="cmbCopyFiles" Header="Copy file(s)..." IsEnabled="False" Click="cmbCopyFiles_Click" >
                         <MenuItem></MenuItem>
                     </MenuItem>
                     <Separator></Separator>
-                    <MenuItem Header="PlayGo" >
+                    <MenuItem x:Name="cmbPlayGo" Header="PlayGo" IsEnabled="False" Click="cmbPlayGo_Click" >
                         <MenuItem></MenuItem>
                     </MenuItem>
                     <Separator></Separator>
-                    <MenuItem Header="Kill Process" >
+                    <MenuItem x:Name="cmbKillProcess" IsEnabled="False" Header="Kill Process" >
                         <MenuItem></MenuItem>
                     </MenuItem>
                     <Separator></Separator>
-                    <MenuItem Header="Copy"  InputGestureText="Ctrl+C">
+                    <MenuItem x:Name="cmbCopy" Header="Copy" IsEnabled="False" InputGestureText="Ctrl+C">
                     </MenuItem>
                     <Separator></Separator>
-                    <MenuItem Header="Properties">
+                    <MenuItem x:Name="cmbProperties" IsEnabled="False" Header="Properties">
                     </MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
