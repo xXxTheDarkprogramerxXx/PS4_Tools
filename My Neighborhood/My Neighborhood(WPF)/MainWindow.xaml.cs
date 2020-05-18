@@ -398,6 +398,14 @@ namespace My_Neighborhood_WPF_
         {
             RefreshData();
             ExtractResources();
+
+            string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            /*Log Window Stuff*/
+            if (!Directory.Exists(AppPath + "/Logs/"))
+            {
+                Directory.CreateDirectory(AppPath + "/Logs/");
+            }
+
         }
 
         private void lstSKU_SizeChanged(object sender, SizeChangedEventArgs e)

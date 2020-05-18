@@ -1,0 +1,163 @@
+D/88391:
+D/88391:CUSA00135
+D/88391:
+D/88391:XDPX20004
+D/88391:
+D/88391:CUSA00135
+D/88391:
+D/88391:XDPX20004
+D/88391:
+D/88391:CUSA00135
+D/88391:
+D/88391:XDPX20004
+D/88391:
+D/88391:CUSA00135
+D/88391:
+D/88391:000000007
+D/88391:
+D/88391:CUSA00744
+D/88391:
+D/88391:00000000f
+D/88391:
+D/88391:XDPX20002
+D/88391:
+D/88391:CUSA07990
+D/88391:
+D/88391:00000000e
+D/88391:
+D/88391:000000008
+D/88391:
+D/88391:NPXS20111
+D/88391:
+D/88391:000000008
+D/88391:
+D/88391:00000000e
+D/88391:
+D/88391:CUSA07990
+D/88391:
+D/88391:XDPX20002
+D/88391:
+D/88391:00000000f
+D/88391:
+D/88391:CUSA00744
+D/88391:
+D/88391:000000007
+D/88391:
+D/88391:CUSA00135
+D/88391:
+D/88391:XDPX20004
+D/88391:
+D/88391:NPXS20102
+D/88391:
+D/88391:NPXS20108
+D/88391:
+D/88391:NPXS20979
+D/88391:
+D/88391:NPXS20993
+D/88391:
+D/88391:NPXS20979
+sx_xlock(/dev/notification lock): SceSwd has nonsleeping lock
+D/88391:
+D/88391:NPXS20108
+D/88391:
+D/88391:NPXS20102
+D/88391:
+D/88391:XDPX20004
+D/88391:
+D/88391:CUSA00135
+D/88391:
+D/88391:000000007
+D/88391:
+D/88391:CUSA00744
+D/88391:
+D/88391:00000000f
+D/88391:
+D/88391:XDPX20002
+D/88391:
+D/88391:CUSA07990
+D/88391:
+D/88391:00000000e
+D/88391:
+D/88391:000000008
+D/88391:
+D/88391:00000000e
+D/88391:
+D/88391:CUSA07990
+D/88391:
+D/88391:XDPX20002
+D/88391:
+D/88391:00000000f
+D/88391:
+D/88391:CUSA00744
+D/88391:
+D/88391:000000007
+D/88391:
+D/88391:CUSA00135
+D/88391:
+D/88391:XDPX20004
+D/88391:
+D/88391:NPXS20102
+D/88391:
+D/88391:NPXS20108
+D/88391:
+D/88391:NPXS20979
+D/88391:
+D/88391:NPXS20993
+D/88391:
+D/88391:NPXS29998
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/data/app/sce_sys/icon0_18.png'
+D/88391:
+D/88391:NPXS29999
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/hostapp/app/sce_sys/icon0_18.png'
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/hostapp/app/sce_sys/icon0.png'
+[SceShellCore] Libc Heap Status: free 49%, in-use 3071.7 KB, trend +5.5 KB/min, peak 3494.2 KB, when 2912 [sec]
+D/88391:
+D/88391:NPXS29998
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/data/app/sce_sys/icon0_18.png'
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/data/app/sce_sys/icon0.png'
+D/88391:
+D/88391:NPXS29999
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/hostapp/app/sce_sys/icon0_18.png'
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/hostapp/app/sce_sys/icon0.png'
+D/88391:
+D/88391:NPXS29998
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/data/app/sce_sys/icon0_18.png'
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/data/app/sce_sys/icon0.png'
+D/88391:
+D/88391:NPXS20993
+D/88391:
+D/88391:NPXS29998
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/data/app/sce_sys/icon0_18.png'
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/data/app/sce_sys/icon0.png'
+D/88391:
+D/88391:NPXS29999
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/hostapp/app/sce_sys/icon0_18.png'
+[SceShellUI] W/PSM.UI : UIImage.Create(): Failed to create Image from '/hostapp/app/sce_sys/icon0.png'
+[SceNetEv] PERIODIC_DOWNLOAD_INTERVAL_SEC={86400} contentId={8}, serviceName={netev}
+[SceNetEv] start DownloadFile, contentId={8}, serviceName={netev}
+[SceNetEv] ifModifiedSince={Mon, 25 Jan 2016 05:28:30 +0000}
+[SceNetEv] W:\Build\J02080965\vsh\shell\shell_core\netev\netev_http_client.cpp(132) Get: NETEV_ISOK::0x8041013d
+[SceNetEv] W:\Build\J02080965\vsh\shell\shell_core\netev\netev_manager.cpp(345) DownloadFile: NETEV_ISOK::0x8041013d
+[SceNetEv] W:\Build\J02080965\vsh\shell\shell_core\netev\netev_manager.cpp(493) Run: NETEV_CONTINUE::0x8041013d
+[SceNetEv] PERIODIC_CHECK_INTERVAL_SEC={480}
+[SceShellCore] Libc Heap Status: free 49%, in-use 3071.9 KB, trend +3.2 KB/min, peak 3494.2 KB, when 2943 [sec]
+[SceHidConfigService] PERIODIC_DOWNLOAD_INTERVAL_SEC={86400} elapsed={2945} isFirstTime={1}
+[SceHidConfigService] start DownloadFile
+[SceHidConfigService] DownloadFile : [RevokeList]
+[SceHidConfigService] ifModifiedSince={Fri, 09 Mar 2018 03:55:47 +0000}
+[SceHidConfigService] SERVER_URL={http://ps4-system.sec.np.dl.playstation.net/ps4-system/hid_config/np/v00/hid_config.env}
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\http_client.cpp(132) Get: HCS_ISOK::0x8041013d
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\hid_config_service_manager.cpp(241) DownloadFile: HCS_ISOK::0x8041013d
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\hid_config_service_manager.cpp(314) Run: HCS_CONTINUE::0x8041013d
+[SceHidConfigService] PERIODIC_CHECK_INTERVAL_SEC={420}
+[SceHidConfigService] PERIODIC_DOWNLOAD_INTERVAL_SEC={86400} elapsed={2945} isFirstTime={1}
+[SceHidConfigService] start DownloadFile
+[SceHidConfigService] VerifySignature : size: total(610), signature(256), message(354) [byte]
+[SceHidConfigService] VerifySignature : pass
+[SceHidConfigService] DownloadFile : [UsbPower]
+[SceHidConfigService] ifModifiedSince={Wed, 29 Jun 2016 12:34:35 +0000}
+[SceHidConfigService] SERVER_URL={http://ps4-system.sec.np.dl.playstation.net/ps4-system/hidusbpower/np/v00/hidusbpower.env}
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\http_client.cpp(132) Get: HCS_ISOK::0x8041013d
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\hid_config_service_manager.cpp(241) DownloadFile: HCS_ISOK::0x8041013d
+[SceHidConfigService] W:\Build\J02080965\vsh\shell\shell_core\hid_config_service\hid_config_service_manager.cpp(314) Run: HCS_CONTINUE::0x8041013d
+[SceHidConfigService] PERIODIC_CHECK_INTERVAL_SEC={420}

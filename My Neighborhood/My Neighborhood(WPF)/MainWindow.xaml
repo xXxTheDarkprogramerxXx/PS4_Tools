@@ -166,6 +166,60 @@
                         <MenuItem></MenuItem>
                         <MenuItem></MenuItem>
                     </MenuItem>
+                    <Separator/>
+                    <MenuItem x:Name="cmbLoadExe" Header="Load executable" IsEnabled="False"/>
+                    <MenuItem Header="Load / Launch">
+                        <MenuItem Header="Load target executable"></MenuItem>
+                        <MenuItem Header="Launch application...">
+                            <MenuItem Header="Run..."></MenuItem>
+                            <Separator/>
+                            <MenuItem Header="No installed applications found"></MenuItem>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Take Screenshot" ></MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Reboot" ></MenuItem>
+                    <MenuItem Header="Power on" ></MenuItem>
+                    <MenuItem Header="Power off" ></MenuItem>
+                    <MenuItem Header="Rest mode" ></MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Connect" ></MenuItem>
+                    <MenuItem Header="Disconnect" ></MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Set file serving directory..." ></MenuItem>
+                    <MenuItem Header="Set default" ></MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Import target settings..." ></MenuItem>
+                    <MenuItem Header="Export target settings..." ></MenuItem>
+                    <Separator/>
+                    <MenuItem Header="System update..." ></MenuItem>
+                    <MenuItem Header="Activate..." ></MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="Delete"  InputGestureText="Delete"></MenuItem>
+                    <MenuItem Header="Rename"  InputGestureText="F2"></MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="Install package" ></MenuItem>
+                    <MenuItem Header="Unistall package..." ></MenuItem>
+                    <MenuItem Header="Manage installed packages..." ></MenuItem>
+                    <MenuItem Header="Manage installed entitlements..." ></MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="Copy file(s)..." >
+                        <MenuItem></MenuItem>
+                    </MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="PlayGo" >
+                        <MenuItem></MenuItem>
+                    </MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="Kill Process" >
+                        <MenuItem></MenuItem>
+                    </MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="Copy"  InputGestureText="Ctrl+C">
+                    </MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="Properties">
+                    </MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>

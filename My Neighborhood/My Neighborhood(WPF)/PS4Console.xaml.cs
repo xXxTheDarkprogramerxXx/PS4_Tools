@@ -19,19 +19,25 @@ using System.Windows.Shapes;
 using PrimS.Telnet;
 using My_Neighborhood_WPF_.Properties;
 using My_Neighborhood_WPF_.SerialApi;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
+using MahApps.Metro.Controls;
+using MahApps.Metro;
+using System.Diagnostics;
 
 namespace My_Neighborhood_WPF_
 {
     /// <summary>
     /// Interaction logic for PS4Console.xaml
     /// </summary>
-    public partial class PS4Console : RibbonWindow
+    public partial class PS4Console : MetroWindow
     {
         public MainWindow.SKUS SKU = new MainWindow.SKUS();
         public MainWindow.TelnetConnection tc = null;
         public FtpClient clients = new FtpClient();
         public bool isOpen = false;
-
+        bool AutoScroll = true;
+        string LogDirectory = "";
 
         public PS4Console()
         {
@@ -62,7 +68,13 @@ namespace My_Neighborhood_WPF_
             if (!string.IsNullOrWhiteSpace(@string))
             {
                 rtbAll.Dispatcher.Invoke(new Action(() => rtbAll.AppendText(@string)));
-                this.Dispatcher.Invoke(() => rtbAll.ScrollToEnd());
+                using (StreamWriter sw = File.AppendText(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+                {
+                    sw.Write(@string);
+                }
+
+                if (AutoScroll == true)
+                    this.Dispatcher.Invoke(() => rtbAll.ScrollToEnd());
             }
         }
 
@@ -76,6 +88,21 @@ namespace My_Neighborhood_WPF_
             Style noSpaceStyle = new Style(typeof(Paragraph));
             noSpaceStyle.Setters.Add(new Setter(Paragraph.MarginProperty, new Thickness(0)));
             rtbAll.Resources.Add(typeof(Paragraph), noSpaceStyle);
+
+
+            string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            //Log Directory 
+            LogDirectory = AppPath + "/Logs/" + SKU.Target;
+            if(!Directory.Exists(LogDirectory))
+            {
+                Directory.CreateDirectory(LogDirectory);
+            }
+            if(File.Exists(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+            {
+                File.Delete(LogDirectory + "/PS4-KLOG-RPC-log.txt");
+            }
+            File.Create(LogDirectory + "/PS4-KLOG-RPC-log.txt");
+
             if (Properties.Settings.Default.ConsolePrefCom == true && Properties.Settings.Default.ConsolePrefPort != "")
             {
                 this.Monitor.NewSerialDataRecieved += this.OnNewSerialDataReceived;
@@ -124,7 +151,14 @@ namespace My_Neighborhood_WPF_
 
 
                         this.Dispatcher.Invoke(() => rtbAll.AppendText(hi));
-                        this.Dispatcher.Invoke(() => rtbAll.ScrollToEnd());
+
+                        using (StreamWriter sw = File.AppendText(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+                        {
+                            sw.Write(hi);
+                        }
+
+                        if (AutoScroll == true)
+                            this.Dispatcher.Invoke(() => rtbAll.ScrollToEnd());
 
                     }
 
@@ -143,12 +177,14 @@ namespace My_Neighborhood_WPF_
             }
         }
         
-    
-
         private void btnClearAll_Click(object sender, RoutedEventArgs e)
         {
-            clients.DeleteFile(@"/data/Infamous_LOG.txt");
-            RefreshProcesses();
+            //clean the all screen
+            rtbAll.SelectAll();
+            rtbAll.Selection.Text = "";
+
+            //clients.DeleteFile(@"/data/Infamous_LOG.txt");/*we no longer need this file*/
+            //RefreshProcesses();
         }
 
         private void btnRefreshProcesses_Click(object sender, RoutedEventArgs e)
@@ -183,6 +219,26 @@ namespace My_Neighborhood_WPF_
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Clipboard.SetText(rtbAll.Selection.Text);
+        }
+
+        private void cbxScrollimput_Checked(object sender, RoutedEventArgs e)
+        {
+            if (cbxScrollimput.IsChecked == false)
+                AutoScroll = false;
+            else
+                AutoScroll = true;
+        }
+
+        private void btnOpenLogDirectory_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (Directory.Exists(LogDirectory))
+            {
+                var urlPart = LogDirectory;
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(urlPart));
+                e.Handled = true;
+
+            }
         }
     }
 }
