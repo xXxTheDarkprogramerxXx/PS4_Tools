@@ -207,7 +207,19 @@ namespace My_Neighborhood_WPF_
 
             public bool IsConnected
             {
-                get { return tcpSocket.Connected; }
+
+                get {
+                    if (tcpSocket != null)
+                    {
+                        return tcpSocket.Connected;
+                    }
+                    else
+                    {
+                        MessageBox.Show("PS4 Is NOT Connected!");
+                        return false;
+                    }
+                }
+
             }
 
 
@@ -1644,7 +1656,7 @@ namespace My_Neighborhood_WPF_
                     //cmbConnect.IsEnabled = true;
                     cmbCopy.IsEnabled = false;
                     cmbCopyFiles.IsEnabled = false;
-                    cmbDelete.IsEnabled = false;
+                    cmbDelete.IsEnabled = true;
                     cmbDiscconect.IsEnabled = false;
                     cmbExportargetSettings.IsEnabled = false;
                     cmbImportTargetSettings.IsEnabled = false;
@@ -1757,5 +1769,10 @@ namespace My_Neighborhood_WPF_
         }
 
         #endregion << Functions >>
+
+        private void cmbRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            btnRefresh.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        }
     }
 }

@@ -62,7 +62,7 @@ namespace My_Neighborhood_WPF_.PS4ConsolePages
                     Properties.Settings.Default.DisableSingleFileLogging = true;
                     Properties.Settings.Default.Save();
 
-                    chbCopy.IsChecked = false;
+                    chbCopy.IsChecked = true;
                 }
             }
 

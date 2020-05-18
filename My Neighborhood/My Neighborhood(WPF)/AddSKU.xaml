@@ -5,18 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:My_Neighborhood_WPF_"
         mc:Ignorable="d"
-        Title="Add SKU" Height="205.97" Width="577.612" Icon="Images/favicon (1).ico" WindowStartupLocation="CenterScreen">
+        Title="Add SKU" Height="230.737" Width="591.479" Icon="Images/favicon (1).ico" WindowStartupLocation="CenterScreen">
     <Grid>
-        <GroupBox x:Name="groupBox" Header="Add a new SKU" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="156" Width="551">
+        <GroupBox x:Name="groupBox" Header="Add a new SKU" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="181" Width="551">
             <Grid Margin="0,0,-0.4,-12.8">
                 <Label x:Name="label" Content="Target name :" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <Label Content="IP address :" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
                 <Label Content="File serving directory :" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txtTargetname" HorizontalAlignment="Left" Height="23" Margin="176,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="352"/>
                 <TextBox x:Name="txtipaddress" HorizontalAlignment="Left" Height="23" Margin="176,41,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="318"/>
-                <TextBox x:Name="txtfileserdir" HorizontalAlignment="Left" Height="23" Margin="176,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="352"/>
+                <TextBox x:Name="txtfileserdir" HorizontalAlignment="Left" Height="23" Margin="176,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="318"/>
                 <Button x:Name="btnAddItem" Content="Add SKU" HorizontalAlignment="Left" Margin="453,114,0,0" VerticalAlignment="Top" Width="75" Click="btnAddItem_Click"/>
                 <Button x:Name="btnLoadIPs" Content="..." HorizontalAlignment="Left" Margin="499,41,0,0" VerticalAlignment="Top" Width="29" Click="btnLoadIPs_Click"/>
+                <Button x:Name="btnDirBrowser" Content="..." HorizontalAlignment="Left" Margin="499,70,0,0" VerticalAlignment="Top" Width="29" Click="btnDirBrowser_Click"/>
             </Grid>
         </GroupBox>
 

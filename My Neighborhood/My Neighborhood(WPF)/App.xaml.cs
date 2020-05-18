@@ -51,6 +51,7 @@ namespace My_Neighborhood_WPF_
                 ThemeManager.ChangeAppStyle(Application.Current,
                                                ThemeManager.GetAccent("Cobalt"),
                                                ThemeManager.GetAppTheme("BaseDark")); // or appStyle.Item1
+
             }
             catch (Exception ex)
             {

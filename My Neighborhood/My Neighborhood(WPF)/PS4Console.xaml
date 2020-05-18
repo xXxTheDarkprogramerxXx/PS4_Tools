@@ -12,8 +12,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <Ribbon x:Name="Ribbon" Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)" Background="White" SelectedIndex="1" Foreground="Black">
+        <!-- Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)"-->
+        <!-- Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)"-->
+        <Ribbon x:Name="Ribbon" Background="White" SelectedIndex="1" Foreground="Black" RenderTransformOrigin="0.5,0.5">
             <Ribbon.HelpPaneContent>
                 <RibbonButton SmallImageSource="Images/icons8-help-64.png" />
             </Ribbon.HelpPaneContent>
@@ -33,7 +34,7 @@
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab x:Name="FileTab" 
-                              Header="File"></RibbonTab>
+                              Header="File"/>
             <RibbonTab x:Name="HomeTab"
                               Header="Home">
 
@@ -51,7 +52,7 @@
                     <RibbonButton x:Name="btnClearAll" SmallImageSource="Images\icons8-multiply-52.png" Label="Clear all" Click="btnClearAll_Click"/>
                     <RibbonButton x:Name="btnRefreshProcesses" SmallImageSource="Images\icons8-update-left-rotation-96.png" Label="Refresh processes" Click="btnRefreshProcesses_Click"/>
                     <RibbonMenuButton x:Name="btnProcessChanVis" SmallImageSource="Images\icons8-eye-96.png" Label="Process channel visibility" IsEnabled="False">
-                        <RibbonMenuItem></RibbonMenuItem>
+                        <RibbonMenuItem/>
                     </RibbonMenuButton>
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxTargets" 
@@ -65,7 +66,7 @@
                     <RibbonMenuButton x:Name="txtEscapeChar"
                                         SmallImageSource="Images\icons8-line-96.png"
                                          Label="Unknown ESC" >
-                        <RibbonMenuItem></RibbonMenuItem>
+                        <RibbonMenuItem/>
                     </RibbonMenuButton>
                     <RibbonCheckBox x:Name="cbxEmptyHide"
                                          IsChecked="True"
@@ -78,7 +79,7 @@
                                          Label="Echo console input"  />
                     <RibbonCheckBox x:Name="cbxScrollimput"
                                          IsChecked="True"
-                                         Label="Auto-Scroll" Checked="cbxScrollimput_Checked"  Unchecked="cbxScrollimput_Checked"  Content="Auto-Scroll&#xD;&#xA;" Margin="0,0,0,0.4"  />
+                                         Label="Auto-Scroll" Checked="cbxScrollimput_Checked"  Unchecked="cbxScrollimput_Checked"  Content="Auto-Scroll&#xA;" Margin="0,0,0,0.4"  />
                 </RibbonGroup>
                 <RibbonGroup x:Name="rgbxData" 
                                     Header="Data">
@@ -90,24 +91,25 @@
                                          Label="Reset layout"  />
                     <RibbonButton x:Name="btnOpenLogDirectory"
                                          SmallImageSource="Images\icons8-opened-folder-96.png"
-                                         Label="Open log directory" Click="btnOpenLogDirectory_Click" >
-                    </RibbonButton>
+                                         Label="Open log directory" Click="btnOpenLogDirectory_Click" />
                     <RibbonMenuButton x:Name="btnTheme"
                                          SmallImageSource="Images\icons8-change-theme-96.png"
                                          Label="Theme"  >
-                        <RibbonMenuItem></RibbonMenuItem>
+                        <RibbonMenuItem/>
                     </RibbonMenuButton>
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
-        <TabControl x:Name="tabControl" Grid.RowSpan="2" Margin="0,138,-0.2,0.4">
-            <TabItem Header="All" Background="Orange">
+        <TabControl x:Name="tabControl" Grid.RowSpan="2" Margin="0,138,-0.2,0.4" RenderTransformOrigin="0.5,0.5">
+            <TabItem Header="All" Background="Orange" Controls:ControlsHelper.HeaderFontSize="12">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="7*"/>
-                        <ColumnDefinition Width="422*"/>
+                        <ColumnDefinition Width="21*"/>
+                        <ColumnDefinition Width="264*"/>
+                        <ColumnDefinition Width="11*"/>
+                        <ColumnDefinition Width="991*"/>
                     </Grid.ColumnDefinitions>
-                    <RichTextBox x:Name="rtbAll" Grid.ColumnSpan="2" Margin="0,0,-0.8,0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
+                    <RichTextBox x:Name="rtbAll" Grid.ColumnSpan="4" Margin="0,0,-0.8,-0.6" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
                         <FlowDocument>
                             <Paragraph>
                                 <Run x:Name="rtbText" Text=""/>
@@ -116,9 +118,9 @@
                     </RichTextBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="TabItem">
+            <!--<TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5"/>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
         <Grid HorizontalAlignment="Left" Height="45" Margin="10,266.6,0,0" Grid.Row="1" VerticalAlignment="Top" Width="1273"/>
 

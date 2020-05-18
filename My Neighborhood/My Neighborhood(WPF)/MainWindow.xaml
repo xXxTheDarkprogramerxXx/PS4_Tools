@@ -11,14 +11,25 @@
     ShowCloseButton="True" 
     ShowMaxRestoreButton="True" 
     ShowMinButton="True"
-        Width="1299.3" Height="480" Icon="Images/Obris.ico" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing" WindowStartupLocation="CenterScreen">
-   
+        Width="1299.3" Height="480" Icon="Images/Obris.ico" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing" WindowStartupLocation="CenterScreen"
+    TextOptions.TextFormattingMode="Ideal"
+    >
+
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Ribbon Visibility="Visible" x:Name="Ribbon" Foreground="Black" Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)" Background="White" SelectionChanged="Ribbon_SelectionChanged" SelectedIndex="1">
+        <!--Title="Neighborhood for PlayStation®4 (Open Source by TheDarkprogramer)"-->
+        <Ribbon Visibility="Visible" x:Name="Ribbon" Foreground="Black"  Background="White" SelectionChanged="Ribbon_SelectionChanged" SelectedIndex="1" RenderTransformOrigin="0.5,0.5">
+            <Ribbon.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="-20"/>
+                </TransformGroup>
+            </Ribbon.RenderTransform>
             <!--<Ribbon.HelpPaneContent>
                 <RibbonButton  SmallImageSource="Images/icons8-help-64.png" />
             </Ribbon.HelpPaneContent>-->
@@ -157,10 +168,18 @@
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
-        <ListView x:Name="lstSKU" VirtualizingStackPanel.IsVirtualizing="False"  HorizontalAlignment="Stretch" Margin="0,138,-0.2,0.4" Grid.RowSpan="2" SizeChanged="lstSKU_SizeChanged" SelectionChanged="lstSKU_SelectionChanged" MouseDoubleClick="lstSKU_MouseDoubleClick">
+        <ListView x:Name="lstSKU" VirtualizingStackPanel.IsVirtualizing="False"  HorizontalAlignment="Stretch" Margin="0,138,-0.2,0.4" Grid.RowSpan="2" SizeChanged="lstSKU_SizeChanged" SelectionChanged="lstSKU_SelectionChanged" MouseDoubleClick="lstSKU_MouseDoubleClick" RenderTransformOrigin="0.5,0.5">
+            <ListView.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="-20"/>
+                </TransformGroup>
+            </ListView.RenderTransform>
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Refresh" InputGestureText="F5"/>
+                    <MenuItem x:Name="cmbRefresh"  Header="Refresh" InputGestureText="F5" Click="cmbRefresh_Click"/>
                     <Separator/>
                     <MenuItem  x:Name="cmbNav" Header="Navigate" IsEnabled="False">
                         <MenuItem></MenuItem>
@@ -195,7 +214,7 @@
                     <MenuItem Header="System update..." IsEnabled="False" Click="MenuItem_Click"></MenuItem>
                     <MenuItem Header="Activate..." IsEnabled="False" Click="MenuItem_Click_1"></MenuItem>
                     <Separator></Separator>
-                    <MenuItem x:Name="cmbDelete" Header="Delete"  InputGestureText="Delete" IsEnabled="False" Click="cmbDelete_Click"></MenuItem>
+                    <MenuItem x:Name="cmbDelete" Header="Delete"  InputGestureText="Delete" IsEnabled="True" Click="cmbDelete_Click"></MenuItem>
                     <MenuItem x:Name="cmbRename" Header="Rename"  InputGestureText="F2" IsEnabled="False" Click="cmbRename_Click"></MenuItem>
                     <Separator></Separator>
                     <MenuItem x:Name="cmbInstallPkg" Header="Install package" IsEnabled="False" Click="cmbInstallPkg_Click" ></MenuItem>
@@ -234,7 +253,7 @@
                                 <Grid>
                                     <ProgressBar Foreground="Blue" x:Name="pbstatus" Value="{Binding Progress}" Height="{Binding Height, ElementName=StatusProgress}" Width="{Binding Width, ElementName=StatusProgress}"/>
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" Text="{Binding ProgressName}">
-                                       
+
                                     </TextBlock>
                                 </Grid>
                             </DataTemplate>
@@ -256,8 +275,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
-      
+
 
     </Grid>
-    
+
 </Controls:MetroWindow>

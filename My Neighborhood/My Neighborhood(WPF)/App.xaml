@@ -17,6 +17,8 @@
                         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
                         <!--<ResourceDictionary Source="/Themes/ExpressionLight.xaml"/>-->
                     </ResourceDictionary.MergedDictionaries>
+                    <System:Double x:Key="WindowTitleFontSize">10</System:Double>
+                    <FontFamily x:Key="HeaderFontFamily">Segoe UI</FontFamily>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
          

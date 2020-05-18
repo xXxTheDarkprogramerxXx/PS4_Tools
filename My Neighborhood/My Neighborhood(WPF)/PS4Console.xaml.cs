@@ -99,23 +99,33 @@ namespace My_Neighborhood_WPF_
             string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
             //Log Directory 
             LogDirectory = AppPath + "/Logs/" + SKU.Target;
-            if(!Directory.Exists(LogDirectory))
+            try
             {
-                Directory.CreateDirectory(LogDirectory);
-            }
-            if (Properties.Settings.Default.DisableSingleFileLogging == true)
-            {
-                if (File.Exists(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+                if (!Directory.Exists(LogDirectory))
                 {
-                    File.Delete(LogDirectory + "/PS4-KLOG-RPC-log.txt");
+                    Directory.CreateDirectory(LogDirectory);
                 }
-            }
-            else
-            {
-                File.Move(LogDirectory + "/PS4-KLOG-RPC-log.txt", LogDirectory + "/PS4-KLOG-RPC-log-backup-" + DateTime.Now.ToString("hmmsstt") + ".txt");
-            }
-            File.Create(LogDirectory + "/PS4-KLOG-RPC-log.txt");
+                if (Properties.Settings.Default.DisableSingleFileLogging == true)
+                {
+                    if (File.Exists(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+                    {
+                        File.Delete(LogDirectory + "/PS4-KLOG-RPC-log.txt");
+                    }
+                }
+                else
+                {
+                    if (File.Exists(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+                    {
+                        File.Move(LogDirectory + "/PS4-KLOG-RPC-log.txt", LogDirectory + "/PS4-KLOG-RPC-log-backup-" + DateTime.Now.ToString("hmmsstt") + ".txt");
+                    }
+                }
 
+                File.Create(LogDirectory + "/PS4-KLOG-RPC-log.txt");
+            }
+            catch(Exception ex)
+            {
+
+            }
             if (Properties.Settings.Default.ConsolePrefCom == true && Properties.Settings.Default.ConsolePrefPort != "")
             {
                 this.Monitor.NewSerialDataRecieved += this.OnNewSerialDataReceived;
