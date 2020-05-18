@@ -68,11 +68,17 @@ namespace My_Neighborhood_WPF_
             if (!string.IsNullOrWhiteSpace(@string))
             {
                 rtbAll.Dispatcher.Invoke(new Action(() => rtbAll.AppendText(@string)));
-                using (StreamWriter sw = File.AppendText(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+                try
                 {
-                    sw.Write(@string);
+                    using (StreamWriter sw = File.AppendText(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+                    {
+                        sw.Write(@string);
+                    }
                 }
+                catch(Exception ex)
+                {
 
+                }
                 if (AutoScroll == true)
                     this.Dispatcher.Invoke(() => rtbAll.ScrollToEnd());
             }
@@ -97,9 +103,16 @@ namespace My_Neighborhood_WPF_
             {
                 Directory.CreateDirectory(LogDirectory);
             }
-            if(File.Exists(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+            if (Properties.Settings.Default.DisableSingleFileLogging == true)
             {
-                File.Delete(LogDirectory + "/PS4-KLOG-RPC-log.txt");
+                if (File.Exists(LogDirectory + "/PS4-KLOG-RPC-log.txt"))
+                {
+                    File.Delete(LogDirectory + "/PS4-KLOG-RPC-log.txt");
+                }
+            }
+            else
+            {
+                File.Move(LogDirectory + "/PS4-KLOG-RPC-log.txt", LogDirectory + "/PS4-KLOG-RPC-log-backup-" + DateTime.Now.ToString("hmmsstt") + ".txt");
             }
             File.Create(LogDirectory + "/PS4-KLOG-RPC-log.txt");
 

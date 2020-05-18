@@ -1,0 +1,20 @@
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\csc.exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\vbc.exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\VBCSCompiler.exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\PS Tools Online.dll.config
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\PS Tools Online.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\PS Tools Online.pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\obj\PS4 Unity\PS Tools Online.csprojResolveAssemblyReference.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\obj\PS4 Unity\PS Tools Online.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS Tools Online\obj\PS4 Unity\PS Tools Online.pdb

@@ -30,7 +30,7 @@ namespace PS4_Tools.Util
                 bytes.Add(byte.Parse(chunk, NumberStyles.AllowHexSpecifier));
             }
             return bytes.ToArray();
-        }
+        }   
 
         public static DateTime FromUnixTime(long unixTime)
         {
@@ -978,6 +978,20 @@ namespace PS4_Tools.Util
 
     public static class StreamExtensions
     {
+        public static byte[] ToByteArray(this Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+
         public static void WriteUInt16LE(this Stream s, ushort i)
         {
             byte[] tmp = new byte[2];

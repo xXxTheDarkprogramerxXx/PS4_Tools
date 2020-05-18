@@ -14,6 +14,7 @@ using Android.Support.V7.Widget;
 using Android.Graphics.Drawables;
 using DesignLibrary.Helpers;
 using Android.Graphics;
+using Android.Content.Res;
 
 namespace DesignLibrary_Tutorial.Fragments
 {
@@ -110,14 +111,14 @@ namespace DesignLibrary_Tutorial.Fragments
         /// <summary>
         /// Custom Recyler View Adapter
         /// </summary>
-        public class SimpleStringRecyclerViewAdapter : RecyclerView.Adapter, IFilterable
+        public class SimpleStringRecyclerViewAdapter : RecyclerView.Adapter
         {
             private readonly TypedValue mTypedValue = new TypedValue();
             private int mBackground;
             private List<WMSScanner.TripDetail> mValues;
             Resources mResource;
             private Dictionary<int, int> mCalculatedSizes;
-            private Filter mFilter;
+           // private Filter mFilter;
 
             public SimpleStringRecyclerViewAdapter(Context context, List<WMSScanner.TripDetail> items, Resources res)
             {
@@ -125,7 +126,7 @@ namespace DesignLibrary_Tutorial.Fragments
                 mBackground = mTypedValue.ResourceId;
                 mValues = items;
                 mResource = res;
-                mFilter = new myFilter(this);
+               // mFilter = new myFilter(this);
                 mCalculatedSizes = new Dictionary<int, int>();
             }
 
@@ -137,13 +138,13 @@ namespace DesignLibrary_Tutorial.Fragments
                 }
             }
 
-            public Filter Filter
-            {
-                get
-                {
-                    return mFilter;
-                }
-            }
+            //public Filter Filter
+            //{
+            //    get
+            //    {
+            //        //return mFilter;
+            //    }
+            //}
 
 
 
@@ -202,6 +203,30 @@ namespace DesignLibrary_Tutorial.Fragments
                 return new SimpleViewHolder(view);
             }
 
+        }
+
+        /// <summary>
+        /// Recycle View Holder
+        /// </summary>
+        public class SimpleViewHolder : RecyclerView.ViewHolder
+        {
+            public string mBoundString;
+            public readonly View mView;
+            public readonly ImageView mImageView;
+            public readonly TextView mTxtView;
+
+            public SimpleViewHolder(View view) : base(view)
+            {
+                mView = view;
+                mTxtView = view.FindViewById<TextView>(Resource.Id.text1);
+                mImageView = view.FindViewById<ImageView>(Resource.Id.avatar);
+
+            }
+
+            public override string ToString()
+            {
+                return base.ToString() + " '" + mTxtView.Text;
+            }
         }
     }
 }

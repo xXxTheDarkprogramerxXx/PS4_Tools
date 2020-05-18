@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:My_Neighborhood_WPF_"
         mc:Ignorable="d"
-        Title="Drive Letter"  Icon="Images/favicon (1).ico" Height="130.97" Width="233.955" Loaded="Window_Loaded">
+        Title="Drive Letter"  Icon="Images/favicon (1).ico" Height="162.437" Width="247.822" Loaded="Window_Loaded">
     <Grid>
-        <GroupBox x:Name="groupBox" Header="Select your drive letter" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="82" Width="207">
+        <GroupBox x:Name="groupBox" Header="Select your drive letter" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="113" Width="222">
             <Grid>
-                <ComboBox x:Name="cbxOpenDrive" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120"/>
+                <ComboBox x:Name="cbxOpenDrive" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="193"/>
                 <Button x:Name="btnDrive" Content="OK" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Width="75" Click="btnDrive_Click"/>
             </Grid>
 

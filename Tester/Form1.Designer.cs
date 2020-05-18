@@ -55,6 +55,7 @@
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.button22 = new System.Windows.Forms.Button();
             this.button21 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -74,7 +75,9 @@
             this.txtspitout = new System.Windows.Forms.TextBox();
             this.txtspitter = new System.Windows.Forms.TextBox();
             this.button23 = new System.Windows.Forms.Button();
-            this.button22 = new System.Windows.Forms.Button();
+            this.button24 = new System.Windows.Forms.Button();
+            this.button25 = new System.Windows.Forms.Button();
+            this.button26 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -302,10 +305,11 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button26);
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Location = new System.Drawing.Point(6, 21);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(148, 80);
+            this.groupBox2.Size = new System.Drawing.Size(169, 80);
             this.groupBox2.TabIndex = 28;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PS4 GP4 Projects";
@@ -371,6 +375,16 @@
             this.groupBox6.TabIndex = 0;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "PKG\'s";
+            // 
+            // button22
+            // 
+            this.button22.Location = new System.Drawing.Point(230, 54);
+            this.button22.Name = "button22";
+            this.button22.Size = new System.Drawing.Size(120, 23);
+            this.button22.TabIndex = 23;
+            this.button22.Text = "Trophy enc";
+            this.button22.UseVisualStyleBackColor = true;
+            this.button22.Click += new System.EventHandler(this.button22_Click);
             // 
             // button21
             // 
@@ -564,21 +578,43 @@
             this.button23.UseVisualStyleBackColor = true;
             this.button23.Click += new System.EventHandler(this.button23_Click);
             // 
-            // button22
+            // button24
             // 
-            this.button22.Location = new System.Drawing.Point(230, 54);
-            this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(120, 23);
-            this.button22.TabIndex = 23;
-            this.button22.Text = "Trophy enc";
-            this.button22.UseVisualStyleBackColor = true;
-            this.button22.Click += new System.EventHandler(this.button22_Click);
+            this.button24.Location = new System.Drawing.Point(882, 214);
+            this.button24.Name = "button24";
+            this.button24.Size = new System.Drawing.Size(118, 23);
+            this.button24.TabIndex = 39;
+            this.button24.Text = "Read PBM";
+            this.button24.UseVisualStyleBackColor = true;
+            this.button24.Click += new System.EventHandler(this.button24_Click);
+            // 
+            // button25
+            // 
+            this.button25.Location = new System.Drawing.Point(881, 248);
+            this.button25.Name = "button25";
+            this.button25.Size = new System.Drawing.Size(130, 23);
+            this.button25.TabIndex = 40;
+            this.button25.Text = "Read APP.JSON";
+            this.button25.UseVisualStyleBackColor = true;
+            this.button25.Click += new System.EventHandler(this.button25_Click);
+            // 
+            // button26
+            // 
+            this.button26.Location = new System.Drawing.Point(87, 29);
+            this.button26.Name = "button26";
+            this.button26.Size = new System.Drawing.Size(75, 46);
+            this.button26.TabIndex = 3;
+            this.button26.Text = "Read APP.XML";
+            this.button26.UseVisualStyleBackColor = true;
+            this.button26.Click += new System.EventHandler(this.button26_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1227, 506);
+            this.Controls.Add(this.button25);
+            this.Controls.Add(this.button24);
             this.Controls.Add(this.groupBox16);
             this.Controls.Add(this.button19);
             this.Controls.Add(this.groupBox14);
@@ -668,6 +704,9 @@
         private System.Windows.Forms.TextBox txtspitter;
         private System.Windows.Forms.Button button23;
         private System.Windows.Forms.Button button22;
+        private System.Windows.Forms.Button button24;
+        private System.Windows.Forms.Button button25;
+        private System.Windows.Forms.Button button26;
     }
 }
 

@@ -207,7 +207,7 @@ namespace Tester
             /*Lets try and work with some savedata*/
             //PS4_Tools.SaveData.Doit(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\savedata\CUSA01656\SAVEDATA00.bin", @"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\savedata\CUSA01656\sdimg_SAVEDATA00");
 
-            PS4_Tools.SaveData.LoadSaveData(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\savedata\CUSA01656\sdimg_SAVEDATA00", @"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\savedata\CUSA01656\SAVEDATA00.bin");
+            PS4_Tools.SaveData.LoadSaveData(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\savedata\CUSA00135\sdimg_BAK1Save0x0sgd", @"C: \Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\savedata\CUSA00135\BAK1Save0x0sgd.bin");
 
         }
 
@@ -551,6 +551,41 @@ namespace Tester
             PS4_Tools.Trophy_File trphy = new PS4_Tools.Trophy_File();
             var item= trphy.SealedTrophy(File.ReadAllBytes(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\trophy\data\NPWR04914_00\trophy.img"), File.ReadAllBytes(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\trophy\data\NPWR04914_00\sealedkey"));
             File.WriteAllBytes("testdecypt.dat", item);
+
+        }
+
+        private void button24_Click(object sender, EventArgs e)
+        {
+            PS4_Tools.PKG.SceneRelated.PBM.PBMStruct pbmfile = PS4_Tools.PKG.SceneRelated.PBM.Read(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\CUSA00265\app.pbm");
+            var displayinfo = pbmfile.DisplayInfo();
+            for (int i = 0; i < displayinfo.Count ; i++)
+            {
+                Console.WriteLine(displayinfo[i]);
+            }
+        }
+
+        private void button25_Click(object sender, EventArgs e)
+        {
+            PS4_Tools.PKG.SceneRelated.App.JSON thejson = new PS4_Tools.PKG.SceneRelated.App.JSON(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\CUSA00265\app.json");
+            Console.WriteLine("Number of Split Files " + thejson.NumberOfSplitFiles);
+            Console.WriteLine("Package Digest " + thejson.PackageDigest);
+            Console.WriteLine("Pieces[1] Url " + thejson.Pieces[0].Url);
+        }
+
+        private void button26_Click(object sender, EventArgs e)
+        {
+            //string path 
+
+            //set base directory for PS4 project
+            PS4_Tools.PKG.SceneRelated.GP4.Psproject project = PS4_Tools.PKG.SceneRelated.GP4.ReadGP4(@"C: \Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\CUSA00265\app.xml");
+            if (project.Fmt != "playgo-status")
+            {
+                MessageBox.Show("This is not a valid PS4 PlayGoXML");
+                return;
+            }
+
+            //lets read the pkg content info 
+            //that should be that
 
         }
     }

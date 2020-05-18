@@ -104,3 +104,17 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborh
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\MahApps.Metro.pdb
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\MahApps.Metro.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\RibbonControlsLibrary.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\IronPython.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\IronPython.Modules.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\IronPython.SQLite.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\IronPython.Wpf.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\Microsoft.Dynamic.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\Microsoft.Scripting.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\Microsoft.Scripting.Metadata.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\IronPython.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\IronPython.Modules.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\IronPython.SQLite.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\IronPython.Wpf.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\Microsoft.Dynamic.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\Microsoft.Scripting.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\My Neighborhood\My Neighborhood(WPF)\bin\Debug\Microsoft.Scripting.Metadata.xml

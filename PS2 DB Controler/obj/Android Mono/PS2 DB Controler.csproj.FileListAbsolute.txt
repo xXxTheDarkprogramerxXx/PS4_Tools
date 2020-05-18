@@ -1,0 +1,9 @@
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\bin\Android Mono\PS2 DB Controler.exe.config
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\bin\Android Mono\PS2 DB Controler.exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\bin\Android Mono\PS2 DB Controler.pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\Android Mono\PS2 DB Controler.csprojResolveAssemblyReference.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\Android Mono\PS2_DB_Controler.Form1.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\Android Mono\PS2_DB_Controler.Properties.Resources.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\Android Mono\PS2 DB Controler.csproj.GenerateResource.Cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\Android Mono\PS2 DB Controler.exe
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\Android Mono\PS2 DB Controler.pdb

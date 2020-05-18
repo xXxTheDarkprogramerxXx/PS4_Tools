@@ -18,8 +18,11 @@ using System.Xml;
 
 #region << Disc Utils >>
 
+#if !PS4_UNITY
+#if !Android_Mono
 using DiscUtils.Iso9660;
-
+#endif
+#endif
 #endregion << Disc Utils >>
 
 #region << VGAudio >>
@@ -52,7 +55,7 @@ using PS4_Tools.Util;
 
 #region << Unity Engine >>
 
-#if UNITY_EDITOR || UNITY_PS4
+#if UNITY_EDITOR || UNITY_PS4 || PS4_UNITY || DEBUG
 
 using UnityEngine;
 
@@ -83,7 +86,7 @@ namespace PS4_Tools
             else
             {
                 rtn = "/PS4Tools";
-                if(!Directory.Exists(rtn))
+                if (!Directory.Exists(rtn))
                 {
                     Directory.CreateDirectory(rtn);
                 }
@@ -165,7 +168,7 @@ namespace PS4_Tools
     public class SELF
     {
         #region SelfStruct
-       
+
         /// <summary>
         /// Self Header 
         /// </summary>
@@ -203,7 +206,7 @@ namespace PS4_Tools
         //    public hilo64_t uncompressed_size = new hilo64_t();
         //}
 
-#endregion
+        #endregion
     }
 
     /// <summary>
@@ -234,7 +237,7 @@ namespace PS4_Tools
                 public int LoopStart { get; set; }
                 public int LoopEnd { get; set; }
             }
-                
+
             /// <summary>
             /// Allows users to load an at9 for decoding and returns the wav as a byte array
             /// </summary>
@@ -266,7 +269,7 @@ namespace PS4_Tools
 
                     array = SongStream.ToArray();
 
-                    
+
 
                 }
                 return array;
@@ -286,9 +289,9 @@ namespace PS4_Tools
                 {
                     At9Reader reader = new At9Reader();
                     At9Structure structure = reader.ReadFile(stream);
-                    at9= structure;
+                    at9 = structure;
                 }
-               
+
 
                 return at9;
             }
@@ -305,6 +308,8 @@ namespace PS4_Tools
         /// </summary>
         public class PNG
         {
+#if !PS4_UNITY
+
             /// <summary>
             /// Resize the image to the specified width and height.
             /// </summary>
@@ -336,6 +341,9 @@ namespace PS4_Tools
 
                 return destImage;
             }
+#endif
+
+#if !PS4_UNITY
 
             /// <summary>
             /// this convers images to 24bbp
@@ -349,8 +357,9 @@ namespace PS4_Tools
                     gr.DrawImage(img, new System.Drawing.Rectangle(0, 0, img.Width, img.Height));
                 return bmp;
             }
-
-#region << Create_PS4_Compatible_PNG >>
+#endif
+#if !PS4_UNITY
+            #region << Create_PS4_Compatible_PNG >>
 
             /// <summary>
             /// Converts a file location of a bitmap to a ps4 compatible one
@@ -373,7 +382,7 @@ namespace PS4_Tools
             /// </summary>
             /// <param name="inputfile">Original Bitmap Location</param>
             /// <param name="outputfile">Original Bitmap Location</param>
-            public void Create_PS4_Compatible_PNG(string inputfile, string outputfile,int Height = 512,int Width = 512)
+            public void Create_PS4_Compatible_PNG(string inputfile, string outputfile, int Height = 512, int Width = 512)
             {
                 //read input file
                 Bitmap returnbmp = new Bitmap(inputfile);
@@ -455,7 +464,8 @@ namespace PS4_Tools
                 return returnbmp.ToByteArray(System.Drawing.Imaging.ImageFormat.Png);
             }
 
-#endregion << Create_PS4_Compatible_PNG >>
+            #endregion << Create_PS4_Compatible_PNG >>
+#endif
         }
 
         /// <summary>
@@ -463,7 +473,7 @@ namespace PS4_Tools
         /// </summary>
         public class DDS
         {
-#region << Returns >>
+            #region << Returns >>
 
             /// <summary>
             /// Directly save a PNG from a DDS File
@@ -478,6 +488,9 @@ namespace PS4_Tools
 
             }
 
+
+#if !PS4_UNITY
+
             /// <summary>
             /// Gets a stream from a DDS
             /// </summary>
@@ -489,10 +502,14 @@ namespace PS4_Tools
 
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
                 Bitmap temp = image.BitmapImage;
-                temp.Save(rtnStream,System.Drawing.Imaging.ImageFormat.Png);
+                temp.Save(rtnStream, System.Drawing.Imaging.ImageFormat.Png);
                 return rtnStream;
 
             }
+
+#endif
+
+#if !PS4_UNITY
 
             /// <summary>
             /// Get a Bitmap from a DDS
@@ -505,7 +522,7 @@ namespace PS4_Tools
                 DDSReader.DDSImage image = new DDSReader.DDSImage(new FileStream(DDSFilePath, FileMode.Open, FileAccess.Read));
                 return (Bitmap)image.BitmapImage;
             }
-            
+
             /// <summary>
             /// Gets a PNG as byte[] from a dds file
             /// </summary>
@@ -517,16 +534,16 @@ namespace PS4_Tools
                 Bitmap temp = image.BitmapImage;
                 return temp.ToByteArray(System.Drawing.Imaging.ImageFormat.Png);
             }
-
+#endif
             #endregion << Returns >>
 
             #region << Creations >>
 
-#if PS4_UNITY
+#if !PS4_UNITY
             public class PS4
             {
 
-
+#if PS4_UNITY || DEBUG
 
                 /// <summary>
                 /// Still not ready for release
@@ -563,18 +580,19 @@ namespace PS4_Tools
                     //img;
                 }
 
+
                 public static void CreateDDSFromStream(byte[] png, string SavePath)
                 {
                     MemoryStream ms = new MemoryStream(png);
-                   // Bitmap Bitmap = new Bitmap(ms);
-                   // DDSReader.DDSImage img = new DDSReader.DDSImage(Bitmap);
+                    // Bitmap Bitmap = new Bitmap(ms);
+                    // DDSReader.DDSImage img = new DDSReader.DDSImage(Bitmap);
                     UnityEngine.Texture2D dd = LoadTexture(ms);
                     dd.Compress(true);
 
-                    
+
                     UnityEditor.EditorUtility.CompressTexture(dd, TextureFormat.DXT1, TextureCompressionQuality.Best);
                     byte[] data = dd.GetRawTextureData();
-                   // dd.GetRawTextureData()
+                    // dd.GetRawTextureData()
                     //img.Save(Bitmap, SavePath);
                     File.WriteAllBytes(SavePath, data);
                     //img;
@@ -621,7 +639,7 @@ namespace PS4_Tools
 
                     return null;                     // Return null if load failed
                 }
-
+#endif
                 // Merged From linked CopyStream below and Jon Skeet's ReadFully example
                 public static void CopyStream(Stream input, Stream output)
                 {
@@ -634,7 +652,7 @@ namespace PS4_Tools
                 }
             }
 #endif
-
+#if !PS4_UNITY
             public class Windows
             {
                 /// <summary>
@@ -692,16 +710,16 @@ namespace PS4_Tools
                     }
                 }
             }
-
+#endif
             #endregion << Creations >>
         }
-
+#if !PS4_UNITY
         /// <summary>
         /// Gim File Handling (Haven't seen one inside PS4 but whatever)
         /// </summary>
         public class GIMImages
         {
-#region << Gim >>
+            #region << Gim >>
 
             public interface IPixelOrderIterator
             {
@@ -1911,9 +1929,9 @@ namespace PS4_Tools
                 }
             }
 
-#endregion << Gim >>
+            #endregion << Gim >>
         }
-
+#endif
     }
 
 
@@ -1925,50 +1943,50 @@ namespace PS4_Tools
     public class RCO
     {
         #region << Vars >>
-                private static byte[] gimMagic = new byte[16] { 0x4D, 0x49, 0x47, 0x2E, 0x30, 0x30, 0x2E, 0x31, 0x50, 0x53, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, };
-                private static byte[] vagEnd = new byte[16] { 0x00, 0x07, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, };
-                private static byte[] pngMagic = new byte[16] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52, };
-                private static byte[] ngrcoMagic = new byte[8] { 0x52, 0x43, 0x4F, 0x46, 0x10, 0x01, 0x00, 0x00, };
-                private static byte[] rcoMagic = new byte[4] { 0x52, 0x43, 0x4F, 0x46 };
-                private static byte[] ngCXML = new byte[8] { 0x52, 0x43, 0x53, 0x46, 0x10, 0x01, 0x00, 0x00, };
-                private static byte[] vagMagic = new byte[8] { 0x56, 0x41, 0x47, 0x70, 0x00, 0x02, 0x00, 0x01, };
-                private static byte[] ddsMagic = new byte[4] { 0x44, 0x44, 0x53, 0x20, };
-                private static byte[] wavMagic = new byte[4] { 0x52, 0x49, 0x46, 0x46, };
-                private static byte[] gtfMagic = new byte[4] { 0x02, 0x02, 0x00, 0xFF, };
-                private static byte[] zlibMagic = new byte[3] { 0x00, 0x78, 0xDA, };
-                private static byte[] singlZL = new byte[2] { 0x78, 0xDA, };
-                private static byte[] _vag = new byte[0];
-                private static byte[] _png = new byte[0];
-                private static byte[] _cxml = new byte[0];
-                private static byte[] _zlib = new byte[0];
-                private static byte[] _wav = new byte[0];
-                private static byte[] _gtf = new byte[0];
-                private static byte[] _dds = new byte[0];
-                private static byte[] zlib = new byte[2];
-                private static byte[] vag = new byte[8];
-                private static byte[] cxml = new byte[8];
-                private static byte[] png = new byte[16];
-                private static byte[] temp = new byte[1];
-                private static byte[] dds = new byte[4];
-                private static byte[] gtf = new byte[4];
-                private static byte[] wav = new byte[4];
-                private static int i = 0;
-                private static int dumped = 0;
-                private static int end = 0;
-                private static int count = 0;
-                private static int countVag = 0;
-                private static int countCXML = 0;
-                private static int countGim = 0;
-                private static int countDDS = 0;
-                private static int countPNG = 0;
-                private static int countGTF = 0;
-                private static int countWAV = 0;
-                private static int countZLIB = 0;
-                private static string baseDir = "";
-                private static string convDir = "";
-                private static string corExt = "";
-                private static string move = "";
-                private static string dest = "";
+        private static byte[] gimMagic = new byte[16] { 0x4D, 0x49, 0x47, 0x2E, 0x30, 0x30, 0x2E, 0x31, 0x50, 0x53, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, };
+        private static byte[] vagEnd = new byte[16] { 0x00, 0x07, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, };
+        private static byte[] pngMagic = new byte[16] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52, };
+        private static byte[] ngrcoMagic = new byte[8] { 0x52, 0x43, 0x4F, 0x46, 0x10, 0x01, 0x00, 0x00, };
+        private static byte[] rcoMagic = new byte[4] { 0x52, 0x43, 0x4F, 0x46 };
+        private static byte[] ngCXML = new byte[8] { 0x52, 0x43, 0x53, 0x46, 0x10, 0x01, 0x00, 0x00, };
+        private static byte[] vagMagic = new byte[8] { 0x56, 0x41, 0x47, 0x70, 0x00, 0x02, 0x00, 0x01, };
+        private static byte[] ddsMagic = new byte[4] { 0x44, 0x44, 0x53, 0x20, };
+        private static byte[] wavMagic = new byte[4] { 0x52, 0x49, 0x46, 0x46, };
+        private static byte[] gtfMagic = new byte[4] { 0x02, 0x02, 0x00, 0xFF, };
+        private static byte[] zlibMagic = new byte[3] { 0x00, 0x78, 0xDA, };
+        private static byte[] singlZL = new byte[2] { 0x78, 0xDA, };
+        private static byte[] _vag = new byte[0];
+        private static byte[] _png = new byte[0];
+        private static byte[] _cxml = new byte[0];
+        private static byte[] _zlib = new byte[0];
+        private static byte[] _wav = new byte[0];
+        private static byte[] _gtf = new byte[0];
+        private static byte[] _dds = new byte[0];
+        private static byte[] zlib = new byte[2];
+        private static byte[] vag = new byte[8];
+        private static byte[] cxml = new byte[8];
+        private static byte[] png = new byte[16];
+        private static byte[] temp = new byte[1];
+        private static byte[] dds = new byte[4];
+        private static byte[] gtf = new byte[4];
+        private static byte[] wav = new byte[4];
+        private static int i = 0;
+        private static int dumped = 0;
+        private static int end = 0;
+        private static int count = 0;
+        private static int countVag = 0;
+        private static int countCXML = 0;
+        private static int countGim = 0;
+        private static int countDDS = 0;
+        private static int countPNG = 0;
+        private static int countGTF = 0;
+        private static int countWAV = 0;
+        private static int countZLIB = 0;
+        private static string baseDir = "";
+        private static string convDir = "";
+        private static string corExt = "";
+        private static string move = "";
+        private static string dest = "";
 
         #endregion << Vars >>
 
@@ -2074,7 +2092,7 @@ namespace PS4_Tools
                             br.BaseStream.Seek(count, SeekOrigin.Begin);
                             br.Read(wav, 0, 4);
 
-#region vagExtract
+                            #region vagExtract
                             if (CompareBytes(vag, vagMagic))
                             {
                                 Console.Write("Found a VAG File will start to extract...");
@@ -2179,8 +2197,8 @@ namespace PS4_Tools
                                 //ConvertVAG(outFile);
                                 countVag++;
                             }
-#endregion vagExtract
-#region pngExtract
+                            #endregion vagExtract
+                            #region pngExtract
                             else if (CompareBytes(png, pngMagic))
                             {
                                 Console.Write("Found a PNG File will start to extract...");
@@ -2290,8 +2308,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countPNG++;
                             }
-#endregion pngExtract
-#region cxmlExtract
+                            #endregion pngExtract
+                            #region cxmlExtract
                             else if (CompareBytes(cxml, ngCXML))
                             {
                                 Console.Write("Found a CXML File will start to extract...");
@@ -2392,8 +2410,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countCXML++;
                             }
-#endregion cxmlExtract
-#region ddsExtract
+                            #endregion cxmlExtract
+                            #region ddsExtract
                             else if (CompareBytes(dds, ddsMagic))
                             {
                                 Console.Write("Found a DDS File will start to extract...");
@@ -2494,8 +2512,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countDDS++;
                             }
-#endregion ddsExtract
-#region gtfExtract
+                            #endregion ddsExtract
+                            #region gtfExtract
                             else if (CompareBytes(gtf, gtfMagic))
                             {
                                 Console.Write("Found a GTF File will start to extract...");
@@ -2596,8 +2614,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countGTF++;
                             }
-#endregion gtfExtract
-#region wavExtract
+                            #endregion gtfExtract
+                            #region wavExtract
                             else if (CompareBytes(wav, wavMagic))
                             {
                                 Console.Write("Found a WAV File will start to extract...");
@@ -2698,7 +2716,7 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countWAV++;
                             }
-#endregion wavExtract
+                            #endregion wavExtract
                             else
                             {
                                 Console.WriteLine("\nFound a new File which i don't know what to do with !\nPlease contact the Developer @ www.playstationhax.it");
@@ -2714,7 +2732,7 @@ namespace PS4_Tools
                     {
                         while ((i = br.Read(temp, 0, 1)) != 0)
                         {
-#region zlibExtract
+                            #region zlibExtract
                             _zlib = new byte[3];
                             br.BaseStream.Seek(count, SeekOrigin.Begin);
                             br.Read(_zlib, 0, 3);
@@ -2833,7 +2851,7 @@ namespace PS4_Tools
                                 //  ConvertDDS(corExt);
                                 Image.DDS.SavePNGFromDDS(corExt, corExt.Replace(".dds", ".png"));
                             }
-#endregion ZlibExtract
+                            #endregion ZlibExtract
                             // Have we dumped all data?
                             if (dumped == end)
                             {
@@ -2880,7 +2898,7 @@ namespace PS4_Tools
         {
             RCOFile rco = new RCOFile();
             rco.FileTable = new FileTable();
-            
+
             try
             {
                 // Reading Header
@@ -2895,7 +2913,7 @@ namespace PS4_Tools
                     //Array reversed
                     //Start Offset 
                     br.BaseStream.Position = (long)rco.Header.Tree_Table_Offset;//go to start of table
-                    var treetable= br.ReadBytes((int)rco.Header.Tree_Table_Size);//read size
+                    var treetable = br.ReadBytes((int)rco.Header.Tree_Table_Size);//read size
 
                     //now reverse 
                     Array.Reverse(treetable);
@@ -2960,7 +2978,7 @@ namespace PS4_Tools
                             br.BaseStream.Seek(count, SeekOrigin.Begin);
                             br.Read(wav, 0, 4);
 
-#region vagExtract
+                            #region vagExtract
                             if (CompareBytes(vag, vagMagic))
                             {
                                 //Console.Write("Found a VAG File will start to extract...");
@@ -3056,7 +3074,7 @@ namespace PS4_Tools
                                             // We reached the eof and loop was stopped. Now we need to write out the last 16 bytes which build the eof of a VAG file.
                                             bw.Write(toWrite, 0, 16);
                                             memset.Read(toWrite, 0, 16);
-                                            Vag vag  = new Vag();
+                                            Vag vag = new Vag();
                                             vag.FileBytes = memset.ToArray();
                                             vag.VagFile = outFile;
                                             rco.FileTable.VagFiles.Add(vag);
@@ -3076,8 +3094,8 @@ namespace PS4_Tools
                                 //ConvertVAG(outFile);
                                 countVag++;
                             }
-#endregion vagExtract
-#region pngExtract
+                            #endregion vagExtract
+                            #region pngExtract
                             else if (CompareBytes(png, pngMagic))
                             {
                                 //Console.Write("Found a PNG File will start to extract...");
@@ -3187,7 +3205,7 @@ namespace PS4_Tools
                                     }
                                     PNG png = new PNG();
                                     png.PNGFile = outFile;
-                                    
+
                                     png.FileBytes = memset.ToArray();
                                     rco.FileTable.PNGFiles.Add(png);
                                     bw.Close();
@@ -3197,8 +3215,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countPNG++;
                             }
-#endregion pngExtract
-#region cxmlExtract
+                            #endregion pngExtract
+                            #region cxmlExtract
                             else if (CompareBytes(cxml, ngCXML))
                             {
                                 //Console.Write("Found a CXML File will start to extract...");
@@ -3298,23 +3316,23 @@ namespace PS4_Tools
                                         else
                                             break;
                                     }
-                                    
+
                                     CXML cxml = new CXML();
                                     cxml.CXMLFile = outFile;
-                                    cxml.FileBytes = memset.ToArray(); 
+                                    cxml.FileBytes = memset.ToArray();
                                     bw.Close();
                                     memset.Close();
                                 }
                                 Console.Write("done!\n");
                                 countCXML++;
                             }
-#endregion cxmlExtract
-#region ddsExtract
+                            #endregion cxmlExtract
+                            #region ddsExtract
                             else if (CompareBytes(dds, ddsMagic))
                             {
-                             //   Console.Write("Found a DDS File will start to extract...");
+                                //   Console.Write("Found a DDS File will start to extract...");
                                 outFile = baseDir + countDDS + ".dds";
-                               // System.IO.File.Create(outFile).Close();
+                                // System.IO.File.Create(outFile).Close();
                                 byte[] toWrite = new byte[16];
                                 _vag = new byte[8];
                                 _zlib = new byte[2];
@@ -3363,7 +3381,7 @@ namespace PS4_Tools
                                                                 {
                                                                     if (dumped != end)
                                                                     {
-                                      //                                  bw.Write(toWrite, 0, 16);
+                                                                        //                                  bw.Write(toWrite, 0, 16);
                                                                         dumped += 16;
                                                                         count += 16;
                                                                         br.BaseStream.Seek(count, SeekOrigin.Begin);
@@ -3416,8 +3434,8 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countDDS++;
                             }
-#endregion ddsExtract
-#region gtfExtract
+                            #endregion ddsExtract
+                            #region gtfExtract
                             else if (CompareBytes(gtf, gtfMagic))
                             {
                                 Console.Write("Found a GTF File will start to extract...");
@@ -3518,11 +3536,11 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countGTF++;
                             }
-#endregion gtfExtract
-#region wavExtract
+                            #endregion gtfExtract
+                            #region wavExtract
                             else if (CompareBytes(wav, wavMagic))
                             {
-                               // Console.Write("Found a WAV File will start to extract...");
+                                // Console.Write("Found a WAV File will start to extract...");
                                 outFile = baseDir + countWAV + ".wav";
                                 //System.IO.File.Create(outFile).Close();
                                 byte[] toWrite = new byte[16];
@@ -3537,7 +3555,7 @@ namespace PS4_Tools
 
                                 //using (BinaryWriter bw = new BinaryWriter(new FileStream(outFile, FileMode.Append, FileAccess.Write)))
                                 {
-                                   // bw.Write(toWrite, 0, 16);
+                                    // bw.Write(toWrite, 0, 16);
                                     dumped += 16;
                                     count += 16;
                                     br.BaseStream.Seek(count, SeekOrigin.Begin);
@@ -3573,7 +3591,7 @@ namespace PS4_Tools
                                                                 {
                                                                     if (dumped != end)
                                                                     {
-                                     //                                   bw.Write(toWrite, 0, 16);
+                                                                        //                                   bw.Write(toWrite, 0, 16);
                                                                         dumped += 16;
                                                                         count += 16;
                                                                         br.BaseStream.Seek(count, SeekOrigin.Begin);
@@ -3624,7 +3642,7 @@ namespace PS4_Tools
                                 Console.Write("done!\n");
                                 countWAV++;
                             }
-#endregion wavExtract
+                            #endregion wavExtract
                             else
                             {
                                 //Console.WriteLine("\nFound a new File which i don't know what to do with !\nPlease contact the Developer @ www.playstationhax.it");
@@ -3640,7 +3658,7 @@ namespace PS4_Tools
                     {
                         while ((i = br.Read(temp, 0, 1)) != 0)
                         {
-#region zlibExtract
+                            #region zlibExtract
                             _zlib = new byte[3];
                             br.BaseStream.Seek(count, SeekOrigin.Begin);
                             br.Read(_zlib, 0, 3);
@@ -3759,7 +3777,7 @@ namespace PS4_Tools
                                 //  ConvertDDS(corExt);
                                 Image.DDS.SavePNGFromDDS(corExt, corExt.Replace(".dds", ".png"));
                             }
-#endregion ZlibExtract
+                            #endregion ZlibExtract
                             // Have we dumped all data?
                             if (dumped == end)
                             {
@@ -3848,7 +3866,7 @@ namespace PS4_Tools
                 items.Add("File_Table_Size:" + File_Table_Size.ToString("X"));
                 return items;
             }
-            
+
         }
 
         public struct Tree_Table
@@ -3858,8 +3876,15 @@ namespace PS4_Tools
             public uint Parent;
             public uint Prevoius_Borhter;
             public uint Next_Brother;
-            
-
+            public uint First_Child;
+            public uint Last_Child;
+            public uint String_Pointer;
+            public uint Type; //(2 == FLOAT)
+            public ulong Float_value;
+            public byte[] empty_value;
+            public uint String_Pointer2;
+            public uint Type_descriptor1;
+            //public uint Offset_
         }
 
         private static RCOFileHeader ReadHeader(BinaryReader br)
@@ -3943,7 +3968,7 @@ namespace PS4_Tools
         public class DDS
         {
             public string DDS_Name { get; set; }
-            public Image.DDS DDS_File{ get; set; }
+            public Image.DDS DDS_File { get; set; }
         }
 
         public class GTF
@@ -3986,10 +4011,54 @@ namespace PS4_Tools
             Doit(Sealedkeylocation, filelocation, filelocation + "_Decrypt");
         }
 
+        public static byte[] GetSaveDataPFSKey(byte[] filelocation, byte[] SealedKeyLocation)
+        {
+
+
+        }
 
         #endregion << Load Save File Class>>
 
-        public static void Doit(string SealedKey,string SaveFile,string FileDecrypt)
+        public static void Doit(string SealedKey, string SaveFile, string FileDecrypt)
+        {
+            var bytes = File.ReadAllBytes(SealedKey);
+            byte[] dec = new byte[32];
+            SCEUtil.sceSblSsDecryptSealedKey(bytes, dec);
+
+            Console.WriteLine("Your PFS Key is {0}", BitConverter.ToString(dec).Replace("-", string.Empty));
+
+            var save = File.ReadAllBytes(SaveFile);
+            byte[] iv = new byte[16];
+            Buffer.BlockCopy(bytes, 16, iv, 0, iv.Length);
+
+            using (AesManaged aes = new AesManaged())
+            {
+                aes.Mode = CipherMode.CBC;
+                aes.IV = iv;
+                aes.KeySize = 256;
+                aes.Key = dec;
+                aes.Padding = PaddingMode.None;
+                var stream = new MemoryStream();
+                using (var decryptor = aes.CreateDecryptor())
+                {
+                    using (var cryptoStream = new CryptoStream(stream, decryptor, CryptoStreamMode.Write))
+                    {
+                        using (var writer = new BinaryWriter(cryptoStream))
+                        {
+                            writer.Write(save);
+                        }
+                    }
+                }
+
+                byte[] cipherBytes = stream.ToArray();
+                Console.WriteLine("PFS Save Content:");
+                //Console.WriteLine(UTF8Encoding.UTF8.GetString(cipherBytes));
+                File.WriteAllBytes(FileDecrypt, cipherBytes);
+            }
+            Console.ReadLine();
+        }
+
+        public static void Doit(string SealedKey, string SaveFile, string FileDecrypt)
         {
             var bytes = File.ReadAllBytes(SealedKey);
             byte[] dec = new byte[32];
@@ -4258,7 +4327,7 @@ namespace PS4_Tools
                 fileStream.Seek(0L, SeekOrigin.Begin);
                 TrophyHeader hdr = LoadHeader(fileStream);
                 trphy = hdr;
-                if (!Util.Utils.ByteArraysEqual(hdr.magic, new byte[]{220,162,77,0}))
+                if (!Util.Utils.ByteArraysEqual(hdr.magic, new byte[] { 220, 162, 77, 0 }))
                 {
                     throw new Exception("This file is not supported!");
                 }
@@ -4275,7 +4344,7 @@ namespace PS4_Tools
         {
             Trophy_File rtn = new Trophy_File();
             try
-            {            
+            {
                 this.trophyItemList = new List<TrophyItem>();
                 this.Bytes = bytes;
                 using (MemoryStream memoryStream = new MemoryStream(bytes))
@@ -4293,9 +4362,9 @@ namespace PS4_Tools
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                
+
             }
             rtn.Bytes = Bytes;
             rtn.SHA1 = SHA1;
@@ -4352,12 +4421,12 @@ namespace PS4_Tools
         /// <param name="file"></param>
         /// <returns></returns>
 
-        public byte[] SealedTrophy(byte[] file,byte[] SealedKey)
+        public byte[] SealedTrophy(byte[] file, byte[] SealedKey)
         {
             //first we need to decrypt the trophy 
             //i think these keys should allow a decrypt
             Licensing.Sealedkey keyload = Licensing.LoadSealedKey(SealedKey);
-            
+
 
             var bytes = SealedKey;
             byte[] dec = new byte[32];
@@ -4420,7 +4489,7 @@ namespace PS4_Tools
 
                     return aes.CreateDecryptor(key, iv).TransformFinalBlock(input, 0, input.Length);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return null;
                 }
@@ -4431,7 +4500,7 @@ namespace PS4_Tools
             /// <summary>
             /// Load and Decrypts an encrypt trophy file
             /// </summary>
-            public static void LoadAndDecrypt(string ESFMFile,string NpCommId)
+            public static void LoadAndDecrypt(string ESFMFile, string NpCommId)
             {
                 try
                 {
@@ -4450,9 +4519,9 @@ namespace PS4_Tools
 
                     File.WriteAllBytes(ESFMFile + ".DECRYPTED", data);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    
+
                 }
             }
 
@@ -4498,7 +4567,7 @@ namespace PS4_Tools
             1C909C	1C90A3	Unique2 Unique 8 bytes.
             1C90A4	1C90A7	Const3 Constant 4 bytes always the same.
             1C90A8	1C90E7	Unique3 Unique 64 bytes.*/
-        
+
         /// <summary>
         /// This seems to be a type of activation file for devkits/ testkits
         /// I did not have a file so this code should work
@@ -4910,7 +4979,7 @@ namespace PS4_Tools
         #endregion << Act.Dat>>
     }
 
-#region << Files On The PS4 >>
+    #region << Files On The PS4 >>
 
     /// <summary>
     /// Content Information Files
@@ -5004,7 +5073,7 @@ namespace PS4_Tools
     }
 
 
-#endregion << Files On The PS4 >>
+    #endregion << Files On The PS4 >>
 
     /*********************************************************
      *          PS4 PKG Reader by maxton  
@@ -5021,7 +5090,7 @@ namespace PS4_Tools
 
     public class PKG
     {
-#region << Official >>
+        #region << Official >>
         public class Official
         {
             /// <summary>
@@ -5287,7 +5356,7 @@ namespace PS4_Tools
                             string json = sr.ReadToEnd();
                             pkg.Manifest_item = JsonConvert.DeserializeObject<Update_Structure.Manifest_Item>(json);
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             //json changed ???
                         }
@@ -5339,7 +5408,7 @@ namespace PS4_Tools
                         Regex regex = new Regex("<titlepatch>(.*?)</titlepatch>", RegexOptions.Singleline);
 
                         /*i have commented this out as for some or other reason I can't get the deserielizer to work */
-#region << Deserlizers not working >>
+                        #region << Deserlizers not working >>
                         //var item = DeserializeXMLFileToObject<Update_Structure>(@"C:\Users\3deEchelon\Downloads\CUSA07708-ver.xml");
 
                         //using (XmlReader reader = new XmlNodeReader(xml))
@@ -5366,7 +5435,7 @@ namespace PS4_Tools
 
                         //}
 
-#endregion << Deserlizers not working >>
+                        #endregion << Deserlizers not working >>
                     }
 
                 }
@@ -5413,7 +5482,7 @@ namespace PS4_Tools
 
                 return currentdownload;
             }
-
+#if !PS4_UNITY
             private static Bitmap LoadPicture(string url)
             {
                 try
@@ -5446,12 +5515,52 @@ namespace PS4_Tools
                     }
                     return (bmp);
                 }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+            }
+#endif
+
+#if PS4_UNITY
+            private static Stream LoadPicture(string url)
+            {
+                try
+                {
+                    HttpWebRequest wreq;
+                    HttpWebResponse wresp;
+                    Stream mystream;
+                    
+
+                   
+                    mystream = null;
+                    wresp = null;
+                    try
+                    {
+                        wreq = (HttpWebRequest)WebRequest.Create("http" + url);
+                        wreq.AllowWriteStreamBuffering = true;
+
+                        wresp = (HttpWebResponse)wreq.GetResponse();
+
+                        if ((mystream = wresp.GetResponseStream()) != null)
+                            return mystream;
+                    }
+                    finally
+                    {
+                        if (mystream != null)
+                            mystream.Close();
+
+                        if (wresp != null)
+                            wresp.Close();
+                    }
+                    return (mystream);
+                }
                 catch(Exception ex)
                 {
                     return null;
                 }
             }
-
+#endif
             /// <summary>
             /// This will return a List of Store Items
             /// </summary>
@@ -5530,8 +5639,12 @@ namespace PS4_Tools
 
                             splittedcelltitel = Regex.Split(splittedfooter[0], "img src=\"http");
                             splittedifno = Regex.Split(splittedcelltitel[1], "\"");
+#if !PS4_UNITY
                             newitem.Store_Content_Image = LoadPicture(splittedifno[0].Trim()).ToByteArray(System.Drawing.Imaging.ImageFormat.Png);
-
+#endif
+#if PS4_UNITY
+                            newitem.Store_Content_Image = LoadPicture(splittedifno[0].Trim()).ToByteArray();
+#endif
                             splittedcelltitel = Regex.Split(splittedfooter[0], "left-detail--detail-2\">");
                             splittedifno = Regex.Split(splittedcelltitel[1], "<");
                             newitem.Store_Content_Type_Str = splittedifno[0].Trim();
@@ -5544,7 +5657,7 @@ namespace PS4_Tools
 
                             storeitems.Add(newitem);
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
 
                         }
@@ -5558,13 +5671,13 @@ namespace PS4_Tools
             }
         }
 
-#endregion << Official >>
+        #endregion << Official >>
 
-#region << Scene Related >>
+        #region << Scene Related >>
 
         public class SceneRelated
         {
-          
+
             /// <summary>
             /// GP4 Project Class
             /// </summary>
@@ -5582,6 +5695,16 @@ namespace PS4_Tools
                     public string Storage_type { get; set; }
                     [XmlAttribute(AttributeName = "app_type")]
                     public string App_type { get; set; }
+                }
+                [XmlRoot(ElementName = "chunk_status")]
+                public class Chunk_status
+                {
+                    [XmlElement(ElementName = "chunks")]
+                    public Chunks Chunks { get; set; }
+                    [XmlElement(ElementName = "scenarios")]
+                    public Scenarios Scenarios { get; set; }
+                    [XmlAttribute(AttributeName = "chunk_count")]
+                    public string Chunk_count { get; set; }
                 }
 
                 [XmlRoot(ElementName = "chunk")]
@@ -5699,6 +5822,8 @@ namespace PS4_Tools
                     public string Fmt { get; set; }
                     [XmlAttribute(AttributeName = "version")]
                     public string Version { get; set; }
+                    [XmlElement(ElementName = "chunk_status")]
+                    public Chunk_status Chunk_status { get; set; }
                 }
 
                 /// <summary>
@@ -5743,7 +5868,7 @@ namespace PS4_Tools
                         XmlWriterSettings settings = new XmlWriterSettings();
                         settings.Encoding = Encoding.UTF8;
                         //XmlWriter writtest = new 
-                        
+
                         var xmlserializer = new XmlSerializer(typeof(Psproject));
                         var stringWriter = new StringWriter();
                         using (var writer = XmlWriter.Create(stringWriter, settings))
@@ -5827,6 +5952,147 @@ namespace PS4_Tools
                 //Read NP_Title
                 //Save NP_Title
             }
+
+            public class PBM
+            {
+                public class PBMStruct
+                {
+                    public byte[] pbm_magic;                      // 0x000 - 0x7064626D //should be the same everywhere
+                    public byte[] Productcode;                  // 0x004 - 0x435553413030323635 = "CUSA00265" remember to grab the extra bytes at the end 12
+                    public uint emptyval;                       // 0x010 - not sure this just empty for some reason
+                    public uint Unk1;                           // 0x014 - seems to always be 90 09 00 00
+                    public uint Verion;                         // 0x018 - seems to always be 00 00 01 00
+                    public uint emptyval2;                       // 0x01C - not sure this just empty for some reason
+                    public uint Unk2;                           // 0x020 - examples 00 00 6C CE
+                    public byte[] Padding;                      // 0x024 - seems to be padding length 3C
+                    public byte[] Enc;                          // 0x060 - enc? hash ? length 20
+                    public byte[] blankval;                     // 0x080 - blank values length 20
+                    public byte[] UnkA0;                        // 0x0A0 - seems to always be 01 00 00 00 
+                    public byte[] blankval2;                    // 0x0A4 - seems to always be 00 00 00 00 
+                    public uint UnkA8;                          // 0x0A8 - Again not sure seems to always be 00 01 00 00
+                    public uint Lenght;                         // 0x0AC - Length of file FF holder 5B 01 00 00
+                    public byte[] BlockB0_BF;                   // 0x0B0 - this seems to be padding again B0- BF length 50
+                    public byte[] FFStartHolder;                // 0x100 - Start of the FF holder - read the Length from the length attribute
+                    public byte[] EndHash;                      // EOF for 20 bytes might be a hash? FC 50 65 C4 27 B0 7C 49 98 E8 26 3B 1D 85 E2 87 93 EB 38 F4 A3 F0 50 BF 7A 4A 77 0E 28 07 E8 E9 
+
+                    public List<string> DisplayInfo()
+                    {
+                        List<string> rtnstr = new List<string>();
+                        rtnstr.Add("pkg_magic:" + Encoding.ASCII.GetString(pbm_magic));
+                        rtnstr.Add("Productcode:" + Encoding.ASCII.GetString(Productcode));
+                        rtnstr.Add("emptyval:" + emptyval.ToString("X"));
+                        rtnstr.Add("Unk1:" + Unk1.ToString("X"));
+                        rtnstr.Add("Verion:" + Verion.ToString("X"));
+                        rtnstr.Add("emptyval2:" + emptyval2.ToString("X"));
+                        rtnstr.Add("Unk2:" + Unk2.ToString("X"));
+                        rtnstr.Add("Padding:" + Padding.ToHexString());
+                        rtnstr.Add("Enc:" + Enc.ToHexString());
+                        rtnstr.Add("blankval:" + blankval.ToHexString());
+                        rtnstr.Add("UnkA0:" + UnkA0.ToHexString());
+                        rtnstr.Add("blankval2:" + blankval2.ToHexString());
+                        rtnstr.Add("UnkA8:" + UnkA8.ToString("X"));
+                        rtnstr.Add("Lenght:" + Lenght.ToString("X"));
+                        rtnstr.Add("BlockB0_BF:" + BlockB0_BF.ToHexString());
+                        rtnstr.Add("FFStartHolder:" + FFStartHolder.ToHexString());
+                        rtnstr.Add("EndHash:" + EndHash.ToHexString());
+                        //.ToString("X")
+                        return rtnstr;
+                    }
+
+                }
+
+                public static PBMStruct Read(byte[] filebytes)
+                {
+                    PBMStruct rtnstruct = new PBMStruct();
+                    using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(filebytes)))
+                    {
+                        Byte[] FileMagic = binaryReader.ReadBytes(4);
+                        if (!Util.Utils.CompareBytes(FileMagic, new byte[] { 0x70, 0x64, 0x62, 0x6D }))/*If Files Match*/
+                        {
+                            throw new Exception("This is not a valid PBM file");
+                        }
+                        //read ProductCode
+                        binaryReader.BaseStream.Position = 0;
+                        rtnstruct.pbm_magic = binaryReader.ReadBytes(4);
+                        rtnstruct.Productcode = binaryReader.ReadBytes(12);//0x0C
+                        rtnstruct.emptyval = binaryReader.ReadUInt32();
+                        rtnstruct.Unk1 = binaryReader.ReadUInt32();
+                        rtnstruct.Verion = binaryReader.ReadUInt32();
+                        rtnstruct.emptyval2 = binaryReader.ReadUInt32();
+                        rtnstruct.Unk2 = binaryReader.ReadUInt32();
+                        rtnstruct.Padding = binaryReader.ReadBytes(0x3C);
+                        rtnstruct.Enc = binaryReader.ReadBytes(0x20);
+                        rtnstruct.blankval = binaryReader.ReadBytes(0x20);
+                        rtnstruct.UnkA0 = binaryReader.ReadBytes(4);
+                        rtnstruct.blankval2 = binaryReader.ReadBytes(4);
+                        rtnstruct.UnkA8 = binaryReader.ReadUInt32();//could be another version not sure
+                        rtnstruct.Lenght = binaryReader.ReadUInt32();
+                        rtnstruct.BlockB0_BF = binaryReader.ReadBytes(0x50);
+                        rtnstruct.FFStartHolder = binaryReader.ReadBytes((int)rtnstruct.Lenght);
+                        rtnstruct.EndHash = binaryReader.ReadBytes(0x20);
+                    }
+
+
+                    return rtnstruct;
+                }
+
+                public static PBMStruct Read(string filelocation)
+                {
+                    return Read(File.ReadAllBytes(filelocation));
+                }
+            }
+
+            public class App
+            {
+                public class JSON
+                {
+                    // Generated by Xamasoft JSON Class Generator
+                    public class Piece
+                    {
+
+                        [JsonProperty("fileOffset")]
+                        public int FileOffset { get; set; }
+
+                        [JsonProperty("fileSize")]
+                        public int FileSize { get; set; }
+
+                        [JsonProperty("url")]
+                        public string Url { get; set; }
+                    }
+
+                    [JsonProperty("numberOfSplitFiles")]
+                    public int NumberOfSplitFiles { get; set; }
+
+                    [JsonProperty("packageDigest")]
+                    public string PackageDigest { get; set; }
+
+                    [JsonProperty("pieces")]
+                    public IList<Piece> Pieces { get; set; }
+
+                    public JSON()
+                    {
+
+                    }
+
+                    public JSON(string ifile)
+                    {
+                        JSON ofile = new JSON();
+                        StreamReader sr = new StreamReader(ifile);
+                        string json = sr.ReadToEnd();
+                        ofile = JsonConvert.DeserializeObject<JSON>(json);
+                        this.NumberOfSplitFiles = ofile.NumberOfSplitFiles;
+                        this.PackageDigest = ofile.PackageDigest;
+                        this.Pieces = ofile.Pieces;
+                    }
+                }
+                
+
+
+            }
+
+
+
+            
 
             /// <summary>
             /// Creates a PS4 Fake DLC Package
@@ -6469,7 +6735,7 @@ namespace PS4_Tools
             /// <summary>
             /// POWERED BY MAXTRON
             /// </summary>
-
+#if (!PS4_UNITY)
 #region << PKG File >>
             public class PS4PKGFile
             {
@@ -6602,7 +6868,7 @@ namespace PS4_Tools
                 return rtnfile;
 
             }
-
+#endif
             /// <summary>
             /// This one is pretty straight Forward it renames a pkg file to the content id name
             /// </summary>
@@ -6706,7 +6972,10 @@ namespace PS4_Tools
             }
         }
 
-#endregion << Scene Related >>
+        #endregion << Scene Related >>
+
+#if (!PS4_UNITY)
+#if !Android_Mono
 
         /// <summary>
         /// Remastered support class can build psp hd's and ps2 classics
@@ -7019,6 +7288,8 @@ namespace PS4_Tools
 
             }
         }
+#endif
+#endif
     }
 
     /************************************

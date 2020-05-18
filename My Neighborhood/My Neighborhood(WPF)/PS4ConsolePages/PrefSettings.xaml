@@ -1,16 +1,19 @@
-﻿<Window x:Class="My_Neighborhood_WPF_.PS4ConsolePages.PrefSettings"
+﻿<Controls:MetroWindow x:Class="My_Neighborhood_WPF_.PS4ConsolePages.PrefSettings"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:My_Neighborhood_WPF_.PS4ConsolePages"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
-        Title="PrefSettings" Height="300" Width="300" Icon="/My Neighborhood(WPF);component/Images/favicon (1).ico" Loaded="Window_Loaded">
+        Title="PrefSettings" Height="300" Width="554.104" Icon="/My Neighborhood(WPF);component/Images/favicon (1).ico" Loaded="Window_Loaded">
     <Grid>
-        <GroupBox x:Name="groupBox" Header="Preference settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="144" Width="274">
-            <CheckBox x:Name="chb" Content="Enable UART" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="chb_Checked" Unchecked="chb_Unchecked"/>
-
+        <GroupBox x:Name="groupBox" Header="Preference settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="144" Width="528">
+            <Grid>
+                <CheckBox x:Name="chb" Content="Enable UART" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="chb_Checked" Unchecked="chb_Unchecked" Width="121"/>
+                <CheckBox x:Name="chbCopy" Content="Don't replace log file each time" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" Checked="chbLogFile_Checked" Unchecked="chbCopy_Unchecked" Width="273"/>
+            </Grid>
         </GroupBox>
 
     </Grid>
-</Window>
+</Controls:MetroWindow>

@@ -1,0 +1,6 @@
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\Android Mono\Tester.csprojResolveAssemblyReference.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\Android Mono\Tester.Form1.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\Android Mono\Tester.GridWithDisplay.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\Android Mono\Tester.Main.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\Android Mono\Tester.Properties.Resources.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\Android Mono\Tester.csproj.GenerateResource.Cache

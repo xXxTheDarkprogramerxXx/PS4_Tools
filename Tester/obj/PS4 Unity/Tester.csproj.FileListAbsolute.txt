@@ -1,0 +1,7 @@
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\bin\PS4 Unity\Tester.exe.config
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\PS4 Unity\Tester.csprojResolveAssemblyReference.cache
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\PS4 Unity\Tester.Form1.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\PS4 Unity\Tester.GridWithDisplay.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\PS4 Unity\Tester.Main.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\PS4 Unity\Tester.Properties.Resources.resources
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Tester\obj\PS4 Unity\Tester.csproj.GenerateResource.Cache

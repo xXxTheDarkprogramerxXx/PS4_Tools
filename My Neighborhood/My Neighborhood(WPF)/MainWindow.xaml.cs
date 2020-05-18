@@ -24,6 +24,10 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
 using MahApps.Metro.Controls;
 using MahApps.Metro;
+using IronPython;
+using IronPython.Compiler;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
 
 namespace My_Neighborhood_WPF_
 {
@@ -585,7 +589,15 @@ namespace My_Neighborhood_WPF_
                 {
                     //items are not signed
                     SetProgress("Signing " + System.IO.Path.GetFileName(prxfiles[i]), 50);
-                    makefself_CMD("", "\"" + prxfiles[i] + "\" " + " \"" + prxfiles[i] + "\"");//hopefully it over writes it 
+                    //makefself_CMD("", "\"" + prxfiles[i] + "\" " + " \"" + prxfiles[i] + "\"");//hopefully it over writes it 
+
+                    string var1 = "", var2 = "";
+                    ScriptEngine engine = Python.CreateEngine();
+                    ScriptScope scope = engine.CreateScope();
+                    engine.ExecuteFile(@"C:\test.py", scope);
+                    dynamic testFunction = scope.GetVariable("test_func");
+                    var result = testFunction(var1, var2);
+
                 }
 
             }
@@ -739,7 +751,7 @@ namespace My_Neighborhood_WPF_
                 driveselector.ShowDialog();
                 if (driveselector.DriveSelected != "")
                 {
-                    // RunProcess("net", @"use " + driveselector.DriveSelected + " ftp://" + selecteditem.Address + ":998 /persistent:yes", null);
+                    RunProcess("net", @"use " + driveselector.DriveSelected + " ftp://" + selecteditem.Address + ":998 /persistent:yes");
                     string unc = "ftp://" + selecteditem.Address + ":998";
                     string drive = driveselector.DriveSelected;
 
@@ -1053,7 +1065,28 @@ namespace My_Neighborhood_WPF_
                     return result;
                 }
             }
-        }      
+        }
+
+        public void RunProcess(string command, string arguments)
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = command;
+            start.Arguments = arguments;
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+            start.RedirectStandardError = true;
+            start.CreateNoWindow = true;
+            System.Diagnostics.Process process = System.Diagnostics.Process.Start(start);
+            string stdoutx = process.StandardOutput.ReadToEnd();
+            string stderrx = process.StandardError.ReadToEnd();
+            if(stderrx != "")
+            {
+                MessageBox.Show(stderrx,"Error",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+            process.WaitForExit();
+            
+        }
+
 
         private bool IsMatchAtIndex(String value, String searchArgument, int startIndex)
         {

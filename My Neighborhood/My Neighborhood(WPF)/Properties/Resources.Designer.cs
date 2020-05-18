@@ -69,5 +69,15 @@ namespace My_Neighborhood_WPF_.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] make_fself1 {
+            get {
+                object obj = ResourceManager.GetObject("make_fself1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

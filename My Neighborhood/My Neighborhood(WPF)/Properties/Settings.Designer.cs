@@ -70,5 +70,17 @@ namespace My_Neighborhood_WPF_.Properties {
                 this["DefaultTheme"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisableSingleFileLogging {
+            get {
+                return ((bool)(this["DisableSingleFileLogging"]));
+            }
+            set {
+                this["DisableSingleFileLogging"] = value;
+            }
+        }
     }
 }

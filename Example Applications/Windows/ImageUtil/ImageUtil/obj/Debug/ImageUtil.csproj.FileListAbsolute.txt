@@ -22,3 +22,16 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Appl
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\Debug\ImageUtil.csproj.GenerateResource.Cache
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\Debug\ImageUtil.exe
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\Debug\ImageUtil.pdb
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\UnityEngine.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\UnityEditor.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\Unity.Cecil.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\Unity.SerializationLogic.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\ExCSS.Unity.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\Unity.DataContract.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\Unity.Legacy.NRefactory.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\Unity.UNetWeaver.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\Unity.CecilTools.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\Unity.Cecil.Pdb.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\Unity.Cecil.Mdb.dll
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\UnityEngine.xml
+C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\Debug\UnityEditor.xml
