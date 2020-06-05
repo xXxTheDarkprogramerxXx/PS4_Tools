@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageUtil", "Example Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCOMage", "RCOMage\RCOMage.csproj", "{F6C7E31D-0038-42E1-AE1A-67D995E209B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaveData_Manager", "SaveData_Manager\SaveData_Manager.csproj", "{F6ECD255-4934-4450-A511-9CE0A863ED4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Android Mono|Any CPU = Android Mono|Any CPU
@@ -104,6 +106,14 @@ Global
 		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.PS4 Unity|Any CPU.Build.0 = Release|Any CPU
 		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6C7E31D-0038-42E1-AE1A-67D995E209B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.Android Mono|Any CPU.ActiveCfg = Release|Any CPU
+		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.Android Mono|Any CPU.Build.0 = Release|Any CPU
+		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.PS4 Unity|Any CPU.ActiveCfg = Release|Any CPU
+		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.PS4 Unity|Any CPU.Build.0 = Release|Any CPU
+		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

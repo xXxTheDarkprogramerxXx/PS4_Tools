@@ -4011,10 +4011,12 @@ namespace PS4_Tools
             Doit(Sealedkeylocation, filelocation, filelocation + "_Decrypt");
         }
 
-        public static byte[] GetSaveDataPFSKey(byte[] filelocation, byte[] SealedKeyLocation)
+        public static byte[] GetSaveDataPFSKey(byte[] SealedKeyLocation)
         {
-
-
+            var bytes = SealedKeyLocation;
+            byte[] dec = new byte[32];
+            SCEUtil.sceSblSsDecryptSealedKey(bytes, dec);    
+            return dec;
         }
 
         #endregion << Load Save File Class>>
@@ -4058,43 +4060,14 @@ namespace PS4_Tools
             Console.ReadLine();
         }
 
-        public static void Doit(string SealedKey, string SaveFile, string FileDecrypt)
+        public static string GetSealedKey(string SealedKey, string SaveFile, string FileDecrypt)
         {
             var bytes = File.ReadAllBytes(SealedKey);
             byte[] dec = new byte[32];
             SCEUtil.sceSblSsDecryptSealedKey(bytes, dec);
 
             Console.WriteLine("Your PFS Key is {0}", BitConverter.ToString(dec).Replace("-", string.Empty));
-
-            var save = File.ReadAllBytes(SaveFile);
-            byte[] iv = new byte[16];
-            Buffer.BlockCopy(bytes, 16, iv, 0, iv.Length);
-
-            using (AesManaged aes = new AesManaged())
-            {
-                aes.Mode = CipherMode.CBC;
-                aes.IV = iv;
-                aes.KeySize = 256;
-                aes.Key = dec;
-                aes.Padding = PaddingMode.None;
-                var stream = new MemoryStream();
-                using (var decryptor = aes.CreateDecryptor())
-                {
-                    using (var cryptoStream = new CryptoStream(stream, decryptor, CryptoStreamMode.Write))
-                    {
-                        using (var writer = new BinaryWriter(cryptoStream))
-                        {
-                            writer.Write(save);
-                        }
-                    }
-                }
-
-                byte[] cipherBytes = stream.ToArray();
-                Console.WriteLine("PFS Save Content:");
-                //Console.WriteLine(UTF8Encoding.UTF8.GetString(cipherBytes));
-                File.WriteAllBytes(FileDecrypt, cipherBytes);
-            }
-            Console.ReadLine();
+            return BitConverter.ToString(dec).Replace("-", string.Empty);
         }
     }
 
@@ -6520,6 +6493,28 @@ namespace PS4_Tools
                                     //if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
 
                                     //File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
+                                }
+                                else if (entry[i].CustomName == PS4PkgUtil.EntryId.NPTITLE_DAT.ToString())
+                                {
+                                    var test = "";
+                                    byte[] entry_data = new byte[64];
+                                    Array.Copy(entry[i].ToArray(), entry_data, 28);
+                                    Array.Copy(data, 0, entry_data, 28, 28);
+
+                                    byte[] iv = new byte[16];
+                                    byte[] key = new byte[16];
+                                    byte[] hash = PS4PkgUtil.Sha256(entry_data, 0, entry_data.Length);
+                                    Array.Copy(hash, 0, iv, 0, 16);
+                                    Array.Copy(hash, 16, key, 0, 16);
+                                    binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
+                                    byte[] file_data = PS4PkgUtil.DecryptAes(key, iv, binaryReader.ReadBytes((int)entry[i].size));
+                                    entry[i].file_data = file_data;
+                                    //File.WriteAllBytes(pkgfile + "_" + entry[i].CustomName, file_data);
+                                    string CustomName = entry[i].CustomName;
+                                    var lastComma = CustomName.LastIndexOf('_');
+                                    if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
+                                    File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName + "entrydata", entry_data);
+                                    File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
                                 }
                                 else
                                 {
