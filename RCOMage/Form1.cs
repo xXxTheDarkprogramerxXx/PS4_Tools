@@ -47,5 +47,10 @@ namespace RCOMage
                 listBox1.DataSource = rcofile.Header.ToList();
             }
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            MessageBox.Show("This is an open source version of RCOMage v2 (ps4 and psv) this tool is not yet completed");
+        }
     }
 }
