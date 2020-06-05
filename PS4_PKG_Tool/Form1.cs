@@ -64,5 +64,10 @@ namespace PS4_PKG_Tool
             }
 
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            MessageBox.Show("This tool has not been completed and was suppose to replace the sce pub tools");
+        }
     }
 }
