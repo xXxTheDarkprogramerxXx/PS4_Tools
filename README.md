@@ -21,6 +21,8 @@ PS4 Explorer - By Lapy [Github](https://github.com/Lapy055/PS4-Xplorer)|[Twitter
 
 PS4 Tools Homebrew (WIP)[Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/tag/HB_WIP)
 
+PS4 Save Manager [Github]
+
 ## Example Applications
 ### Image Util [![Build status](https://ci.appveyor.com/api/projects/status/ftuj48025au3q3cg?svg=true)](https://ci.appveyor.com/project/xXxTheDarkprogramerxXx/ps4-tools)
 
@@ -39,6 +41,10 @@ Created as an example app reads ps4 pkg's
 
 ![](https://i.imgur.com/UgfxOpd.png)
 
+### PS4 Save Manager 
+Created to manage save files dumped with either Ps4 Tools Homebrew or with Save Data Mounter by Chendo Chap
+
+![](https://i.imgur.com/BV4fpiW.png)
 
 ## Getting Started
 
