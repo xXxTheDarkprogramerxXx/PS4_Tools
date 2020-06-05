@@ -19,7 +19,7 @@ PS4 PKG Tool- By pearlxcore [Github](https://github.com/pearlxcore/PS4-PKG-Tool)
 
 PS4 Explorer - By Lapy [Github](https://github.com/Lapy055/PS4-Xplorer)|[Twitter](https://twitter.com/Lapy05575948)
 
-PS4 Tools Homebrew (WIP)(https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/tag/HB_WIP)
+PS4 Tools Homebrew (WIP)[Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/tag/HB_WIP)
 
 ## Example Applications
 ### Image Util [![Build status](https://ci.appveyor.com/api/projects/status/ftuj48025au3q3cg?svg=true)](https://ci.appveyor.com/project/xXxTheDarkprogramerxXx/ps4-tools)
