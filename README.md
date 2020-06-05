@@ -33,6 +33,13 @@ Created originally just to show the power of ps4 tools but now has alot more feu
 
 ![](https://i.imgur.com/2wSA74j.png)
 
+### Ps4 PKG Viewer
+Created as an example app reads ps4 pkg's
+[Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tree/master/PS4_PKG_Viewer)
+
+![](https://i.imgur.com/UgfxOpd.png)
+
+
 ## Getting Started
 
 Add the .DLL to your solution. 
