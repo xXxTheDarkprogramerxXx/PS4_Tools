@@ -263,5 +263,10 @@ namespace My_Neighborhood_WPF_
 
             }
         }
+
+        private void rtbAll_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
