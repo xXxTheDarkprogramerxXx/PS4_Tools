@@ -1,0 +1,1084 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GameArchives</name>
+    </assembly>
+    <members>
+        <member name="T:GameArchives.IFSNode">
+            <summary>
+            Represent an element of a filesystem, usually directories and files.
+            </summary>
+        </member>
+        <member name="P:GameArchives.IFSNode.Name">
+            <summary>
+            The name of this node.
+            </summary>
+        </member>
+        <member name="P:GameArchives.IFSNode.Parent">
+            <summary>
+            The folder where this node resides.
+            For the root directory, this is null.
+            </summary>
+        </member>
+        <member name="T:GameArchives.IFile">
+            <summary>
+            Represents a single file in a filesystem.
+            </summary>
+        </member>
+        <member name="P:GameArchives.IFile.Size">
+            <summary>
+            The size of this file.
+            </summary>
+        </member>
+        <member name="P:GameArchives.IFile.Compressed">
+            <summary>
+            Indicates whether this file is compressed in the archive.
+            </summary>
+        </member>
+        <member name="P:GameArchives.IFile.CompressedSize">
+            <summary>
+            The size of this file, as it is in the archive.
+            </summary>
+        </member>
+        <member name="P:GameArchives.IFile.ExtendedInfo">
+            <summary>
+            A collection of extended information about the file. The values in the collection
+            depend on the type of package the file is from. Modifying this dictionary results in
+            undefined behavior.
+            </summary>
+        </member>
+        <member name="M:GameArchives.IFile.GetBytes">
+            <summary>
+            Get a byte-array in memory containing all the data of this file.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:GameArchives.IFile.Stream">
+            <summary>
+             Gets a stream that allows access to this file.
+            </summary>
+        </member>
+        <member name="M:GameArchives.IFile.GetStream">
+            <summary>
+            Get a stream (either memory-backed or disk-based) that allows access to this file.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:GameArchives.IDirectory">
+            <summary>
+            Represents a directory within some file system.
+            </summary>
+        </member>
+        <member name="M:GameArchives.IDirectory.TryGetFile(System.String,GameArchives.IFile@)">
+            <summary>
+            Tries to get the named file. If it is not found, returns false.
+            </summary>
+            <param name="name"></param>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.IDirectory.GetFile(System.String)">
+            <summary>
+            Get the file in this directory with the given name. Throws exception if not found.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown when the file could not be found.</exception>  
+        </member>
+        <member name="M:GameArchives.IDirectory.TryGetDirectory(System.String,GameArchives.IDirectory@)">
+            <summary>
+            Tries to get the named directory. If it is not found, returns false.
+            </summary>
+            <param name="name"></param>
+            <param name="dir"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.IDirectory.GetDirectory(System.String)">
+            <summary>
+            Get the directory in this directory with the given name. Throws exception if not found.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+            <exception cref="T:System.IO.DirectoryNotFoundException">Thrown when the directory could not be found.</exception>
+        </member>
+        <member name="M:GameArchives.IDirectory.GetFileAtPath(System.String)">
+            <summary>
+            Tries to get the file at the given path, which is relative to this directory.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+            <exception cref="T:System.IO.DirectoryNotFoundException">Thrown when a directory in the path could not be found.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown when the file could not be found.</exception>
+        </member>
+        <member name="P:GameArchives.IDirectory.Files">
+            <summary>
+            A collection of all files in this directory.
+            </summary>
+        </member>
+        <member name="P:GameArchives.IDirectory.Dirs">
+            <summary>
+            A collection of all the directories in this directory.
+            </summary>
+        </member>
+        <member name="T:GameArchives.AbstractPackage">
+            <summary>
+            Represents some content package which contains a single filesystem.
+            </summary>
+        </member>
+        <member name="P:GameArchives.AbstractPackage.FileName">
+            <summary>
+            The name of this package.
+            </summary>
+        </member>
+        <member name="P:GameArchives.AbstractPackage.RootDirectory">
+            <summary>
+            The root directory of this filesystem.
+            </summary>
+        </member>
+        <member name="P:GameArchives.AbstractPackage.Size">
+            <summary>
+            The size of this package's data files. For packages with unified header and data,
+            this is just the size of the package file.
+            </summary>
+        </member>
+        <member name="P:GameArchives.AbstractPackage.Writeable">
+            <summary>
+            Indicates whether this package can be modified.
+            </summary>
+        </member>
+        <member name="M:GameArchives.AbstractPackage.Dispose">
+            <summary>
+            Implementation of the IDisposable interface.
+            </summary>
+        </member>
+        <member name="F:GameArchives.AbstractPackage.PATH_SEPARATOR">
+            <summary>
+            Separates elements in a file path.
+            </summary>
+        </member>
+        <member name="F:GameArchives.AbstractPackage.ROOT_DIR">
+            <summary>
+            The name of the root directory. Never used in paths, though.
+            </summary>
+        </member>
+        <member name="P:GameArchives.AbstractPackage.FileType">
+            <summary>
+            The .NET type of the file objects in this package.
+            </summary>
+        </member>
+        <member name="M:GameArchives.AbstractPackage.GetFile(System.String)">
+            <summary>
+            Get the file at the given path. Path separator is '/'.
+            Files in the root directory have no path separator.
+            </summary>
+            <param name="path"></param>
+            <returns>The file at the given path.</returns>
+        </member>
+        <member name="M:GameArchives.AbstractPackage.GetAllFiles``1">
+            <summary>
+            Returns a list containing all the logical files of the specified type in this archive.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.AbstractPackage.GetAllFiles">
+            <summary>
+            Returns a list containing all the logical files in this archive.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.MutablePackage.FileReplaceCheck(GameArchives.IFile,GameArchives.IFile)">
+            <summary>
+            Checks if a replacement operation is possible on the given source and target files.
+            </summary>
+            <param name="target">The file to be overwritten.</param>
+            <param name="source">The file to read from.</param>
+            <returns>True if the replacement is possible.</returns>
+        </member>
+        <member name="M:GameArchives.MutablePackage.TryReplaceFile(GameArchives.IFile,GameArchives.IFile)">
+            <summary>
+            Replace the given target file with the given source file.
+            This modifies the archive file permanently!
+            </summary>
+            <param name="target">The file to be overwritten.</param>
+            <param name="source">The file to read from.</param>
+            <returns>True if the replacement is successful.</returns>
+        </member>
+        <member name="T:GameArchives.Ark.ArkPackage">
+            <summary>
+            Ark Package
+            </summary>
+        </member>
+        <member name="M:GameArchives.Ark.ArkPackage.#ctor(GameArchives.IFile)">
+            <summary>
+            Instantiate ark package file from input .hdr file.
+            Note: will check for data files and throw exception if they're not found.
+            </summary>
+            <param name="pathToHdr">Full path to .hdr file</param>
+        </member>
+        <member name="M:GameArchives.Ark.ArkPackage.readFileTable(System.IO.Stream,System.UInt32,System.Boolean)">
+            <summary>
+            Read the filename table, which is a blob of strings,
+            then read the filename pointer table which links files to filenames
+            </summary>
+        </member>
+        <member name="M:GameArchives.Ark.ArkPackage.readNewFileTable(System.IO.Stream,System.Boolean)">
+            <summary>
+            Reads the new file table format in v9 and v10
+            </summary>
+        </member>
+        <member name="M:GameArchives.Ark.ArkPackage.makeOrGetDir(System.String)">
+            <summary>
+            Get the directory at the end of this path, or make it (and all
+            intermediate dirs) if it doesn't exist.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GameArchives.Ark.ProtectedFileStream">
+            <summary>
+            A "protected file" wrapper.
+            </summary>
+        </member>
+        <member name="M:GameArchives.Ark.ProtectedFileStream.#ctor(System.IO.Stream)">
+            <summary>
+            Constructs a new protected file stream from the given base stream.
+            </summary>
+            <param name="package">The base stream</param>
+        </member>
+        <member name="T:GameArchives.Common.DefaultDirectory">
+            <summary>
+            A default implementation of a directory.
+            Useful for archives where directories are implicit.
+            Important: File and directory names are case-insensitive.
+            </summary>
+        </member>
+        <member name="T:GameArchives.Common.OffsetFile">
+            <summary>
+            An uncompressed file which is simply a number of bytes at a certain offset in a stream.
+            </summary>
+        </member>
+        <member name="M:GameArchives.Common.OffsetFile.#ctor(System.String,GameArchives.IDirectory,System.IO.Stream,System.Int64,System.Int64)">
+            <summary>
+            Constructs a new OffsetFile
+            </summary>
+            <param name="name">The name of the file, including extension</param>
+            <param name="parent">The directory in which this file resides</param>
+            <param name="img">Stream which contains this file</param>
+            <param name="offset">Offset into the stream at which the file starts</param>
+            <param name="size">Length in bytes of the file</param>
+        </member>
+        <member name="T:GameArchives.Common.MultiStream">
+            <summary>
+            A single stream which is actually made up of a number of streams in sequence.
+            </summary>
+        </member>
+        <member name="P:GameArchives.Common.MultiStream.CanRead">
+            <summary>
+            Denotes whether the stream can be read from.
+            </summary>
+        </member>
+        <member name="P:GameArchives.Common.MultiStream.CanSeek">
+            <summary>
+            Denotes whether the user can seek this stream.
+            </summary>
+        </member>
+        <member name="P:GameArchives.Common.MultiStream.CanWrite">
+            <summary>
+            Denotes whether the user can write to this stream.
+            </summary>
+        </member>
+        <member name="P:GameArchives.Common.MultiStream.Length">
+            <summary>
+            The total length of this file.
+            </summary>
+        </member>
+        <member name="P:GameArchives.Common.MultiStream.Position">
+            <summary>
+            The current position the stream points to within the file.
+            </summary>
+        </member>
+        <member name="M:GameArchives.Common.MultiStream.Flush">
+            <summary>
+            Not implemented; read-only stream.
+            </summary>
+        </member>
+        <member name="M:GameArchives.Common.MultiStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads `count` bytes into `buffer` at offset `offset`.
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.Common.MultiStream.offsetToStream(System.Int64,System.IO.Stream@)">
+            <summary>
+            Get the correct stream and offset.
+            Returns the offset into that stream.
+            </summary>
+            <param name="offset"></param>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.Common.MultiStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Seek the stream to given position within the file relative to given origin.
+            </summary>
+            <param name="offset"></param>
+            <param name="origin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.Common.MultiStream.SetLength(System.Int64)">
+            <summary>
+            Not implemented; read-only stream.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:GameArchives.Common.MultiStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Not implemented; read-only stream.
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="count"></param>
+        </member>
+        <member name="T:GameArchives.Common.OffsetStream">
+            <summary>
+            A stream based on another stream, useful for representing
+            file streams within simple archive packages.
+            </summary>
+        </member>
+        <member name="M:GameArchives.Common.OffsetStream.#ctor(System.IO.Stream,System.Int64,System.Int64)">
+            <summary>
+            Constructs a new offset stream on the given base stream with the given offset and length.
+            </summary>
+            <param name="package">The base stream</param>
+            <param name="offset">Offset into the base stream where this stream starts</param>
+            <param name="length">Number of bytes in this stream</param>
+        </member>
+        <member name="M:GameArchives.FSAR.FSARPackage.#ctor(GameArchives.IFile)">
+            <summary>
+            Open the .far archive which is the given file.
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:GameArchives.FSAR.FSARPackage.makeOrGetDir(System.String)">
+            <summary>
+            Get the directory at the end of this path, or make it (and all
+            intermediate dirs) if it doesn't exist.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GameArchives.Local.LocalDirectory">
+            <summary>
+            Represents a directory in the local file system.
+            All files in the directory are loaded by default, while subdirectories
+            are loaded on-demand (although this may change in the future).
+            </summary>
+        </member>
+        <member name="M:GameArchives.Local.LocalDirectory.#ctor(System.String)">
+            <summary>
+            Make a shallow instance of the given local directory.
+            </summary>
+            <param name="path">Location of the directory.</param>
+        </member>
+        <member name="T:GameArchives.Local.LocalFile">
+            <summary>
+            Represents a file on the local filesystem.
+            </summary>
+        </member>
+        <member name="T:GameArchives.PackageTestResult">
+            <summary>
+            The result of a package test.
+            </summary>
+        </member>
+        <member name="F:GameArchives.PackageTestResult.NO">
+            <summary>
+            Definitely not an instance of the package type.
+            </summary>
+        </member>
+        <member name="F:GameArchives.PackageTestResult.MAYBE">
+            <summary>
+            Possibly an instance of the package type, but a more in-depth analysis would be needed.
+            </summary>
+        </member>
+        <member name="F:GameArchives.PackageTestResult.YES">
+            <summary>
+            Definitely an instance of the package type.
+            </summary>
+        </member>
+        <member name="T:GameArchives.PackageReader">
+            <summary>
+            Collection of methods for reading packages.
+            </summary>
+        </member>
+        <member name="M:GameArchives.PackageReader.ReadPackageFromFile(System.String)">
+            <summary>
+            Attempts to read the file as a supported archive package.
+            If the file is not of a supported format, throws an exception.
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+            <exception cref="T:System.NotSupportedException">Thrown when an unsupported file type is given.</exception>
+        </member>
+        <member name="M:GameArchives.PackageReader.ReadPackageFromFile(GameArchives.IFile,System.Func{System.String,System.String})">
+            <summary>
+            Attempts to read the file as a supported archive package.
+            If the file is not of a supported format, throws an exception.
+            </summary>
+            <param name="file">An IFile referring to the archive package.</param>
+            <param name="passcode_cb">
+              This callback will be called when a package is a likely match but needs a password/decryption
+              key. It will be called with a request string, and should return the key.
+            </param>
+            <returns>The package, if it could be opened.</returns>
+            <exception cref="T:System.NotSupportedException">Thrown when an unsupported file type is given.</exception>
+        </member>
+        <member name="M:GameArchives.PackageReader.ReadPackageFromFile(GameArchives.IFile,System.String)">
+            <summary>
+            Reads a package using the given decryption key if necessary.
+            </summary>
+        </member>
+        <member name="M:GameArchives.PackageReader.ReadPackageFromStream(System.IO.Stream,System.String)">
+            <summary>
+            Tries to read a package given only a stream. This makes a dummy file which works with the package reader.
+            </summary>
+            <param name="stream">Stream to read from. This must support the Length property.</param>
+            <param name="filename">(Optional) the filename to give the dummy file.</param>
+            <returns></returns>
+        </member>
+        <member name="P:GameArchives.PackageReader.SupportedFormats">
+            <summary>
+            A list of supported file formats and their extensions, presented
+            in a format that an OpenFileDialog supports.
+            </summary>
+        </member>
+        <member name="M:GameArchives.FSGIMG.FSGIMGPackage.RecursivelyGetFiles(GameArchives.FSGIMG.FSGIMGDirectory,System.String,System.Int64,System.String,System.Collections.Generic.Dictionary{System.UInt32,GameArchives.FSGIMG.FSGIMGPackage.file_descriptor})">
+            <summary>
+            Parse a directory for its contents.
+            </summary>
+            <param name="name">The name of this directory.</param>
+            <param name="base_offset">Location of its filename infos.</param>
+            <param name="nodes">File descriptor dictionary</param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.FSGIMG.FSGIMGPackage.Hash(System.String)">
+            <summary>
+            Hashes a path with a broken fnv132 hashing algorithm
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="P:GameArchives.PackageType.Name">
+            <summary>
+            The common name of this package type.
+            </summary>
+        </member>
+        <member name="P:GameArchives.PackageType.Extensions">
+            <summary>
+            The common file extensions of this package type.
+            </summary>
+            <remarks>
+            These should be of the format:
+            *.ext
+            As expected by an OpenFileDialog filter list.
+            </remarks>
+        </member>
+        <member name="P:GameArchives.PackageType.CheckFile">
+            <summary>
+            Given a file, determines whether the file is
+            of this package type.
+            </summary>
+        </member>
+        <member name="P:GameArchives.PackageType.Load">
+            <summary>
+            Given a file which is a valid package, opens it as this
+            package type, returning the package instance.
+            </summary>
+        </member>
+        <member name="M:GameArchives.PackageType.AddType(System.String,System.String[],System.Func{GameArchives.IFile,GameArchives.PackageTestResult},System.Func{GameArchives.IFile,GameArchives.AbstractPackage})">
+            <summary>
+            Add an archive package type to the supported types.
+            </summary>
+            <param name="name">Friendly name for the package type</param>
+            <param name="extensions">String-array of typical file extensions, formatted
+            as *.ext</param>
+            <param name="file">Function which, given a file, returns a PackageTestResult
+            which tells if the file is of that package type.</param>
+            <param name="load">Function which loads the package.</param>
+        </member>
+        <member name="M:GameArchives.PFS.PFSCDecompressStream.#ctor(System.IO.Stream)">
+            <summary>
+            Wraps a PFSC file to create a decompressed stream.
+            </summary>
+            <param name="s"></param>
+            <param name="sectorSize"></param>
+            <param name="sectorOffsets"></param>
+        </member>
+        <member name="F:GameArchives.PFS.PFSCDecompressStream.offsetIntoSector">
+            <summary>
+            Offset within the sector for Read()s
+            Should always be == position % sectorSize
+            </summary>
+        </member>
+        <member name="F:GameArchives.PFS.PFSCDecompressStream.position">
+            <summary>
+            Position within logical stream.
+            </summary>
+        </member>
+        <member name="T:GameArchives.PFS.PFSDirectory">
+            <summary>
+            Playstation File System Directory
+            </summary>
+        </member>
+        <member name="T:GameArchives.PFS.PFSPackage">
+            <summary>
+            Represents a PFS image.
+            </summary>
+        </member>
+        <member name="F:GameArchives.PFS.XtsCryptStream.sectorSize">
+            <summary>
+            Size of each XEX sector
+            </summary>
+        </member>
+        <member name="F:GameArchives.PFS.XtsCryptStream.offsetIntoSector">
+            <summary>
+            Offset within the sector for Read()s
+            Should always be == position % sectorSize
+            </summary>
+        </member>
+        <member name="F:GameArchives.PFS.XtsCryptStream.activeSector">
+            <summary>
+            Active sector number
+            </summary>
+        </member>
+        <member name="F:GameArchives.PFS.XtsCryptStream.cryptStartSector">
+            <summary>
+            Sector at and after which the encryption is active
+            </summary>
+        </member>
+        <member name="F:GameArchives.PFS.XtsCryptStream.position">
+            <summary>
+            Position within logical stream.
+            </summary>
+        </member>
+        <member name="F:GameArchives.PFS.XtsCryptStream.sectorBuf">
+            <summary>
+            Temporary location for the decrypted sector
+            </summary>
+        </member>
+        <member name="M:GameArchives.PFS.XtsCryptStream.#ctor(System.IO.Stream,System.Byte[],System.Byte[],System.UInt32,System.UInt32)">
+            <summary>
+            Creates an AES-XTS-128 stream.
+            Reads from the stream will decrypt data. Writes to the stream will encrypt data.
+            </summary>
+        </member>
+        <member name="M:GameArchives.PFS.XtsCryptStream.ReadSectorBuffer">
+            <summary>
+            Precondition: activeSector is set
+            Postconditions:
+            - sectorOffset is reset to 0
+            - sectorBuf[] is filled with decrypted sector
+            - position is updated
+            </summary>
+        </member>
+        <member name="M:GameArchives.PSARC.PSARCPackage.#ctor(GameArchives.IFile)">
+            <summary>
+            Open the .psarc archive which is the given file.
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:GameArchives.PSARC.PSARCPackage.makeOrGetDir(System.String)">
+            <summary>
+            Get the directory at the end of this path, or make it (and all
+            intermediate dirs) if it doesn't exist.
+            </summary>
+            <param name="path">Path from PSARC path file, including filename.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="T:GameArchives.STFS.STFSDirectory">
+            <summary>
+            Represents a Directory within an STFS package.
+            </summary>
+        </member>
+        <member name="T:GameArchives.STFS.STFSFile">
+            <summary>
+            Represents a file within an STFS package.
+            </summary>
+        </member>
+        <member name="M:GameArchives.STFS.STFSFile.ToString">
+            <summary>
+            The name of this file.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.STFS.STFSFile.GetBytes">
+            <summary>
+            Gets up to the first 2GiB of a file. For larger accesses use STFSFileStream.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.STFS.STFSFile.GetStream">
+            <summary>
+            Returns a Stream that allows access to the file's bytes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:GameArchives.STFS.STFSFileStream">
+            <summary>
+            A stream for accessing file data from within an STFS package.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSFileStream.CanRead">
+            <summary>
+            Denotes whether the stream can be read from.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSFileStream.CanSeek">
+            <summary>
+            Denotes whether the user can seek this stream.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSFileStream.CanWrite">
+            <summary>
+            Denotes whether the user can write to this stream.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSFileStream.Length">
+            <summary>
+            The total length of this file.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSFileStream.Position">
+            <summary>
+            The current position the stream points to within the file.
+            </summary>
+        </member>
+        <member name="M:GameArchives.STFS.STFSFileStream.Flush">
+            <summary>
+            Not implemented; read-only stream.
+            </summary>
+        </member>
+        <member name="M:GameArchives.STFS.STFSFileStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads `count` bytes into `buffer` at offset `offset`.
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.STFS.STFSFileStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Seek the stream to given position within the file relative to given origin.
+            </summary>
+            <param name="offset"></param>
+            <param name="origin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.STFS.STFSFileStream.SetLength(System.Int64)">
+            <summary>
+            Not implemented; read-only stream.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:GameArchives.STFS.STFSFileStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Not implemented; read-only stream.
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="count"></param>
+        </member>
+        <member name="T:GameArchives.STFS.STFSType">
+            <summary>
+            Represents the two supported types of STFS packages (CON and LIVE).
+            </summary>
+        </member>
+        <member name="F:GameArchives.STFS.STFSType.CON">
+            <summary>
+            Package signed with console key.
+            </summary>
+        </member>
+        <member name="F:GameArchives.STFS.STFSType.LIVE">
+            <summary>
+            Package signed for XBOX Live.
+            </summary>
+        </member>
+        <member name="F:GameArchives.STFS.STFSType.PIRS">
+            <summary>
+            Package used in system files and on-disc content.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.BlockHash.Index">
+            <summary>
+            The ordinal index of this block.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.BlockHash.Hash">
+            <summary>
+            SHA-1 hash of the block.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.BlockHash.NextBlock">
+            <summary>
+            Ordinal number of next block.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.BlockHash.Status">
+            <summary>
+            Status byte:
+            Value   Meaning
+            0x00    Unused Block
+            0x40    Free Block (previously used)
+            0x80    Used Block
+            0xC0    Newly Allocated Block
+            </summary>
+        </member>
+        <member name="T:GameArchives.STFS.STFSPackage">
+            <summary>
+            Represents an STFS package. Allows read-only access to files.
+            </summary>
+        </member>
+        <member name="M:GameArchives.STFS.STFSPackage.IsSTFS(GameArchives.IFile)">
+            <summary>
+            Checks if the given file is an STFS file (LIVE/CON).
+            </summary>
+            <param name="filename">Absolute path to file.</param>
+            <returns>Is the file an STFS?</returns>
+        </member>
+        <member name="P:GameArchives.STFS.STFSPackage.stream">
+            <summary>
+            The stream used to access this STFS package. Typically, this is a FileStream.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSPackage.Type">
+            <summary>
+            The type of this STFS package (LIVE and CON are supported).
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSPackage.RootDirectory">
+            <summary>
+            The directory under which all files in this STFS package live.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSPackage.Size">
+            <summary>
+            The total size of this STFS package.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSPackage.Disposed">
+            <summary>
+            Has this package been disposed?
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSPackage.Thumbnail">
+            <summary>
+            The content thumbnail of this package.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSPackage.TitleThumbnail">
+            <summary>
+            The title thumbnail for this package.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSPackage.FileName">
+            <summary>
+            The filename of this package.
+            </summary>
+        </member>
+        <member name="P:GameArchives.STFS.STFSPackage.BlockCache">
+            <summary>
+            Holds the block we're currently working on.
+            </summary>
+        </member>
+        <member name="M:GameArchives.STFS.STFSPackage.OpenFile(GameArchives.IFile)">
+            <summary>
+            Opens up an STFS file at the given absolute path.
+            </summary>
+            <param name="path">Path to the STFS file.</param>
+            <returns>New STFS instance which refers to given file.</returns>
+            <exception cref="T:System.IO.InvalidDataException">Thrown if file is not valid STFS package.</exception>
+        </member>
+        <member name="M:GameArchives.STFS.STFSPackage.Finalize">
+            <summary>
+            Ensure that we dispose upon garbage collection.
+            </summary>
+        </member>
+        <member name="M:GameArchives.STFS.STFSPackage.BlockToOffset(System.Int32)">
+            <summary>
+            Turns a given block number to an offset within the STFS package.
+            </summary>
+            <param name="blockNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.STFS.STFSPackage.GetFileBlocks(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Returns an array of the file's block numbers in order.
+            </summary>
+            <param name="blockNum">The starting block index</param>
+            <param name="numBlocks">How many blocks the file has</param>
+            <param name="sequential">Do we know the blocks are sequential? (speedup)</param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.STFS.STFSPackage.CacheBlockAt(System.Int64)">
+            <summary>
+            Cache the block at the given byte offset.
+            Does not check that you're aligned to a block boundary.
+            </summary>
+            <param name="offset"></param>
+        </member>
+        <member name="M:GameArchives.STFS.STFSPackage.Dispose">
+            <summary>
+            Dispose this object.
+            </summary>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadInt8(System.IO.Stream)">
+            <summary>
+            Read a signed 8-bit integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadUInt8(System.IO.Stream)">
+            <summary>
+            Read an unsigned 8-bit integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadUInt16LE(System.IO.Stream)">
+            <summary>
+            Read an unsigned 16-bit little-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadInt16LE(System.IO.Stream)">
+            <summary>
+            Read a signed 16-bit little-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadUInt16BE(System.IO.Stream)">
+            <summary>
+            Read an unsigned 16-bit Big-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadInt16BE(System.IO.Stream)">
+            <summary>
+            Read a signed 16-bit Big-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadUInt24LE(System.IO.Stream)">
+            <summary>
+            Read an unsigned 24-bit little-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadInt24LE(System.IO.Stream)">
+            <summary>
+            Read a signed 24-bit little-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadUInt24BE(System.IO.Stream)">
+            <summary>
+            Read an unsigned 24-bit Big-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadInt24BE(System.IO.Stream)">
+            <summary>
+            Read a signed 24-bit Big-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadUInt32LE(System.IO.Stream)">
+            <summary>
+            Read an unsigned 32-bit little-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadInt32LE(System.IO.Stream)">
+            <summary>
+            Read a signed 32-bit little-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadUInt32BE(System.IO.Stream)">
+            <summary>
+            Read an unsigned 32-bit Big-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadInt32BE(System.IO.Stream)">
+            <summary>
+            Read a signed 32-bit Big-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadUInt64LE(System.IO.Stream)">
+            <summary>
+            Read an unsigned 64-bit little-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadInt64LE(System.IO.Stream)">
+            <summary>
+            Read a signed 64-bit little-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadUInt64BE(System.IO.Stream)">
+            <summary>
+            Read an unsigned 64-bit big-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadInt64BE(System.IO.Stream)">
+            <summary>
+            Read a signed 64-bit big-endian integer from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadMultibyteBE(System.IO.Stream,System.Byte)">
+            <summary>
+            Reads a multibyte value of the specified length from the stream.
+            </summary>
+            <param name="s">The stream</param>
+            <param name="bytes">Must be less than or equal to 8</param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadFloat(System.IO.Stream)">
+            <summary>
+            Read a single-precision (4-byte) floating-point value from the stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadASCIINullTerminated(System.IO.Stream,System.Int32)">
+            <summary>
+            Read a null-terminated ASCII string from the given stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadLengthPrefixedString(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Read a length-prefixed string of the specified encoding type from the file.
+            The length is a 32-bit little endian integer.
+            </summary>
+            <param name="s"></param>
+            <param name="e">The encoding to use to decode the string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadLengthUTF8(System.IO.Stream)">
+            <summary>
+            Read a length-prefixed UTF-8 string from the given stream.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadBytes(System.IO.Stream,System.Int32)">
+            <summary>
+            Read a given number of bytes from a stream into a new byte array.
+            </summary>
+            <param name="s"></param>
+            <param name="count">Number of bytes to read (maximum)</param>
+            <returns>New byte array of size &lt;=count.</returns>
+        </member>
+        <member name="M:GameArchives.StreamExtensions.ReadMidiMultiByte(System.IO.Stream)">
+            <summary>
+            Read a variable-length integral value as found in MIDI messages.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.U8.U8Package.#ctor(GameArchives.IFile)">
+            <summary>
+            Open the .far archive which is the given file.
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:GameArchives.Util.LocalDir(System.String)">
+            <summary>
+            Opens a directory from the local filesystem as an IDirectory
+            </summary>
+            <param name="dir">Path to the directory.</param>
+            <returns>An IDirectory representing the local directory.</returns>
+        </member>
+        <member name="M:GameArchives.Util.LocalFile(System.String)">
+            <summary>
+            Create an instance of an IFile from the given local path.
+            Note that this creates a new LocalDirectory object each time it is
+            called. If you are opening a lot of files from one directory, it's more
+            efficient to grab the directory with Util.LocalDir(), then get each
+            file from there.
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GameArchives.Util.Last``1(``0[])">
+            <summary>
+            Returns the last element of this array.
+            </summary>
+            <typeparam name="T">The type of the array.</typeparam>
+            <param name="arr"></param>
+            <returns>The last element of the array.</returns>
+        </member>
+        <member name="M:GameArchives.Util.ExtractTo(GameArchives.IFile,System.String)">
+            <summary>
+            Saves this file to the given path. Overwrites existing files.
+            </summary>
+            <param name="file"></param>
+            <param name="path"></param>
+        </member>
+        <member name="M:GameArchives.Util.CopyTo(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Copies one stream to the other.
+            </summary>
+            <param name="input">The source stream.</param>
+            <param name="output">The destination stream.</param>
+        </member>
+        <member name="T:GameArchives.XISO.XISODirectory">
+            <summary>
+            Xbox (360) ISO Directory
+            </summary>
+        </member>
+        <member name="T:GameArchives.XISO.XISOFSNode">
+            <summary>
+            Represents an element of an XISO file system.
+            </summary>
+        </member>
+        <member name="P:GameArchives.XISO.XISOFSNode.EntryLocation">
+            <summary>
+            The location of the filesystem entry node in the ISO.
+            </summary>
+        </member>
+        <member name="T:GameArchives.XISO.XISOPackage">
+            <summary>
+            Represents an Xbox/Xbox 360 disc image.
+            </summary>
+        </member>
+    </members>
+</doc>

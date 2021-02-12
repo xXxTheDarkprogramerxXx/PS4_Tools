@@ -588,5 +588,40 @@ namespace Tester
             //that should be that
 
         }
+
+        private void btnUnlockTpy_Click(object sender, EventArgs e)
+        {
+            //Unlock Spesific Trophy
+            PS4_Tools.Trophy_File.Unlock_All_Title_Id("NPWR09395_00");
+            //Unlock all Trophy files
+            PS4_Tools.Trophy_File.Unlock_All_Trophies();
+        }
+
+        private void btnTrophyTimeFIx_Click(object sender, EventArgs e)
+        {
+            PS4_Tools.Recovery.TrophyTimeStampFix();
+        }
+
+        private void btnRebuildAppDb_Click(object sender, EventArgs e)
+        {
+            List<string> CusaList = new List<string>();//litrally just need the dir names as they are the CUSA items
+            CusaList.Add("CUSA00744");
+            CusaList.Add("CUSA01073");
+            CusaList.Add("CUSA02010");
+            CusaList.Add("CUSA02299");
+            CusaList.Add("CUSA02343");
+            CusaList.Add("CUSA03291");
+            CusaList.Add("CUSA03806");
+            CusaList.Add("CUSA05088");
+            CusaList.Add("CUSA07713");
+            CusaList.Add("CUSA07840");
+            CusaList.Add("CUSA07841");
+            CusaList.Add("CUSA08427");
+            CusaList.Add("CUSA09303");
+            CusaList.Add("CUSA10859");
+            CusaList.Add("CUSA12085");
+            CusaList.Add("CUSA16983");
+            PS4_Tools.Recovery.RebuildAppDb(apploc: @"C:\Publish\Sony\user\app\",metaloc: @"C:\Publish\Sony\user\appmeta\");
+        }
     }
 }

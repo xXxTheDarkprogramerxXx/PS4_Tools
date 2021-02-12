@@ -5,11 +5,6 @@ Collection Of Open Source PS4 Tools all in one Library
 
 Supports Unity
 
-## Donate
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=E4AMXF22CXG42&source=url)
-
-
 ## Projects Currently Running PS4 Tools
 
 PS4 PS2 Classics Manager (Unreleased) [Github](https://github.com/xXxTheDarkprogramerxXx/PS2-Classics-Replacer)

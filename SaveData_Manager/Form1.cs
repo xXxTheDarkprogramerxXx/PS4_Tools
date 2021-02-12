@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PS4_Tools;
+using System.IO;
 
 namespace SaveData_Manager
 {
@@ -17,6 +18,37 @@ namespace SaveData_Manager
         {
             InitializeComponent();
         }
+
+        public static void CopyDir(string sourceDirectory, string targetDirectory)
+        {
+            DirectoryInfo diSource = new DirectoryInfo(sourceDirectory);
+            DirectoryInfo diTarget = new DirectoryInfo(targetDirectory);
+
+            CopyAll(diSource, diTarget);
+        }
+
+        public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            Directory.CreateDirectory(target.FullName);
+
+            // Copy each file into the new directory.
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
+                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
+            }
+
+            // Copy each subdirectory using recursion.
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir =
+                    target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
+        }
+
+
+        public static string LocalDB = "";
 
         public class SaveDataGameHolder
         {
@@ -43,6 +75,8 @@ namespace SaveData_Manager
 
             public string Subdetail { get; set; }
             public Bitmap icon { get; set; }
+
+            public SaveDataGameHolder dataholder { get; set; }
 
         }
 
@@ -164,6 +198,7 @@ namespace SaveData_Manager
                     displayitem.UserId = saveholder[i].UserId;
                     displayitem.Title = Get_MAINTITLE(saveholder[i].paraminfo);
                     displayitem.TitleId = saveholder[i].Title_ID;
+                    displayitem.dataholder = saveholder[i];
                     try
                     {
 
@@ -183,6 +218,8 @@ namespace SaveData_Manager
                 dataGridView1.Columns["Detail"].Visible = false;
                 dataGridView1.Columns["Subdetail"].Visible = false;
                 dataGridView1.Columns["icon"].Visible = false;
+                dataGridView1.Columns["dataholder"].Visible = false;
+                
             }
             catch(Exception ex)
             {
@@ -212,6 +249,49 @@ namespace SaveData_Manager
         private void pictureBox1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void saveAllGamesToLocalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //All items need to be moved
+            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            {
+                //copy all items to the local db
+                SaveDataDisplayHolder holderitem = dataGridView1.Rows[i].DataBoundItem as SaveDataDisplayHolder;
+                string saveitem = holderitem.dataholder.PathToSave;
+                CopyDir(saveitem, LocalDB+ "//" + holderitem.dataholder.DirName);
+
+            }
+            MessageBox.Show("Copy completed", "Save Data Manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            LocalDB = Application.StartupPath + "//SaveManager";
+
+            if (!System.IO.Directory.Exists(LocalDB))
+            {
+                System.IO.Directory.CreateDirectory(LocalDB);
+            }
+
+
+        }
+
+        private void saveToLocalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveDataDisplayHolder holderitem = dataGridView1.SelectedRows[0].DataBoundItem as SaveDataDisplayHolder;
+            string saveitem = holderitem.dataholder.PathToSave;
+            CopyDir(saveitem, LocalDB + "//" + holderitem.dataholder.DirName);
+            MessageBox.Show("Copy completed", "Save Data Manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        }
+
+        private void showLocalItemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Open Local Data
+            SaveDataDisplayHolder holderitem = dataGridView1.SelectedRows[0].DataBoundItem as SaveDataDisplayHolder;
+            //File.Open()
         }
     }
 }

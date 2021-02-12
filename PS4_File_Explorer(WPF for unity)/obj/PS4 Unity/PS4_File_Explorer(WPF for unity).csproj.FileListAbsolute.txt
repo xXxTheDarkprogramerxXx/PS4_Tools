@@ -12,3 +12,17 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Exp
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity).csproj.GenerateResource.Cache
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity).exe
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity).pdb
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\bin\PS4 Unity\PS4_File_Explorer(WPF for unity).exe.config
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\bin\PS4 Unity\PS4_File_Explorer(WPF for unity).exe
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\bin\PS4 Unity\PS4_File_Explorer(WPF for unity).pdb
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity).csprojResolveAssemblyReference.cache
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\MainWindow.g.cs
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\App.g.cs
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity)_MarkupCompile.cache
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity)_MarkupCompile.lref
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\MainWindow.baml
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity).g.resources
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer_WPF_for_unity_.Properties.Resources.resources
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity).csproj.GenerateResource.Cache
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity).exe
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_File_Explorer(WPF for unity)\obj\PS4 Unity\PS4_File_Explorer(WPF for unity).pdb

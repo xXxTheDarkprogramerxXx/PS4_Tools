@@ -64,6 +64,14 @@ using System.Runtime.InteropServices;
 
 #endregion << Unity Engine >>
 
+
+#region << SQL Lite >>
+
+using System.Data.SQLite;
+using System.Data;
+
+#endregion << SQL Lite >>
+
 namespace PS4_Tools
 {
 
@@ -4015,7 +4023,7 @@ namespace PS4_Tools
         {
             var bytes = SealedKeyLocation;
             byte[] dec = new byte[32];
-            SCEUtil.sceSblSsDecryptSealedKey(bytes, dec);    
+            SCEUtil.sceSblSsDecryptSealedKey(bytes, dec);
             return dec;
         }
 
@@ -4060,6 +4068,20 @@ namespace PS4_Tools
             Console.ReadLine();
         }
 
+        public static void ReadPFS(string Path)
+        {
+        }
+
+        public static byte[] GetSealedKey_Bytes(string SealedKey)
+        {
+            var bytes = File.ReadAllBytes(SealedKey);
+            byte[] dec = new byte[32];
+            SCEUtil.sceSblSsDecryptSealedKey(bytes, dec);
+
+            Console.WriteLine("Your PFS Key is {0}", BitConverter.ToString(dec).Replace("-", string.Empty));
+            return dec;
+        }
+
         public static string GetSealedKey(string SealedKey, string SaveFile, string FileDecrypt)
         {
             var bytes = File.ReadAllBytes(SealedKey);
@@ -4068,6 +4090,48 @@ namespace PS4_Tools
 
             Console.WriteLine("Your PFS Key is {0}", BitConverter.ToString(dec).Replace("-", string.Empty));
             return BitConverter.ToString(dec).Replace("-", string.Empty);
+        }
+
+
+
+    }
+
+
+    public class PFS
+    {
+        //thanks to liborbispkg for this bit of into
+        [Flags]
+        public enum PfsMode : ushort
+        {
+            None = 0,
+            Signed = 0x1,
+            Is64Bit = 0x2,
+            Encrypted = 0x4,
+            UnknownFlagAlwaysSet = 0x8,
+        }
+
+
+        public class Header
+        {
+            public int Version = 1; // 1
+            public int Magic = 20130315; // 20130315 (march 15 2013???)
+            public int Id = 0;
+            public byte Fmode = 0;
+            public byte Clean = 0;
+            public byte ReadOnly = 0;
+            public byte Rsv = 0;
+            public PfsMode Mode = PfsMode.UnknownFlagAlwaysSet;
+            public ushort Unk1 = 0;
+            public uint BlockSize = 0x10000;
+            public uint NBackup = 0;
+            /// <summary>
+            /// This is always 1 for some reason.
+            /// </summary>
+            public long NBlock = 1;
+            public long DinodeCount = 0;
+            public long Ndblock = 0;
+            public long DinodeBlockCount = 0;
+
         }
     }
 
@@ -4421,6 +4485,237 @@ namespace PS4_Tools
         }
 
         /// <summary>
+        /// This is the class that will hold the tbl info 
+        /// </summary>
+        private class tbl_trophy_flag
+        {
+            public int id { get; set; }
+            public int title_id { get; set; }
+            public string revision { get; set; }
+            public string trophy_title_id { get; set; }
+            public int trophyid { get; set; }
+            public int groupid { get; set; }
+            public bool visible { get; set; }
+            public bool unlocked { get; set; }
+            public int unlock_attribute { get; set; }
+            public string time_unlocked { get; set; }
+            public string time_unlocked_uc { get; set; }
+            public int grade { get; set; }
+            public bool hidden { get; set; }
+            public string title { get; set; }
+            public string description { get; set; }
+        }
+
+        public class EarnedTrophies
+        {
+            [JsonProperty("platinum")]
+            public int Platinum { get; set; }
+
+            [JsonProperty("gold")]
+            public int Gold { get; set; }
+
+            [JsonProperty("silver")]
+            public int Silver { get; set; }
+
+            [JsonProperty("bronze")]
+            public int Bronze { get; set; }
+        }
+        public class trpsummary
+        {
+            [JsonProperty("format")]
+            public int Format { get; set; }
+
+            [JsonProperty("earnedTrophies")]
+            public EarnedTrophies EarnedTrophies { get; set; }
+            [JsonConstructor]
+            public trpsummary() { }
+        }
+
+        public static void Unlock_All_Title_Id(string title_id, string dbFileLocation = @"C:\Publish\Sony\trophy_local.db", string trpsummaryFile = @"C:\Publish\Sony\trpsummary.dat")
+        {
+
+            Console.WriteLine("Create connection to trophy db...");
+            //SQLiteConnection con = new SQLiteConnection();
+
+            string dbFilename = dbFileLocation;
+            //build the connection string
+            string cs = string.Format("Version=3;uri=file:{0}", dbFilename);//sony is format 3
+            if (!File.Exists(dbFilename))
+                throw new Exception("Could not load tropy db");
+
+
+            //create a backup 
+            if (File.Exists(dbFilename + ".backup"))
+            {
+                File.Delete(dbFilename + ".backup");
+            }
+            File.Copy(dbFilename, dbFilename + ".backup", true);//just give it an overwrite incase
+
+            //we just want to do the update here now 
+            string SQL = @"UPDATE  tbl_trophy_flag set time_unlocked='" + DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.00Z") + "', time_unlocked_uc ='" + DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.00Z") + @"',unlocked=1
+                WHERE trophy_title_id='" + title_id + "' AND unlocked = 0";
+
+            if (SQLLite.SqlHelper.ExecuteNonQueryBL1(SQL, cs) == false)
+            {
+                throw new Exception("Could not update fields");
+            }
+
+
+            //now do the title file so it updates percentages ext
+
+            SQL = @"UPDATE tbl_trophy_title SET  progress=100,unlocked_trophy_num=trophy_num,unlocked_platinum_num=platinum_num,unlocked_gold_num=gold_num,unlocked_silver_num=silver_num,unlocked_bronze_num=bronze_num Where trophy_title_id = '" + title_id + "'";
+            if (SQLLite.SqlHelper.ExecuteNonQueryBL1(SQL, cs) == false)
+            {
+                throw new Exception("Could not update header fields");
+            }
+
+            //load up current trophies
+            //we need to rebuild the summary trophy file cause we are not using the sony method we are doing it manual
+            //todo do screenshots somewhere
+            //trpsummary myDeserializedClass = new trpsummary();
+
+            //File.ReadAllText = 
+
+            trpsummary myDeserializedClass = JsonConvert.DeserializeObject<trpsummary>(File.ReadAllText(trpsummaryFile));
+
+            SQL = "SELECT SUM(unlocked_platinum_num) FROM tbl_trophy_title";
+
+            int TotalPlatNum = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Platinum = TotalPlatNum;
+
+            SQL = "SELECT SUM(unlocked_gold_num) FROM tbl_trophy_title";
+
+            int TotalGoldNUm = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Gold = TotalGoldNUm;
+
+            SQL = "SELECT SUM(unlocked_silver_num) FROM tbl_trophy_title";
+
+            int TotalSilverNUm = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Silver = TotalSilverNUm;
+
+            SQL = "SELECT SUM(unlocked_bronze_num) FROM tbl_trophy_title";
+
+            int TotalBronzeNUm = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Bronze = TotalBronzeNUm;
+
+            File.WriteAllText(trpsummaryFile, JsonConvert.SerializeObject(myDeserializedClass));
+
+            return;
+            //            string SQL = @"SELECT * FROM tbl_trophy_flag
+            //Where trophy_title_id='"+ title_id + "'";
+
+            var dttemp = SQLLite.SqlHelper.GetDataTable(SQL, cs);
+            List<tbl_trophy_flag> item = new List<tbl_trophy_flag>();
+
+            for (int i = 0; i < dttemp.Rows.Count; i++)
+            {
+                //here we have some data !
+                tbl_trophy_flag newitem = new tbl_trophy_flag();
+
+                newitem.id = Convert.ToInt32(dttemp.Rows[i]["id"].ToString());
+                newitem.title_id = Convert.ToInt32(dttemp.Rows[i]["title_id"].ToString());
+                newitem.revision = dttemp.Rows[i]["title_id"].ToString();
+                newitem.trophy_title_id = dttemp.Rows[i]["trophy_title_id"].ToString();
+                newitem.trophyid = Convert.ToInt32(dttemp.Rows[i]["trophyid"].ToString());
+                newitem.groupid = Convert.ToInt32(dttemp.Rows[i]["groupid"].ToString());
+                newitem.visible = Convert.ToBoolean(Convert.ToInt32(dttemp.Rows[i]["visible"].ToString()));
+                newitem.unlocked = Convert.ToBoolean(Convert.ToInt32(dttemp.Rows[i]["unlocked"].ToString()));
+                newitem.unlock_attribute = Convert.ToInt32(dttemp.Rows[i]["unlock_attribute"].ToString());
+                newitem.time_unlocked = dttemp.Rows[i]["time_unlocked"].ToString();
+                newitem.time_unlocked_uc = dttemp.Rows[i]["time_unlocked_uc"].ToString();
+                newitem.grade = Convert.ToInt32(dttemp.Rows[i]["grade"].ToString());
+                newitem.hidden = Convert.ToBoolean(Convert.ToInt32(dttemp.Rows[i]["hidden"].ToString()));
+                newitem.title = dttemp.Rows[i]["title"].ToString();
+                newitem.description = dttemp.Rows[i]["description"].ToString();
+                item.Add(newitem);
+            }
+
+            for (int i = 0; i < item.Count; i++)
+            {
+                if (item[i].unlocked == false)
+                {
+                    //set the new item to true 
+                }
+            }
+        }
+
+        public static void Unlock_All_Trophies(string dbFileLocation = @"C:\Publish\Sony\trophy_local.db", string trpsummaryFile = @"C:\Publish\Sony\trpsummary.dat")
+        {
+            Console.WriteLine("Create connection to trophy db...");
+            //SQLiteConnection con = new SQLiteConnection();
+
+            string dbFilename = dbFileLocation;
+            //build the connection string
+            string cs = string.Format("Version=3;uri=file:{0}", dbFilename);//sony is format 3
+            if (!File.Exists(dbFilename))
+                throw new Exception("Could not load tropy db");
+
+            //create a backup 
+            if (File.Exists(dbFilename + ".backup"))
+            {
+                File.Delete(dbFilename + ".backup");
+            }
+            File.Copy(dbFilename, dbFilename + ".backup", true);//just give it an overwrite incase
+
+            //we just want to do the update here now this is for all
+            string SQL = @"UPDATE  tbl_trophy_flag set time_unlocked='" + DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.00Z") + "', time_unlocked_uc ='" + DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.00Z") + @"',unlocked=1
+                WHERE unlocked = 0";
+
+            if (SQLLite.SqlHelper.ExecuteNonQueryBL1(SQL, cs) == false)
+            {
+                throw new Exception("Could not update fields");
+            }
+
+
+            //now do the title file so it updates percentages ext
+
+            SQL = @"UPDATE tbl_trophy_title SET  progress=100,unlocked_trophy_num=trophy_num,unlocked_platinum_num=platinum_num,unlocked_gold_num=gold_num,unlocked_silver_num=silver_num,unlocked_bronze_num=bronze_num";
+            if (SQLLite.SqlHelper.ExecuteNonQueryBL1(SQL, cs) == false)
+            {
+                throw new Exception("Could not update header fields");
+            }
+
+            //load up current trophies
+            //we need to rebuild the summary trophy file cause we are not using the sony method we are doing it manual
+            //todo do screenshots somewhere
+            trpsummary myDeserializedClass = JsonConvert.DeserializeObject<trpsummary>(File.ReadAllText(trpsummaryFile));
+
+            SQL = "SELECT SUM(unlocked_platinum_num) FROM tbl_trophy_title";
+
+            int TotalPlatNum = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Platinum = TotalPlatNum;
+
+            SQL = "SELECT SUM(unlocked_gold_num) FROM tbl_trophy_title";
+
+            int TotalGoldNUm = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Gold = TotalGoldNUm;
+
+            SQL = "SELECT SUM(unlocked_silver_num) FROM tbl_trophy_title";
+
+            int TotalSilverNUm = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Silver = TotalSilverNUm;
+
+            SQL = "SELECT SUM(unlocked_bronze_num) FROM tbl_trophy_title";
+
+            int TotalBronzeNUm = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Bronze = TotalBronzeNUm;
+
+            File.WriteAllText(trpsummaryFile, JsonConvert.SerializeObject(myDeserializedClass));
+
+            return;
+        }
+
+
+
+        /// <summary>
         /// Class used for Encrypted SFM
         /// </summary>
         public class ESFM
@@ -4520,6 +4815,406 @@ namespace PS4_Tools
                 return data;
             }
         }
+
+    }
+
+    /// <summary>
+    /// PS4 Tools Recovery System
+    /// </summary>
+    public class Recovery
+    {
+        /// <summary>
+        /// This is made possible by kemalsanli
+        /// Credit for the orginal python script goes to him
+        /// </summary>
+        public static void TrophyTimeStampFix(string dbFileLocation = @"C:\Publish\Sony\trophy_local.db")
+        {
+            string dbFilename = dbFileLocation;
+            //build the connection string
+            string cs = string.Format("Version=3;uri=file:{0}", dbFilename);//sony is format 3
+            if (!File.Exists(dbFilename))
+                throw new Exception("Could not load tropy db");
+            Console.WriteLine("Updating... \n");
+            string SQL = @"UPDATE tbl_trophy_title_entry SET time_last_update=time_last_update_uc where time_last_update=='0001-01-01T00:00:00.00Z'";
+            if (SQLLite.SqlHelper.ExecuteNonQueryBL1(SQL, cs) == false)
+            {
+                throw new Exception("Failed to update records in SQL");
+            }
+            SQL = @"UPDATE tbl_trophy_title SET time_last_update=time_last_update_uc, time_last_unlocked=time_last_update_uc WHERE time_last_update == '0001-01-01T00:00:00.00Z' or time_last_unlocked == '0001-01-01T00:00:00.00Z'";
+            if (SQLLite.SqlHelper.ExecuteNonQueryBL1(SQL, cs) == false)
+            {
+                throw new Exception("Failed to update records in SQL");
+            }
+            SQL = @"UPDATE tbl_trophy_flag SET time_unlocked=time_unlocked_uc where time_unlocked=='0001-01-01T00:00:00.00Z'";
+            if (SQLLite.SqlHelper.ExecuteNonQueryBL1(SQL, cs) == false)
+            {
+                throw new Exception("Failed to update records in SQL");
+            }
+
+
+
+        }
+
+        /// <summary>
+        /// This should fix the trophy summary issues when a user rebuilds the database
+        /// </summary>
+        /// <param name="trpsummaryFile"></param>
+        public static void FixTrophySummary(string dbFileLocation = @"C:\Publish\Sony\trophy_local.db", string trpsummaryFile = @"C:\Publish\Sony\trpsummary.dat")
+        {
+            Console.WriteLine("Create connection to trophy db...");
+            //SQLiteConnection con = new SQLiteConnection();
+
+            string dbFilename = dbFileLocation;
+            //build the connection string
+            string cs = string.Format("Version=3;uri=file:{0}", dbFilename);//sony is format 3
+            if (!File.Exists(dbFilename))
+                throw new Exception("Could not load tropy db");
+
+            //create a backup 
+            if (File.Exists(trpsummaryFile + ".backup"))
+            {
+                File.Delete(trpsummaryFile + ".backup");
+            }
+
+            File.Copy(trpsummaryFile, trpsummaryFile + ".backup", true);
+
+            //load up current trophies
+            //we need to rebuild the summary trophy file cause we are not using the sony method we are doing it manual
+            //todo do screenshots somewhere
+            Trophy_File.trpsummary myDeserializedClass = JsonConvert.DeserializeObject<Trophy_File.trpsummary>(File.ReadAllText(trpsummaryFile));
+
+           string SQL = "SELECT SUM(unlocked_platinum_num) FROM tbl_trophy_title";
+
+            int TotalPlatNum = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Platinum = TotalPlatNum;
+
+            SQL = "SELECT SUM(unlocked_gold_num) FROM tbl_trophy_title";
+
+            int TotalGoldNUm = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Gold = TotalGoldNUm;
+
+            SQL = "SELECT SUM(unlocked_silver_num) FROM tbl_trophy_title";
+
+            int TotalSilverNUm = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Silver = TotalSilverNUm;
+
+            SQL = "SELECT SUM(unlocked_bronze_num) FROM tbl_trophy_title";
+
+            int TotalBronzeNUm = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
+
+            myDeserializedClass.EarnedTrophies.Bronze = TotalBronzeNUm;
+
+            File.WriteAllText(trpsummaryFile, JsonConvert.SerializeObject(myDeserializedClass));
+
+        }
+
+        /// <summary>
+        /// Rebuilds your App.db Credits for this goes to Zer0xFF
+        /// </summary>
+        /// <param name="dbFileLocation"></param>
+        public static void RebuildAppDb(string dbFileLocation = @"C:\Publish\Sony\app.db", string apploc = @"/user/app/", string metaloc = @"/system_data/priv/appmeta/")
+        {
+            Processed = new List<CUSA>();
+            Console.WriteLine("Create connection to app.db...");
+            //SQLiteConnection con = new SQLiteConnection();
+
+            string dbFilename = dbFileLocation;
+            //build the connection string
+            string cs = string.Format("Version=3;uri=file:{0}", dbFilename);//sony is format 3
+            if (!File.Exists(dbFilename))
+                throw new Exception("Could not load tropy db");
+
+
+            //create a backup 
+            if (File.Exists(dbFilename + ".backup"))
+            {
+                File.Delete(dbFilename + ".backup");
+            }
+            File.Copy(dbFilename, dbFilename + ".backup", true);//just give it an overwrite incase
+
+
+            List<string> CusaList = new List<string>();
+
+            string[] allfiles = Directory.GetDirectories(apploc);
+            for (int i = 0; i < allfiles.Length; i++)
+            {
+                if (allfiles[i].Contains("CUSA"))
+                {
+                    CusaList.Add(Path.GetFileName(allfiles[i]));
+                }
+            }
+            //create the in List
+            string titleidlist = "";
+            for (int i = 0; i < CusaList.Count; i++)
+            {
+                titleidlist += "'" + CusaList[i] + "',";
+            }
+
+
+            titleidlist = titleidlist.Remove(titleidlist.Length - 1, 1);//remove the last,
+
+            string insertlist = "";
+
+            string SQL = @"SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'tbl_appbrowse_%%';";
+            DataTable dttemp = SQLLite.SqlHelper.GetDataTable(SQL, cs);
+            for (int i = 0; i < dttemp.Rows.Count; i++)
+            {
+                SQL = "SELECT T.titleid FROM " + dttemp.Rows[i][0].ToString() + " T WHERE T.titleid NOT IN (" + titleidlist + @")";
+                DataTable dtMissing = SQLLite.SqlHelper.GetDataTable(SQL, cs);
+                for (int ix = 0; ix < dtMissing.Rows.Count; ix++)
+                {
+                    //title id needs to be checked
+                    string GameId = dtMissing.Rows[i][0].ToString();
+                    Console.WriteLine("Processing GameID:" + GameId);
+                    var cusa = get_game_info_by_id(GameId, metaloc, apploc);
+                    if (cusa.is_usable == true)
+                    {
+                        insertlist = "('" + cusa.sfo.TitleID + "','" + cusa.sfo.ContentID + "','" + cusa.sfo.Title + "','/user/appmeta/" + cusa.sfo.TitleID + "', '2018-07-27 15:06:46.822', '0', '0', '5', '1', '100', '0', '151', '5', '1', 'gd', '0', '0', '0', '0', NULL, NULL, NULL, '" + cusa.size.ToString() + "', '2018-07-27 15:06:46.802', '0', 'game', NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, '2018-07-27 15:06:46.757')";
+                        //do the insert here and just get it over and done with 
+                        SQL = "INSERT INTO " + dttemp.Rows[i][0].ToString() + " VALUES " + insertlist;
+                        SQLLite.SqlHelper.ExecuteNonQueryBL1(SQL, cs);
+                        Console.WriteLine("Completed");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Skipped");
+                    }
+                }
+
+                Console.WriteLine("Processing table: tbl_appinfo");
+
+                SQL = @"SELECT DISTINCT T.titleid FROM (SELECT titleid FROM " + dttemp.Rows[i][0].ToString() + ") T WHERE T.titleid LIKE 'CUSA%%' AND T.titleid NOT IN (SELECT DISTINCT titleid FROM tbl_appinfo);";
+                DataTable dtmissing_appinfo_cusa_id = SQLLite.SqlHelper.GetDataTable(SQL, cs);
+                for (int ix = 0; ix < dtmissing_appinfo_cusa_id.Rows.Count; ix++)
+                {
+                    string game_id = dtmissing_appinfo_cusa_id.Rows[i][0].ToString();
+                    Console.WriteLine("Processing GameID:" + game_id);
+                    var cusa = get_game_info_by_id(game_id, metaloc, apploc);
+                    if (cusa.is_usable == true)
+                    {
+                        List<AppInfo> sqlitems = get_pseudo_appinfo(cusa.sfo, cusa.size);
+                        for (int sq = 0; sq < sqlitems.Count; sq++)
+                        {
+                            SQL = "INSERT INTO tbl_appinfo (titleid, key, val) VALUES ('" + game_id + "','" + sqlitems[i].Key + "','" + sqlitems[i].Value + "')";
+                            SQLLite.SqlHelper.ExecuteNonQueryBL1(SQL, cs);
+                        }
+
+                        Console.WriteLine("Completed");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Skipped");
+                    }
+                }
+            }
+
+
+        }
+
+        private static List<CUSA> Processed = new List<CUSA>();
+
+
+
+        private class CUSA
+        {
+            public string GameId = "";
+            public Param_SFO.PARAM_SFO sfo = null;
+
+            public long size = 999999;
+
+            public bool is_usable = false;
+
+        }
+
+        private static CUSA get_game_info_by_id(string GameID, string AppMetaLocation, string apploc)
+        {
+            bool exits = false;
+            for (int i = 0; i < Processed.Count; i++)
+            {
+                if (Processed[i].GameId == GameID)
+                {
+                    return Processed[i];
+                }
+            }
+            try
+            {
+                var sfo = new Param_SFO.PARAM_SFO(AppMetaLocation + GameID + @"/param.sfo");
+                if (sfo.Category == "")
+                {
+                    var holder = new CUSA();
+                    holder.GameId = GameID;
+                    holder.is_usable = false;
+                    holder.size = 0;
+                    Processed.Add(holder);
+                    return holder;
+                }
+                else
+                {
+                    var holder = new CUSA();
+                    holder.GameId = GameID;
+                    holder.sfo = sfo;
+                    holder.is_usable = true;
+                    try
+                    {
+                        holder.size = new System.IO.FileInfo(apploc + GameID + "/app.pkg").Length;
+                    }
+                    catch (Exception ex)
+                    {
+                        //for testing on a local disk i did not copy all pkg files over
+                        holder.size = 0;
+                    }
+                    Processed.Add(holder);
+                    return holder;
+                }
+            }
+            catch (Exception ex)
+            {
+                var holder = new CUSA();
+                holder.GameId = GameID;
+                holder.is_usable = false;
+                holder.size = 0;
+                Processed.Add(holder);
+                return holder;
+            }
+
+        }
+
+
+        private class AppInfo
+        {
+            public string Key = "";
+            public string Value = "";
+        }
+
+
+
+        private static List<AppInfo> get_pseudo_appinfo(Param_SFO.PARAM_SFO sfo, long size)
+        {
+            //build the first few items by default 
+
+            List<AppInfo> appinfo = new List<AppInfo>();
+            AppInfo info = new AppInfo();
+            info.Key = "#_access_index";
+            info.Value = "67";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "#_last_access_time";
+            info.Value = "2018-07-27 15:04:39.822";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "#_contents_status";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "#_mtime";
+            info.Value = "2018-07-27 15:04:40.635";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "#_size";
+            info.Value = size.ToString();
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "#_update_index";
+            info.Value = "74";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "#exit_type";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            //dump all SFO info here 
+            for (int i = 0; i < sfo.Tables.Count; i++)
+            {
+                info = new AppInfo();
+                info.Key = sfo.Tables[i].Name.ToString();
+                info.Value = sfo.Tables[i].Value.ToString();
+                appinfo.Add(info);
+            }
+
+            info = new AppInfo();
+            info.Key = "_contents_ext_type";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_contents_location";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_current_slot";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_disable_live_detail";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_hdd_location";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_path_info";
+            info.Value = "3113537756987392";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_path_info_2";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_size_other_hdd";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_sort_priority";
+            info.Value = "100";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_uninstallable";
+            info.Value = "1";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_view_category";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_working_status";
+            info.Value = "0";
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_org_path";
+            info.Value = "/user/app/" + sfo.TitleID;
+            appinfo.Add(info);
+
+            info = new AppInfo();
+            info.Key = "_metadata_path";
+            info.Value = "/user/appmeta/" + sfo.TitleID;
+            appinfo.Add(info);
+
+
+            return appinfo;
+
+        }
+
 
     }
 
@@ -6058,14 +6753,14 @@ namespace PS4_Tools
                         this.Pieces = ofile.Pieces;
                     }
                 }
-                
+
 
 
             }
 
 
 
-            
+
 
             /// <summary>
             /// Creates a PS4 Fake DLC Package
@@ -6087,12 +6782,12 @@ namespace PS4_Tools
                 //We are switching to Maxtron's Liborbis
 
                 //we have maxtron's pkg tools now solets see what liborbis can do for us 
-               // LibOrbis.PKG.PkgBuilder pkg = new PkgBuilder();
+                // LibOrbis.PKG.PkgBuilder pkg = new PkgBuilder();
 
 
             }
 
-#region << UnprotectedPKG >>
+            #region << UnprotectedPKG >>
 
             private static string m_pkgfile;
             private static bool m_loaded;
@@ -6132,27 +6827,27 @@ namespace PS4_Tools
 
             public enum PKG_State
             {
-               Fake =0,
-               Official = 1,
-               Officail_DP = 2,
-               Unkown = 99 
+                Fake = 0,
+                Official = 1,
+                Officail_DP = 2,
+                Unkown = 99
             }
 
             private static PKGType GetPkgType(string str)
             {
-                if (str == "gde" || str== "gdk")
+                if (str == "gde" || str == "gdk")
                 {
                     return PKGType.App;
                 }
-                if (str =="gd")
+                if (str == "gd")
                 {
                     return PKGType.Game;
                 }
-                if (str =="ac")
+                if (str == "ac")
                 {
                     return PKGType.Addon_Theme;
                 }
-                if (str =="gp")
+                if (str == "gp")
                 {
                     return PKGType.Patch;
                 }
@@ -6201,7 +6896,7 @@ namespace PS4_Tools
                     {
                         return Param.Title;
                     }
-                }       
+                }
 
                 public string Content_ID
                 {
@@ -6226,8 +6921,8 @@ namespace PS4_Tools
                     {
                         return Util.Utils.FromUnixTime(Header.pkg_version_date).ToString();
                     }
-                }           
-                
+                }
+
             }
 
 
@@ -6344,7 +7039,7 @@ namespace PS4_Tools
             /// <summary>
             /// Just to match PKG Magic
             /// </summary>
-            private static byte[] PKG_Magic = new byte[]{ 0x7F, 0x43, 0x4E, 0x54 };
+            private static byte[] PKG_Magic = new byte[] { 0x7F, 0x43, 0x4E, 0x54 };
 
             /// <summary>
             /// Reads a PS4 PKG Into an Unprotected_PKG Object
@@ -6391,7 +7086,7 @@ namespace PS4_Tools
                 /*Digest Table*/
 
                 binaryReader.BaseStream.Position = 0x100;
-               
+
                 ps4struct.digesttable.digest_entries1 = binaryReader.ReadBytes(0x20);
                 ps4struct.digesttable.digest_entries2 = binaryReader.ReadBytes(0x20);
                 ps4struct.digesttable.digest_table_digest = binaryReader.ReadBytes(0x20);
@@ -6447,7 +7142,7 @@ namespace PS4_Tools
 
                     PS4_Struct ps4struct = ReadHeader(binaryReader);
 
-                    binaryReader.BaseStream.Seek(9216,SeekOrigin.Begin);//go to a specific offset
+                    binaryReader.BaseStream.Seek(9216, SeekOrigin.Begin);//go to a specific offset
                     byte[] data = PS4PkgUtil.Decrypt(binaryReader.ReadBytes(256));//simple decrypt
 
 
@@ -6466,13 +7161,13 @@ namespace PS4_Tools
                         entry[i].offset = Util.Utils.ReadUInt32(binaryReader);
                         entry[i].size = Util.Utils.ReadUInt32(binaryReader);
                         entry[i].padding = binaryReader.ReadBytes(8);
-                        
+
                         entry[i].key_index = ((entry[i].flags2 & 0xF000) >> 12);
                         entry[i].is_encrypted = ((entry[i].flags1 & 0x80000000) != 0) ? true : false;
                     }
 
                     //create extacted directory
-                    if(!Directory.Exists(Path.GetDirectoryName(pkgfile) + "\\Extracted\\"))
+                    if (!Directory.Exists(Path.GetDirectoryName(pkgfile) + "\\Extracted\\"))
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(pkgfile) + "\\Extracted\\");
                     }
@@ -6550,7 +7245,7 @@ namespace PS4_Tools
                                 var lastComma = CustomName.LastIndexOf('_');
                                 if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
 
-                                File.WriteAllBytes(Path.GetDirectoryName(pkgfile)+"\\Extracted\\"+ CustomName, file_data);
+                                File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
                             }
                         }
                         catch (Exception ex)
@@ -6561,7 +7256,7 @@ namespace PS4_Tools
 
                 }
             }
-            
+
             /// <summary>
             /// Reads a PS4 PKG Into an Unprotected_PKG Object
             /// </summary>
@@ -6725,30 +7420,31 @@ namespace PS4_Tools
                 return pkgreturn;
             }
 
-#endregion << UnprotectedPKG >>
+            #endregion << UnprotectedPKG >>
 
             /// <summary>
             /// POWERED BY MAXTRON
             /// </summary>
 #if (!PS4_UNITY)
-#region << PKG File >>
+            #region << PKG File >>
             public class PS4PKGFile
             {
                 public Pkg Package { get; set; }
                 public Header PackageHeader { get; set; }
-                public Param_SFO.PARAM_SFO PackageSFO {
+                public Param_SFO.PARAM_SFO PackageSFO
+                {
                     get;
                     set;
-                } 
+                }
 
-               
+
                 public byte[] Ekpfs { get; set; }
 
                 public GameArchives.AbstractPackage PackageInside { get; set; }
 
                 public GameArchives.AbstractPackage InnerPFS { get; set; }
 
-               public PKGEncryption Encryption { get; set; }
+                public PKGEncryption Encryption { get; set; }
             }
 
             public class PKGEncryption
@@ -6760,7 +7456,7 @@ namespace PS4_Tools
                 public byte[] imageKeyDecrypted { get; set; }
             }
 
-#endregion << PKG File >>
+            #endregion << PKG File >>
 
             public string pkgtable { get; set; }
             //private static PS4_Tools.LibOrbis.PKG.Pkg pkg = null;
@@ -6798,8 +7494,8 @@ namespace PS4_Tools
                     pkg = pkginside;
                 }
 
-                    try
-                    {
+                try
+                {
                     var dk3 = Crypto.RSA2048Decrypt(pkg.EntryKeys.Keys[3].key, RSAKeyset.PkgDerivedKey3Keyset);
                     var iv_key = Crypto.Sha256(
                       pkg.ImageKey.meta.GetBytes()
@@ -6819,7 +7515,7 @@ namespace PS4_Tools
 
                     var ekpfs = Crypto.RSA2048Decrypt(imageKeyDecrypted, RSAKeyset.FakeKeyset);
                     rtnfile.Ekpfs = ekpfs;
-                    var package = GameArchives. PackageReader.ReadPackageFromFile(pkgfileloc, new string(ekpfs.Select(b => (char)b).ToArray()));
+                    var package = GameArchives.PackageReader.ReadPackageFromFile(pkgfileloc, new string(ekpfs.Select(b => (char)b).ToArray()));
                     rtnfile.PackageInside = package;
                     var innerPfs = GameArchives.PackageReader.ReadPackageFromFile(package.GetFile("/pfs_image.dat"));
                     rtnfile.InnerPFS = innerPfs;
@@ -6868,7 +7564,7 @@ namespace PS4_Tools
             /// This one is pretty straight Forward it renames a pkg file to the content id name
             /// </summary>
             /// <param name="pkgfile"></param>
-            public static void Rename_pkg_To_ContentID(string pkgfile,string outputpkgfolder,bool overwrite = false)
+            public static void Rename_pkg_To_ContentID(string pkgfile, string outputpkgfolder, bool overwrite = false)
             {
                 Unprotected_PKG ps4pkg = Read_PKG(pkgfile);
                 //get paramsfo 
@@ -6876,7 +7572,7 @@ namespace PS4_Tools
                 string FolderName = new FileInfo(pkgfile).DirectoryName;
                 string FileName = new FileInfo(pkgfile).Name;
 
-                string outputfile = outputpkgfolder  + psfo.ContentID+".pkg";
+                string outputfile = outputpkgfolder + psfo.ContentID + ".pkg";
 
                 if (!File.Exists(outputfile) && overwrite == false)
                 {
@@ -6902,7 +7598,7 @@ namespace PS4_Tools
                 string FolderName = new FileInfo(pkgfile).DirectoryName;
                 string FileName = new FileInfo(pkgfile).Name;
 
-                string outputfile = outputpkgfolder + psfo.Title  + ".pkg";
+                string outputfile = outputpkgfolder + psfo.Title + ".pkg";
 
                 if (!File.Exists(outputfile) && overwrite == false)
                 {
@@ -6943,7 +7639,7 @@ namespace PS4_Tools
                     Param_SFO.PARAM_SFO.FMT format = Param_SFO.PARAM_SFO.FMT.Utf8Null;
                     var item = maxtronsfo.ParamSfo.Values[i];
                     string value = "";
-                    switch(item.Type)
+                    switch (item.Type)
                     {
                         case LibOrbis.SFO.SfoEntryType.Integer:
                             format = Param_SFO.PARAM_SFO.FMT.UINT32;
@@ -6960,7 +7656,7 @@ namespace PS4_Tools
                             break;
                     }
 
-                    AddNewItem(i, maxtronsfo.ParamSfo.Values[i].Name,value, format, item.Length, item.MaxLength, sfo.Tables);
+                    AddNewItem(i, maxtronsfo.ParamSfo.Values[i].Name, value, format, item.Length, item.MaxLength, sfo.Tables);
                 }
 
                 return sfo;
@@ -7006,16 +7702,16 @@ namespace PS4_Tools
                 /// <param name="Icon0Location">location of ICON0 if none set default is used</param>
                 /// <param name="BackgroundLocation">Location of Background image if none is set default is used</param>
                 /// <param name="CustomGP4Location">Use a custom GP4 File For Repacking the ISO</param>
-                public void Create_Single_ISO_PKG(string PS2_ISO, string SaveFileLOcation, string Title, Bitmap Icon0 = null, string BackgroundLocation = "", string ContentID = "" ,string CustomGP4Location = "")
+                public void Create_Single_ISO_PKG(string PS2_ISO, string SaveFileLOcation, string Title, Bitmap Icon0 = null, string BackgroundLocation = "", string ContentID = "", string CustomGP4Location = "")
                 {
                     try
                     {
                         //checks files that are required 
-                        if(PS2_ISO == "")
+                        if (PS2_ISO == "")
                         {
                             throw new Exception("PS2 ISO is required");
                         }
-                        if(SaveFileLOcation == "")
+                        if (SaveFileLOcation == "")
                         {
                             throw new Exception("SaveFileLOcation is required");
                         }
@@ -7023,7 +7719,7 @@ namespace PS4_Tools
                         {
                             throw new Exception("Title is required");
                         }
-                        if(Icon0 == null)
+                        if (Icon0 == null)
                         {
                             throw new Exception("Icon0 is required");
                         }
@@ -7034,7 +7730,7 @@ namespace PS4_Tools
 
                         Console.WriteLine("Reading PS2 ISO");
 
-#region << CNF Reader >>
+                        #region << CNF Reader >>
 
                         //start off by reading the ISO FIle
                         //we need to get the control file info
@@ -7073,9 +7769,9 @@ namespace PS4_Tools
                             }
                         }
 
-#endregion << CNF Reader >>
+                        #endregion << CNF Reader >>
 
-#region << Set Up Working Directory >>
+                        #region << Set Up Working Directory >>
 
                         Console.WriteLine("Creating working directory");
 
@@ -7085,19 +7781,19 @@ namespace PS4_Tools
                         }
 
                         if (!Directory.Exists(Working_Dir))
-                        {                          
+                        {
                             Directory.CreateDirectory(Working_Dir);
                             Console.WriteLine("Created " + Working_Dir);
                         }
                         if (!Directory.Exists(Working_Dir + @"\PS2Emu\"))
-                        {                           
+                        {
                             Directory.CreateDirectory(Working_Dir + @"\PS2Emu\");
                             Console.WriteLine("Created " + Working_Dir + @"\PS2Emu\");
                         }
 
                         System.IO.File.WriteAllBytes(Working_Dir + "PS2.zip", Properties.Resources.PS2);
                         Console.WriteLine("Writing " + Working_Dir + "PS2.zip");
-                       
+
                         Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile(Working_Dir + "PS2.zip");
                         zip.ExtractAll(Working_Dir + @"\PS2Emu\");
 
@@ -7105,15 +7801,15 @@ namespace PS4_Tools
                         PS4_Tools.MoveDirectory(Working_Dir + @"\PS2Emu\PS2", Working_Dir + @"\PS2Emu\");
                         System.IO.File.WriteAllBytes(Working_Dir + @"\PS2Emu\sce_sys\" + "param.sfo", Properties.Resources.param);
                         Console.WriteLine("Writing " + Working_Dir + @"\PS2Emu\sce_sys\" + "param.sfo");
-                       
+
                         System.IO.File.WriteAllBytes(Working_Dir + "PS2Classics.gp4", Properties.Resources.PS2Classics);
                         Console.WriteLine("Writing " + Working_Dir + "PS2Classics.gp4");
 
-                      
 
-#endregion << Set Up Wokring Directory >>
 
-#region << Load and update gp4 and sfo Project >>
+                        #endregion << Set Up Wokring Directory >>
+
+                        #region << Load and update gp4 and sfo Project >>
                         Console.WriteLine("Loading GP4 Project");
                         var project = SceneRelated.GP4.ReadGP4(Working_Dir + "PS2Classics.gp4");
                         Console.WriteLine("Loading SFO");
@@ -7123,7 +7819,7 @@ namespace PS4_Tools
                         {
                             Console.WriteLine("No Content ID Specified Building custom one");
                             //build custom content id
-                            ContentID = "UP9000-" + sfo.TitleID.Trim() + "_00-" + PS2ID.Trim().Replace("_","") + "0000001";
+                            ContentID = "UP9000-" + sfo.TitleID.Trim() + "_00-" + PS2ID.Trim().Replace("_", "") + "0000001";
 
                             Console.WriteLine("Content ID :" + ContentID);
                         }
@@ -7161,7 +7857,7 @@ namespace PS4_Tools
 
                         Console.WriteLine("Saving SFO");
                         sfo.SaveSFO(sfo, Working_Dir + @"\PS2Emu\sce_sys\" + "param.sfo");//update sfo info
-                                                                                  //update GP4
+                                                                                          //update GP4
 
                         Console.WriteLine("Upating GP4");
                         project.Volume.Package.Content_id = ContentID;//set contentid
@@ -7171,9 +7867,9 @@ namespace PS4_Tools
                         SceneRelated.GP4.SaveGP4(Working_Dir + "PS2Classics.gp4", project);
 
                         Console.WriteLine("Saving GP4");
-#endregion << Load GP4 Project >>
+                        #endregion << Load GP4 Project >>
 
-#region << Save Image Files to corresponding locations and also change to correct format >>
+                        #region << Save Image Files to corresponding locations and also change to correct format >>
 
                         Console.WriteLine("Saving Images");
 
@@ -7187,9 +7883,9 @@ namespace PS4_Tools
                         Bitmap icon1 = ps4icon0.Create_PS4_Compatible_PNG(bitmap);
                         icon1.Save(Working_Dir + @"PS2Emu\sce_sys\pic1.png");
 
-#endregion  << Save Image Files to corresponding locations and also change to correct format >>
+                        #endregion  << Save Image Files to corresponding locations and also change to correct format >>
 
-#region << PS2 Config >>
+                        #region << PS2 Config >>
 
                         Console.WriteLine("Creating Custom PS2 LUA And Config");
                         var textfile = File.ReadAllText(Working_Dir + @"PS2Emu\config-emu-ps4.txt");
@@ -7212,22 +7908,22 @@ namespace PS4_Tools
                         textfile = textfile.Replace(@"#--path-toolingscript=""/app0/patches""", @"--path-toolingscript=""/app0/patches""");//#--path-toolingscript=""/app0/patches"""
                         File.WriteAllText(Working_Dir + @"PS2Emu\config-emu-ps4.txt", textfile);
 
-#endregion << Copy over the images >>
+                        #endregion << Copy over the images >>
 
-#region << PS2 ISO copy >>
+                        #region << PS2 ISO copy >>
                         Console.WriteLine("Moving ISO File This May Take Some Time");
 
                         File.Delete(Working_Dir + @"\PS2Emu\image\disc01.iso");
                         //CopyFileWithProgress(txtPath.Text.Trim(), AppCommonPath() + @"\PS2\image\disc01.iso");
                         string currentimage = PS2_ISO;
-                       
+
                         //Copy File 
-                        File.Copy(currentimage, Working_Dir + @"\PS2Emu\image\disc" + String.Format("{0:D2}",1) + ".iso", true);
+                        File.Copy(currentimage, Working_Dir + @"\PS2Emu\image\disc" + String.Format("{0:D2}", 1) + ".iso", true);
 
 
                         //now build the ps4 pkg
                         //still needed is a way to include memory mapped files inside the ps4 
-                        var gp4  = LibOrbis.GP4.Gp4Project.ReadFrom(new FileStream(Working_Dir + "PS2Classics.gp4", FileMode.Open,FileAccess.Read));
+                        var gp4 = LibOrbis.GP4.Gp4Project.ReadFrom(new FileStream(Working_Dir + "PS2Classics.gp4", FileMode.Open, FileAccess.Read));
 
                         //LibOrbis.PKG.PkgBuilder builder = new PkgBuilder(PkgProperties.FromGp4(gp4, Working_Dir));
                         //LibOrbis.GP4.Gp4Project.WriteTo(gp4,new FileStream(SaveFileLOcation, FileMode.OpenOrCreate,FileAccess.ReadWrite));
@@ -7240,7 +7936,7 @@ namespace PS4_Tools
                         new PkgBuilder(PkgProperties.FromGp4(gp4, Working_Dir + "\\")).Write(SaveFileLOcation);
 
 
-#endregion << PS2 ISO copy >>
+                        #endregion << PS2 ISO copy >>
                     }
                     catch (Exception ex)
                     {
@@ -7314,7 +8010,7 @@ namespace PS4_Tools
         /// </summary>
         public class SLB2
         {
-#region Variables
+            #region Variables
             static long slb2BaseOffset = 0x200;
             static long containerSize;
             static long slb2Version;
@@ -7327,7 +8023,7 @@ namespace PS4_Tools
             static long byteCount;
             static long blockCount;
             static string fileName;
-#endregion Variables
+            #endregion Variables
 
             /// <summary>
             /// Reset the major Variables for the next SLB2 Container
@@ -7410,10 +8106,10 @@ namespace PS4_Tools
                     //start reading from 20 
                     b.BaseStream.Seek(0x20, SeekOrigin.Begin);
                     for (int i = 0; i < fileCount; i++)
-                    {                     
+                    {
                         InnerPUP pup = new InnerPUP();
                         pup.OffsetOfDecryptedBlocks = b.ReadBytes(4);//read 4 bytes should state the start offset
-                        pup.CryptContentSize = Util.Utils.HexToDec(b.ReadBytes(4),"reverse");
+                        pup.CryptContentSize = Util.Utils.HexToDec(b.ReadBytes(4), "reverse");
                         pup.Reserved = b.ReadBytes(8);
                         pup.CryptContentName = Encoding.ASCII.GetString(b.ReadBytes(14));
                         b.ReadBytes(18);//just skiep the next 4 bytes
@@ -7659,7 +8355,7 @@ namespace PS4_Tools
             public byte[] InnerPupMagic { get; set; }
         }
 
-    
+
     }
 
     /// <summary>
@@ -7694,7 +8390,7 @@ namespace PS4_Tools
                 {
                     ps4type = File_Type.PS4_ACT;
                 }
-                if(Utils.CompareBytes(FileHeader , new byte[] { 0x52,0x49,0x46,0x46 }))/*RIFF*/
+                if (Utils.CompareBytes(FileHeader, new byte[] { 0x52, 0x49, 0x46, 0x46 }))/*RIFF*/
                 {
                     if (Path.GetExtension(FileLocation).ToUpper() == ".AT9")
                     {
@@ -7736,7 +8432,7 @@ namespace PS4_Tools
                 {
                     ps4type = File_Type.PLAYGO;
                 }
-                if(Utils.CompareBytes(FileHeader , new byte [] { 0x53, 0x4C, 0x42, 0x32, }))//SLB2
+                if (Utils.CompareBytes(FileHeader, new byte[] { 0x53, 0x4C, 0x42, 0x32, }))//SLB2
                 {
                     ps4type = File_Type.UpdateFile;
                 }

@@ -15,6 +15,50 @@ namespace PS4_Tools.Util
 {
     internal class Utils
     {
+
+
+        /// <summary>
+        /// Converts the string representation of a Guid to its Guid 
+        /// equivalent. A return value indicates whether the operation 
+        /// succeeded. 
+        /// </summary>
+        /// <param name="s">A string containing a Guid to convert.</param>
+        /// <param name="result">
+        /// When this method returns, contains the Guid value equivalent to 
+        /// the Guid contained in <paramref name="s"/>, if the conversion 
+        /// succeeded, or <see cref="Guid.Empty"/> if the conversion failed. 
+        /// The conversion fails if the <paramref name="s"/> parameter is a 
+        /// <see langword="null" /> reference (<see langword="Nothing" /> in 
+        /// Visual Basic), or is not of the correct format. 
+        /// </param>
+        /// <value>
+        /// <see langword="true" /> if <paramref name="s"/> was converted 
+        /// successfully; otherwise, <see langword="false" />.
+        /// </value>
+        /// <exception cref="ArgumentNullException">
+        ///        Thrown if <pararef name="s"/> is <see langword="null"/>.
+        /// </exception>
+        public static bool GuidTryParse(string s, out Guid result)
+        {
+            if (s == null)
+                throw new ArgumentNullException("s");
+            System.Text.RegularExpressions.Regex format = new System.Text.RegularExpressions.Regex(
+                "^[A-Fa-f0-9]{32}$|" +
+                "^({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?$|" +
+                "^({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})$");
+            System.Text.RegularExpressions.Match match = format.Match(s);
+            if (match.Success)
+            {
+                result = new Guid(s);
+                return true;
+            }
+            else
+            {
+                result = Guid.Empty;
+                return false;
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

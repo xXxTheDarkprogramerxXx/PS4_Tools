@@ -50,6 +50,7 @@
             this.button15 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button26 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -77,7 +78,9 @@
             this.button23 = new System.Windows.Forms.Button();
             this.button24 = new System.Windows.Forms.Button();
             this.button25 = new System.Windows.Forms.Button();
-            this.button26 = new System.Windows.Forms.Button();
+            this.btnUnlockTpy = new System.Windows.Forms.Button();
+            this.btnTrophyTimeFIx = new System.Windows.Forms.Button();
+            this.btnRebuildAppDb = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -313,6 +316,16 @@
             this.groupBox2.TabIndex = 28;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PS4 GP4 Projects";
+            // 
+            // button26
+            // 
+            this.button26.Location = new System.Drawing.Point(87, 29);
+            this.button26.Name = "button26";
+            this.button26.Size = new System.Drawing.Size(75, 46);
+            this.button26.TabIndex = 3;
+            this.button26.Text = "Read APP.XML";
+            this.button26.UseVisualStyleBackColor = true;
+            this.button26.Click += new System.EventHandler(this.button26_Click);
             // 
             // groupBox3
             // 
@@ -598,21 +611,44 @@
             this.button25.UseVisualStyleBackColor = true;
             this.button25.Click += new System.EventHandler(this.button25_Click);
             // 
-            // button26
+            // btnUnlockTpy
             // 
-            this.button26.Location = new System.Drawing.Point(87, 29);
-            this.button26.Name = "button26";
-            this.button26.Size = new System.Drawing.Size(75, 46);
-            this.button26.TabIndex = 3;
-            this.button26.Text = "Read APP.XML";
-            this.button26.UseVisualStyleBackColor = true;
-            this.button26.Click += new System.EventHandler(this.button26_Click);
+            this.btnUnlockTpy.Location = new System.Drawing.Point(881, 277);
+            this.btnUnlockTpy.Name = "btnUnlockTpy";
+            this.btnUnlockTpy.Size = new System.Drawing.Size(331, 23);
+            this.btnUnlockTpy.TabIndex = 41;
+            this.btnUnlockTpy.Text = "UnlockTrophy";
+            this.btnUnlockTpy.UseVisualStyleBackColor = true;
+            this.btnUnlockTpy.Click += new System.EventHandler(this.btnUnlockTpy_Click);
+            // 
+            // btnTrophyTimeFIx
+            // 
+            this.btnTrophyTimeFIx.Location = new System.Drawing.Point(881, 308);
+            this.btnTrophyTimeFIx.Name = "btnTrophyTimeFIx";
+            this.btnTrophyTimeFIx.Size = new System.Drawing.Size(331, 23);
+            this.btnTrophyTimeFIx.TabIndex = 42;
+            this.btnTrophyTimeFIx.Text = "FixTrophyTimeStamp";
+            this.btnTrophyTimeFIx.UseVisualStyleBackColor = true;
+            this.btnTrophyTimeFIx.Click += new System.EventHandler(this.btnTrophyTimeFIx_Click);
+            // 
+            // btnRebuildAppDb
+            // 
+            this.btnRebuildAppDb.Location = new System.Drawing.Point(882, 337);
+            this.btnRebuildAppDb.Name = "btnRebuildAppDb";
+            this.btnRebuildAppDb.Size = new System.Drawing.Size(331, 23);
+            this.btnRebuildAppDb.TabIndex = 43;
+            this.btnRebuildAppDb.Text = "Rebuild App Db";
+            this.btnRebuildAppDb.UseVisualStyleBackColor = true;
+            this.btnRebuildAppDb.Click += new System.EventHandler(this.btnRebuildAppDb_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1227, 506);
+            this.Controls.Add(this.btnRebuildAppDb);
+            this.Controls.Add(this.btnTrophyTimeFIx);
+            this.Controls.Add(this.btnUnlockTpy);
             this.Controls.Add(this.button25);
             this.Controls.Add(this.button24);
             this.Controls.Add(this.groupBox16);
@@ -707,6 +743,9 @@
         private System.Windows.Forms.Button button24;
         private System.Windows.Forms.Button button25;
         private System.Windows.Forms.Button button26;
+        private System.Windows.Forms.Button btnUnlockTpy;
+        private System.Windows.Forms.Button btnTrophyTimeFIx;
+        private System.Windows.Forms.Button btnRebuildAppDb;
     }
 }
 
