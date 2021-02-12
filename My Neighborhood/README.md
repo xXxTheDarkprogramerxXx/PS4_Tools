@@ -22,14 +22,11 @@ The project is to resemble the official PlayStation 4 Neighborhood without any o
 * API Installed
 * System must be running a semi dev unit (not normal retail)
 
-To change your console from Normal Retail to a Semi Dev one simply use [LightningMods's Updater](http://psarchive.darksoftware.xyz/UPDATER_BETA.pkg)
+To change your console from Normal Retail to a Semi Dev one simply use LightningMods's Updater
 
 
 Console output will look similar to this 
 ![](https://i.imgur.com/Lu6z9dv.png)
-
-## What's included 
-Recently added is the make_fslef function since unity does not sign any of its files we needed to sign the prx's and eboot to have it function correctly
 
 ## Credits
 [LightningMods](https://twitter.com/LightningMods_/) - For the incredible api provided to make all of this possible and alot of input
