@@ -23,6 +23,8 @@ PS4 Tools Homebrew (WIP)[Github](https://github.com/xXxTheDarkprogramerxXx/PS4_T
 
 PS4 Save Manager [Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tree/master/SaveData_Manager)
 
+PS4 Trophy Unlocker [Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tree/master/TrophyUnlocker)
+
 ## Example Applications
 ### Image Util [![Build status](https://ci.appveyor.com/api/projects/status/ftuj48025au3q3cg?svg=true)](https://ci.appveyor.com/project/xXxTheDarkprogramerxXx/ps4-tools)
 
@@ -45,6 +47,11 @@ Created as an example app reads ps4 pkg's
 Created to manage save files dumped with either Ps4 Tools Homebrew or with Save Data Mounter by Chendo Chap
 
 ![](https://i.imgur.com/BV4fpiW.png)
+
+### PS4 Trophy Unlocker
+Well It Unlocks Trophies
+
+![](https://i.imgur.com/Ec416h3.png)
 
 ## Getting Started
 
