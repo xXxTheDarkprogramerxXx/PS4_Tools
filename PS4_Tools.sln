@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCOMage", "RCOMage\RCOMage.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaveData_Manager", "SaveData_Manager\SaveData_Manager.csproj", "{F6ECD255-4934-4450-A511-9CE0A863ED4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrophyUnlocker", "TrophyUnlocker\TrophyUnlocker.csproj", "{C63323DB-9AA8-41A5-B327-EF55867CDFDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Android Mono|Any CPU = Android Mono|Any CPU
@@ -114,6 +116,14 @@ Global
 		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.PS4 Unity|Any CPU.Build.0 = Release|Any CPU
 		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6ECD255-4934-4450-A511-9CE0A863ED4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C63323DB-9AA8-41A5-B327-EF55867CDFDD}.Android Mono|Any CPU.ActiveCfg = Release|Any CPU
+		{C63323DB-9AA8-41A5-B327-EF55867CDFDD}.Android Mono|Any CPU.Build.0 = Release|Any CPU
+		{C63323DB-9AA8-41A5-B327-EF55867CDFDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63323DB-9AA8-41A5-B327-EF55867CDFDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63323DB-9AA8-41A5-B327-EF55867CDFDD}.PS4 Unity|Any CPU.ActiveCfg = Release|Any CPU
+		{C63323DB-9AA8-41A5-B327-EF55867CDFDD}.PS4 Unity|Any CPU.Build.0 = Release|Any CPU
+		{C63323DB-9AA8-41A5-B327-EF55867CDFDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63323DB-9AA8-41A5-B327-EF55867CDFDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

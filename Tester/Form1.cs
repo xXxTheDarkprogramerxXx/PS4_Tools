@@ -151,7 +151,7 @@ namespace Tester
 
             if (Playing == false)
             {
-                var bytes = PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Users\3deEchelon\Desktop\PS4\AT9\prelude1.at9");
+                var bytes = PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Publish\Sony\snd0.at9");
                 player = new System.Media.SoundPlayer(new MemoryStream(bytes));
                 player.Play();
 
@@ -549,7 +549,7 @@ namespace Tester
         private void button22_Click(object sender, EventArgs e)
         {
             PS4_Tools.Trophy_File trphy = new PS4_Tools.Trophy_File();
-            var item= trphy.SealedTrophy(File.ReadAllBytes(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\trophy\data\NPWR04914_00\trophy.img"), File.ReadAllBytes(@"C:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\trophy\data\NPWR04914_00\sealedkey"));
+            var item= trphy.SealedTrophy(File.ReadAllBytes(@"D:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\trophy\data\NPWR04914_00\trophy.img"), File.ReadAllBytes(@"D:\Users\3deEchelon\Desktop\PS4\RE\Ps4 Save Data Backup\10000000\trophy\data\NPWR04914_00\sealedkey"));
             File.WriteAllBytes("testdecypt.dat", item);
 
         }
@@ -622,6 +622,22 @@ namespace Tester
             CusaList.Add("CUSA12085");
             CusaList.Add("CUSA16983");
             PS4_Tools.Recovery.RebuildAppDb(apploc: @"C:\Publish\Sony\user\app\",metaloc: @"C:\Publish\Sony\user\appmeta\");
+        }
+
+        private void button27_Click(object sender, EventArgs e)
+        {
+            PS4_Tools.PKG.LockGame("CUSA02299");
+        }
+
+        private void button28_Click(object sender, EventArgs e)
+        {
+
+            PS4_Tools.PKG.UnlockGame("CUSA02299");
+        }
+
+        private void btnSealedKey_Click(object sender, EventArgs e)
+        {
+            //var SealedKey = PS4_Tools.PKG.Official.
         }
     }
 }

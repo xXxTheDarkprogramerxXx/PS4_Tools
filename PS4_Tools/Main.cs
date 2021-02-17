@@ -4713,8 +4713,6 @@ namespace PS4_Tools
             return;
         }
 
-
-
         /// <summary>
         /// Class used for Encrypted SFM
         /// </summary>
@@ -4883,7 +4881,7 @@ namespace PS4_Tools
             //todo do screenshots somewhere
             Trophy_File.trpsummary myDeserializedClass = JsonConvert.DeserializeObject<Trophy_File.trpsummary>(File.ReadAllText(trpsummaryFile));
 
-           string SQL = "SELECT SUM(unlocked_platinum_num) FROM tbl_trophy_title";
+            string SQL = "SELECT SUM(unlocked_platinum_num) FROM tbl_trophy_title";
 
             int TotalPlatNum = Convert.ToInt32(SQLLite.SqlHelper.GetSingleValue(SQL, cs));
 
@@ -5758,6 +5756,54 @@ namespace PS4_Tools
 
     public class PKG
     {
+        #region << For PS4 >>
+
+        public static void LockGame(string TitleID, string dbFileLocation = @"C:\Publish\Sony\app.db")
+        {
+            Console.WriteLine("Create connection to app.db...");
+            //SQLiteConnection con = new SQLiteConnection();
+
+            string dbFilename = dbFileLocation;
+            //build the connection string
+            string cs = string.Format("Version=3;uri=file:{0}", dbFilename);//sony is format 3
+            if (!File.Exists(dbFilename))
+                throw new Exception("Could not load app.db");
+
+            string SQL = @"SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'tbl_appbrowse_%%';";
+            DataTable dttemp = SQLLite.SqlHelper.GetDataTable(SQL, cs);
+            for (int i = 0; i < dttemp.Rows.Count; i++)
+            {
+                string Update = @"UPDATE "+dttemp.Rows[i][0].ToString()+@"
+SET visible = 0
+Where titleId = '"+TitleID+"'";
+                SQLLite.SqlHelper.ExecuteNonQueryBL1(Update, cs);
+            }
+
+        }
+
+        public static void UnlockGame(string TitleID,string dbFileLocation = @"C:\Publish\Sony\app.db")
+        {
+            Console.WriteLine("Create connection to app.db...");
+            //SQLiteConnection con = new SQLiteConnection();
+
+            string dbFilename = dbFileLocation;
+            //build the connection string
+            string cs = string.Format("Version=3;uri=file:{0}", dbFilename);//sony is format 3
+            if (!File.Exists(dbFilename))
+                throw new Exception("Could not load app.db");
+            string SQL = @"SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'tbl_appbrowse_%%';";
+            DataTable dttemp = SQLLite.SqlHelper.GetDataTable(SQL, cs);
+            for (int i = 0; i < dttemp.Rows.Count; i++)
+            {
+                string Update = @"UPDATE " + dttemp.Rows[i][0].ToString() + @"
+SET visible = 1
+Where titleId = '" + TitleID + "'";
+                SQLLite.SqlHelper.ExecuteNonQueryBL1(Update, cs);
+            }
+        }
+
+        #endregion << For PS4 >>
+
         #region << Official >>
         public class Official
         {
@@ -5969,6 +6015,14 @@ namespace PS4_Tools
                 /*Get XML String */
                 string urlofupdatexml = "http://gs-sec.ww.np.dl.playstation.net/plo/np/" + TitleID + "/" + hash.ToLower() + "/" + TitleID + "-ver.xml";
 
+                nptitle = "" + TitleID;
+                keyByte = PS4Keys.ShellCore_Keys.Retail.HMAC_SHA256_Patch_Pkg_URL_Key.Key;  //Util.Utils.Hex2Binary("AD62E37F905E06BC19593142281C112CEC0E7EC3E97EFDCAEFCDBAAFA6378D84");
+                hmacsha256 = new HMACSHA256(keyByte);
+                messageBytes = encoding.GetBytes(nptitle);
+                hashnptitle = hmacsha256.ComputeHash(messageBytes);
+                hash = Util.Utils.ByteToString(hashnptitle);
+
+                string checkforappver = "http://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo//prod/" + TitleID + "/" + hash.ToLower() + "/" + TitleID + "/" + "icon0.png";
                 try
                 {
                     using (WebClient client = new WebClient())
@@ -6609,15 +6663,143 @@ namespace PS4_Tools
                 }
             }
 
-            public class NP_Data
+            public class NP_Bind
             {
-                //Read NP_Data
-                //Save NP_Data
+
+
+
+                //Read NP_Bind
+                public byte[] magic;                        //D2 94 A0 18
+                public byte[] version;                      //00 00 00 01
+                public byte[] unk1;                         //00 00 00 00 00 00 02 14
+                public byte[] unk2;                         //length is 0x70 they seem to be all the same with all versions
+                public byte[] revions;                      //00 10 00 0C ? revisoin ?
+                public string Nptitle;                      //4E 50 57 52 31 35 30 39 31 5F 30 30
+                public byte[] unk3;                         //00 10 00 0C ? revisoin again ?
+                public byte[] unk4;                         //30 00 00 00 00 00 00 00 00 00 00 00 first part might be the key hash used ?
+                public byte[] unk5;                         //00 12 00 B0 ? not sure another random holder ?
+                public byte[] NpTitleSecret;                //This is from here to end of file 64 bit enc key
+                public byte[] emptyspace;                   //random empty space ?
+                public byte[] Footer;                       //Footer encryption ?            
+
+                public NP_Bind()
+                {
+
+                }
+                //Read NP_Title
+                public NP_Bind(byte[] filebytes)
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(filebytes)))
+                    {
+                        Byte[] FileMagic = binaryReader.ReadBytes(4);
+                        if (!Util.Utils.CompareBytes(FileMagic, new byte[] { 0xD2, 0x94, 0xA0, 0x18 }))/*If Files Match*/
+                        {
+                            throw new Exception("This is not a valid NP_Bind file");
+                        }
+                        //read ProductCode
+                        binaryReader.BaseStream.Position = 0;
+                        magic = binaryReader.ReadBytes(4);
+                        version = binaryReader.ReadBytes(4);
+                        unk1 = binaryReader.ReadBytes(8);
+                        unk2 = binaryReader.ReadBytes(0x70);
+                        revions = binaryReader.ReadBytes(4);
+                        Nptitle = System.Text.Encoding.UTF8.GetString(binaryReader.ReadBytes(0xC));//4E 50 57 52 31 35 30 39 31 5F 30 30
+                        unk3 = binaryReader.ReadBytes(4);
+                        unk4 = binaryReader.ReadBytes(0xC);
+                        unk5 = binaryReader.ReadBytes(4);
+                        NpTitleSecret = binaryReader.ReadBytes(0xC4);
+                        emptyspace = binaryReader.ReadBytes(0x98);
+                        Footer = binaryReader.ReadBytes(0x14);
+                    }
+                }
+
+                public NP_Bind(string FileLocation)
+                {
+                    byte[] filebytes = File.ReadAllBytes(FileLocation);
+                    using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(filebytes)))
+                    {
+                        Byte[] FileMagic = binaryReader.ReadBytes(4);
+                        if (!Util.Utils.CompareBytes(FileMagic, new byte[] { 0xD2, 0x94, 0xA0, 0x18 }))/*If Files Match*/
+                        {
+                            throw new Exception("This is not a valid NP_Title file");
+                        }
+                        //read ProductCode
+                        binaryReader.BaseStream.Position = 0;
+                        magic = binaryReader.ReadBytes(4);
+                        version = binaryReader.ReadBytes(4);
+                        unk1 = binaryReader.ReadBytes(8);
+                        unk2 = binaryReader.ReadBytes(0x70);
+                        revions = binaryReader.ReadBytes(4);
+                        Nptitle = System.Text.Encoding.UTF8.GetString(binaryReader.ReadBytes(0xC));//4E 50 57 52 31 35 30 39 31 5F 30 30
+                        unk3 = binaryReader.ReadBytes(4);
+                        unk4 = binaryReader.ReadBytes(0xC);
+                        unk5 = binaryReader.ReadBytes(4);
+                        NpTitleSecret = binaryReader.ReadBytes(0xC4);
+                        emptyspace = binaryReader.ReadBytes(0x98);
+                        Footer = binaryReader.ReadBytes(0x14);
+                    }
+
+                }
+
+
+
+                //Save NP_Bind
             }
 
             public class NP_Title
             {
+                public byte[] magic;                        //4E 50 54 44
+                public byte[] flag;                         //00 00 00 80
+                public byte[] emptyval;                     //00 00 00 00 00 00 00 00
+                public string Nptitle;                      //43 55 53 41 31 30 38 35 39 5F 30 30 00 00 00 00
+                public byte[] NpTitleSecret;                //This is from here to end of file 64 bit enc key
+
+                public NP_Title()
+                {
+                    
+                }
                 //Read NP_Title
+                public NP_Title(byte[] filebytes)
+                {
+                    NP_Title rtnstruct = new NP_Title();
+                    using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(filebytes)))
+                    {
+                        Byte[] FileMagic = binaryReader.ReadBytes(4);
+                        if (!Util.Utils.CompareBytes(FileMagic, new byte[] { 0x4E, 0x50, 0x54, 0x44 }))/*If Files Match*/
+                        {
+                            throw new Exception("This is not a valid NP_Title file");
+                        }
+                        //read ProductCode
+                        binaryReader.BaseStream.Position = 0;
+                        magic = binaryReader.ReadBytes(4);
+                        flag = binaryReader.ReadBytes(4);//00 00 00 80 debug
+                        emptyval = binaryReader.ReadBytes(8);
+                        Nptitle = System.Text.Encoding.UTF8.GetString(binaryReader.ReadBytes(16));
+                        NpTitleSecret = binaryReader.ReadBytes(0x80);
+                    }
+                }
+
+                public NP_Title(string FileLocation)
+                {
+                    byte[] filebytes = File.ReadAllBytes(FileLocation);
+                    NP_Title rtnstruct = new NP_Title();
+                    using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(filebytes)))
+                    {
+                        Byte[] FileMagic = binaryReader.ReadBytes(4);
+                        if (!Util.Utils.CompareBytes(FileMagic, new byte[] { 0x4E, 0x50, 0x54, 0x44 }))/*If Files Match*/
+                        {
+                            throw new Exception("This is not a valid NP_Title file");
+                        }
+                        //read ProductCode
+                        binaryReader.BaseStream.Position = 0;
+                        magic = binaryReader.ReadBytes(4);
+                        flag = binaryReader.ReadBytes(4);//00 00 00 80 debug
+                        emptyval = binaryReader.ReadBytes(8);
+                        Nptitle = System.Text.Encoding.UTF8.GetString(binaryReader.ReadBytes(16));
+                        NpTitleSecret = binaryReader.ReadBytes(0x80);
+                    }
+
+                }
                 //Save NP_Title
             }
 
@@ -7602,14 +7784,25 @@ namespace PS4_Tools
 
                 if (!File.Exists(outputfile) && overwrite == false)
                 {
-                    File.Copy(pkgfile, outputfile, overwrite);
+                    File.Copy(pkgfile, RemoveSpecialCharacters(outputfile), overwrite);
                 }
                 else
                 {
-                    File.Copy(pkgfile, outputfile, overwrite);
+                    File.Copy(pkgfile, RemoveSpecialCharacters(outputfile), overwrite);
                 }
             }
-
+            public static string RemoveSpecialCharacters(string str)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (char c in str)
+                {
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_' || c == ' ')
+                    {
+                        sb.Append(c);
+                    }
+                }
+                return sb.ToString();
+            }
             private static List<Param_SFO.PARAM_SFO.Table> AddNewItem(int Index, string Name, string Value, Param_SFO.PARAM_SFO.FMT format, int lenght, int maxlength, List<Param_SFO.PARAM_SFO.Table> xtable)
             {
                 Param_SFO.PARAM_SFO.index_table indextable = new Param_SFO.PARAM_SFO.index_table();

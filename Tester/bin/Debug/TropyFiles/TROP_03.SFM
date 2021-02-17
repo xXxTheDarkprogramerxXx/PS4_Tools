@@ -1,141 +1,137 @@
-<!--Sce-Np-Trophy-Signature: 4c39b98c0100000000000000ea6e8473c31e7393cca1972c3a2cabfd99fdb9bec579eff3d3c0a706467b8b7d6ad3994b865534e48b974a9495bad97010900efa95393fc1eabfc5cb0730a64a3873b2552b1a3da215545098d449364c77e2d36321dabe5aef9e009a9c97182fb1d6fd9d33db755d903ac7637b1f43a1c68c2b8338d8cee7de564a46bc895722c242e9fa841bb8fe3d254b347d420688e0975eca-->
+<!--Sce-Np-Trophy-Signature: 4c39b98c0100000000000000c3ca3368ca98906a8bc907bb579cfa977ef07bf429278c2e39f5d4e2f6a5693578fc048c6ed3adb434acd18cd354db48fdc39db1f12dea3014cea5d0c01066c9a3b769bb5a74361bcadd5670dc7a9ca7b8cccfaf28b1b0aa69c1a381b182dee9e4cf0e936b7eb8d3d0155d749ed8336b34ae7bf3225a38650b90c1f090b20ca79c1f37e736e694dd262a6e0efc1e2c8d3157364a-->
 <trophyconf version="1.1" platform="ps4" policy="large">
- <npcommid>NPWR05254_00</npcommid>
- <trophyset-version>01.04</trophyset-version>
+ <npcommid>NPWR18712_00</npcommid>
+ <trophyset-version>01.00</trophyset-version>
  <parental-level license-area="default">0</parental-level>
- <title-name>DRIVECLUB™</title-name>
- <title-detail>Trofeos de DRIVECLUB™</title-detail>
- <group id="001">
-  <name>DRIVECLUB™ Tour</name>
-  <detail>DRIVECLUB™ Tour</detail>
- </group>
+ <title-name>Asterix &amp; obelix XXL3</title-name>
+ <title-detail> The Crystal Menhir</title-detail>
  <trophy id="000" hidden="no" ttype="P" pid="-1">
-  <name>#UnidosPorLaVelocidad</name>
-  <detail>Consigue todos los demás trofeos.</detail>
+  <name>Un gran ejemplar</name>
+  <detail>Consigue todos los trofeos del juego.</detail>
  </trophy>
  <trophy id="001" hidden="no" ttype="B" pid="000">
-  <name>Solo hay una primera vez</name>
-  <detail>Completa tu primer evento.</detail>
+  <name>Librador de menhires</name>
+  <detail>Termina el juego en Fácil o en una dificultad superior.</detail>
  </trophy>
- <trophy id="002" hidden="no" ttype="B" pid="000">
-  <name>Bienvenido al club</name>
-  <detail>Únete a un club o haz que alguien se una a un club que hayas creado.</detail>
+ <trophy id="002" hidden="no" ttype="S" pid="000">
+  <name>Guerrero galo</name>
+  <detail>Termina el juego en Normal o en una dificultad superior.</detail>
  </trophy>
- <trophy id="003" hidden="no" ttype="B" pid="000">
-  <name>El primero de muchos</name>
-  <detail>Supera tu primer enfrentamiento.</detail>
+ <trophy id="003" hidden="no" ttype="G" pid="000">
+  <name>Héroe galo</name>
+  <detail>Termina el juego en Difícil.</detail>
  </trophy>
  <trophy id="004" hidden="no" ttype="B" pid="000">
-  <name>Este es mío</name>
-  <detail>Personaliza un vehículo.</detail>
+  <name>Un menhir personalizado</name>
+  <detail>Recupera el Menhir de Cristal.</detail>
  </trophy>
- <trophy id="005" hidden="no" ttype="B" pid="000">
-  <name>Aspirante</name>
-  <detail>Mantente en lo más alto del marcador cuando se acabe el tiempo en un Desafío en solitario.</detail>
+ <trophy id="005" hidden="yes" ttype="B" pid="000">
+  <name>¡No hay pastos más verdes que los galos!</name>
+  <detail>Termina el capítulo 1: Galia.</detail>
  </trophy>
- <trophy id="006" hidden="no" ttype="B" pid="000">
-  <name>¡Y así empieza todo!</name>
-  <detail>Envía un Desafío a otro jugador.</detail>
+ <trophy id="006" hidden="yes" ttype="B" pid="000">
+  <name>Así se rompe el hielo</name>
+  <detail>Termina el capítulo 2: Tule.</detail>
  </trophy>
- <trophy id="007" hidden="no" ttype="B" pid="000">
-  <name>¡Subida de nivel!</name>
-  <detail>Alcanza el nivel de piloto 2.</detail>
+ <trophy id="007" hidden="yes" ttype="B" pid="000">
+  <name>Y Tiro porque me toca</name>
+  <detail>Termina el capítulo 3: Tiro.</detail>
  </trophy>
- <trophy id="008" hidden="no" ttype="B" pid="000">
-  <name>5 y contando</name>
-  <detail>Alcanza el nivel de piloto 5.</detail>
+ <trophy id="008" hidden="yes" ttype="B" pid="000">
+  <name>Una odisea dis-Creta</name>
+  <detail>Termina el capítulo 4: Creta.</detail>
  </trophy>
- <trophy id="009" hidden="no" ttype="B" pid="000">
-  <name>Progreso</name>
-  <detail>Alcanza el nivel 1 con un galardón.</detail>
+ <trophy id="009" hidden="yes" ttype="S" pid="000">
+  <name>No se construyó en un día</name>
+  <detail>Termina el capítulo 5: Roma.</detail>
  </trophy>
- <trophy id="010" hidden="yes" ttype="B" pid="000">
-  <name>A cien por hora</name>
-  <detail>Completa un evento de punto a punto con una velocidad media de 100 mph (161 km/h).</detail>
+ <trophy id="010" hidden="yes" ttype="G" pid="000">
+  <name>El regreso de los héroes</name>
+  <detail>Termina el capítulo 6: Salvar la aldea.</detail>
  </trophy>
- <trophy id="011" hidden="no" ttype="S" pid="000">
-  <name>Cara a cara</name>
-  <detail>Completa 50 enfrentamientos.</detail>
+ <trophy id="011" hidden="no" ttype="B" pid="000">
+  <name>¡Están locos estos romanos!</name>
+  <detail>Derrota a 500 romanos.</detail>
  </trophy>
  <trophy id="012" hidden="no" ttype="S" pid="000">
-  <name>En el podio</name>
-  <detail>Acaba en cualquiera de las 3 primeras posiciones en una carrera con 12 jugadores.</detail>
+  <name>Resistencia gala</name>
+  <detail>Derrota a 1500 romanos.</detail>
  </trophy>
- <trophy id="013" hidden="no" ttype="S" pid="000">
-  <name>Pegado</name>
-  <detail>Mantente a rebufo de otro vehículo durante al menos 2000 metros (2187 yardas) en un único evento.</detail>
+ <trophy id="013" hidden="no" ttype="B" pid="000">
+  <name>Mercader de las arenas</name>
+  <detail>Aturde a 250 romanos.</detail>
  </trophy>
- <trophy id="014" hidden="yes" ttype="S" pid="000">
-  <name>Trabajo en equipo</name>
-  <detail>Sé miembro de un club cuyo nivel sea 10 o superior.</detail>
+ <trophy id="014" hidden="no" ttype="B" pid="000">
+  <name>¡Helados para todos!</name>
+  <detail>Congela a 100 romanos.</detail>
  </trophy>
- <trophy id="015" hidden="no" ttype="S" pid="000">
-  <name>Pleno</name>
-  <detail>Supera 3 tiempos objetivo en una sola sesión contrarreloj.</detail>
+ <trophy id="015" hidden="no" ttype="B" pid="000">
+  <name>¡Paso, que voy ardiendo!</name>
+  <detail>Quema a 100 romanos.</detail>
  </trophy>
- <trophy id="016" hidden="no" ttype="S" pid="000">
-  <name>Larga distancia</name>
-  <detail>Conduce al menos 300 millas (483 km).</detail>
+ <trophy id="016" hidden="no" ttype="B" pid="000">
+  <name>Supergalo</name>
+  <detail>Derrota a un total de 500 romanos bajo el efecto de la poción mágica.</detail>
  </trophy>
  <trophy id="017" hidden="no" ttype="S" pid="000">
-  <name>Haciendo la ola</name>
-  <detail>Alcanza el nivel de piloto 15.</detail>
+  <name>Profesional de los bolos</name>
+  <detail>Lanza a un romano y que golpee a 10 adversarios.</detail>
  </trophy>
  <trophy id="018" hidden="no" ttype="S" pid="000">
-  <name>Comienzo de la vida</name>
-  <detail>Alcanza el nivel de piloto 30.</detail>
+  <name>Una buena zurra</name>
+  <detail>Haz volar a 8 romanos con un gancho.</detail>
  </trophy>
- <trophy id="019" hidden="no" ttype="S" pid="000">
-  <name>Escalera</name>
-  <detail>Gana una carrera con cada clase de vehículo: Compacto, Rendimiento, Deportivo, Superdeportivo e Hiperdeportivo.</detail>
+ <trophy id="019" hidden="no" ttype="B" pid="000">
+  <name>Un poco más cerca de las estrellas</name>
+  <detail>Lanza a un total de 100 romanos.</detail>
  </trophy>
- <trophy id="020" hidden="no" ttype="G" pid="000">
-  <name>Invencible</name>
-  <detail>Gana 5 de tus propios Desafíos en solitario tras enviarlos al menos a un jugador más.</detail>
+ <trophy id="020" hidden="no" ttype="S" pid="000">
+  <name>El arte de la sutileza</name>
+  <detail>Consigue aturdir a 250 enemigos con los romanos que caen al suelo.</detail>
  </trophy>
- <trophy id="021" hidden="no" ttype="G" pid="000">
-  <name>Maestría</name>
-  <detail>Sube un galardón al máximo.</detail>
+ <trophy id="021" hidden="no" ttype="S" pid="000">
+  <name>Tenista profesional</name>
+  <detail>Realiza 5 devoluciones de tenis con el mismo romano en una partida cooperativa para 2 jugadores.</detail>
  </trophy>
- <trophy id="022" hidden="no" ttype="G" pid="000">
-  <name>Lunático</name>
-  <detail>Acumula un total de 1 millón de puntos de derrape.</detail>
+ <trophy id="022" hidden="no" ttype="B" pid="000">
+  <name>La cosa se pone seria</name>
+  <detail>Consigue un combo de 50 bofetadas.</detail>
  </trophy>
- <trophy id="023" hidden="no" ttype="G" pid="000">
-  <name>Limpieza</name>
-  <detail>En una carrera de 12 jugadores, acaba en el podio sin perder Fama por colisiones con otros pilotos.</detail>
+ <trophy id="023" hidden="no" ttype="S" pid="000">
+  <name>Intocable</name>
+  <detail>Consigue un combo de 100 bofetadas.</detail>
  </trophy>
  <trophy id="024" hidden="no" ttype="G" pid="000">
-  <name>Cadena perpetua</name>
-  <detail>Conduce al menos 1000 millas (1610 km) como miembro de un club.</detail>
+  <name>Maestría en el combate</name>
+  <detail>Consigue un combo de 200 bofetadas.</detail>
  </trophy>
- <trophy id="025" hidden="no" ttype="G" pid="000">
-  <name>Bienvenido al límite</name>
-  <detail>Alcanza el nivel de piloto 50.</detail>
+ <trophy id="025" hidden="no" ttype="B" pid="000">
+  <name>Dadle amor al barril</name>
+  <detail>Vence a 10 romanos con un barril de pólvora.</detail>
  </trophy>
- <trophy id="026" hidden="no" ttype="G" pid="000">
-  <name>Crédito a quien lo merece</name>
-  <detail>Sube un galardón al máximo en cada una de estas categorías: Juego, Modos de juego, Vehículos y Tipos de eventos.</detail>
+ <trophy id="026" hidden="yes" ttype="B" pid="000">
+  <name>¡Que te pires!</name>
+  <detail>Haz que un romano dispare a un objetivo.</detail>
  </trophy>
- <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
-  <name>Trofeo novato</name>
-  <detail>Gana el evento "Trofeo novato" en Tour.</detail>
+ <trophy id="027" hidden="no" ttype="B" pid="000">
+  <name>Roñoso</name>
+  <detail>Reúne 5000 cascos.</detail>
  </trophy>
- <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
-  <name>Trofeo aficionado</name>
-  <detail>Gana el evento "Trofeo aficionado" en Tour.</detail>
+ <trophy id="028" hidden="no" ttype="S" pid="000">
+  <name>Una colección maravillosa</name>
+  <detail>Reúne 10 000 cascos.</detail>
  </trophy>
- <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
-  <name>Trofeo semiprofesional</name>
-  <detail>Gana el evento "Trofeo semiprofesional" en Tour.</detail>
+ <trophy id="029" hidden="no" ttype="G" pid="000">
+  <name>Vas a zurrar de lo lindo...</name>
+  <detail>Compra una mejora de personaje.</detail>
  </trophy>
- <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
-  <name>Trofeo profesional</name>
-  <detail>Gana el evento "Trofeo profesional" en Tour.</detail>
+ <trophy id="030" hidden="no" ttype="S" pid="000">
+  <name>¡Por Tutatis!</name>
+  <detail>Compra todas las mejoras de personaje.</detail>
  </trophy>
- <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
-  <name>Trofeo leyenda</name>
-  <detail>Gana el evento "Trofeo leyenda" en Tour.</detail>
+ <trophy id="031" hidden="no" ttype="G" pid="000">
+  <name>Excelencia gala</name>
+  <detail>Completa todos los campamentos con la medalla de oro.</detail>
  </trophy>
 </trophyconf>
-
+

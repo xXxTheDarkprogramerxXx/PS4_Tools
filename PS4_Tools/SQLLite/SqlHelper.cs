@@ -51,6 +51,7 @@ namespace PS4_Tools.SQLLite
             {
 
             }
+
         }
 
         public static DataTable GetDataTable(string sqlqry, string constr)
@@ -72,7 +73,7 @@ namespace PS4_Tools.SQLLite
                 // we need another selution to the error handeling
                 //ErrorLoging.WriteErrorLog(0, ex.Message, ex.StackTrace);
             }
-
+            con.Close();
             return DT;
         }
         /// <summary>
@@ -101,7 +102,7 @@ namespace PS4_Tools.SQLLite
             }
             finally
             {
-
+                con.Close();
             }
 
             return success;
@@ -147,6 +148,7 @@ namespace PS4_Tools.SQLLite
 
                 if (cmd != null) cmd.Dispose();
                 cmd = null;
+                con.Close();
             }
 
             return objValue;

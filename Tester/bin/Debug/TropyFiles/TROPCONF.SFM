@@ -1,40 +1,39 @@
-<!--Sce-Np-Trophy-Signature: 4c39b98c0100000000000000c3c94bab31f61ff26498684fd8f7bb2df11c53d4a9b79a64b1ce815a7878c2aacc32e93472255744ec504373c344971abc69caa052687e915fa3100f9766299773c2391316d4d98f8d8118daca0e33d1853b295a4773299c17e76e8ebdee6b3c253e3a0c1c6db2d667e945d68c2354301cf4024cdb865f19be6dac604be7430e92c1479e51b83076903976d6af7b1fa53542933f-->
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000001260c2cc2b6181246b4f25ca95bdd5b53d26a9c658243dee4b9012a2c942cc2c901dc5041d2782b43979c84d5e7834f1ce4a82b40fa2f0ee08a04e74fdc1ac4f42b421546a5438e3847e2c02590b7bae88ec5d686a789f07bc21e35700ca20bb5cb2eedc68488570354f2e447925cc285cae5d17ee4d637c8f430e50d70961e63ff63aff040256fda08826035ea3e1dd4aa7d5ef-->
 <trophyconf version="1.1" platform="ps4" policy="large">
- <npcommid>NPWR05254_00</npcommid>
- <trophyset-version>01.04</trophyset-version>
+ <npcommid>NPWR18712_00</npcommid>
+ <trophyset-version>01.00</trophyset-version>
  <parental-level license-area="default">0</parental-level>
- <group id="001"/>
  <trophy id="000" hidden="no" ttype="P" pid="-1"/>
  <trophy id="001" hidden="no" ttype="B" pid="000"/>
- <trophy id="002" hidden="no" ttype="B" pid="000"/>
- <trophy id="003" hidden="no" ttype="B" pid="000"/>
+ <trophy id="002" hidden="no" ttype="S" pid="000"/>
+ <trophy id="003" hidden="no" ttype="G" pid="000"/>
  <trophy id="004" hidden="no" ttype="B" pid="000"/>
- <trophy id="005" hidden="no" ttype="B" pid="000"/>
- <trophy id="006" hidden="no" ttype="B" pid="000"/>
- <trophy id="007" hidden="no" ttype="B" pid="000"/>
- <trophy id="008" hidden="no" ttype="B" pid="000"/>
- <trophy id="009" hidden="no" ttype="B" pid="000"/>
- <trophy id="010" hidden="yes" ttype="B" pid="000"/>
- <trophy id="011" hidden="no" ttype="S" pid="000"/>
+ <trophy id="005" hidden="yes" ttype="B" pid="000"/>
+ <trophy id="006" hidden="yes" ttype="B" pid="000"/>
+ <trophy id="007" hidden="yes" ttype="B" pid="000"/>
+ <trophy id="008" hidden="yes" ttype="B" pid="000"/>
+ <trophy id="009" hidden="yes" ttype="S" pid="000"/>
+ <trophy id="010" hidden="yes" ttype="G" pid="000"/>
+ <trophy id="011" hidden="no" ttype="B" pid="000"/>
  <trophy id="012" hidden="no" ttype="S" pid="000"/>
- <trophy id="013" hidden="no" ttype="S" pid="000"/>
- <trophy id="014" hidden="yes" ttype="S" pid="000"/>
- <trophy id="015" hidden="no" ttype="S" pid="000"/>
- <trophy id="016" hidden="no" ttype="S" pid="000"/>
+ <trophy id="013" hidden="no" ttype="B" pid="000"/>
+ <trophy id="014" hidden="no" ttype="B" pid="000"/>
+ <trophy id="015" hidden="no" ttype="B" pid="000"/>
+ <trophy id="016" hidden="no" ttype="B" pid="000"/>
  <trophy id="017" hidden="no" ttype="S" pid="000"/>
  <trophy id="018" hidden="no" ttype="S" pid="000"/>
- <trophy id="019" hidden="no" ttype="S" pid="000"/>
- <trophy id="020" hidden="no" ttype="G" pid="000"/>
- <trophy id="021" hidden="no" ttype="G" pid="000"/>
- <trophy id="022" hidden="no" ttype="G" pid="000"/>
- <trophy id="023" hidden="no" ttype="G" pid="000"/>
+ <trophy id="019" hidden="no" ttype="B" pid="000"/>
+ <trophy id="020" hidden="no" ttype="S" pid="000"/>
+ <trophy id="021" hidden="no" ttype="S" pid="000"/>
+ <trophy id="022" hidden="no" ttype="B" pid="000"/>
+ <trophy id="023" hidden="no" ttype="S" pid="000"/>
  <trophy id="024" hidden="no" ttype="G" pid="000"/>
- <trophy id="025" hidden="no" ttype="G" pid="000"/>
- <trophy id="026" hidden="no" ttype="G" pid="000"/>
- <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001"/>
- <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001"/>
- <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001"/>
- <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001"/>
- <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001"/>
+ <trophy id="025" hidden="no" ttype="B" pid="000"/>
+ <trophy id="026" hidden="yes" ttype="B" pid="000"/>
+ <trophy id="027" hidden="no" ttype="B" pid="000"/>
+ <trophy id="028" hidden="no" ttype="S" pid="000"/>
+ <trophy id="029" hidden="no" ttype="G" pid="000"/>
+ <trophy id="030" hidden="no" ttype="S" pid="000"/>
+ <trophy id="031" hidden="no" ttype="G" pid="000"/>
 </trophyconf>
-
+

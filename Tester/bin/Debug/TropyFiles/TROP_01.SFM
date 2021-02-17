@@ -1,66 +1,137 @@
-<!--Sce-Np-Trophy-Signature: 4c39b98c010000000000000018bbe8d0aec3250c12655e6a5481614bfb72ce9e718566057e2896b90607fa2092b5f1d894d567023567cc2af2d55d2791fe8cb6838f367713463d4cd90484098439c6e92d5b4869fd497dd36e1f7a6e1d373332b7dddcb0e007d3772fe9c22e2669c86ccc51dd8b1b4964fee126e89b2d92a27e4d4efbe0d8cfe1a04ba0745d50415aab9503dc59d8431ae4af685ca7d1777285-->
-<trophyconf version="1.1" platform="ps4" policy="freemium">
- <npcommid>NPWR04914_00</npcommid>
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000002c12ee4975cefc5a5039d0f32294f434bf3e6baeaefb6650473cf3116252562296ae5625a3dd80082841617cb34e2ba39fab68c902b7ff79c21a465f8a541c187c5a00eccef1a9be69d1bed1f8f133ae239ec0e1e2541202a703136aa7517ff2bffe7eb3594257dc55f6b9cbe90dd0121b53c64c2f1be05f5be28cf7c737448bba408879938df0470866fdb914ee4dbc3726f035-->
+<trophyconf version="1.1" platform="ps4" policy="large">
+ <npcommid>NPWR18712_00</npcommid>
  <trophyset-version>01.00</trophyset-version>
  <parental-level license-area="default">0</parental-level>
- <title-name>THE PLAYROOM</title-name>
- <title-detail>Have fun finding all trophies hidden in THE PLAYROOM!</title-detail>
- <trophy id="000" hidden="yes" ttype="B" pid="-1">
-  <name>Lovely meeting you!</name>
-  <detail>Release ASOBI into your room.</detail>
+ <title-name>Asterix &amp; obelix XXL3</title-name>
+ <title-detail>The Crystal Menhir</title-detail>
+ <trophy id="000" hidden="no" ttype="P" pid="-1">
+  <name>Exemplary courage</name>
+  <detail>Earn all the trophies</detail>
  </trophy>
- <trophy id="001" hidden="yes" ttype="S" pid="-1">
-  <name>Eye for an eye</name>
-  <detail>Punch ASOBI and let him hit you back.</detail>
+ <trophy id="001" hidden="no" ttype="B" pid="000">
+  <name>Menhir Delivery Man</name>
+  <detail>Finish the game in “Easy” mode or a higher difficulty setting</detail>
  </trophy>
- <trophy id="002" hidden="yes" ttype="B" pid="-1">
-  <name>Honey, I'm home!</name>
-  <detail>Make ASOBI lonely and return to him!</detail>
+ <trophy id="002" hidden="no" ttype="S" pid="000">
+  <name>Gaulish Warrior</name>
+  <detail>Finish the game in “Normal” mode or a higher difficulty setting</detail>
  </trophy>
- <trophy id="003" hidden="yes" ttype="B" pid="-1">
-  <name>Boo!</name>
-  <detail>Play "Peek-a-boo" with the AR Bots.</detail>
+ <trophy id="003" hidden="no" ttype="G" pid="000">
+  <name>Gaulish Hero</name>
+  <detail>Finish the game in “Difficult” mode</detail>
  </trophy>
- <trophy id="004" hidden="yes" ttype="S" pid="-1">
-  <name>Flight of the Bot</name>
-  <detail>Send an AR Bot flying against the screen.</detail>
+ <trophy id="004" hidden="no" ttype="B" pid="000">
+  <name>A tailor-made menhir</name>
+  <detail>Recover the Crystal Menhir</detail>
  </trophy>
- <trophy id="005" hidden="yes" ttype="B" pid="-1">
-  <name>Secret Night Club</name>
-  <detail>Create a little beat routine for the AR Bots to dance to.</detail>
+ <trophy id="005" hidden="yes" ttype="B" pid="000">
+  <name>The grass is greener on the Gauls’ side!</name>
+  <detail>Finish Chapter 1 - Gaul</detail>
  </trophy>
- <trophy id="006" hidden="yes" ttype="S" pid="-1">
-  <name>Lights out!</name>
-  <detail>Turn the lights off inside the AR Bots' home.</detail>
+ <trophy id="006" hidden="yes" ttype="B" pid="000">
+  <name>Break the ice</name>
+  <detail>Finish Chapter 2 - Thule</detail>
  </trophy>
- <trophy id="007" hidden="yes" ttype="B" pid="-1">
-  <name>Wait! Is it one, two, and we go on three?</name>
-  <detail>Stay synched up and release the AR Hockey playfield.</detail>
+ <trophy id="007" hidden="yes" ttype="B" pid="000">
+  <name>A spare Tyre</name>
+  <detail>Finish Chapter 3 - Tyre</detail>
  </trophy>
- <trophy id="008" hidden="yes" ttype="S" pid="-1">
-  <name>Super Rally!</name>
-  <detail>Make a rally last more than 10 hits.</detail>
+ <trophy id="008" hidden="yes" ttype="B" pid="000">
+  <name>A discreet odyssey</name>
+  <detail>Finish Chapter 4 - Crete</detail>
  </trophy>
- <trophy id="009" hidden="yes" ttype="B" pid="-1">
-  <name>Lightning Speed!</name>
-  <detail>Score by using a boost attack.</detail>
+ <trophy id="009" hidden="yes" ttype="S" pid="000">
+  <name>It wasn’t built in a day</name>
+  <detail>Finish Chapter 5 - Rome</detail>
  </trophy>
- <trophy id="010" hidden="yes" ttype="B" pid="-1">
-  <name>Don't try this at home...</name>
-  <detail>Splash the screen during a celebration.</detail>
+ <trophy id="010" hidden="yes" ttype="G" pid="000">
+  <name>The heroes’ return</name>
+  <detail>Finish Chapter 6 - Save the village</detail>
  </trophy>
- <trophy id="011" hidden="no" ttype="G" pid="-1">
-  <name>Master of THE PLAYROOM</name>
-  <detail>Find all of THE PLAYROOM trophies.</detail>
+ <trophy id="011" hidden="no" ttype="B" pid="000">
+  <name>These Romans are crazy!</name>
+  <detail>Defeat 500 Romans</detail>
+ </trophy>
+ <trophy id="012" hidden="no" ttype="S" pid="000">
+  <name>Incorrigible Gaul</name>
+  <detail>Defeat 1,500 Romans</detail>
+ </trophy>
+ <trophy id="013" hidden="no" ttype="B" pid="000">
+  <name>Sandman</name>
+  <detail>Stun 250 Romans</detail>
+ </trophy>
+ <trophy id="014" hidden="no" ttype="B" pid="000">
+  <name>Ice dispenser</name>
+  <detail>Freeze 100 Romans</detail>
+ </trophy>
+ <trophy id="015" hidden="no" ttype="B" pid="000">
+  <name>It’s hot, it burns!</name>
+  <detail>Warm up 100 Romans</detail>
+ </trophy>
+ <trophy id="016" hidden="no" ttype="B" pid="000">
+  <name>Super Gaul</name>
+  <detail>Defeat 500 Romans under the effect of a magic potion</detail>
+ </trophy>
+ <trophy id="017" hidden="no" ttype="S" pid="000">
+  <name>Pro Bowler</name>
+  <detail>Throw a Roman and hit 10 enemies</detail>
+ </trophy>
+ <trophy id="018" hidden="no" ttype="S" pid="000">
+  <name>Swing</name>
+  <detail>Send 8 Romans flying with a single uppercut</detail>
+ </trophy>
+ <trophy id="019" hidden="no" ttype="B" pid="000">
+  <name>Seeing stars</name>
+  <detail>Throw 100 Romans</detail>
+ </trophy>
+ <trophy id="020" hidden="no" ttype="S" pid="000">
+  <name>The art of subtlety</name>
+  <detail>Stun 250 enemies with Romans falling back to the ground</detail>
+ </trophy>
+ <trophy id="021" hidden="no" ttype="S" pid="000">
+  <name>Handball pro</name>
+  <detail>Throw one Roman back and forth 5 times with another player</detail>
+ </trophy>
+ <trophy id="022" hidden="no" ttype="B" pid="000">
+  <name>Things are starting to get serious</name>
+  <detail>Do a 50-hit combo</detail>
+ </trophy>
+ <trophy id="023" hidden="no" ttype="S" pid="000">
+  <name>Untouchable</name>
+  <detail>Do a 100-hit combo</detail>
+ </trophy>
+ <trophy id="024" hidden="no" ttype="G" pid="000">
+  <name>Combat Master</name>
+  <detail>Do a 200-hit combo</detail>
+ </trophy>
+ <trophy id="025" hidden="no" ttype="B" pid="000">
+  <name>Get a load of this barrel</name>
+  <detail>Defeat 10 Romans with a barrel of powder</detail>
+ </trophy>
+ <trophy id="026" hidden="yes" ttype="B" pid="000">
+  <name>Don’t miss!</name>
+  <detail>Make a Roman hit a target</detail>
+ </trophy>
+ <trophy id="027" hidden="no" ttype="B" pid="000">
+  <name>Miser</name>
+  <detail>Keep 5,000 helmets</detail>
+ </trophy>
+ <trophy id="028" hidden="no" ttype="S" pid="000">
+  <name>A fine collection</name>
+  <detail>Collect 10,000 helmets</detail>
+ </trophy>
+ <trophy id="029" hidden="no" ttype="G" pid="000">
+  <name>It’s gonna be rough...</name>
+  <detail>Buy a character upgrade</detail>
+ </trophy>
+ <trophy id="030" hidden="no" ttype="S" pid="000">
+  <name>By Toutatis!</name>
+  <detail>Buy all the character upgrades</detail>
+ </trophy>
+ <trophy id="031" hidden="no" ttype="G" pid="000">
+  <name>Gaulish excellence</name>
+  <detail>Complete all the camps with a gold medal</detail>
  </trophy>
 </trophyconf>
-
-
-
-
-
-
-
-
-
-
+

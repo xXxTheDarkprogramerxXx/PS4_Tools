@@ -81,6 +81,9 @@
             this.btnUnlockTpy = new System.Windows.Forms.Button();
             this.btnTrophyTimeFIx = new System.Windows.Forms.Button();
             this.btnRebuildAppDb = new System.Windows.Forms.Button();
+            this.button27 = new System.Windows.Forms.Button();
+            this.button28 = new System.Windows.Forms.Button();
+            this.btnSealedKey = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -641,11 +644,44 @@
             this.btnRebuildAppDb.UseVisualStyleBackColor = true;
             this.btnRebuildAppDb.Click += new System.EventHandler(this.btnRebuildAppDb_Click);
             // 
+            // button27
+            // 
+            this.button27.Location = new System.Drawing.Point(881, 369);
+            this.button27.Name = "button27";
+            this.button27.Size = new System.Drawing.Size(331, 23);
+            this.button27.TabIndex = 44;
+            this.button27.Text = "Lock Game";
+            this.button27.UseVisualStyleBackColor = true;
+            this.button27.Click += new System.EventHandler(this.button27_Click);
+            // 
+            // button28
+            // 
+            this.button28.Location = new System.Drawing.Point(884, 405);
+            this.button28.Name = "button28";
+            this.button28.Size = new System.Drawing.Size(331, 23);
+            this.button28.TabIndex = 45;
+            this.button28.Text = "Unlock Game";
+            this.button28.UseVisualStyleBackColor = true;
+            this.button28.Click += new System.EventHandler(this.button28_Click);
+            // 
+            // btnSealedKey
+            // 
+            this.btnSealedKey.Location = new System.Drawing.Point(884, 443);
+            this.btnSealedKey.Name = "btnSealedKey";
+            this.btnSealedKey.Size = new System.Drawing.Size(331, 23);
+            this.btnSealedKey.TabIndex = 46;
+            this.btnSealedKey.Text = "Load Sealed Key";
+            this.btnSealedKey.UseVisualStyleBackColor = true;
+            this.btnSealedKey.Click += new System.EventHandler(this.btnSealedKey_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1227, 506);
+            this.Controls.Add(this.btnSealedKey);
+            this.Controls.Add(this.button28);
+            this.Controls.Add(this.button27);
             this.Controls.Add(this.btnRebuildAppDb);
             this.Controls.Add(this.btnTrophyTimeFIx);
             this.Controls.Add(this.btnUnlockTpy);
@@ -746,6 +782,9 @@
         private System.Windows.Forms.Button btnUnlockTpy;
         private System.Windows.Forms.Button btnTrophyTimeFIx;
         private System.Windows.Forms.Button btnRebuildAppDb;
+        private System.Windows.Forms.Button button27;
+        private System.Windows.Forms.Button button28;
+        private System.Windows.Forms.Button btnSealedKey;
     }
 }
 

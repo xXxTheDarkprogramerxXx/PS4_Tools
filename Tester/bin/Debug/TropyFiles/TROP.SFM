@@ -1,141 +1,137 @@
-<!--Sce-Np-Trophy-Signature: 4c39b98c0100000000000000f62d81c8b2caea449e2cd7936ad303c733fa10ada2a1175656daaa163c972879eddd683baa734cbfe1195889e71bdfedfcb6eb1724f7fbe07a3f8e3924ac859b76c50c9f7839760f9278a216c01eaf166976acb9b1ffbdb9bb712cd5e759ef800c1ac47188358ea5abf8f6a2377fb3e462ed8e07ef508a6e8d22644ce1987c2cbd3c501e26303ee981aa3b9834d9b4e40901e8ca-->
+<!--Sce-Np-Trophy-Signature: 4c39b98c010000000000000003a2d9458feee32bbffccded697741df23e12b7416d5957dbd9edd4fa5162e38eaff7a1a30d166a5c487e941809d9575857d144b5c50ca0e745ed94dcee4fd6bc5b314103a448dcdd5ea7f3c63137b94a10413f69105a5c45eb9e9f8ca1f29f245a90dc3ad4a29dd79eff5fe5e3e99859e2908df7bb742d3fff416ef671035e717168c24c9dbc3322c7b8159c4f113a28d77cef3-->
 <trophyconf version="1.1" platform="ps4" policy="large">
- <npcommid>NPWR05254_00</npcommid>
- <trophyset-version>01.04</trophyset-version>
+ <npcommid>NPWR18712_00</npcommid>
+ <trophyset-version>01.00</trophyset-version>
  <parental-level license-area="default">0</parental-level>
- <title-name>DRIVECLUB™</title-name>
- <title-detail>Trophies for DRIVECLUB™</title-detail>
- <group id="001">
-  <name>DRIVECLUB™ Tour</name>
-  <detail>DRIVECLUB™ Tour</detail>
- </group>
+ <title-name>Asterix &amp; obelix XXL3</title-name>
+ <title-detail> The Crystal Menhir</title-detail>
  <trophy id="000" hidden="no" ttype="P" pid="-1">
-  <name>#UniteInSpeed</name>
-  <detail>Collect all of the other Trophies.</detail>
+  <name>Exemplary courage</name>
+  <detail>Earn all the trophies</detail>
  </trophy>
  <trophy id="001" hidden="no" ttype="B" pid="000">
-  <name>You Only Get One First Time</name>
-  <detail>Complete your first Event.</detail>
+  <name>Menhir Delivery Man</name>
+  <detail>Finish the game in “Easy” mode or a higher difficulty setting&#x0a;</detail>
  </trophy>
- <trophy id="002" hidden="no" ttype="B" pid="000">
-  <name>Clubman</name>
-  <detail>Join a Club, or have someone join a Club that you have created.</detail>
+ <trophy id="002" hidden="no" ttype="S" pid="000">
+  <name>Gaulish Warrior</name>
+  <detail>Finish the game in “Normal” mode or a higher difficulty setting</detail>
  </trophy>
- <trophy id="003" hidden="no" ttype="B" pid="000">
-  <name>First Of Many</name>
-  <detail>Beat your first Face-Off.</detail>
+ <trophy id="003" hidden="no" ttype="G" pid="000">
+  <name>Gaulish Hero</name>
+  <detail>Finish the game in “Difficult” mode</detail>
  </trophy>
  <trophy id="004" hidden="no" ttype="B" pid="000">
-  <name>This One Is Mine</name>
-  <detail>Customize a vehicle.&#x0a;</detail>
+  <name>A tailor-made menhir</name>
+  <detail>Recover the Crystal Menhir</detail>
  </trophy>
- <trophy id="005" hidden="no" ttype="B" pid="000">
-  <name>Contender</name>
-  <detail>When the timer expires on a Solo Challenge, be at the top of the leaderboard.</detail>
+ <trophy id="005" hidden="yes" ttype="B" pid="000">
+  <name>The grass is greener on the Gauls’ side!</name>
+  <detail>Finish Chapter 1 - Gaul</detail>
  </trophy>
- <trophy id="006" hidden="no" ttype="B" pid="000">
-  <name>And So It Begins!</name>
-  <detail>Send a Challenge to another player.</detail>
+ <trophy id="006" hidden="yes" ttype="B" pid="000">
+  <name>Break the ice</name>
+  <detail>Finish Chapter 2 - Thule</detail>
  </trophy>
- <trophy id="007" hidden="no" ttype="B" pid="000">
-  <name>Level Up!</name>
-  <detail>Reach Driver Level 2.</detail>
+ <trophy id="007" hidden="yes" ttype="B" pid="000">
+  <name>A spare Tyre</name>
+  <detail>Finish Chapter 3 - Tyre</detail>
  </trophy>
- <trophy id="008" hidden="no" ttype="B" pid="000">
-  <name>5 And Counting</name>
-  <detail>Reach Driver Level 5.</detail>
+ <trophy id="008" hidden="yes" ttype="B" pid="000">
+  <name>A discreet odyssey</name>
+  <detail>Finish Chapter 4 - Crete</detail>
  </trophy>
- <trophy id="009" hidden="no" ttype="B" pid="000">
-  <name>Progress</name>
-  <detail>Reach Level 1 with one Accolade.</detail>
+ <trophy id="009" hidden="yes" ttype="S" pid="000">
+  <name>It wasn’t built in a day</name>
+  <detail>Finish Chapter 5 - Rome</detail>
  </trophy>
- <trophy id="010" hidden="yes" ttype="B" pid="000">
-  <name>Tonnage</name>
-  <detail>Complete a point to point Event with an average speed of 100mph or 161 km/h.</detail>
+ <trophy id="010" hidden="yes" ttype="G" pid="000">
+  <name>The heroes’ return</name>
+  <detail>Finish Chapter 6 - Save the village</detail>
  </trophy>
- <trophy id="011" hidden="no" ttype="S" pid="000">
-  <name>Face-Off</name>
-  <detail>Complete 50 Face-Offs.</detail>
+ <trophy id="011" hidden="no" ttype="B" pid="000">
+  <name>These Romans are crazy!</name>
+  <detail>Defeat 500 Romans</detail>
  </trophy>
  <trophy id="012" hidden="no" ttype="S" pid="000">
-  <name>On The Podium</name>
-  <detail>Place in any of the top 3 positions during a 12 player race.</detail>
+  <name>Incorrigible Gaul</name>
+  <detail>Defeat 1,500 Romans</detail>
  </trophy>
- <trophy id="013" hidden="no" ttype="S" pid="000">
-  <name>Nose To Tail</name>
-  <detail>Draft another vehicle for at least 2187 yards (2000 metres) in a single event.</detail>
+ <trophy id="013" hidden="no" ttype="B" pid="000">
+  <name>Sandman</name>
+  <detail>Stun 250 Romans</detail>
  </trophy>
- <trophy id="014" hidden="yes" ttype="S" pid="000">
-  <name>Team Work</name>
-  <detail>Be a member of a Club that is Club Level 10 or above.</detail>
+ <trophy id="014" hidden="no" ttype="B" pid="000">
+  <name>Ice dispenser</name>
+  <detail>Freeze 100 Romans</detail>
  </trophy>
- <trophy id="015" hidden="no" ttype="S" pid="000">
-  <name>Rack 'em Up, Knock 'em Down</name>
-  <detail>Beat 3 Target Times in a single Time Trial event.</detail>
+ <trophy id="015" hidden="no" ttype="B" pid="000">
+  <name>It’s hot, it burns!</name>
+  <detail>Warm up 100 Romans</detail>
  </trophy>
- <trophy id="016" hidden="no" ttype="S" pid="000">
-  <name>Long Distance</name>
-  <detail>Drive for at least 300 miles (483 km).</detail>
+ <trophy id="016" hidden="no" ttype="B" pid="000">
+  <name>Super Gaul</name>
+  <detail>Defeat 500 Romans under the effect of a magic potion</detail>
  </trophy>
  <trophy id="017" hidden="no" ttype="S" pid="000">
-  <name>Making Waves</name>
-  <detail>Reach Driver Level 15.</detail>
+  <name>Pro Bowler</name>
+  <detail>Throw a Roman and hit 10 enemies</detail>
  </trophy>
  <trophy id="018" hidden="no" ttype="S" pid="000">
-  <name>Life Begins</name>
-  <detail>Reach Driver Level 30.</detail>
+  <name>Swing</name>
+  <detail>Send 8 Romans flying with a single uppercut</detail>
  </trophy>
- <trophy id="019" hidden="no" ttype="S" pid="000">
-  <name>Full House</name>
-  <detail>Win a Race in each class of vehicle: Hot Hatch, Performance, Sports, Super and Hyper.</detail>
+ <trophy id="019" hidden="no" ttype="B" pid="000">
+  <name>Seeing stars</name>
+  <detail>Throw 100 Romans</detail>
  </trophy>
- <trophy id="020" hidden="no" ttype="G" pid="000">
-  <name>Unbeatable</name>
-  <detail>Win 5 of your own Solo Challenges after sending them to at least one other player.</detail>
+ <trophy id="020" hidden="no" ttype="S" pid="000">
+  <name>The art of subtlety</name>
+  <detail>Stun 250 enemies with Romans falling back to the ground</detail>
  </trophy>
- <trophy id="021" hidden="no" ttype="G" pid="000">
-  <name>Mastery</name>
-  <detail>Max out one Accolade.</detail>
+ <trophy id="021" hidden="no" ttype="S" pid="000">
+  <name>Handball pro</name>
+  <detail>Throw one Roman back and forth 5 times with another player</detail>
  </trophy>
- <trophy id="022" hidden="no" ttype="G" pid="000">
-  <name>Hoon-a-tic</name>
-  <detail>Rack up 1 million Drift Points in total.</detail>
+ <trophy id="022" hidden="no" ttype="B" pid="000">
+  <name>Things are starting to get serious</name>
+  <detail>Do a 50-hit combo</detail>
  </trophy>
- <trophy id="023" hidden="no" ttype="G" pid="000">
-  <name>Cleanup </name>
-  <detail>In a 12 player race, finish on the podium without losing any Fame due to collisions with other competitors.</detail>
+ <trophy id="023" hidden="no" ttype="S" pid="000">
+  <name>Untouchable</name>
+  <detail>Do a 100-hit combo</detail>
  </trophy>
  <trophy id="024" hidden="no" ttype="G" pid="000">
-  <name>Lifer</name>
-  <detail>Drive at least 1000 miles (1610 km) as a Club Member.</detail>
+  <name>Combat Master</name>
+  <detail>Do a 200-hit combo</detail>
  </trophy>
- <trophy id="025" hidden="no" ttype="G" pid="000">
-  <name>Welcome To The Limit</name>
-  <detail>Reach Driver Level 50.</detail>
+ <trophy id="025" hidden="no" ttype="B" pid="000">
+  <name>Get a load of this barrel</name>
+  <detail>Defeat 10 Romans with a barrel of powder</detail>
  </trophy>
- <trophy id="026" hidden="no" ttype="G" pid="000">
-  <name>Credit Where It's Due</name>
-  <detail>Max out one of each Gameplay, Game Mode, Vehicle and Event Accolades.</detail>
+ <trophy id="026" hidden="yes" ttype="B" pid="000">
+  <name>Don’t miss!</name>
+  <detail>Make a Roman hit a target</detail>
  </trophy>
- <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
-  <name>The Rookie Trophy</name>
-  <detail>Win 'The Rookie Trophy' Event in Tour.</detail>
+ <trophy id="027" hidden="no" ttype="B" pid="000">
+  <name>Miser</name>
+  <detail>Collect 5,000 helmets</detail>
  </trophy>
- <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
-  <name>The Amateur Trophy</name>
-  <detail>Win 'The Amateur Trophy' Event in Tour.</detail>
+ <trophy id="028" hidden="no" ttype="S" pid="000">
+  <name>A fine collection</name>
+  <detail>Collect 10,000 helmets</detail>
  </trophy>
- <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
-  <name>The Semi-Pro Trophy</name>
-  <detail>Win 'The Semi-Pro Trophy' Event in Tour.</detail>
+ <trophy id="029" hidden="no" ttype="G" pid="000">
+  <name>It’s gonna be rough...</name>
+  <detail>Buy a character upgrade</detail>
  </trophy>
- <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
-  <name>The Professional Trophy</name>
-  <detail>Win 'The Professional Trophy' Event in Tour.</detail>
+ <trophy id="030" hidden="no" ttype="S" pid="000">
+  <name>By Toutatis!</name>
+  <detail>Buy all the character upgrades</detail>
  </trophy>
- <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
-  <name>The Legend Trophy</name>
-  <detail>Win 'The Legend Trophy' Event in Tour.</detail>
+ <trophy id="031" hidden="no" ttype="G" pid="000">
+  <name>Gaulish excellence</name>
+  <detail>Complete all the camps with a gold medal</detail>
  </trophy>
 </trophyconf>
 

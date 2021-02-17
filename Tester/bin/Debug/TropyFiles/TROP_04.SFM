@@ -1,141 +1,137 @@
-<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000004a597d2cf566e03c98a03e6d024113c72dde57d36a5caad749fd5e0755a1ee555b406cc9dae40e11d332b2f615d65476f1fcfbfbccb3b978be3718bd2434589a9da0e62346f6cd7188f88af3a6104e9c2a44ccea2d3f07afbaf3d9c2065fa10ce0b7871326727fd8a8e09cd947b3c7edde5dc73906ec2e22b86102906d81c0545948f0e21f32337e17b1f67764feac0a144a78b1-->
+<!--Sce-Np-Trophy-Signature: 4c39b98c01000000000000007dc64dccb48deec5bf514f7f3c41f6d2b32098a2158995c9bd36f33cf860efb3c834043d5808f9c11286b754c6197415b00509e19532b537116debef9ccb852ae3215d0e68cbac0fb0fe11d90eac0cfea351cff4dd68d182b37a67fa8b1063765c9e286872c944811956729f3e1f83495e63d4736c22c40932d0d10cb9421eba74ece5348a9e1386d78f7a7be2c09b8bb5281a37-->
 <trophyconf version="1.1" platform="ps4" policy="large">
- <npcommid>NPWR05254_00</npcommid>
- <trophyset-version>01.04</trophyset-version>
+ <npcommid>NPWR18712_00</npcommid>
+ <trophyset-version>01.00</trophyset-version>
  <parental-level license-area="default">0</parental-level>
- <title-name>DRIVECLUB™</title-name>
- <title-detail>DRIVECLUB™-Trophäen</title-detail>
- <group id="001">
-  <name>DRIVECLUB™ Tour</name>
-  <detail>DRIVECLUB™ Tour</detail>
- </group>
+ <title-name>Asterix &amp; Obelix XXL3</title-name>
+ <title-detail>Der Kristall-Hinkelstein</title-detail>
  <trophy id="000" hidden="no" ttype="P" pid="-1">
-  <name>#ImTempoVereint</name>
-  <detail>Sammle alle anderen Trophäen.</detail>
+  <name>Herausragende Tapferkeit</name>
+  <detail>Alle Trophäen erhalten.</detail>
  </trophy>
  <trophy id="001" hidden="no" ttype="B" pid="000">
-  <name>Es gibt nur ein erstes Mal</name>
-  <detail>Schließe deine erste Veranstaltung ab.</detail>
+  <name>Hinkelsteinlieferant</name>
+  <detail>Das Spiel im Modus „Einfach“ oder schwieriger abschließen.</detail>
  </trophy>
- <trophy id="002" hidden="no" ttype="B" pid="000">
-  <name>Club-Vertreter</name>
-  <detail>Tritt einem Club bei oder lass jemanden einem Club beitreten, den du gegründet hast.</detail>
+ <trophy id="002" hidden="no" ttype="S" pid="000">
+  <name>Gallischer Krieger</name>
+  <detail>Das Spiel im Modus „Normal“ oder schwieriger abschließen.</detail>
  </trophy>
- <trophy id="003" hidden="no" ttype="B" pid="000">
-  <name>Erste von vielen</name>
-  <detail>Gewinne dein erstes Duell.</detail>
+ <trophy id="003" hidden="no" ttype="G" pid="000">
+  <name>Gallischer Held</name>
+  <detail>Das Spiel im Modus „Schwer“ abschließen.</detail>
  </trophy>
  <trophy id="004" hidden="no" ttype="B" pid="000">
-  <name>Das gehört mir</name>
-  <detail>Passe ein Fahrzeug an.</detail>
+  <name>Ein Hinkelstein nach Maß</name>
+  <detail>Den Kristall-Hinkelstein erlangen.</detail>
  </trophy>
- <trophy id="005" hidden="no" ttype="B" pid="000">
-  <name>Herausforderer</name>
-  <detail>Führe die Bestenliste an, wenn die Zeit bei einer Solo-Herausforderung abläuft.</detail>
+ <trophy id="005" hidden="yes" ttype="B" pid="000">
+  <name>Das Gras ist grüner bei den Galliern!</name>
+  <detail>Kapitel 1 – „Gallien“ – abschließen.</detail>
  </trophy>
- <trophy id="006" hidden="no" ttype="B" pid="000">
-  <name>Mögen die Spiele beginnen!</name>
-  <detail>Sende einem anderen Spieler eine Herausforderung.</detail>
+ <trophy id="006" hidden="yes" ttype="B" pid="000">
+  <name>Das Eis bezwingen</name>
+  <detail>Kapitel 2 – „Thule“ – abschließen.</detail>
  </trophy>
- <trophy id="007" hidden="no" ttype="B" pid="000">
-  <name>Stufenaufstieg!</name>
-  <detail>Erreiche Fahrerstufe 2.</detail>
+ <trophy id="007" hidden="yes" ttype="B" pid="000">
+  <name>Reiches Tyros</name>
+  <detail>Kapitel 3 – „Tyros“ – abschließen.</detail>
  </trophy>
- <trophy id="008" hidden="no" ttype="B" pid="000">
-  <name>5 und mehr</name>
-  <detail>Erreiche Fahrerstufe 5.</detail>
+ <trophy id="008" hidden="yes" ttype="B" pid="000">
+  <name>Eine Odyssee nach Kreta</name>
+  <detail>Kapitel 4 – „Kreta“ – abschließen.</detail>
  </trophy>
- <trophy id="009" hidden="no" ttype="B" pid="000">
-  <name>Fortschritt</name>
-  <detail>Erreiche Stufe 1 mit einer Auszeichnung.</detail>
+ <trophy id="009" hidden="yes" ttype="S" pid="000">
+  <name>Nicht an einem Tag erbaut</name>
+  <detail>Kapitel 5 – „Rom“ – abschließen.</detail>
  </trophy>
- <trophy id="010" hidden="yes" ttype="B" pid="000">
-  <name>100 Sachen</name>
-  <detail>Schließe eine „Punkt zu Punkt“-Veranstaltung mit einer Durchschnittsgeschwindigkeit von 100 mph oder 161 km/h ab.</detail>
+ <trophy id="010" hidden="yes" ttype="G" pid="000">
+  <name>Rückkehr der Helden</name>
+  <detail>Kapitel 6 – „Rettung des Dorfs“ – abschließen.</detail>
  </trophy>
- <trophy id="011" hidden="no" ttype="S" pid="000">
-  <name>Duell</name>
-  <detail>Schließe 50 Duelle ab.</detail>
+ <trophy id="011" hidden="no" ttype="B" pid="000">
+  <name>Die spinnen, die Römer!</name>
+  <detail>500 Römer besiegen.</detail>
  </trophy>
  <trophy id="012" hidden="no" ttype="S" pid="000">
-  <name>Siegertreppchen</name>
-  <detail>Komme in einem Rennen mit 12 Spielern unter die Top 3.</detail>
+  <name>Gallischer Widerstand</name>
+  <detail>1.500 Römer besiegen.</detail>
  </trophy>
- <trophy id="013" hidden="no" ttype="S" pid="000">
-  <name>Stoßstange an Stoßstange</name>
-  <detail>Fahre in einer einzelnen Veranstaltung mindestens 2000 Meter (2187 yards) im Windschatten eines anderen Fahrzeugs.</detail>
+ <trophy id="013" hidden="no" ttype="B" pid="000">
+  <name>Der Sandhändler</name>
+  <detail>250 Römer betäuben.</detail>
  </trophy>
- <trophy id="014" hidden="yes" ttype="S" pid="000">
-  <name>Teamarbeit</name>
-  <detail>Sei Mitglied in einem Club mit der Club-Stufe 10 oder höher.</detail>
+ <trophy id="014" hidden="no" ttype="B" pid="000">
+  <name>Eisverkäufer</name>
+  <detail>100 Römer einfrieren.</detail>
  </trophy>
- <trophy id="015" hidden="no" ttype="S" pid="000">
-  <name>Abgeräumt</name>
-  <detail>Schlage 3 Zielzeiten in einer einzigen Zeitrennen-Session.</detail>
+ <trophy id="015" hidden="no" ttype="B" pid="000">
+  <name>Brennend heiß</name>
+  <detail>100 Römer aufwärmen.</detail>
  </trophy>
- <trophy id="016" hidden="no" ttype="S" pid="000">
-  <name>Langstrecke</name>
-  <detail>Fahre mindestens 300 Meilen (483 Kilometer).</detail>
+ <trophy id="016" hidden="no" ttype="B" pid="000">
+  <name>Supergallier</name>
+  <detail>Unter Einfluss des Zaubertranks insgesamt 500 Römer besiegen.</detail>
  </trophy>
  <trophy id="017" hidden="no" ttype="S" pid="000">
-  <name>Hohe Wellen schlagen</name>
-  <detail>Erreiche Fahrerstufe 15.</detail>
+  <name>Bowlingprofi</name>
+  <detail>Einen Römer werfen und 10 Gegner treffen.</detail>
  </trophy>
  <trophy id="018" hidden="no" ttype="S" pid="000">
-  <name>Lebensanfang</name>
-  <detail>Erreiche Fahrerstufe 30.</detail>
+  <name>Schwinger</name>
+  <detail>8 Römer mit einem Kinnhaken fliegen lassen.</detail>
  </trophy>
- <trophy id="019" hidden="no" ttype="S" pid="000">
-  <name>Full House</name>
-  <detail>Gewinne ein Rennen in jeder Fahrzeugklasse: Kompaktsportwagen, Performance, Sport, Super und Hyper.</detail>
+ <trophy id="019" hidden="no" ttype="B" pid="000">
+  <name>Den Sternen noch näher</name>
+  <detail>Insgesamt 100 Römer werfen.</detail>
  </trophy>
- <trophy id="020" hidden="no" ttype="G" pid="000">
-  <name>Unschlagbar</name>
-  <detail>Gewinne 5 deiner eigenen Solo-Herausforderungen, nachdem du sie an mindestens einen weiteren Spieler gesendet hast.</detail>
+ <trophy id="020" hidden="no" ttype="S" pid="000">
+  <name>Die Kunst der Subtilität</name>
+  <detail>250 Feinde mithilfe von Römern betäuben, die wieder auf die Erde zurückfallen.</detail>
  </trophy>
- <trophy id="021" hidden="no" ttype="G" pid="000">
-  <name>Meisterschaft</name>
-  <detail>Erreiche bei einer Auszeichnung das Maximum.</detail>
+ <trophy id="021" hidden="no" ttype="S" pid="000">
+  <name>Handballprofi</name>
+  <detail>Wirf einen Römer im Koop-Modus mit 2 Spielern 5 Mal hin und her.</detail>
  </trophy>
- <trophy id="022" hidden="no" ttype="G" pid="000">
-  <name>Wahn-flitz-ig</name>
-  <detail>Sammle insgesamt eine Million Driftpunkte.</detail>
+ <trophy id="022" hidden="no" ttype="B" pid="000">
+  <name>Die Sache wird ernst</name>
+  <detail>Eine Kombo mit 50 Ohrfeigen erzielen.</detail>
  </trophy>
- <trophy id="023" hidden="no" ttype="G" pid="000">
-  <name>Saubere Leistung</name>
-  <detail>Erreiche bei einem Rennen mit 12 Spielern einen Podiumsplatz, ohne Ruhm durch Kollisionen mit anderen Teilnehmern zu verlieren.</detail>
+ <trophy id="023" hidden="no" ttype="S" pid="000">
+  <name>Unantastbar</name>
+  <detail>Eine Kombo mit 100 Ohrfeigen erzielen.</detail>
  </trophy>
  <trophy id="024" hidden="no" ttype="G" pid="000">
-  <name>Lebenslänglich</name>
-  <detail>Fahre als Club-Mitglied mindestens 1000 Meilen (1610 Kilometer).</detail>
+  <name>Meister des Kampfs</name>
+  <detail>Eine Kombo mit 200 Ohrfeigen erzielen.</detail>
  </trophy>
- <trophy id="025" hidden="no" ttype="G" pid="000">
-  <name>Willkommen am Limit</name>
-  <detail>Erreiche Fahrerstufe 50.</detail>
+ <trophy id="025" hidden="no" ttype="B" pid="000">
+  <name>Ich Fass es nicht</name>
+  <detail>10 Römer mit einem Pulverfass besiegen.</detail>
  </trophy>
- <trophy id="026" hidden="no" ttype="G" pid="000">
-  <name>Ehre, wem Ehre gebührt</name>
-  <detail>Erreiche das Maximum einer Auszeichnung für jeweils eine Fahrzeug-Klasse, eine Gameplay-Art, einen Spielmodus und eine Veranstaltungsart.</detail>
+ <trophy id="026" hidden="yes" ttype="B" pid="000">
+  <name>Schau genau hin!</name>
+  <detail>Einen Römer als Zielscheibe benutzen.</detail>
  </trophy>
- <trophy id="027" hidden="no" ttype="B" pid="-1" gid="001">
-  <name>Die Rookie-Trophäe</name>
-  <detail>Gewinne die Rookie-Trophäe im Tour-Modus.</detail>
+ <trophy id="027" hidden="no" ttype="B" pid="000">
+  <name>Nichts zu verschenken</name>
+  <detail>5.000 Helme sammeln.</detail>
  </trophy>
- <trophy id="028" hidden="no" ttype="B" pid="-1" gid="001">
-  <name>Die Amateur-Trophäe</name>
-  <detail>Gewinne die Amateur-Trophäe im Tour-Modus.</detail>
+ <trophy id="028" hidden="no" ttype="S" pid="000">
+  <name>Eine schöne Sammlung</name>
+  <detail>10.000 Helme sammeln.</detail>
  </trophy>
- <trophy id="029" hidden="no" ttype="S" pid="-1" gid="001">
-  <name>Die Semi-Pro-Trophäe</name>
-  <detail>Gewinne die Semi-Pro-Trophäe im Tour-Modus.</detail>
+ <trophy id="029" hidden="no" ttype="G" pid="000">
+  <name>Das wird den Kampf ankurbeln ...</name>
+  <detail>Eine Charakterverbesserung kaufen</detail>
  </trophy>
- <trophy id="030" hidden="no" ttype="S" pid="-1" gid="001">
-  <name>Die Professional-Trophäe</name>
-  <detail>Gewinne die Professional-Trophäe im Tour-Modus.</detail>
+ <trophy id="030" hidden="no" ttype="S" pid="000">
+  <name>Beim Teutates!</name>
+  <detail>Alle Charakterverbesserungen kaufen.</detail>
  </trophy>
- <trophy id="031" hidden="no" ttype="G" pid="-1" gid="001">
-  <name>Die Legend-Trophäe</name>
-  <detail>Gewinne die Legend-Trophäe im Tour-Modus.</detail>
+ <trophy id="031" hidden="no" ttype="G" pid="000">
+  <name>Gallische Erhabenheit</name>
+  <detail>Alle Lager mit der Goldmedaille abschließen.</detail>
  </trophy>
 </trophyconf>
-
+
