@@ -19,8 +19,11 @@ Run it.
 
 
 Click the arrows up and down to select the trophy you want unlocked
+
 [ ] to view the trophy list.
+
 X to unlock.
+
 And Triangle for a screenshot
 
 Have fun
