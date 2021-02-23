@@ -666,7 +666,7 @@
             // 
             // btnSealedKey
             // 
-            this.btnSealedKey.Location = new System.Drawing.Point(884, 443);
+            this.btnSealedKey.Location = new System.Drawing.Point(884, 437);
             this.btnSealedKey.Name = "btnSealedKey";
             this.btnSealedKey.Size = new System.Drawing.Size(331, 23);
             this.btnSealedKey.TabIndex = 46;

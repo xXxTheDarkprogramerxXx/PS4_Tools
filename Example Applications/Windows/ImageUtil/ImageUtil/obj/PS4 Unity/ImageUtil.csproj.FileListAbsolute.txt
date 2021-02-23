@@ -33,9 +33,3 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Appl
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\bin\PS4 Unity\UnityEditor.xml
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\PS4 Unity\ImageUtil.exe
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\PS4 Unity\ImageUtil.pdb
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\PS4 Unity\ImageUtil.csprojResolveAssemblyReference.cache
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\PS4 Unity\ImageUtil.Form1.resources
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\PS4 Unity\ImageUtil.Properties.Resources.resources
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\PS4 Unity\ImageUtil.csproj.GenerateResource.Cache
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\PS4 Unity\ImageUtil.exe
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\Example Applications\Windows\ImageUtil\ImageUtil\obj\PS4 Unity\ImageUtil.pdb

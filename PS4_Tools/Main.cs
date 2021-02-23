@@ -6661,6 +6661,12 @@ Where titleId = '" + TitleID + "'";
                     //}
                     //return new Param_SFO.PARAM_SFO();
                 }
+
+                public static Param_SFO.PARAM_SFO Get_Param_SFO(byte[] sfobytes)
+                {
+                    return new Param_SFO.PARAM_SFO(sfobytes);
+                }
+
             }
 
             public class NP_Bind

@@ -59,7 +59,6 @@ D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bi
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\PS4 Unity\PARAM.SFO.pdb
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\PS4 Unity\UnityEditor.xml
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\PS4 Unity\UnityEngine.xml
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\PS4 Unity\PS4_Tools.csprojResolveAssemblyReference.cache
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\PS4 Unity\PS4_Tools.Properties.Resources.resources
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\PS4 Unity\PS4_Tools.csproj.GenerateResource.Cache
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\PS4 Unity\PS4_Tools.dll

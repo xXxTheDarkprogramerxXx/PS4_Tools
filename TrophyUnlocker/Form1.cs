@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Compression;
 using System.Diagnostics;
+using System.Net;
 
 namespace TrophyUnlocker
 {
@@ -19,45 +20,92 @@ namespace TrophyUnlocker
         {
             InitializeComponent();
         }
+        private List<string> ListFiles(string url)
+        {
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(url);
+                request.Method = WebRequestMethods.Ftp.ListDirectory;
+
+                request.Credentials = new NetworkCredential("anonymous", "");
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string names = reader.ReadToEnd();
+
+                reader.Close();
+                response.Close();
+
+                return names.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            }
+            catch (Exception)
+            {
+                //   throw;
+            }
+            return new List<string>();
+        }
+        public static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+        private byte[] DownloadFile(string ftpSourceFilePath)
+        {
+
+            // byte[] buffer = new byte[2048];
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpSourceFilePath);
+            request.Credentials = new NetworkCredential("anonymous", "janeDoe@contoso.com");
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+            request.UsePassive = true;
+            // FtpWebRequest request = CreateFtpWebRequest(ftpSourceFilePath, userName, password, true);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+            Stream reader = request.GetResponse().GetResponseStream();
+            byte[] buffer = ReadFully(reader);
+
+
+            return buffer;
+        }
+
+        public class UserInfo
+        {
+            public string UserId { get; set; }
+            public string Name { get; set; }
+        }
+
+        public class GameInfo
+        {
+            public string TitleId { get; set; }
+            public byte[] npbind { get; set; }
+            public byte[] nptitle { get; set; }
+            public byte[] param { get; set; }
+            public byte[] TrophyFile { get; set; }
+            public string Title { get; set; }
+            public string ContentID { get; set; }
+
+        }
+        List<GameInfo> gamelist = new List<GameInfo>();
+
+
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //Open File Items
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            openFileDialog1.Title = "Select PS4 File";
-
-            openFileDialog1.CheckFileExists = true;
-
-            openFileDialog1.CheckPathExists = true;
-
-            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
-
-            openFileDialog1.RestoreDirectory = true;
-
-            openFileDialog1.Multiselect = false;
-
-            openFileDialog1.ReadOnlyChecked = true;
-
-            openFileDialog1.ShowReadOnly = true;
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (textBox1.Text == "")
             {
-                try
-                {
-                    var sfo = new Param_SFO.PARAM_SFO(openFileDialog1.FileName);
-                    label5.Text = "Content ID: " +sfo.ContentID;
-                    textBox1.Text = openFileDialog1.FileName;
-                    label8.Text = "Game Title : " + sfo.Title;
-                    txtPreviewTitle.Text = "Unlocker for " + sfo.Title;
-                }
-                catch(Exception ex)
-                {
-
-                }
+                MessageBox.Show("Please enter an IP");
+                return;
             }
+            pnlProgress.Visible = true;
+            backgroundWorker1.RunWorkerAsync();
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -89,11 +137,11 @@ namespace TrophyUnlocker
                 {
                     var trp = new PS4_Tools.Trophy_File();
                     trp.Load(File.ReadAllBytes(openFileDialog1.FileName));
-                    if(trp.FileCount == 0)
+                    if (trp.FileCount == 0)
                     {
                         MessageBox.Show("Trophy file not valid");
                     }
-                    textBox2.Text = openFileDialog1.FileName;
+                    //textBox2.Text = openFileDialog1.FileName;
                 }
                 catch (Exception ex)
                 {
@@ -130,7 +178,7 @@ namespace TrophyUnlocker
                 try
                 {
                     PS4_Tools.PKG.SceneRelated.NP_Title titleid = new PS4_Tools.PKG.SceneRelated.NP_Title(openFileDialog1.FileName);
-                    textBox3.Text = openFileDialog1.FileName;
+                    //textBox3.Text = openFileDialog1.FileName;
                     label6.Text = "NpTitle Id :" + titleid.Nptitle;
                 }
                 catch (Exception ex)
@@ -168,7 +216,7 @@ namespace TrophyUnlocker
                 try
                 {
                     PS4_Tools.PKG.SceneRelated.NP_Bind bind = new PS4_Tools.PKG.SceneRelated.NP_Bind(openFileDialog1.FileName);
-                    textBox4.Text = openFileDialog1.FileName;
+                    //textBox4.Text = openFileDialog1.FileName;
                     label7.Text = "Np Bind : " + bind.Nptitle;
                 }
                 catch (Exception ex)
@@ -255,7 +303,7 @@ namespace TrophyUnlocker
             {
                 DeleteDirectory(AppCommonPath() + @"\CONTENTS\");
             }
-            ZipFile.ExtractToDirectory(AppCommonPath() + "CONTENTS.zip", AppCommonPath()+ @"\CONTENTS\");
+            ZipFile.ExtractToDirectory(AppCommonPath() + "CONTENTS.zip", AppCommonPath() + @"\CONTENTS\");
 
 
             if (Directory.Exists(AppCommonPath() + @"\ext\"))
@@ -318,11 +366,11 @@ namespace TrophyUnlocker
         {
             //throw new NotImplementedException();
         }
-
+        FolderBrowserDialog saveFileDialog1 = new FolderBrowserDialog();
         private void button5_Click(object sender, EventArgs e)
         {
             ExtractAllResources();
-            FolderBrowserDialog saveFileDialog1 = new FolderBrowserDialog();
+            saveFileDialog1 = new FolderBrowserDialog();
             //saveFileDialog1.Filter = "PS4 PKG|*.pkg";
             //saveFileDialog1.Title = "Save an PS4 PKG File";
             //saveFileDialog1.ov
@@ -330,17 +378,244 @@ namespace TrophyUnlocker
             {
                 return;
             }
+            UpdateProgress("");
+            pnlProgress.Visible = true;
+            backgroundWorker2.RunWorkerAsync();
 
+
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //var gameselected = gamelist.Select(x => x.Title == comboBox1.SelectedText);
+            var result = gamelist.Single(s => s.Title == comboBox1.SelectedItem);
+            //poulate date
+            label8.Text = "Game Title : " + result.Title;
+
+            label5.Text = "Content ID : " + result.ContentID;
+
+            PS4_Tools.PKG.SceneRelated.NP_Title titleid = new PS4_Tools.PKG.SceneRelated.NP_Title(result.nptitle);
+            label6.Text = "NpTitle Id : " + titleid.Nptitle;
+
+            PS4_Tools.PKG.SceneRelated.NP_Bind NP_Bind = new PS4_Tools.PKG.SceneRelated.NP_Bind(result.npbind);
+            label7.Text = "Np Bind :  " + NP_Bind.Nptitle;
+
+            txtPreviewTitle.Text = "Unlocker for " + result.Title;
+        }
+
+        private void UpdateProgress(string txt)
+        {
+            if (this.pnlProgress.InvokeRequired)
+            {
+                this.pnlProgress.BeginInvoke((MethodInvoker)delegate () { this.lblProgress.Text = txt; ; });
+            }
+            else
+            {
+                this.pnlProgress.Text = txt; ;
+            }
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+
+
+                /*We moved to FTP Alot Easier*/
+                UpdateProgress("Connection to ps4");
+                // Get the object used to communicate with the server.
+                gamelist = new List<GameInfo>();
+                string url = "ftp://" + textBox1.Text + ":1337/user/home/";
+                UpdateProgress("Checking user directory");
+                //var list = ListFiles(url);
+                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(url);
+                ftpRequest.Credentials = new NetworkCredential("anonymous", "janeDoe@contoso.com");
+                ftpRequest.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+                ftpRequest.UsePassive = true;
+                FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse();
+                List<UserInfo> result = new List<UserInfo>();
+                using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+                {
+                    string line = streamReader.ReadLine();
+                    while (!string.IsNullOrEmpty(line))
+                    {
+                        var splitt = line.Split(' ');
+                        if (splitt.Length == 10)//only do this when 10 items in array
+                        {
+                            UserInfo info = new UserInfo();
+
+                            byte[] userinfo = DownloadFile(url + splitt[9] + "/username.dat");
+                            info.UserId = splitt[9];
+                            info.Name = System.Text.Encoding.ASCII.GetString(userinfo);
+                            UpdateProgress("User found ID" + info.UserId + " Name  " + info.Name);
+                            result.Add(info);//save all user folders
+                        }
+                        line = streamReader.ReadLine();
+                    }
+                }
+                UpdateProgress("Gatehring game info");
+                //list all games here
+                url = "ftp://" + textBox1.Text + ":1337/system_data/priv/appmeta/";
+                ftpRequest = (FtpWebRequest)WebRequest.Create(url);
+                ftpRequest.Credentials = new NetworkCredential("anonymous", "janeDoe@contoso.com");
+                ftpRequest.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+                ftpRequest.UsePassive = true;
+                response = (FtpWebResponse)ftpRequest.GetResponse();
+
+                using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+                {
+                    string line = streamReader.ReadLine();
+                    while (!string.IsNullOrEmpty(line))
+                    {
+                        var splitt = line.Split(' ');
+                        if (splitt.Length == 9)//only do this when 10 items in array
+                        {
+                            if (splitt[8] != "..")
+                            {
+                                try
+                                {
+                                    GameInfo info = new GameInfo();
+
+
+                                    UpdateProgress("Game found " + splitt[8]);
+                                    UpdateProgress("Downloading Param.SFO for " + splitt[8]);
+                                    byte[] paramsfo = DownloadFile(url + splitt[8] + "/param.sfo");
+                                    info.param = paramsfo;
+                                    UpdateProgress("Downloading nptitle.dat for " + splitt[8]);
+                                    info.nptitle = DownloadFile(url + splitt[8] + "/nptitle.dat"); //System.Text.Encoding.ASCII.GetString(userinfo);
+                                    UpdateProgress("Downloading npbind.dat for " + splitt[8]);
+                                    info.npbind = DownloadFile(url + splitt[8] + "/npbind.dat");
+                                    //get the TrophyFile
+                                    UpdateProgress("Downloading TROPHY.TRP for " + splitt[8]);
+                                    var bindinfo = new PS4_Tools.PKG.SceneRelated.NP_Bind(info.npbind);
+                                    string tmpurl = "ftp://" + textBox1.Text + ":1337/user/trophy/conf/" + bindinfo.Nptitle + "/";
+                                    info.TrophyFile = DownloadFile(tmpurl + "TROPHY.TRP");
+                                    gamelist.Add(info);
+                                    var sfofile = PS4_Tools.PKG.SceneRelated.PARAM_SFO.Get_Param_SFO(info.param);
+                                    info.TitleId = sfofile.TitleID;
+                                    info.Title = sfofile.Title;
+                                    info.ContentID = sfofile.ContentID;
+
+
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
+                            }
+                        }
+                        line = streamReader.ReadLine();
+                    }
+                }
+
+
+                //FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://"+textBox1.Text + ":1337");
+                //request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+                //// This example assumes the FTP site uses anonymous logon.
+                //request.Credentials = new NetworkCredential("anonymous", "");
+
+                //response = (FtpWebResponse)request.GetResponse();
+
+                //Stream responseStream = response.GetResponseStream();
+                //StreamReader reader = new StreamReader(responseStream);
+                //Console.WriteLine(reader.ReadToEnd());
+
+                //Console.WriteLine($"Download Complete, status {response.StatusDescription}");
+
+                //reader.Close();
+                //response.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error " + ex.Message, "Error while loading game data");
+            }
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            for (int i = 0; i < gamelist.Count; i++)
+            {
+                comboBox1.Items.Add(gamelist[i].Title);
+            }
+            if (gamelist.Count != 0)
+            {
+                comboBox1.SelectedIndex = 0;
+            }
+
+            pnlProgress.Visible = false;
+        }
+        public static string RemoveSpecialCharacters(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_' || c == ' ')
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string selectedgame = "";
+            if (this.comboBox1.InvokeRequired)
+            {
+                this.comboBox1.BeginInvoke((MethodInvoker)delegate () { selectedgame = comboBox1.SelectedItem.ToString(); });
+            }
+            else
+            {
+                selectedgame = comboBox1.SelectedItem.ToString();
+            }
+            GameInfo result = new GameInfo();
+            for (int i = 0; i < gamelist.Count; i++)
+            {
+                System.Threading.Thread.Sleep(100);
+                if (gamelist[i].Title == selectedgame)
+                {
+                    result = gamelist[i];
+                }
+            }
+            UpdateProgress("Copying Files to temp dir");
+            //var result = gamelist.Single(s => s.Title == selectedgame);
             //First We Do Param.Sfo
-            File.Copy(textBox1.Text,AppCommonPath() + @"CONTENTS\sce_sys\param.sfo",true);
+            UpdateProgress("Copying Param.sfo");
+            if (File.Exists(AppCommonPath() + @"CONTENTS\sce_sys\param.sfo"))
+            {
+                File.Delete(AppCommonPath() + @"CONTENTS\sce_sys\param.sfo");
+            }
+            File.WriteAllBytes(AppCommonPath() + @"CONTENTS\sce_sys\param.sfo", result.param);
+            //File.Copy(, AppCommonPath() + @"CONTENTS\sce_sys\param.sfo", true);
             //Next Trophy
-            File.Copy(textBox2.Text, AppCommonPath() + @"CONTENTS\sce_sys\trophy\trophy00.trp", true);
+            UpdateProgress("Copying trophy00.trp");
+            if (File.Exists(AppCommonPath() + @"CONTENTS\sce_sys\trophy\trophy00.trp"))
+            {
+                File.Delete(AppCommonPath() + @"CONTENTS\sce_sys\trophy\trophy00.trp");
+            }
+            File.WriteAllBytes(AppCommonPath() + @"CONTENTS\sce_sys\trophy\trophy00.trp", result.TrophyFile);
+            // File.Copy(textBox2.Text, AppCommonPath() + @"CONTENTS\sce_sys\trophy\trophy00.trp", true);
             //np title
-            File.Copy(textBox3.Text, AppCommonPath() + @"CONTENTS\sce_sys\nptitle.dat", true);
+            UpdateProgress("Copying nptitle.dat");
+            if (File.Exists(AppCommonPath() + @"CONTENTS\sce_sys\nptitle.dat"))
+            {
+                File.Delete(AppCommonPath() + @"CONTENTS\sce_sys\nptitle.dat");
+            }
+            File.WriteAllBytes(AppCommonPath() + @"CONTENTS\sce_sys\nptitle.dat", result.nptitle);
+            //File.Copy(textBox3.Text, AppCommonPath() + @"CONTENTS\sce_sys\nptitle.dat", true);
             //np bind
-            File.Copy(textBox4.Text, AppCommonPath() + @"CONTENTS\sce_sys\npbind.dat", true);
+            UpdateProgress("Copying npbind.dat");
+            if (File.Exists(AppCommonPath() + @"CONTENTS\sce_sys\npbind.dat"))
+            {
+                File.Delete(AppCommonPath() + @"CONTENTS\sce_sys\npbind.dat");
+            }
+            File.WriteAllBytes(AppCommonPath() + @"CONTENTS\sce_sys\npbind.dat", result.npbind);
+            //File.Copy(textBox4.Text, AppCommonPath() + @"CONTENTS\sce_sys\npbind.dat", true);
             string tmpcontentid = "EP2165-XDPX30000_00-TROPHYUNLOCKXXXX";
             //string tmpcontentid = "EP2165-CUSA09960_00-F13GAMEDISCXXXXX";
+
+            UpdateProgress("Fixing Param.sfo");
             var sfo = new Param_SFO.PARAM_SFO(AppCommonPath() + @"CONTENTS\sce_sys\param.sfo");
             //save the title as Unlocker For
             for (int i = 0; i < sfo.Tables.Count; i++)
@@ -349,6 +624,12 @@ namespace TrophyUnlocker
                 {
                     var tempitem = sfo.Tables[i];
                     tempitem.Value = "Unlocker for " + sfo.Title;
+                    sfo.Tables[i] = tempitem;
+                }
+                if (sfo.Tables[i].Name == "APP_VER")
+                {
+                    var tempitem = sfo.Tables[i];
+                    tempitem.Value = "01.00";
                     sfo.Tables[i] = tempitem;
                 }
                 //CONTENT_ID
@@ -366,18 +647,21 @@ namespace TrophyUnlocker
                 //    sfo.Tables[i] = tempitem;
                 //}
             }
-            sfo.SaveSFO(sfo, AppCommonPath() + @"CONTENTS\sce_sys\param.sfo");//we save it with the new title
+            sfo.SaveSFO(sfo, AppCommonPath() + @"CONTENTS\sce_sys\param.sfo");
+            //we save it with the new title
             //sfo.Tables = "Unlocker for " + sfo.Title;
             //now build the pkg with the new sfo
+
+            UpdateProgress("Creating GP4 Project");
             var project = PS4_Tools.PKG.SceneRelated.GP4.ReadGP4(AppCommonPath() + "Trophy_Unlocker.gp4");
-            
+            UpdateProgress("GP4 content id " + sfo.ContentID);
             project.Volume.Package.Content_id = sfo.ContentID;//this hould be litrally all we need
 
             PS4_Tools.PKG.SceneRelated.GP4.SaveGP4(AppCommonPath() + "Trophy_Unlocker.gp4", project);
 
 
             //now build the pkg
-            
+            UpdateProgress("Creating PKG");
             bool BusyCoping = true;
             new System.Threading.Thread(new System.Threading.ThreadStart(delegate
             {
@@ -401,17 +685,27 @@ namespace TrophyUnlocker
                     var tempitem = sfo.Tables[i];
                     version = tempitem.Value;
                 }
-          
-            }
 
-            PS4_Tools.PKG.SceneRelated.Rename_pkg_To_Title(saveFileDialog1.SelectedPath +@"\"+ sfo.ContentID +"-A" + sfo.APP_VER.Replace(".","") + "-V"+ version.Replace(".","")+ ".pkg", saveFileDialog1.SelectedPath + @"\",true);
-            //delete the old one 
-            if(File.Exists(saveFileDialog1.SelectedPath + @"\" + sfo.ContentID + "-A" + sfo.APP_VER.Replace(".", "") + "-V" + version.Replace(".", "") + ".pkg"))
+            }
+            UpdateProgress("Renaming PKG");
+            if (File.Exists(saveFileDialog1.SelectedPath + @"\" + RemoveSpecialCharacters(sfo.Title) + ".pkg"))
             {
-                File.Delete(saveFileDialog1.SelectedPath + @"\" + sfo.ContentID + "-A" + sfo.APP_VER.Replace(".", "") + "-V" + version.Replace(".", "") + ".pkg");
+                File.Delete(saveFileDialog1.SelectedPath + @"\" + RemoveSpecialCharacters(sfo.Title) + ".pkg");
             }
+            File.Move(saveFileDialog1.SelectedPath + @"\" + sfo.ContentID + "-A" + sfo.APP_VER.Replace(".", "") + "-V" + version.Replace(".", "") + ".pkg", saveFileDialog1.SelectedPath + @"\" + RemoveSpecialCharacters(sfo.Title) + ".pkg");
+            // PS4_Tools.PKG.SceneRelated.Rename_pkg_To_Title(saveFileDialog1.SelectedPath +@"\"+ sfo.ContentID +"-A" + sfo.APP_VER.Replace(".","") + "-V"+ version.Replace(".","")+ ".pkg", saveFileDialog1.SelectedPath + @"\",true);
+            ////delete the old one 
+            //if(File.Exists(saveFileDialog1.SelectedPath + @"\" + sfo.ContentID + "-A" + sfo.APP_VER.Replace(".", "") + "-V" + version.Replace(".", "") + ".pkg"))
+            //{
+            //    File.Delete(saveFileDialog1.SelectedPath + @"\" + sfo.ContentID + "-A" + sfo.APP_VER.Replace(".", "") + "-V" + version.Replace(".", "") + ".pkg");
+            //}
+            UpdateProgress("Done");
             Process.Start(saveFileDialog1.SelectedPath);
+        }
 
+        private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            pnlProgress.Visible = false;
         }
     }
 }

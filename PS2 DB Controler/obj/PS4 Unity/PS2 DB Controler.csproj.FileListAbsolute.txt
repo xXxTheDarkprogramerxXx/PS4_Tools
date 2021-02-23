@@ -7,15 +7,3 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Contr
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\PS4 Unity\PS2 DB Controler.csproj.GenerateResource.Cache
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\PS4 Unity\PS2 DB Controler.exe
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\PS4 Unity\PS2 DB Controler.pdb
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\bin\PS4 Unity\PS2 DB Controler.exe.config
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\bin\PS4 Unity\PS2 DB Controler.exe
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\bin\PS4 Unity\PS2 DB Controler.pdb
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\bin\PS4 Unity\HtmlAgilityPack.dll
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\bin\PS4 Unity\HtmlAgilityPack.pdb
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\bin\PS4 Unity\HtmlAgilityPack.xml
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\PS4 Unity\PS2 DB Controler.csprojResolveAssemblyReference.cache
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\PS4 Unity\PS2_DB_Controler.Form1.resources
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\PS4 Unity\PS2_DB_Controler.Properties.Resources.resources
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\PS4 Unity\PS2 DB Controler.csproj.GenerateResource.Cache
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\PS4 Unity\PS2 DB Controler.exe
-D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS2 DB Controler\obj\PS4 Unity\PS2 DB Controler.pdb
