@@ -1,6 +1,8 @@
 # Trophy Unlocker
 Use this to unlock trophies on the PS4.
-![image](https://user-images.githubusercontent.com/12253240/108216538-4637c000-713b-11eb-9338-709a5e686b29.png)
+![image](https://i.imgur.com/ss9B5iO.png)
+
+![image](https://i.imgur.com/5eWg3Q1.png)
 
 ## How to use ?
 * Run TrophyUnlocker.exe
