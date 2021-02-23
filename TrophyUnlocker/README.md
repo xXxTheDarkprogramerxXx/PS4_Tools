@@ -7,10 +7,9 @@ Use this to unlock trophies on the PS4.
 ## How to use ?
 * Run TrophyUnlocker.exe
 
-* Add the required files of the current game you want to run.
-* All can be dumped with the app dump payload.
+* Enter the PS4 IP and CLick Connect
 
-Click Build Unlocker
+* Click Build Unlocker
 
 Now install the created pkg on the ps4
 (If the game is installed it will overwrite it so be careful!)
