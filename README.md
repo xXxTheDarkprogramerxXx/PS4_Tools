@@ -55,6 +55,11 @@ Well It Unlocks Trophies
 
 ![image](https://i.imgur.com/5eWg3Q1.png)
 
+### Ps4 Trophy Viewer
+Created on the request of @pearlxcore
+
+![](https://i.imgur.com/3B56fVw.png)
+
 ## Getting Started
 
 Add the .DLL to your solution. 
