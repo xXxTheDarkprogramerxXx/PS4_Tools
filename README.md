@@ -32,6 +32,12 @@ Created for DefaultDNB
 
 ![](https://i.imgur.com/yFVDU7S.png)
 
+### Atrac9 Player
+
+A simple At9 player
+
+![image](https://i.imgur.com/p5EIC5Z.png)
+
 ### Ps4 Tools Homebrew
 Created originally just to show the power of ps4 tools but now has alot more feutures 
 
