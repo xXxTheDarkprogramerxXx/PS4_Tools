@@ -72,6 +72,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\favicon %282%29.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PARAM.SFO">
       <HintPath>..\..\..\..\GitHub\PS3Tools\PARAM.SFO Editor\PARAM.SFO\bin\Debug\PARAM.SFO.dll</HintPath>
@@ -89,6 +92,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +106,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PS4 Medial Player.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PS4 Medial Player.Designer.cs">
+      <DependentUpon>PS4 Medial Player.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -108,7 +126,11 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="PS4 Medial Player.resx">
+      <DependentUpon>PS4 Medial Player.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -127,6 +149,30 @@
       <Project>{095271bf-9f85-43d0-bf8e-782b18eaed6f}</Project>
       <Name>PS4_Tools</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon %282%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ps4_tools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4792965023_57b20776-4c77-425a-b91c-10608d18cbf3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon %282%291.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4862351490_63c3ddf4-94ce-43b2-92d2-e33d3b0f7be2 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\baseline_stop_black_18dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\baseline_play_circle_outline_black_18dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sfoeditor.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

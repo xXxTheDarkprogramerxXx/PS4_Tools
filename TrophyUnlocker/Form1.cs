@@ -229,11 +229,11 @@ namespace TrophyUnlocker
         public static string AppCommonPath()
         {
             string returnstring = "";
-            //if (Properties.Settings.Default.OverwriteTemp == true && Properties.Settings.Default.TempPath != string.Empty)
-            //{
-            //    returnstring = Properties.Settings.Default.TempPath + @"\Ps4Tools\";
-            //}
-            //else
+            if (Properties.Settings.Default.TempPath != string.Empty)
+            {
+                returnstring = Properties.Settings.Default.TempPath + @"\Ps4Tools\";
+            }
+            else
             {
                 returnstring = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Ps4Tools\";
             }
@@ -369,6 +369,14 @@ namespace TrophyUnlocker
         FolderBrowserDialog saveFileDialog1 = new FolderBrowserDialog();
         private void button5_Click(object sender, EventArgs e)
         {
+            if(gamelist.Count == 0 && string.IsNullOrEmpty(manualitem.Title))
+            {
+                return;
+            }
+            if(gamelist.Count == 0)
+            {
+                gamelist.Add(manualitem);
+            }
             ExtractAllResources();
             saveFileDialog1 = new FolderBrowserDialog();
             //saveFileDialog1.Filter = "PS4 PKG|*.pkg";
@@ -558,25 +566,101 @@ namespace TrophyUnlocker
             }
             return sb.ToString();
         }
+        public int FindBytes(byte[] src, byte[] find)
+        {
+            int index = -1;
+            int matchIndex = 0;
+            // handle the complete source array
+            for (int i = 0; i < src.Length; i++)
+            {
+                if (src[i] == find[matchIndex])
+                {
+                    if (matchIndex == (find.Length - 1))
+                    {
+                        index = i - matchIndex;
+                        break;
+                    }
+                    matchIndex++;
+                }
+                else if (src[i] == find[0])
+                {
+                    matchIndex = 1;
+                }
+                else
+                {
+                    matchIndex = 0;
+                }
+
+            }
+            return index;
+        }
+
+        public byte[] ReplaceBytes(byte[] src, byte[] search, byte[] repl)
+        {
+            byte[] dst = null;
+            int index = FindBytes(src, search);
+            if (index >= 0)
+            {
+                dst = new byte[src.Length - search.Length + repl.Length];
+                // before found array
+                Buffer.BlockCopy(src, 0, dst, 0, index);
+                // repl copy
+                Buffer.BlockCopy(repl, 0, dst, index, repl.Length);
+                // rest of src array
+                Buffer.BlockCopy(
+                    src,
+                    index + search.Length,
+                    dst,
+                    index + repl.Length,
+                    src.Length - (index + search.Length));
+            }
+            return dst;
+        }
+
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
             string selectedgame = "";
-            if (this.comboBox1.InvokeRequired)
-            {
-                this.comboBox1.BeginInvoke((MethodInvoker)delegate () { selectedgame = comboBox1.SelectedItem.ToString(); });
-            }
-            else
-            {
-                selectedgame = comboBox1.SelectedItem.ToString();
-            }
             GameInfo result = new GameInfo();
-            for (int i = 0; i < gamelist.Count; i++)
+            try
             {
-                System.Threading.Thread.Sleep(100);
-                if (gamelist[i].Title == selectedgame)
+                if (this.comboBox1.InvokeRequired)
                 {
-                    result = gamelist[i];
+                    this.comboBox1.BeginInvoke((MethodInvoker)delegate () {
+                        try
+                        {
+                            selectedgame = comboBox1.SelectedItem.ToString();
+                        }
+                        catch
+                        {
+
+                        }
+                    });
                 }
+                else
+                {
+                    selectedgame = comboBox1.SelectedItem.ToString();
+                }
+               
+                for (int i = 0; i < gamelist.Count; i++)
+                {
+                    System.Threading.Thread.Sleep(100);
+                    if (gamelist[i].Title == selectedgame)
+                    {
+                        result = gamelist[i];
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+            if(!string.IsNullOrEmpty(manualitem.Title))
+            {
+                result = manualitem;
+            }
+            else if(gamelist.Count == 1)
+            {
+                result = gamelist[0];
             }
             UpdateProgress("Copying Files to temp dir");
             //var result = gamelist.Single(s => s.Title == selectedgame);
@@ -614,9 +698,23 @@ namespace TrophyUnlocker
             //File.Copy(textBox4.Text, AppCommonPath() + @"CONTENTS\sce_sys\npbind.dat", true);
             string tmpcontentid = "EP2165-XDPX30000_00-TROPHYUNLOCKXXXX";
             //string tmpcontentid = "EP2165-CUSA09960_00-F13GAMEDISCXXXXX";
+            string newpkgid = "XDPX30000_00";
 
-            UpdateProgress("Fixing Param.sfo");
+            //now fix the nptitleid
             var sfo = new Param_SFO.PARAM_SFO(AppCommonPath() + @"CONTENTS\sce_sys\param.sfo");
+            UpdateProgress("Fixing NpTitle");
+            byte[] nptitle = File.ReadAllBytes(AppCommonPath() + @"CONTENTS\sce_sys\nptitle.dat");
+            byte[] orginaltit =  Encoding.UTF8.GetBytes(sfo.TitleID+ "_00");
+            byte[] newtit = Encoding.UTF8.GetBytes(newpkgid);
+            nptitle =  ReplaceBytes(nptitle,
+            orginaltit,
+            newtit);
+            File.WriteAllBytes(AppCommonPath() + @"CONTENTS\sce_sys\nptitle.dat", nptitle);
+            //string nptitle = File.ReadAllText(AppCommonPath() + @"CONTENTS\sce_sys\nptitle.dat");
+            //nptitle = nptitle.Replace(sfo.TitleID, newpkgid);
+            //File.WriteAllText(AppCommonPath() + @"CONTENTS\sce_sys\nptitle.dat", nptitle);
+            UpdateProgress("Fixing Param.sfo");
+          
             //save the title as Unlocker For
             for (int i = 0; i < sfo.Tables.Count; i++)
             {
@@ -630,6 +728,30 @@ namespace TrophyUnlocker
                 {
                     var tempitem = sfo.Tables[i];
                     tempitem.Value = "01.00";
+                    sfo.Tables[i] = tempitem;
+                }
+                if (sfo.Tables[i].Name == "TITLE_ID")
+                {
+                    var tempitem = sfo.Tables[i];
+                    tempitem.Value = newpkgid.Replace("_00","");
+                    sfo.Tables[i] = tempitem;
+                }
+                if (sfo.Tables[i].Name == "CONTENT_ID")
+                {
+                    var tempitem = sfo.Tables[i];
+                    tempitem.Value = tempitem.Value.Replace(sfo.TitleID, newpkgid.Replace("_00",""));
+                    sfo.Tables[i] = tempitem;
+                }
+                if (sfo.Tables[i].Name == "CATEGORY")
+                {
+                    var tempitem = sfo.Tables[i];
+                    tempitem.Value = "gd";
+                    sfo.Tables[i] = tempitem;
+                }
+                if (sfo.Tables[i].Name == "PUBTOOLINFO")
+                {
+                    var tempitem = sfo.Tables[i];
+                    tempitem.Value = tempitem.Value.Replace("digital25", "digital50");
                     sfo.Tables[i] = tempitem;
                 }
                 //CONTENT_ID
@@ -651,7 +773,7 @@ namespace TrophyUnlocker
             //we save it with the new title
             //sfo.Tables = "Unlocker for " + sfo.Title;
             //now build the pkg with the new sfo
-
+            sfo = new Param_SFO.PARAM_SFO(AppCommonPath() + @"CONTENTS\sce_sys\param.sfo");
             UpdateProgress("Creating GP4 Project");
             var project = PS4_Tools.PKG.SceneRelated.GP4.ReadGP4(AppCommonPath() + "Trophy_Unlocker.gp4");
             UpdateProgress("GP4 content id " + sfo.ContentID);
@@ -706,6 +828,289 @@ namespace TrophyUnlocker
         private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pnlProgress.Visible = false;
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            frmSettings settingsform = new frmSettings();
+            settingsform.ShowDialog();
+            this.Close();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            switch (Properties.Settings.Default.AppType)
+            {
+                case "FTP":
+                    pnlFTP.Visible = true;
+                    break;
+                case "Manual":
+                    pnlManual.Visible = true;
+                    break;
+                case "PKG":
+                    pnlPKG.Visible = true;
+                    break;
+                default:
+                    pnlFTP.Visible = true;
+                    break;
+            }
+        }
+
+        private void btnPKG_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            openFileDialog1.Title = "Select PS4 pkg";
+
+            openFileDialog1.CheckFileExists = true;
+
+            openFileDialog1.CheckPathExists = true;
+
+            openFileDialog1.Filter = "PS4 pkg (*.pkg)|*.pkg";
+
+            openFileDialog1.RestoreDirectory = true;
+
+            openFileDialog1.Multiselect = false;
+
+            openFileDialog1.ReadOnlyChecked = true;
+
+            openFileDialog1.ShowReadOnly = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    gamelist = new List<GameInfo>();
+                    GameInfo info = new GameInfo();
+                    PS4_Tools.PKG.SceneRelated.Unprotected_PKG pkg = PS4_Tools.PKG.SceneRelated.Read_PKG(openFileDialog1.FileName);
+                    for (int i = 0; i < pkg.Entires.Length; i++)
+                    {
+                        if (pkg.Entires[i].CustomName == "NPBIND_DAT")
+                        {
+                            info.npbind = pkg.Entires[i].file_data;
+                        }
+                        if (pkg.Entires[i].CustomName == "NPTITLE_DAT")
+                        {
+                            info.nptitle= pkg.Entires[i].file_data;     
+                        }
+                        if (pkg.Entires[i].CustomName == "PARAM_SFO")
+                        {
+                            info.param = pkg.Entires[i].file_data;
+                        }
+                        if (pkg.Entires[i].CustomName == "TROPHY__TROPHY00_TRP")
+                        {
+                            info.TrophyFile = pkg.Entires[i].file_data;
+                            //quickly testing the trophy stuff
+                            Stream stream = new MemoryStream(info.TrophyFile);
+
+                            PS4_Tools.Trophy_File trp = new PS4_Tools.Trophy_File();
+                            trp.Load(stream);
+
+                        }
+                    }
+                    info.ContentID = pkg.Content_ID;
+                    info.Title = pkg.PS4_Title;
+                    var sfo=  PS4_Tools.PKG.SceneRelated.PARAM_SFO.Get_Param_SFO(info.param);
+                    info.TitleId = sfo.TitleID;
+                    gamelist.Add(info);
+
+                    label8.Text = "Game Title : " + pkg.PS4_Title;
+
+                    label5.Text = "Content ID : " + pkg.Content_ID;
+
+                    PS4_Tools.PKG.SceneRelated.NP_Title titleid = new PS4_Tools.PKG.SceneRelated.NP_Title(info.nptitle);
+                    label6.Text = "NpTitle Id : " + titleid.Nptitle;
+
+                    PS4_Tools.PKG.SceneRelated.NP_Bind NP_Bind = new PS4_Tools.PKG.SceneRelated.NP_Bind(info.npbind);
+                    label7.Text = "Np Bind :  " + NP_Bind.Nptitle;
+
+                    txtPreviewTitle.Text = "Unlocker for " + pkg.PS4_Title;
+
+                    txtPKG.Text = openFileDialog1.FileName;
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            
+        }
+
+        public GameInfo manualitem = new GameInfo();
+        private void btnParam_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            openFileDialog1.Title = "Select PS4 File";
+
+            openFileDialog1.CheckFileExists = true;
+
+            openFileDialog1.CheckPathExists = true;
+
+            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+
+            openFileDialog1.RestoreDirectory = true;
+
+            openFileDialog1.Multiselect = false;
+
+            openFileDialog1.ReadOnlyChecked = true;
+
+            openFileDialog1.ShowReadOnly = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    byte[] sfobytes = File.ReadAllBytes(openFileDialog1.FileName);
+                    var trp = PS4_Tools.PKG.SceneRelated.PARAM_SFO.Get_Param_SFO(sfobytes);
+                  
+                    manualitem.param = sfobytes;
+                    txtParam.Text = openFileDialog1.FileName;
+                    label8.Text = "Game Title : " + trp.Title;
+                    manualitem.ContentID = trp.ContentID;
+                    manualitem.Title = trp.Title;
+                    manualitem.TitleId = trp.TitleID;
+                    label5.Text = "Content ID : " + trp.ContentID;
+                    txtPreviewTitle.Text = "Unlocker for " + trp.Title;
+                    //textBox2.Text = openFileDialog1.FileName;
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        private void btnTrophy_Click(object sender, EventArgs e)
+        {
+            //Open File Items
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            openFileDialog1.Title = "Select PS4 File";
+
+            openFileDialog1.CheckFileExists = true;
+
+            openFileDialog1.CheckPathExists = true;
+
+            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+
+            openFileDialog1.RestoreDirectory = true;
+
+            openFileDialog1.Multiselect = false;
+
+            openFileDialog1.ReadOnlyChecked = true;
+
+            openFileDialog1.ShowReadOnly = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    var trp = new PS4_Tools.Trophy_File();
+                    trp.Load(File.ReadAllBytes(openFileDialog1.FileName));
+                    if (trp.FileCount == 0)
+                    {
+                        MessageBox.Show("Trophy file not valid");
+                    }
+                    manualitem.TrophyFile = File.ReadAllBytes(openFileDialog1.FileName);
+                    txtTrophy.Text = openFileDialog1.FileName;
+                    //textBox2.Text = openFileDialog1.FileName;
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        private void btnNptitle_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            openFileDialog1.Title = "Select PS4 File";
+
+            openFileDialog1.CheckFileExists = true;
+
+            openFileDialog1.CheckPathExists = true;
+
+            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+
+            openFileDialog1.RestoreDirectory = true;
+
+            openFileDialog1.Multiselect = false;
+
+            openFileDialog1.ReadOnlyChecked = true;
+
+            openFileDialog1.ShowReadOnly = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    byte[] nptit = File.ReadAllBytes(openFileDialog1.FileName);
+
+                    PS4_Tools.PKG.SceneRelated.NP_Title titleid = new PS4_Tools.PKG.SceneRelated.NP_Title(nptit);
+                    label6.Text = "NpTitle Id : " + titleid.Nptitle;
+
+                    manualitem.nptitle = nptit;
+                    txtNptitle.Text = openFileDialog1.FileName;
+                    //textBox2.Text = openFileDialog1.FileName;
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        private void btnNpBind_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            openFileDialog1.Title = "Select PS4 File";
+
+            openFileDialog1.CheckFileExists = true;
+
+            openFileDialog1.CheckPathExists = true;
+
+            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+
+            openFileDialog1.RestoreDirectory = true;
+
+            openFileDialog1.Multiselect = false;
+
+            openFileDialog1.ReadOnlyChecked = true;
+
+            openFileDialog1.ShowReadOnly = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    byte[] npbind = File.ReadAllBytes(openFileDialog1.FileName);
+                    PS4_Tools.PKG.SceneRelated.NP_Bind NP_Bind = new PS4_Tools.PKG.SceneRelated.NP_Bind(npbind);
+                    label7.Text = "Np Bind :  " + NP_Bind.Nptitle;
+                    manualitem.npbind = npbind;
+                    txtNpBind.Text = openFileDialog1.FileName;
+                    //textBox2.Text = openFileDialog1.FileName;
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
         }
     }
 }

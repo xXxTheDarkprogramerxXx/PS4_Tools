@@ -63,3 +63,4 @@ D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\ob
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\PS4 Unity\PS4_Tools.csproj.GenerateResource.Cache
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\PS4 Unity\PS4_Tools.dll
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\PS4 Unity\PS4_Tools.pdb
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\obj\PS4 Unity\PS4_Tools.csprojResolveAssemblyReference.cache

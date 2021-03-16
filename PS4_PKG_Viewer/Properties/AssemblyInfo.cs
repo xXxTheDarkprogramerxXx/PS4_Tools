@@ -1,16 +1,19 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PS4_PKG_Viewer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("PS4 PKG Viewer")]
+[assembly: AssemblyDescription(@"PS4 PKG Viewer.
+Powered by PS4 Tools
+https://github.com/xXxTheDarkprogramerxXx/PS4_Tools")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PS4_PKG_Viewer")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCompany("PS4 Tools by The Darkprogramer")]
+[assembly: AssemblyProduct("PS4 PKG Viewer")]
+[assembly: AssemblyCopyright("Copyright © PS4 Tools" )]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

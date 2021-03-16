@@ -1,0 +1,74 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\3de Echelon\\source\\repos\\PS4 PKG Viewer Android\\PS4 PKG Viewer Android\\PS4 PKG Viewer Android.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\3de Echelon\\source\\repos\\PS4 PKG Viewer Android\\PS4 PKG Viewer Android\\PS4 PKG Viewer Android.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\3de Echelon\\source\\repos\\PS4 PKG Viewer Android\\PS4 PKG Viewer Android\\PS4 PKG Viewer Android.csproj",
+        "projectName": "PS4 PKG Viewer Android",
+        "projectPath": "C:\\Users\\3de Echelon\\source\\repos\\PS4 PKG Viewer Android\\PS4 PKG Viewer Android\\PS4 PKG Viewer Android.csproj",
+        "packagesPath": "C:\\Users\\3de Echelon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\3de Echelon\\source\\repos\\PS4 PKG Viewer Android\\PS4 PKG Viewer Android\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\3de Echelon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "monoandroid11.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "monoandroid11.0": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "monoandroid11.0": {
+          "dependencies": {
+            "Xamarin.Android.Support.Core.Utils": {
+              "target": "Package",
+              "version": "[28.0.0.3, )"
+            },
+            "Xamarin.Android.Support.CustomTabs": {
+              "target": "Package",
+              "version": "[28.0.0.3, )"
+            },
+            "Xamarin.Android.Support.Design": {
+              "target": "Package",
+              "version": "[28.0.0.3, )"
+            },
+            "Xamarin.AndroidX.Legacy.Support.Core.UI": {
+              "target": "Package",
+              "version": "[1.0.0.5, )"
+            },
+            "Xamarin.AndroidX.Lifecycle.LiveData": {
+              "target": "Package",
+              "version": "[2.2.0.3, )"
+            },
+            "Xamarin.Essentials": {
+              "target": "Package",
+              "version": "[1.6.1, )"
+            },
+            "Xamarin.Google.Android.Material": {
+              "target": "Package",
+              "version": "[1.1.0.5-rc3, )"
+            }
+          }
+        }
+      }
+    }
+  }
+}

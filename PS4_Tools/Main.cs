@@ -55,11 +55,13 @@ using PS4_Tools.Util;
 
 #region << Unity Engine >>
 
-#if UNITY_EDITOR || UNITY_PS4 || PS4_UNITY || DEBUG
+#if UNITY_EDITOR || UNITY_PS4 || PS4_UNITY || DEBUG != Android_Mono
 
 using UnityEngine;
 
 #endif
+
+
 using System.Runtime.InteropServices;
 
 #endregion << Unity Engine >>
@@ -257,6 +259,38 @@ namespace PS4_Tools
                 byte[] array;
 
                 using (Stream stream = new FileStream(at9file, FileMode.Open, FileAccess.Read))
+                using (BinaryReader read = new BinaryReader(stream))
+                {
+                    At9Reader reader = new At9Reader();
+                    At9Structure structure = reader.ReadFile(stream);
+                    IAudioFormat format = new Atrac9FormatBuilder(structure.AudioData, structure.Config, structure.SampleCount, structure.EncoderDelay)
+                .WithLoop(structure.Looping, structure.LoopStart, structure.LoopEnd)
+                .Build();
+                    //now we have the atrac9 format now we need to play it somehow
+                    AudioData AudioData = new AudioData(format);
+                    MemoryStream SongStream = new MemoryStream(0);
+                    AudioInfo.Containers[FileType.Wave].GetWriter().WriteToStream(AudioData, SongStream, null);
+
+#if DEBUG
+                    /*Uncomment this if you need to test but this definitely works*/
+                    //System.IO.File.WriteAllBytes(at9file + ".wav", SongStream.ToArray());
+
+#endif
+
+                    array = SongStream.ToArray();
+
+
+
+                }
+                return array;
+            }
+
+            public static byte[] LoadAt9(byte[] at9file)
+            {
+                //Byte array holder for return vars
+                byte[] array;
+
+                using (Stream stream = new MemoryStream(at9file))
                 using (BinaryReader read = new BinaryReader(stream))
                 {
                     At9Reader reader = new At9Reader();
@@ -551,7 +585,7 @@ namespace PS4_Tools
             public class PS4
             {
 
-#if PS4_UNITY || DEBUG
+#if PS4_UNITY || DEBUG != Android_Mono
 
                 /// <summary>
                 /// Still not ready for release
@@ -4149,7 +4183,7 @@ namespace PS4_Tools
         private bool Readbytes = true; //Bool Read Bytes
 
         TrophyHeader trphy = new TrophyHeader(); //Trophy Header Object
-
+        public TROPHY.TROPCONF trophyconf = null;
         /// <summary>
         /// How Many Files Are In The Trophy File
         /// </summary>
@@ -4214,7 +4248,59 @@ namespace PS4_Tools
             public long Size;
             /*Total Bytes*/
             public byte[] TotalBytes;
+            /*Decrypted Trophy Conf*/
+            public Trophyconf trophyconf;
         }
+
+        [XmlRoot(ElementName = "parental-level")]
+        public class Parentallevel
+        {
+            [XmlAttribute(AttributeName = "license-area")]
+            public string Licensearea { get; set; }
+            [XmlText]
+            public string Text { get; set; }
+        }
+
+        [XmlRoot(ElementName = "trophy")]
+        public class Trophy
+        {
+            [XmlElement(ElementName = "name")]
+            public string Name { get; set; }
+            [XmlElement(ElementName = "detail")]
+            public string Detail { get; set; }
+            [XmlAttribute(AttributeName = "id")]
+            public string Id { get; set; }
+            [XmlAttribute(AttributeName = "hidden")]
+            public string Hidden { get; set; }
+            [XmlAttribute(AttributeName = "ttype")]
+            public string Ttype { get; set; }
+            [XmlAttribute(AttributeName = "pid")]
+            public string Pid { get; set; }
+        }
+
+        [XmlRoot(ElementName = "trophyconf")]
+        public class Trophyconf
+        {
+            [XmlElement(ElementName = "npcommid")]
+            public string Npcommid { get; set; }
+            [XmlElement(ElementName = "trophyset-version")]
+            public string Trophysetversion { get; set; }
+            [XmlElement(ElementName = "parental-level")]
+            public Parentallevel Parentallevel { get; set; }
+            [XmlElement(ElementName = "title-name")]
+            public string Titlename { get; set; }
+            [XmlElement(ElementName = "title-detail")]
+            public string Titledetail { get; set; }
+            [XmlElement(ElementName = "trophy")]
+            public List<Trophy> Trophy { get; set; }
+            [XmlAttribute(AttributeName = "version")]
+            public string Version { get; set; }
+            [XmlAttribute(AttributeName = "platform")]
+            public string Platform { get; set; }
+            [XmlAttribute(AttributeName = "policy")]
+            public string Policy { get; set; }
+        }
+
 
         /*Trophy Files have multiple Items*/
         public List<TrophyItem> trophyItemList = new List<TrophyItem>();
@@ -4377,7 +4463,7 @@ namespace PS4_Tools
             //MessageBox.Show(this._error, "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
-        public Trophy_File Load(byte[] bytes)
+        public Trophy_File Load(byte[] bytes, string NPComId = "")
         {
             Trophy_File rtn = new Trophy_File();
             try
@@ -4407,8 +4493,46 @@ namespace PS4_Tools
             rtn.SHA1 = SHA1;
             rtn.trphy = trphy;
             rtn.trophyItemList = trophyItemList;
+            if (!string.IsNullOrEmpty(NPComId))
+            {
+                for (int i = 0; i < rtn.trophyItemList.Count; i++)
+                {
+                    //decrypt all the bytes 
+                    if (!NPComId.Contains("_00"))
+                    {
+                        NPComId = NPComId + "_00";
+                    }
+                    var itembytes = rtn.ExtractFileToMemory(rtn.trophyItemList[i].Name);
+                    byte[] itemcontainer = null;
+                    try
+                    {
+
+                        itemcontainer = ESFM.LoadAndDecrypt(itembytes, NPComId);
+                        File.WriteAllBytes(@"C:\temp\test.sfm", itemcontainer);
+                        //XmlDocument doc = new XmlDocument();
+                        string xml = Encoding.Default.GetString(itemcontainer);
+                        //File.WriteAllText("C:\\TEMP\\test.xml",xml);
+                        //doc.LoadXml(xml);
+                        //from here deserialize
+                        //File.WriteAllBytes("C:\\TEMP\\test.xml", itemcontainer);
+                        XmlSerializer serializer = new XmlSerializer(typeof(Trophyconf));
+                        using (TextReader reader = new StringReader(xml))
+                        {
+                            rtn.trophyItemList[i].trophyconf=(Trophyconf)serializer.Deserialize(reader);
+                        }
+
+                    }
+                    catch(Exception ex)
+                    {
+
+                    }
+                }
+            }
+
             return rtn;
         }
+
+
 
         public static byte[] ReadFully(Stream input)
         {
@@ -4801,6 +4925,11 @@ namespace PS4_Tools
                 IO.Seek(0, SeekOrigin.Begin);
 
                 string np_comm_id = NpCommId.PadRight(16, '\0');
+                //keygen_riv = new byte[16] { 0xE3, 0x5F, 0xCB, 0xCA, 0xF6, 0xE1, 0xA3, 0xCE, 0x96, 0x75, 0x10, 0xFA, 0x79, 0x08, 0x6F, 0x9D };
+                //keygen_riv = new byte[16] { 0x7A, 0x4A, 0xDD, 0x7D, 0x39, 0x11, 0x07, 0x5F, 0xCE, 0x12, 0x2A, 0xDD, 0x1A, 0xCB, 0x79, 0x6F};
+                //keygen_riv = new byte[16] { 0x9A, 0xEC, 0xC9, 0xDC, 0xD9, 0xC5, 0x2B, 0x89, 0x0D, 0x8D, 0x9F, 0xB1, 0xFB, 0x56, 0x26, 0x0E };
+                //keygen_riv = new byte[16] { 0x65, 0x9A, 0x82, 0x19, 0x27, 0xCF, 0xD6, 0x2F, 0x0C, 0x1C, 0xC2, 0x5F, 0xAF, 0x67, 0x96, 0x5B };
+                //keygen_riv = new byte[16] { 0x4C, 0x49, 0xDC, 0x8D, 0xF6, 0xA2, 0x0E, 0x15, 0x92, 0xF9, 0xE9, 0xF7, 0x44, 0x2B, 0x42, 0x61, };
                 data_erk = aes_encrypt_cbc(PS4Keys.ShellCore_Keys.Retail.Trophy.Trophy_Key, keygen_riv, np_comm_id);
                 Stream basestream = IO.BaseStream;
                 data_riv = Util.StreamExtensions.ReadBytes(basestream, 16);
@@ -5773,15 +5902,15 @@ namespace PS4_Tools
             DataTable dttemp = SQLLite.SqlHelper.GetDataTable(SQL, cs);
             for (int i = 0; i < dttemp.Rows.Count; i++)
             {
-                string Update = @"UPDATE "+dttemp.Rows[i][0].ToString()+@"
+                string Update = @"UPDATE " + dttemp.Rows[i][0].ToString() + @"
 SET visible = 0
-Where titleId = '"+TitleID+"'";
+Where titleId = '" + TitleID + "'";
                 SQLLite.SqlHelper.ExecuteNonQueryBL1(Update, cs);
             }
 
         }
 
-        public static void UnlockGame(string TitleID,string dbFileLocation = @"C:\Publish\Sony\app.db")
+        public static void UnlockGame(string TitleID, string dbFileLocation = @"C:\Publish\Sony\app.db")
         {
             Console.WriteLine("Create connection to app.db...");
             //SQLiteConnection con = new SQLiteConnection();
@@ -6193,7 +6322,7 @@ Where titleId = '" + TitleID + "'";
                     try
                     {
                         pages++;
-                        currentdownload = currentdownload + client.DownloadString(new Uri("https://store.playstation.com/" + Region + "/grid/" + NPTitle + "_00" + "/" + pages + "?relationship=add-ons"));
+                        currentdownload = currentdownload + client.DownloadString(new Uri("https://store.playstation.com/" + Region + "/grid/" + NPTitle + "_00" + "/" + pages + "?PlatformPrivacyWs1=all&gameContentType=addons&psappver=20.0.0scope=sceapp&smcid=psapp"));
                         DownloadRecersivly(currentdownload, pages, client, Region, NPTitle);
                     }
                     catch (Exception ex)
@@ -6297,7 +6426,7 @@ Where titleId = '" + TitleID + "'";
                 client.Headers.Add("Accept-Language", "en-US");
                 client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64)");
                 client.Headers.Add("Referer", "https://store.playstation.com/");
-
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
                 string Region = "";
                 int Page = 1;
                 string Regionstr = NPTitle.Substring(1, 1);
@@ -6317,7 +6446,7 @@ Where titleId = '" + TitleID + "'";
                         break;
                 }
 
-                string download = client.DownloadString(new Uri("https://store.playstation.com/" + Region + "/grid/" + NPTitle + "_00" + "/" + Page + "?relationship=add-ons"));
+                string download = client.DownloadString(new Uri("https://store.playstation.com/" + Region + "/grid/" + NPTitle + "_00" + "/" + Page + "?PlatformPrivacyWs1=all&gameContentType=addons&psappver=20.0.0scope=sceapp&smcid=psapp"));
 
                 string downloadholder = "";
 
@@ -6762,7 +6891,7 @@ Where titleId = '" + TitleID + "'";
 
                 public NP_Title()
                 {
-                    
+
                 }
                 //Read NP_Title
                 public NP_Title(byte[] filebytes)
@@ -6983,6 +7112,8 @@ Where titleId = '" + TitleID + "'";
             private static byte[] icon_byte;
             private static byte[] pic_byte;
             private static byte[] trp_byte;
+            private static byte[] snd_byte;
+           
             private static bool m_error;
             private static byte[] image_byte;
             public enum PKGType
@@ -7064,6 +7195,9 @@ Where titleId = '" + TitleID + "'";
                 /// PS4 Icon Image
                 /// </summary>
                 public byte[] Icon { get; set; }
+                public byte[] Background { get; set; }
+
+                public byte[] Sound { get; set; }
 
                 /*PKG State (Fake ? Offcial */
 
@@ -7091,6 +7225,40 @@ Where titleId = '" + TitleID + "'";
                     get
                     {
                         return Header.pkg_content_id;
+                    }
+                }
+                public string Firmware_Version
+                {
+                    get
+                    {
+                        try
+                        {
+                            for (int i = 0; i < Param.Tables.Count; i++)
+                            {
+                                if (Param.Tables[i].Name == "SYSTEM_VER")
+                                {
+                                    var tmp = Param.Tables[i].Value.ToString();
+                                    // var holder = tmp.;
+                                    int dec = 0;
+                                    int.TryParse(tmp, out dec);
+                                    var myNumber = dec.ToString("X"); //string.Format("{ 0:x}", dec);
+                                    if (myNumber.Length % 2 == 1)
+                                        myNumber = myNumber.Insert(0, "0");
+                                    myNumber = myNumber.Insert(2, ".");
+                                    return myNumber.Substring(0, 5);
+
+
+
+                                    //dec.ToString("X");
+                                }
+
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+                        return "Unknown";
                     }
                 }
 
@@ -7314,6 +7482,7 @@ Where titleId = '" + TitleID + "'";
             /// <param name="pkgfile"></param>
             public static void ExtarctPKG(string pkgfile)
             {
+                KeysEntry entrykeys = null;
                 StringBuilder stringBuilder = new StringBuilder();
                 using (BinaryReader binaryReader = new BinaryReader(File.OpenRead(pkgfile)))
                 {
@@ -7367,38 +7536,60 @@ Where titleId = '" + TitleID + "'";
                             bool is_encrypted = entry[i].is_encrypted;
                             if (is_encrypted)
                             {
-                                //testing image key stuff here
-                                if (entry[i].CustomName == PS4PkgUtil.EntryId.IMAGE_KEY.ToString())
+                                if (entry[i].key_index == 3)
                                 {
-                                    //var file_data = PS4PkgUtil.Decrypt(entry[i].file_data,entry[i].);
-                                    //string CustomName = entry[i].CustomName;
-                                    //var lastComma = CustomName.LastIndexOf('_');
-                                    //if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
+                                    var totalEntrySize = entry[i].is_encrypted ? (entry[i].size + 15) & ~15 : entry[i].size;
 
-                                    //File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
-                                }
-                                else if (entry[i].CustomName == PS4PkgUtil.EntryId.NPTITLE_DAT.ToString())
-                                {
                                     var test = "";
-                                    byte[] entry_data = new byte[64];
-                                    Array.Copy(entry[i].ToArray(), entry_data, 28);
-                                    Array.Copy(data, 0, entry_data, 28, 28);
-
-                                    byte[] iv = new byte[16];
-                                    byte[] key = new byte[16];
-                                    byte[] hash = PS4PkgUtil.Sha256(entry_data, 0, entry_data.Length);
-                                    Array.Copy(hash, 0, iv, 0, 16);
-                                    Array.Copy(hash, 16, key, 0, 16);
+                                    byte[] entry_data = new byte[totalEntrySize];
                                     binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
-                                    byte[] file_data = PS4PkgUtil.DecryptAes(key, iv, binaryReader.ReadBytes((int)entry[i].size));
-                                    entry[i].file_data = file_data;
-                                    //File.WriteAllBytes(pkgfile + "_" + entry[i].CustomName, file_data);
+                                    binaryReader.Read(entry_data, 0, entry_data.Length);
+
+                                    //Array.Copy(entry[i].ToArray(), entry_data, totalEntrySize);
+                                    //Array.Copy(data, 0, entry_data, 28, 28);
+                                    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+                                    rsa.ImportParameters(new RSAParameters
+                                    {
+
+                                        P = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.P,
+                                        Q = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.Q,
+                                        Exponent = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.D,
+                                        Modulus = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.Modulus,
+                                        DP = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.DP,
+                                        DQ = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.DQ,
+                                        InverseQ = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.QP,
+                                        D = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.Private_Key
+                                    });
+                                    byte[] keySeed = rsa.Decrypt(entrykeys.Keys[3].key, false);
+                                    var iv_key = Crypto.Sha256(
+                                                 entry[i].ToArray()
+                                                 .Concat(keySeed)
+                                                 .ToArray());
+                                    var tmp = new byte[entry_data.Length];
+                                    Crypto.AesCbcCfb128Decrypt(tmp, entry_data, tmp.Length, iv_key.Skip(16).Take(16).ToArray(), iv_key.Take(16).ToArray());
+
+
+                                    entry[i].file_data = tmp;
                                     string CustomName = entry[i].CustomName;
                                     var lastComma = CustomName.LastIndexOf('_');
                                     if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
                                     File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName + "entrydata", entry_data);
-                                    File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
+                                    File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, tmp);
                                 }
+                                //testing image key stuff here
+                                //if (entry[i].CustomName == PS4PkgUtil.EntryId.IMAGE_KEY.ToString())
+                                //{
+                                //    //var file_data = PS4PkgUtil.Decrypt(entry[i].file_data,entry[i].);
+                                //    //string CustomName = entry[i].CustomName;
+                                //    //var lastComma = CustomName.LastIndexOf('_');
+                                //    //if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
+
+                                //    //File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
+                                //}
+                                //else if (entry[i].CustomName == PS4PkgUtil.EntryId.NPTITLE_DAT.ToString())
+                                //{
+
+                                //}
                                 else
                                 {
 
@@ -7425,15 +7616,38 @@ Where titleId = '" + TitleID + "'";
                             }
                             else
                             {
-                                //else it should just be a simple read
-                                binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
-                                byte[] file_data = binaryReader.ReadBytes((int)entry[i].size);
-                                entry[i].file_data = file_data;
-                                string CustomName = entry[i].CustomName;
-                                var lastComma = CustomName.LastIndexOf('_');
-                                if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
+                                if ((entry[i].CustomName == PS4PkgUtil.EntryId.ENTRY_KEYS.ToString()))
+                                {
+                                    binaryReader.BaseStream.Position = entry[i].offset;
+                                    var seedDigest = binaryReader.ReadBytes(32);
+                                    var digests = new byte[7][];
+                                    var keys = new PkgEntryKey[7];
+                                    for (var x = 0; x < 7; x++)
+                                    {
+                                        digests[x] = binaryReader.ReadBytes(32);
+                                    }
+                                    for (var x = 0; x < 7; x++)
+                                    {
+                                        keys[x] = new PkgEntryKey
+                                        {
+                                            digest = digests[x],
+                                            key = binaryReader.ReadBytes(256)
+                                        };
+                                    }
+                                    entrykeys = new KeysEntry(seedDigest, keys);
+                                }
+                                else
+                                {
+                                    //else it should just be a simple read
+                                    binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
+                                    byte[] file_data = binaryReader.ReadBytes((int)entry[i].size);
+                                    entry[i].file_data = file_data;
+                                    string CustomName = entry[i].CustomName;
+                                    var lastComma = CustomName.LastIndexOf('_');
+                                    if (lastComma != -1) CustomName = CustomName.Remove(lastComma, 1).Insert(lastComma, ".");
 
-                                File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
+                                    File.WriteAllBytes(Path.GetDirectoryName(pkgfile) + "\\Extracted\\" + CustomName, file_data);
+                                }
                             }
                         }
                         catch (Exception ex)
@@ -7452,6 +7666,9 @@ Where titleId = '" + TitleID + "'";
             /// <returns>PKG With Unprotected_PKG Structure</returns>
             public static Unprotected_PKG Read_PKG(Stream pkgfile)
             {
+                //we hold the entry keys from ENTREY_KEYS
+                KeysEntry entrykeys = null;
+
                 Unprotected_PKG pkgreturn = new Unprotected_PKG();
 
                 m_loaded = false;
@@ -7460,6 +7677,7 @@ Where titleId = '" + TitleID + "'";
                 pic_byte = null;
                 trp_byte = null;
                 image_byte = null;
+                snd_byte = null;
 
                 using (BinaryReader binaryReader = new BinaryReader(pkgfile))
                 {
@@ -7517,25 +7735,87 @@ Where titleId = '" + TitleID + "'";
                             bool is_encrypted = entry[i].is_encrypted;
                             if (is_encrypted)
                             {
-                                byte[] entry_data = new byte[64];
-                                Array.Copy(entry[i].ToArray(), entry_data, 32);
-                                Array.Copy(data, 0, entry_data, 32, 32);
-                                byte[] iv = new byte[16];
-                                byte[] key = new byte[16];
-                                byte[] hash = PS4PkgUtil.Sha256(entry_data, 0, entry_data.Length);
-                                Array.Copy(hash, 0, iv, 0, 16);
-                                Array.Copy(hash, 16, key, 0, 16);
-                                binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
-                                byte[] file_data = PS4PkgUtil.DecryptAes(key, iv, binaryReader.ReadBytes((int)entry[i].size));
-                                entry[i].file_data = file_data;
+                                if (entry[i].key_index == 3)
+                                {
+                                    var totalEntrySize = entry[i].is_encrypted ? (entry[i].size + 15) & ~15 : entry[i].size;
+
+                                    var test = "";
+                                    byte[] entry_data = new byte[totalEntrySize];
+                                    binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
+                                    binaryReader.Read(entry_data, 0, entry_data.Length);
+
+                                    //Array.Copy(entry[i].ToArray(), entry_data, totalEntrySize);
+                                    //Array.Copy(data, 0, entry_data, 28, 28);
+                                    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+                                    rsa.ImportParameters(new RSAParameters
+                                    {
+
+                                        P = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.P,
+                                        Q = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.Q,
+                                        Exponent = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.D,
+                                        Modulus = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.Modulus,
+                                        DP = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.DP,
+                                        DQ = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.DQ,
+                                        InverseQ = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.QP,
+                                        D = PS4Keys.ShellCore_Keys.Retail.RSA_PKG_Meta.Private_Key
+                                    });
+                                    byte[] keySeed = rsa.Decrypt(entrykeys.Keys[3].key, false);
+                                    var iv_key = Crypto.Sha256(
+                                                 entry[i].ToArray()
+                                                 .Concat(keySeed)
+                                                 .ToArray());
+                                    var tmp = new byte[entry_data.Length];
+                                    Crypto.AesCbcCfb128Decrypt(tmp, entry_data, tmp.Length, iv_key.Skip(16).Take(16).ToArray(), iv_key.Take(16).ToArray());
+
+
+                                    entry[i].file_data = tmp;
+
+                                }
+                                else
+                                {
+                                    byte[] entry_data = new byte[64];
+                                    Array.Copy(entry[i].ToArray(), entry_data, 32);
+                                    Array.Copy(data, 0, entry_data, 32, 32);
+                                    byte[] iv = new byte[16];
+                                    byte[] key = new byte[16];
+                                    byte[] hash = PS4PkgUtil.Sha256(entry_data, 0, entry_data.Length);
+                                    Array.Copy(hash, 0, iv, 0, 16);
+                                    Array.Copy(hash, 16, key, 0, 16);
+                                    binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
+                                    byte[] file_data = PS4PkgUtil.DecryptAes(key, iv, binaryReader.ReadBytes((int)entry[i].size));
+                                    entry[i].file_data = file_data;
+                                }
                                 // File.WriteAllBytes(pkgfile + "_" + entry[j].CustomName, file_data);
                             }
                             else
                             {
-                                //else it should just be a simple read
-                                binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
-                                byte[] file_data = binaryReader.ReadBytes((int)entry[i].size);
-                                entry[i].file_data = file_data;
+                                if ((entry[i].CustomName == PS4PkgUtil.EntryId.ENTRY_KEYS.ToString()))
+                                {
+                                    binaryReader.BaseStream.Position = entry[i].offset;
+                                    var seedDigest = binaryReader.ReadBytes(32);
+                                    var digests = new byte[7][];
+                                    var keys = new PkgEntryKey[7];
+                                    for (var x = 0; x < 7; x++)
+                                    {
+                                        digests[x] = binaryReader.ReadBytes(32);
+                                    }
+                                    for (var x = 0; x < 7; x++)
+                                    {
+                                        keys[x] = new PkgEntryKey
+                                        {
+                                            digest = digests[x],
+                                            key = binaryReader.ReadBytes(256)
+                                        };
+                                    }
+                                    entrykeys = new KeysEntry(seedDigest, keys);
+                                }
+                                else
+                                {
+                                    //else it should just be a simple read
+                                    binaryReader.BaseStream.Position = (long)((ulong)entry[i].offset);
+                                    byte[] file_data = binaryReader.ReadBytes((int)entry[i].size);
+                                    entry[i].file_data = file_data;
+                                }
                             }
                         }
                         catch (Exception ex)
@@ -7569,6 +7849,14 @@ Where titleId = '" + TitleID + "'";
                         {
                             trp_byte = entry[i].file_data;
                         }
+                        if(entry[i].CustomName == PS4PkgUtil.EntryId.SND0_AT9.ToString())
+                        {
+                            snd_byte = entry[i].file_data;
+                        }
+                        if(entry[i].CustomName == PS4PkgUtil.EntryId.PIC1_PNG.ToString())
+                        {
+                            pic_byte = entry[i].file_data;
+                        }
                     }
 
                     if (sfo_byte != null && sfo_byte.Length > 0)
@@ -7580,9 +7868,18 @@ Where titleId = '" + TitleID + "'";
                     {
                         pkgreturn.Icon = icon_byte;
                     }
+                    if (pic_byte != null && pic_byte.Length > 0)
+                    {
+                        pkgreturn.Background = pic_byte;
+                    }
+                    if (snd_byte != null && snd_byte.Length > 0)
+                    {
+                        pkgreturn.Sound = snd_byte;
+                    }
                     else if (trp_byte != null && trp_byte.Length > 0)
                     {
                         Trophy_File trpreader = new Trophy_File();
+
                         trpreader.Load(trp_byte);
                         icon_byte = trpreader.ExtractFileToMemory("ICON0.PNG");
                         if (icon_byte != null && icon_byte.Length > 0)
@@ -7599,7 +7896,13 @@ Where titleId = '" + TitleID + "'";
                     {
                         Trophy_File trpreader = new Trophy_File();
                         //trpreader.Load(trp_byte);
-                        pkgreturn.Trophy_File = trpreader.Load(trp_byte);
+                        string nptitle = "";
+                        if (pkgreturn.Param != null)
+                        {
+                            nptitle = pkgreturn.Param.TitleID;
+                        }
+                        var item = trpreader.Load(trp_byte, nptitle);
+                        pkgreturn.Trophy_File = item;
                     }
                     pkgreturn.PKGState = (pkgtype == 6666) ? PKG_State.Fake : ((pkgtype == 7747) ? PKG_State.Officail_DP : PKG_State.Official);
 

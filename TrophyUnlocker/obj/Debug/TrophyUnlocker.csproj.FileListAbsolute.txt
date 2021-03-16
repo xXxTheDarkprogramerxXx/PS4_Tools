@@ -35,3 +35,4 @@ D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\TrophyUnlock
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\TrophyUnlocker\bin\Debug\UnityEngine.xml
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\TrophyUnlocker\bin\Debug\DotNetZip.xml
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\TrophyUnlocker\bin\Debug\UnityEditor.xml
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\TrophyUnlocker\obj\Debug\TrophyUnlocker.frmSettings.resources

@@ -35,6 +35,7 @@ namespace PS4_Tools.TROPHY
                 return trophys[index];
             }
         }
+        
         public TROPCONF(string path)
         {
             this.path = path;
@@ -118,7 +119,11 @@ namespace PS4_Tools.TROPHY
             byte[] data = new byte[TROPCONFReader.Length];
             TROPCONFReader.Read(data, 0, (int)TROPCONFReader.Length);
             string xml = Encoding.UTF8.GetString(data).Trim('\0');
+
             XmlDocument xmldoc = new XmlDocument();
+            //xml = xml.TrimEnd();
+            // xml = xml.Skip(1).Take(xml.Count() - 2)
+            xml = Regex.Replace(xml, @"[^\u0020-\u007F]", String.Empty);
             xmldoc.LoadXml(CleanInvalidXmlChars(xml));
             XmlElement root = xmldoc.DocumentElement;
 
@@ -149,17 +154,32 @@ namespace PS4_Tools.TROPHY
             trophys = new List<Trophy>();
             foreach (XmlNode trophy in trophysXML)
             {
-                Trophy item = new Trophy(
-                    int.Parse(trophy.Attributes["id"].Value),
-                    trophy.Attributes["hidden"].Value,
-                    trophy.Attributes["ttype"].Value,
-                    int.Parse(trophy.Attributes["pid"].Value),"",""
-                    //trophy["name"].InnerText,
-                    //trophy["detail"].InnerText
-                    );
+                try
+                {
+                    Trophy item = new Trophy(
+                        int.Parse(trophy.Attributes["id"].Value),
+                        trophy.Attributes["hidden"].Value,
+                        trophy.Attributes["ttype"].Value,
+                        int.Parse(trophy.Attributes["pid"].Value),
+                        trophy["name"].InnerText,
+                        trophy["detail"].InnerText
+                        );
+                    trophys.Add(item);
+                }
+                catch(Exception ex)
+                {
+                    Trophy item = new Trophy(
+                        int.Parse(trophy.Attributes["id"].Value),
+                        trophy.Attributes["hidden"].Value,
+                        trophy.Attributes["ttype"].Value,
+                        int.Parse(trophy.Attributes["pid"].Value),"",""
+                        //trophy["name"].InnerText,
+                        //trophy["detail"].InnerText
+                        );
+                    trophys.Add(item);
+                }
 
-
-                trophys.Add(item);
+               
             }
 
 

@@ -674,17 +674,50 @@ namespace PS4_Tools.Util
                 BinaryWriter writer = new BinaryWriter(ms, Encoding.BigEndianUnicode);
                 //writer.Write();
                 byte[] item = BitConverter.GetBytes(this.filename_offset);
-                Array.Reverse(item);
+                //Array.Reverse(item);
+                byte[] tmp = new byte[4];
+                tmp[3] = (byte)(id & 0xFF);
+                tmp[2] = (byte)((id >> 8) & 0xFF);
+                tmp[1] = (byte)((id >> 16) & 0xFF);
+                tmp[0] = (byte)((id >> 24) & 0xFF);
+                writer.Write(tmp);
                 writer.Write(item);
-                writer.Write(this.flags1);
-                writer.Write(this.flags2);
-                writer.Write(this.offset);
-                writer.Write(this.size);
+                byte[] _flag1 = BitConverter.GetBytes(this.flags1);
+                Array.Reverse(_flag1, 0, _flag1.Length);
+                writer.Write(_flag1);
+                byte[] _flag2 = BitConverter.GetBytes(this.flags2);
+                Array.Reverse(_flag2, 0, _flag2.Length);
+                writer.Write(_flag2);
+                byte[] _offset = BitConverter.GetBytes(this.offset);
+                Array.Reverse(_offset, 0, _offset.Length);
+                writer.Write(_offset);
+                byte[] _size = BitConverter.GetBytes(this.size);
+                Array.Reverse(_size, 0, _size.Length);
+                writer.Write(_size);
                 writer.Write(this.padding);
                 writer.Close();
                 return ms.ToArray();
             }
-
+            public void Write(Stream s)
+            {
+                //s.WriteUInt32BE((uint)id);
+                //s.WriteUInt32BE(NameTableOffset);
+                //s.WriteUInt32BE(Flags1);
+                //s.WriteUInt32BE(Flags2);
+                //s.WriteUInt32BE(DataOffset);
+                //s.WriteUInt32BE(DataSize);
+                //s.Position += 8; // pad
+            }
+            public byte[] GetBytes()
+            {
+                var buf = new byte[32];
+                using (var ms = new MemoryStream(buf))
+                {
+                    BinaryWriter writer = new BinaryWriter(ms, Encoding.BigEndianUnicode);
+                    Write(ms);
+                }
+                return buf;
+            }
 
             public static byte[] RSA2048Decrypt(byte[] ciphertext)
             {

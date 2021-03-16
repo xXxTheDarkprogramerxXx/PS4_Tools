@@ -148,15 +148,56 @@ namespace Tester
         bool Playing = false;
         private void button6_Click(object sender, EventArgs e)
         {
-
             if (Playing == false)
             {
-                var bytes = PS4_Tools.Media.Atrac9.LoadAt9(@"C:\Publish\Sony\snd0.at9");
-                player = new System.Media.SoundPlayer(new MemoryStream(bytes));
-                player.Play();
+                //Open File Items
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-                button6.Text = "Stop Playing";
-                Playing = true;
+                openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                openFileDialog1.Title = "Select PS4 File";
+
+                openFileDialog1.CheckFileExists = true;
+
+                openFileDialog1.CheckPathExists = true;
+
+                openFileDialog1.Filter = "PS4 File (*.*)|*.*";
+
+                openFileDialog1.RestoreDirectory = true;
+
+                openFileDialog1.Multiselect = false;
+
+                openFileDialog1.ReadOnlyChecked = true;
+
+                openFileDialog1.ShowReadOnly = true;
+
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    var ps4filetype = PS4_Tools.Tools.Get_PS4_File_Type(openFileDialog1.FileName);
+                    //MessageBox.Show("File is a " + ps4filetype.ToString());
+                    switch (ps4filetype)
+                    {
+                        case PS4_Tools.Tools.File_Type.PARAM_SFO:
+                            var sfo = new Param_SFO.PARAM_SFO(openFileDialog1.FileName);
+                            break;
+                        case PS4_Tools.Tools.File_Type.PS4_DDS:
+                            var dd = PS4_Tools.Image.DDS.GetBytesFromDDS(openFileDialog1.FileName);
+                            break;
+                        case PS4_Tools.Tools.File_Type.PS4_PKG:
+                            var pkg = PS4_Tools.PKG.SceneRelated.Read_PKG(openFileDialog1.FileName);
+                            break;
+                        case PS4_Tools.Tools.File_Type.UpdateFile:
+                            var update = new PS4_Tools.PUP();
+                            var tempfile = update.Read_Pup(openFileDialog1.FileName);
+                            break;
+                        case PS4_Tools.Tools.File_Type.ATRAC9:
+                            var bytes = PS4_Tools.Media.Atrac9.LoadAt9(openFileDialog1.FileName);
+                            player = new System.Media.SoundPlayer(new MemoryStream(bytes));
+                            player.Play();
+                            Playing = true;
+                            break;
+                    }
+                } 
             }
             else
             {
@@ -450,7 +491,7 @@ namespace Tester
 
             openFileDialog1.CheckPathExists = true;
 
-            openFileDialog1.Filter = "PS4 Retail File (TROPHY.TRP)|TROPHY.TRP";
+            openFileDialog1.Filter = "PS4 File (*.*)|*.*";
 
             openFileDialog1.RestoreDirectory = true;
 
@@ -464,7 +505,12 @@ namespace Tester
                 PS4_Tools.Trophy_File trophy = new PS4_Tools.Trophy_File();
                 Stream stream = new FileStream(openFileDialog1.FileName, FileMode.Open, FileAccess.Read);
                 var trophyfile = trophy.Load(stream);
-
+                if(trophyfile.FileCount ==0)
+                {
+                    //might be encrypoted decrypt it 
+                   var tbitem = PS4_Tools.Trophy_File.ESFM.LoadAndDecrypt(File.ReadAllBytes(openFileDialog1.FileName), "CUSA11456_00");
+                    File.WriteAllBytes(openFileDialog1.FileName + ".decrypted", tbitem);
+                }
                 PS4_Tools.TROPHY.TROPCONF tconf;
                 PS4_Tools.TROPHY.TROPTRNS tpsn;
                 PS4_Tools.TROPHY.TROPUSR tusr;
@@ -484,6 +530,12 @@ namespace Tester
                         return;
                     }
                     NPCOMID = NPCOMID.TrimEnd();
+                }
+                if (File.Exists(Diroftrpy + @"\param.sfo"))
+                {
+                    Param_SFO.PARAM_SFO sfo = new Param_SFO.PARAM_SFO(Diroftrpy + @"\param.sfo");
+                    NPCOMID = sfo.TitleID+"_00";
+                    
                 }
                 for (int i = 0; i < trophyfile.trophyItemList.Count; i++)
                 {
@@ -505,7 +557,15 @@ namespace Tester
 
                     if (trophy.trophyItemList[i].Name == "TROPCONF.ESFM")
                     {
+
+
+                        itemcontainer = PS4_Tools.Trophy_File.ESFM.LoadAndDecrypt(itembytes, NPCOMID);
                         tconf = new PS4_Tools.TROPHY.TROPCONF(itemcontainer);
+                    }
+                    if(trophy.trophyItemList[i].Name == "TROP.ESFM")
+                    {
+                        itemcontainer = PS4_Tools.Trophy_File.ESFM.LoadAndDecrypt(itembytes, NPCOMID);
+                       var tconf2 = new PS4_Tools.TROPHY.TROPCONF(itemcontainer);
                     }
                     if (trophy.trophyItemList[i].Name == "TROPTRNS.DAT")
                     {
