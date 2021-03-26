@@ -233,8 +233,16 @@ namespace SaveData_Manager
             try
             {
                 SaveDataDisplayHolder displayitem = dataGridView1.SelectedRows[0].DataBoundItem as SaveDataDisplayHolder;
-                textBox1.Text = displayitem.Subdetail;
-                textBox2.Text = displayitem.Detail;
+                textBox2.TextAlign = HorizontalAlignment.Left;
+                textBox2.Text = "Title" + Environment.NewLine;
+                textBox2.Text += displayitem.Title + Environment.NewLine;
+                //textBox2.Text += "Title ID" + Environment.NewLine;
+                //textBox2.Text += displayitem.TitleId + Environment.NewLine;
+                //textBox2.Text += "User ID" + Environment.NewLine;
+                //textBox2.Text += displayitem.UserId + Environment.NewLine;
+                textBox2.Text += "Details" + Environment.NewLine;
+                textBox2.Text += displayitem.Subdetail;
+                textBox1.Text = displayitem.Detail;
 
                 pictureBox1.Image = displayitem.icon;
 
@@ -268,14 +276,32 @@ namespace SaveData_Manager
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LocalDB = Application.StartupPath + "//SaveManager";
-
-            if (!System.IO.Directory.Exists(LocalDB))
+            try
             {
-                System.IO.Directory.CreateDirectory(LocalDB);
+                if (string.IsNullOrEmpty(Properties.Settings.Default.BackupLocation))
+                {
+                    LocalDB = Application.StartupPath + "//SaveManager";
+
+                    if (!System.IO.Directory.Exists(LocalDB))
+                    {
+                        System.IO.Directory.CreateDirectory(LocalDB);
+                    }
+                }
+                else
+                {
+                    LocalDB = Properties.Settings.Default.BackupLocation;
+
+                    if (!System.IO.Directory.Exists(LocalDB))
+                    {
+                        System.IO.Directory.CreateDirectory(LocalDB);
+                    }
+                }
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Could not load local save location resetting to default", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-
+            }
         }
 
         private void saveToLocalToolStripMenuItem_Click(object sender, EventArgs e)
@@ -292,6 +318,17 @@ namespace SaveData_Manager
             //Open Local Data
             SaveDataDisplayHolder holderitem = dataGridView1.SelectedRows[0].DataBoundItem as SaveDataDisplayHolder;
             //File.Open()
+            string path = LocalDB + @"\" + holderitem.dataholder.DirName;
+            if (Directory.Exists(path))
+            {
+                System.Diagnostics.Process.Start(path);
+            }
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            frmSettings set = new frmSettings();
+            set.ShowDialog();
         }
     }
 }

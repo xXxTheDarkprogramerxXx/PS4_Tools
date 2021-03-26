@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.txtRCOPath = new System.Windows.Forms.TextBox();
             this.btnRCO = new System.Windows.Forms.Button();
@@ -36,6 +38,8 @@
             this.btnResourceDir = new System.Windows.Forms.Button();
             this.btnDump = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -97,9 +101,12 @@
             this.btnDump.TabIndex = 6;
             this.btnDump.Text = "DUMP";
             this.btnDump.UseVisualStyleBackColor = true;
+            this.btnDump.Click += new System.EventHandler(this.btnDump_Click);
             // 
             // listBox1
             // 
+            this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.HorizontalScrollbar = true;
             this.listBox1.ItemHeight = 16;
@@ -108,12 +115,32 @@
             this.listBox1.Size = new System.Drawing.Size(211, 180);
             this.listBox1.TabIndex = 7;
             // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "baseline_source_black_48dp.png");
+            this.imageList1.Images.SetKeyName(1, "baseline_save_alt_black_48dp.png");
+            this.imageList1.Images.SetKeyName(2, "baseline_insert_drive_file_black_48dp.png");
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.Location = new System.Drawing.Point(245, 159);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(460, 180);
+            this.richTextBox1.TabIndex = 8;
+            this.richTextBox1.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(722, 361);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.btnDump);
             this.Controls.Add(this.btnResourceDir);
@@ -141,6 +168,8 @@
         private System.Windows.Forms.Button btnResourceDir;
         private System.Windows.Forms.Button btnDump;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 

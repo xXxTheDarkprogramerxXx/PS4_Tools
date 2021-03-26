@@ -2930,7 +2930,1160 @@ namespace PS4_Tools
             }
         }
 
+        private static string fileExtensionFromType(string type)
+        {
+            if (type == "texture/jpg")
+            {
+                return "jpg";
+            }
+            if (type == "texture/tif")
+            {
+                return "tif";
+            }
+            if (type == "texture/gif")
+            {
+                return "gif";
+            }
+            if (type == "texture/gxt")
+            {
+                return "gxt";
+            }
+            if (type == "texture/gim")
+            {
+                return "gim";
+            }
+            if (type == "texture/png")
+            {
+                return "png";
+            }
+            // Some PS4 RCOs have just png and not texture/png
+            if (type == "png")
+            {
+                return "png";
+            }
+            if (type == "texture/dds")
+            {
+                return "dds";
+            }
+            if (type == "sound/vag")
+            {
+                return "vag";
+            }
+            if (type == "sound/wav")
+            {
+                return "wav";
+            }
+            if (type == "sound/mp3")
+            {
+                return "mp3";
+            }
+            if (type == "sound/at3")
+            {
+                return "at3";
+            }
+            if (type == "sound/aac")
+            {
+                return "aac";
+            }
+            return "bin";
+        }
 
+        private static string typeToString(ATTRIBUTE_TYPE type)
+        {
+            switch (type)
+            {
+                case ATTRIBUTE_TYPE.Char:
+                    return "CHAR";
+                case ATTRIBUTE_TYPE.DATA:
+                    return "DATA";
+                case ATTRIBUTE_TYPE.Float:
+                    return "FLOAT";
+                case ATTRIBUTE_TYPE.FLOAT_ARRAY:
+                    return "FLOAT_ARRAY";
+                case ATTRIBUTE_TYPE.ID_INT:
+                    return "ID_INT";
+                case ATTRIBUTE_TYPE.ID_INT_LPB:
+                    return "ID_INT_LPB";
+                case ATTRIBUTE_TYPE.ID_STR_LPB:
+                    return "ID_STR_LPB";
+                case ATTRIBUTE_TYPE.ID_STR:
+                    return "ID_STR";
+                case ATTRIBUTE_TYPE.INTEGER:
+                    return "INTEGER";
+                case ATTRIBUTE_TYPE.INTEGER_ARRAY:
+                    return "INTEGER_ARRAY";
+                case ATTRIBUTE_TYPE.NONE:
+                    return "NONE";
+                case ATTRIBUTE_TYPE.STRING:
+                    return "STRING";
+                case ATTRIBUTE_TYPE.STYLE_ID:
+                    return "STYLE_ID";
+            }
+
+            return "NO KNOWN TYPE";
+        }
+
+        private static string getStringTableString(ref string s, RCOFileHeader rcohead, BinaryReader br, uint offset, uint len)
+        {
+            byte[] buf = new byte[len * 2];
+            //memset(buf, 0, len + 1);
+            //memcpy(buf, mBuffer + mHeader.strings_start_off + offset, sizeof(char) * len);
+            br.BaseStream.Position = (int)(rcohead.String_Table_Offset + offset);
+            br.Read(buf, 0, (int)(sizeof(char) * len));
+            string result = System.Text.Encoding.UTF8.GetString(buf);
+            result = result.Split('\0')[0];
+            s = result;
+            return s;
+            //return NO_ERROR;
+        }
+
+
+
+        private static void getEntireStringTableString(RCOFileHeader rcohead, BinaryReader br)
+        {
+            byte[] buffer = new byte[256];
+            br.BaseStream.Position = (int)(rcohead.String_Table_Offset);
+            br.Read(buffer, 0, 256);//read the whole table
+            string result = System.Text.Encoding.UTF8.GetString(buffer);
+            result = result.Split('\0')[0];
+            //s = result;
+        }
+
+        private static bool getStringTableString(ref string s, RCOFileHeader rcohead, BinaryReader br, uint offset)
+        {
+            byte[] buffer = new byte[256];
+            //C++ TO C# CONVERTER TODO TASK: The memory management function 'memset' has no equivalent in C#:
+            //memset(buf, 0, 256);
+
+            //C++ TO C# CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in C#:
+            // memcpy(buf, mBuffer + mHeader.strings_start_off + offset, 255 * sizeof(ATTRIBUTE_TYPE));
+            br.BaseStream.Position = (int)(rcohead.String_Table_Offset + offset);
+            //string result = br.ReadString();
+            var chars = br.ReadChars(256);
+            var tmp = new string(chars);
+            br.BaseStream.Position = (int)(rcohead.String_Table_Offset + offset);
+            br.Read(buffer, 0, 256);//read the whole table
+            string result = System.Text.Encoding.UTF8.GetString(buffer);
+            result = result.Split('\0')[0];
+            s = result;
+            return true;
+        }
+
+        private static void getCharTableChar(ref string s, uint offset, uint len, RCOFileHeader rcohead, BinaryReader br)
+        {
+            byte[] buf = new byte[len + 2];
+
+            //memcpy(buf, mBuffer + mHeader.char_start_off + (offset * 2), len);
+
+
+            br.BaseStream.Position = (long)(rcohead.Char_Table_Offset + (offset * 2));
+            br.ReadBytes((int)len);
+            string result = System.Text.Encoding.UTF8.GetString(buf);
+            s = result;
+
+
+        }
+
+        private static void getIdStringString(ref string s, uint offset, RCOFileHeader rcohead, BinaryReader br, bool loopback = false)
+        {
+
+            byte[] buffer = new byte[256];
+            uint loopback_val;
+
+
+            //memcpy(&loopback_val, mBuffer + mHeader.id_str_start_off + offset, sizeof(uint32_t));
+
+            //memset(buf, 0, 256);
+
+            //memcpy(buf, mBuffer + mHeader.id_str_start_off + offset + sizeof(uint32_t), 255 * sizeof(char));
+
+
+            br.BaseStream.Position = (int)(rcohead.ID_String_Table_Offset + offset);
+            loopback_val = br.ReadUInt32();//check looback ?
+
+            br.BaseStream.Position = (int)(rcohead.ID_String_Table_Offset + offset + sizeof(uint));
+            br.Read(buffer, 0, 256);//read the whole table
+            string result = System.Text.Encoding.UTF8.GetString(buffer);
+            result = result.Split('\0')[0];
+            s = result;
+
+            //s = buf.ToString();
+
+
+
+            return;
+        }
+
+        private static void getStyleId(ref string s, uint offset, RCOFileHeader rcohead, BinaryReader br)
+        {
+            uint styleid;
+
+            //memcpy(&styleid, mBuffer + mHeader.styles_off + offset * sizeof(uint32_t), sizeof(uint32_t));
+            br.BaseStream.Position = (long)(rcohead.Styles_ID_Intiger_Table_Offset + offset + sizeof(uint));
+            styleid = br.ReadUInt32();
+            //char buf[256];
+            //snprintf(buf, 256, "%x", styleid);
+
+            s = styleid.ToString("X");
+            //s = buf;
+
+
+        }
+
+        private static void getIntArray(ref List<uint> ints, uint offset, uint len, RCOFileHeader rcohead, BinaryReader br)
+        {
+            for (int i = 0; i < len; i++)
+            {
+                uint val;
+
+                //memcpy(&val, mBuffer + mHeader.ints_arr_off + (offset * sizeof(uint32_t)) + i * sizeof(uint32_t), sizeof(uint32_t));
+                br.BaseStream.Position = (long)((long)rcohead.Intiger_Array_Table_Offset + (offset * sizeof(uint)) + i * sizeof(uint));
+                val = br.ReadUInt32();
+                ints.Add(val);
+            }
+
+
+        }
+
+        private static void getFloatArray(ref List<float> floats, uint offset, uint len, RCOFileHeader rcohead, BinaryReader br)
+        {
+            for (int i = 0; i < len; i++)
+            {
+                float val;
+
+                //memcpy(&val, mBuffer + mHeader.float_arr_off + (offset * sizeof(float)) + i * sizeof(float), sizeof(float));
+                br.BaseStream.Position = (long)((long)rcohead.Float_Array_Table_Offset + (offset * sizeof(float)) + i * sizeof(float));
+                val = br.ReadSingle();
+                floats.Add(val);
+            }
+
+        }
+
+        private static void getIdIntInt(ref uint i, uint offset, RCOFileHeader rcohead, BinaryReader br)
+        {
+            uint loopback;
+
+            //memcpy(&loopback, mBuffer + mHeader.id_int_start_off + offset, sizeof(uint32_t));
+            br.BaseStream.Position = (long)rcohead.ID_Integer_Table_Offset + offset;
+            br.ReadUInt32();
+
+            // memcpy(&i, mBuffer + mHeader.id_int_start_off + offset + sizeof(uint32_t), sizeof(uint32_t));
+            br.BaseStream.Position = (long)rcohead.ID_Integer_Table_Offset + offset + sizeof(uint);//you dont need to do this but for the sake of keeping things as close as possible i did
+            i = br.ReadUInt32();
+        }
+
+        private static void getFileData(byte[] filedata, ref uint outlen, uint offset, uint size, bool isCompressed, uint originalSize, RCOFileHeader rcohead, BinaryReader br)
+        {
+            filedata = new byte[size];
+
+            byte[] fdata = filedata;
+            outlen = size;
+
+            //memcpy(fdata, mBuffer + mHeader.file_table_off + offset, size * sizeof(uint8_t));
+
+            br.BaseStream.Position = (long)rcohead.File_Table_Offset + offset;
+            fdata = br.ReadBytes((int)size * sizeof(byte));
+
+
+            if (isCompressed)
+            {
+                if (originalSize <= 0)
+                    return;
+
+                Console.WriteLine("Found a compressed file ZLIB still needs to be intoduced here");
+                //byte[] deflated = new byte[originalSize];
+
+                //uint destlen = originalSize;//1024 * 1024 * 10;
+
+                //uncompress(deflated, &destlen, fdata, size);
+
+                //uint8_t* deflated_final = new uint8_t[destlen];
+                //memcpy(deflated_final, deflated, destlen);
+
+                //*filedata = deflated_final;
+                //outlen = destlen;
+
+                //delete[] deflated;
+                //delete[] fdata;
+            }
+
+            return;
+
+        }
+
+        public class string_data_raw
+        {
+            public int offset = new int();
+            public int len = new int();
+        }
+        public class char_data_raw
+        {
+            public int offset = new int();
+            public int len = new int();
+        }
+        public class int_array_data_raw
+        {
+            public int offset = new int();
+            public int num = new int();
+        }
+        public class float_array_data_raw
+        {
+            public int offset = new int();
+            public int num = new int();
+        }
+        public class file_data_raw
+        {
+            public int offset = new int();
+            public int size = new int();
+        }
+        public class id_string_table_data_raw
+        {
+            public int offset = new int();
+            public bool loopback = new bool(); // still not sure what this means
+        }
+        public class id_int_table_data_raw
+        {
+            public int offset = new int();
+            public bool loopback = new bool();
+        }
+
+        public class LayoutFile
+        {
+            public enum ProgressBarType
+            {
+                BarNormal,
+                BarAnimation,
+                BarRigid
+            }
+
+            public enum ScrollBarVisibility
+            {
+                Visible,
+                ScrollableVisible,
+                ScrollingVisible,
+                Invisible
+            }
+
+            public enum GridListScrollOrientation
+            {
+                GridHorizontal,
+                GridVertical
+            }
+
+            public enum ImageScaleType
+            {
+                ScaleCenter = 0,
+                ScaleStretch,
+                ScaleAspectInside,
+                ScaleAspectOutside,
+                ScaleNinePatch
+            }
+
+            public enum Type
+            {
+                SceneType,
+                DialogType,
+                PanelType,
+                ListPanelItemType,
+                Unknown
+            }
+
+            public enum Anchor
+            {
+                AnchorNone = 0,
+                AnchorTop = 1,
+                AnchorBottom = 2,
+                AnchorHeight = 4,
+                AnchorLeft = 16,
+                AnchorRight = 32,
+                AnchorWidth = 64
+            }
+
+            public enum HorizontalAlignment
+            {
+                HAlignLeft = 0,
+                HAlignCenter,
+                HAlignRight,
+            }
+
+            public enum VerticalAlignment
+            {
+                VAlignTop = 0,
+                VAlignBottom,
+                VAlignCenter
+            }
+
+            public enum TextTrimming
+            {
+                TrimNone = 0,
+                TrimCharacter,
+                TrimWord,
+                TrimEllipsisCharacter,
+                TrimEllipsisWord,
+                TrimMarquee,
+                TrimRoundMarquee
+            }
+
+            public enum LineBreak
+            {
+                BreakCharacter = 0,
+                BreakWord,
+                BreakBreakableSymbol,
+                BreakAtCode
+            }
+
+            public class Transform
+            {
+                public ATTRIBUTE_TYPE transX;
+                public ATTRIBUTE_TYPE transY;
+                public ATTRIBUTE_TYPE transZ;
+                public ATTRIBUTE_TYPE scaleX;
+                public ATTRIBUTE_TYPE scaleY;
+                public ATTRIBUTE_TYPE scaleZ;
+                public ATTRIBUTE_TYPE angleX;
+                public ATTRIBUTE_TYPE angleY;
+                public ATTRIBUTE_TYPE angleZ;
+
+                
+                //public static int read(byte[] buf, Transform @out)
+                //{
+                //    buf += Util.readFloat32(new uint8_t(buf), ref @out.transX);
+                //    buf += Util.readFloat32(new uint8_t(buf), ref @out.transY);
+                //    buf += Util.readFloat32(new uint8_t(buf), ref @out.transZ);
+
+                //    buf += Util.readFloat32(new uint8_t(buf), ref @out.scaleX);
+                //    buf += Util.readFloat32(new uint8_t(buf), ref @out.scaleY);
+                //    buf += Util.readFloat32(new uint8_t(buf), ref @out.scaleZ);
+
+                //    buf += Util.readFloat32(new uint8_t(buf), ref @out.angleX);
+                //    buf += Util.readFloat32(new uint8_t(buf), ref @out.angleY);
+                //    buf += Util.readFloat32(new uint8_t(buf), ref @out.angleZ);
+
+                //    return sizeof(float) * 9;
+                //}
+                
+                //public string writeXmlAttribute()
+                //{
+                //    std::stringstream str = new std::stringstream();
+
+                //    str << transX << ",";
+                //    str << transY << ",";
+                //    str << transZ << ",";
+
+                //    str << scaleX << ",";
+                //    str << scaleY << ",";
+                //    str << scaleZ << ",";
+
+                //    str << angleX << ",";
+                //    str << angleY << ",";
+                //    str << angleZ;
+
+                //    return str.str();
+                //}
+            }
+
+        }
+
+        public class rco_tree_table_element_attribute_raw
+        {
+            public uint string_offset = new uint();
+            public uint type = new uint();
+            public uint i = new uint();
+            public float f = new float();
+            public string_data_raw s = new string_data_raw();
+            public char_data_raw c = new char_data_raw();
+            public int_array_data_raw ia = new int_array_data_raw();
+            public float_array_data_raw fa = new float_array_data_raw();
+            public file_data_raw file = new file_data_raw();
+            public id_string_table_data_raw id = new id_string_table_data_raw();
+            public id_int_table_data_raw idref = new id_int_table_data_raw();
+        }
+        public static decimal ToDecimal(byte[] bytes)
+        {
+            int[] bits = new int[4];
+            bits[0] = ((bytes[0] | (bytes[1] << 8)) | (bytes[2] << 0x10)) | (bytes[3] << 0x18); //lo
+            bits[1] = ((bytes[4] | (bytes[5] << 8)) | (bytes[6] << 0x10)) | (bytes[7] << 0x18); //mid
+            bits[2] = ((bytes[8] | (bytes[9] << 8)) | (bytes[10] << 0x10)) | (bytes[11] << 0x18); //hi
+            bits[3] = ((bytes[12] | (bytes[13] << 8)) | (bytes[14] << 0x10)) | (bytes[15] << 0x18); //flags
+
+            return new decimal(bits);
+        }
+        private static bool loadAttributes(RCOElement el, uint offset, uint count, RCOFileHeader header, BinaryReader br, bool mainloader = false)
+        {
+            List<RCOAttribute> attributes = el.attributes;
+
+            rco_tree_table_element_attribute_raw[] raw_attr = new rco_tree_table_element_attribute_raw[count];
+            //memcpy(raw_attr, mBuffer + offset, sizeof(rco_tree_table_element_attribute_raw) * count);
+            //br.Read()
+            br.BaseStream.Position = offset;//read from here
+            for (int i = 0; i < raw_attr.Length; i++)
+            {
+                raw_attr[i] = new rco_tree_table_element_attribute_raw();
+                raw_attr[i].string_offset = br.ReadUInt32();
+                raw_attr[i].type = br.ReadUInt32();
+
+                //from here we need to decide what to do about this 
+                //we don't have a union so we need to decide how this is managed
+                var type = (ATTRIBUTE_TYPE)raw_attr[i].type;
+                switch (type)
+                {
+                    case ATTRIBUTE_TYPE.Float:
+                        raw_attr[i].f = br.ReadSingle();//should read the float       
+                        br.ReadBytes(0x04);//read an empty value
+                        break;
+                    case ATTRIBUTE_TYPE.INTEGER:
+                        raw_attr[i].i = br.ReadUInt32();//should read the float       
+                        br.ReadBytes(0x04);//read an empty value
+                        break;
+                    case ATTRIBUTE_TYPE.STRING:
+                    case ATTRIBUTE_TYPE.STYLE_ID:
+                        string_data_raw s = new string_data_raw();
+                        s.offset = br.ReadInt32();
+                        s.len = br.ReadInt32();
+                        raw_attr[i].s = s;
+                        break;
+                    case ATTRIBUTE_TYPE.Char:
+                        char_data_raw c = new char_data_raw();
+                        c.offset = br.ReadInt32();
+                        c.len = br.ReadInt32();
+                        raw_attr[i].c = c;
+                        break;
+                    case ATTRIBUTE_TYPE.INTEGER_ARRAY:
+                        int_array_data_raw ia = new int_array_data_raw();
+                        ia.offset = br.ReadInt32();
+                        ia.num = br.ReadInt32();
+                        raw_attr[i].ia = ia;
+                        break;
+                    case ATTRIBUTE_TYPE.FLOAT_ARRAY:
+                        float_array_data_raw fa = new float_array_data_raw();
+                        fa.offset = br.ReadInt32();
+                        fa.num = br.ReadInt32();
+                        raw_attr[i].fa = fa;
+                        break;
+                    case ATTRIBUTE_TYPE.ID_STR:
+                    case ATTRIBUTE_TYPE.ID_STR_LPB:
+                        id_string_table_data_raw id1 = new id_string_table_data_raw();
+                        id1.offset = br.ReadInt32();
+                        id1.loopback = br.ReadBoolean();
+                        raw_attr[i].id = id1;
+                        break;
+                    case ATTRIBUTE_TYPE.DATA:
+                        file_data_raw file = new file_data_raw();
+                        file.offset = br.ReadInt32();
+                        file.size = br.ReadInt32();
+                        raw_attr[i].file = file;
+                        break;
+                    case ATTRIBUTE_TYPE.ID_INT:
+                    case ATTRIBUTE_TYPE.ID_INT_LPB:
+                        id_int_table_data_raw idref = new id_int_table_data_raw();
+                        idref.offset = br.ReadInt32();
+                        idref.loopback = br.ReadBoolean();
+                        raw_attr[i].idref = idref;
+                        break;
+                    default:
+                        raw_attr[i].i = br.ReadUInt32();
+                        raw_attr[i].f = br.ReadSingle();//should read the float       
+                        break;
+                }
+
+            }
+
+
+            Dictionary<int, RCOAttribute> filedata_indexes = new Dictionary<int, RCOAttribute>();
+
+            // Handle all attributes apart from files
+            for (int i = 0; i < raw_attr.Length; i++)
+            {
+                try
+                {
+                    RCOAttribute attr = new RCOAttribute();
+
+                    rco_tree_table_element_attribute_raw cur_attr = raw_attr[i];
+
+                    attr.type = (ATTRIBUTE_TYPE)cur_attr.type;
+
+                    getStringTableString(ref attr.name, header, br, (cur_attr.string_offset));
+
+
+                    bool deferred = false;
+                    try
+                    {
+                        switch (attr.type)
+                        {
+                            case ATTRIBUTE_TYPE.Char:
+                                //getCharTableChar(ref attr.c, cur_attr.c.offset, cur_attr.c.len);
+                                getCharTableChar(ref attr.c, (uint)cur_attr.c.offset, (uint)cur_attr.c.len, header, br);
+                                break;
+                            case ATTRIBUTE_TYPE.STRING:
+                                getStringTableString(ref attr.s, header, br, (uint)cur_attr.s.offset, (uint)cur_attr.s.len);
+                                break;
+                            case ATTRIBUTE_TYPE.ID_STR_LPB:
+                                getIdStringString(ref attr.idstr, (uint)cur_attr.id.offset, header, br, true);
+                                break;
+                            case ATTRIBUTE_TYPE.ID_STR:
+                                getIdStringString(ref attr.idstr, (uint)cur_attr.id.offset, header, br);
+                                break;
+                            case ATTRIBUTE_TYPE.STYLE_ID:
+                                getStyleId(ref attr.s, (uint)cur_attr.s.offset, header, br);
+                                break;
+                            case ATTRIBUTE_TYPE.Float:
+                                attr.f = cur_attr.f;
+                                break;
+                            case ATTRIBUTE_TYPE.INTEGER:
+                                attr.i = (int)cur_attr.i;
+                                break;
+                            case ATTRIBUTE_TYPE.INTEGER_ARRAY:
+                                getIntArray(ref attr.ia, (uint)cur_attr.ia.offset, (uint)cur_attr.ia.num, header, br);
+                                break;
+                            case ATTRIBUTE_TYPE.FLOAT_ARRAY:
+                                getFloatArray(ref attr.fa, (uint)cur_attr.fa.offset, (uint)cur_attr.fa.num, header, br);
+                                break;
+                            case ATTRIBUTE_TYPE.ID_INT:
+                            case ATTRIBUTE_TYPE.ID_INT_LPB:
+                                getIdIntInt(ref attr.idint, (uint)cur_attr.idref.offset, header, br);
+                                break;
+                            case ATTRIBUTE_TYPE.DATA:
+                                filedata_indexes.Add(i, attr);
+                                deferred = true;
+                                break;
+                            default:
+                                Console.Write("unhandled type: {0:D}\n", attr.type);
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                    if (attr.name == "compress" && attr.s.ToString() == "on")
+                    {
+                        el.isCompressed = true;
+                    }
+                    else if (attr.name == "origsize")
+                    {
+                        el.originalSize = (uint)attr.i;
+                    }
+
+                    if (!deferred)
+                    {
+                        attributes.Add(attr);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            // Handle files afterwards (deferred)
+            foreach (var it in filedata_indexes)
+            {
+                int index = it.Key;
+                RCOAttribute attr = it.Value;
+
+                if (attr.type == ATTRIBUTE_TYPE.DATA)
+                {
+                    getFileData(attr.file, ref attr.filelen, (uint)raw_attr[index].file.offset, (uint)raw_attr[index].file.size, el.isCompressed, el.originalSize, header, br);
+                }
+
+                attributes.Add(attr);
+            }
+
+            string path = "";
+            string ext = "";
+            string id = "";
+
+            if (el.name == "locale")
+            {
+                path = "xmls";
+                ext = "xml";
+            }
+            else if (el.name == "texture" || el.name == "override_texture")
+            {
+                path = "textures";
+            }
+            else if (el.name == "sounddata")
+            {
+                path = "sounds";
+            }
+            else if (el.name == "layout")
+            {
+                path = "layouts";
+                // Just a binary file but makes sense to give it a separate ext
+                ext = "pslayout";
+            }
+
+            foreach (RCOAttribute it in attributes)
+            {
+                if (it.name == "id")
+                {
+                    if (it.idstr != null)
+                    {
+                        id = it.idstr.ToString();
+                    }
+                    else
+                    {
+                        id = it.idint.ToString("X");
+                    }
+                }
+                if (it.name == "type")
+                {
+                    ext = RCO.fileExtensionFromType(it.s.ToString());
+                }
+            }
+
+            foreach (RCOAttribute it in attributes)
+            {
+                if (it.name == "src")
+                {
+                    string buf = "";
+                    buf = string.Format("{0}/{1}.{2}", path, id, ext);
+                    it.s = buf;
+                }
+                else if (it.name == "src_4k")
+                {
+                    string buf = "";
+                    buf = string.Format("{0}/{1}_4k.{2}", path, id, ext);
+                    it.s = buf;
+                }
+                else if (it.name == "right")
+                {
+                    string buf = "";
+                    buf = string.Format("{0}/{1}_right.{2}", path, id, ext);
+                    it.s = buf;
+                }
+                else if (it.name == "left")
+                {
+                    string buf = "";
+                    buf = string.Format("{0}/{1}_left.{2}", path, id, ext);
+                    it.s = buf;
+                }
+            }
+
+            raw_attr = null;
+
+            return true;
+        }
+
+        private static bool loadElement(RCOElement el, uint offset, RCOFileHeader rcohead, BinaryReader br,ref RCOFile rco)
+        {
+            bool err;
+
+            rco_tree_table_element element = new rco_tree_table_element();
+
+            br.BaseStream.Position = offset;
+
+            //now read the element
+            element.element_offset = br.ReadUInt32();
+            element.attr_ct = br.ReadUInt32();
+            element.parent = br.ReadUInt32();
+            element.previous_sibling = br.ReadUInt32();
+            element.next_sibling = br.ReadUInt32();
+            element.first_child = br.ReadUInt32();
+            element.last_child = br.ReadUInt32();
+
+
+            uint root_attr_offset = (uint)(offset + Marshal.SizeOf(element));
+
+            err = getStringTableString(ref el.name, rcohead, br, element.element_offset);
+
+            if (err != true)
+            {
+                return err;
+            }
+            
+            err = loadAttributes(el, root_attr_offset, element.attr_ct, rcohead, br, true);
+
+            if (err != true)
+            {
+                return err;
+            }
+            
+            if (element.first_child != 0xFFFFFFFF)
+            {
+                RCOElement first_child = new RCOElement();
+                err = loadElement(first_child, (uint)rcohead.Tree_Table_Offset + element.first_child, rcohead, br,ref rco);
+                if (err != true)
+                {
+                    return err;
+                }
+                el.children.Add(first_child);
+            }
+
+            if (element.next_sibling != 0xFFFFFFFF)
+            {
+                RCOElement next_sibling = new RCOElement();
+                err = loadElement(next_sibling, (uint)rcohead.Tree_Table_Offset + element.next_sibling, rcohead, br, ref rco);
+                if (err != true)
+                {
+                    return err;
+                }
+                el.siblings.Add(next_sibling);
+            }
+            
+            return err;
+        }
+
+        private static void writeIndent(TextWriter f, UInt32 depth = 0)
+        {
+            string indent = "";
+            for (int i = 0; i < depth; i++)
+            {
+                indent += "\t";
+            }
+            if (depth != 0)
+            {
+                f.Write(indent);
+            }
+        }
+
+        private static void writeIndent(FileInfo f, UInt32 depth = 0)
+        {
+            string indent = "";
+            for (int i = 0; i < depth; i++)
+            {
+                indent += "\t";
+            }
+            if (depth != 0)
+            {
+                File.WriteAllText(f.FullName, indent);
+            }
+        }
+
+        private static void dumpElement(TextWriter f, RCOElement el, UInt32 depth = 0, string outputDirectory = "" )
+        {
+            writeIndent(f, depth);  
+            f.Write("<" + el.name);
+
+            foreach (RCOAttribute it in el.attributes)
+            {
+                //ORIGINAL LINE: RCOAttribute &attr = it;
+                RCOAttribute attr = it;
+                if (attr.type == ATTRIBUTE_TYPE.Float)
+                {
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.f.ToString()));
+                }
+                if(attr.type == ATTRIBUTE_TYPE.STRING)
+                {
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.INTEGER)
+                {
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.i.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.ID_STR_LPB)
+                {
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.idstr.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.ID_STR)
+                {
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.idstr.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.DATA)
+                {
+                    // Handle locale XML files
+                    if (attr.fileext == ".xml")
+                    {
+                        byte[] buffercopy = new byte[attr.filelen];
+                        Array.Copy(attr.file, buffercopy, attr.filelen);
+                        RCOFile tmprco = new RCOFile(buffercopy, attr.filelen);
+
+
+
+                        dumpElement(f, tmprco.RootElement, 0, outputDirectory);
+
+                        
+
+                        buffercopy = null;
+                    }
+                    else if (attr.fileext == ".pslayout")
+                    {
+                        byte[] buffercopy = new byte[(attr.filelen)];
+                        //C++ TO C# CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in C#:
+                        //memcpy(buffercopy, attr.file, attr.filelen);
+
+                        Array.Copy(attr.file, buffercopy, attr.filelen);
+
+                        //LayoutFile layout = new LayoutFile(buffercopy);
+
+
+                       // string output_filename = outputDirectory + "/" + attr.toString() + ".xml";
+                        //FILE outfile = fopen(output_filename, "wb");
+
+                        //if (outfile != null)
+                        //{
+                           // layout.write(outfile);
+                          //  fclose(outfile);
+                        //}
+
+
+                    }
+                    // Handle anything else (textures, sounds, etc)
+                    else
+                    {
+                        string output_filename = outputDirectory + "/" + attr.name.ToString();
+                        File.WriteAllBytes(outputDirectory, attr.file);
+                        f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
+                    }
+                }
+            }
+
+            if (el.children.Count > 0)
+            {
+                //fprintf(f, ">\r\n");
+                f.Write(">\r\n");
+                dumpElement(f, el.children[0], depth + 1, outputDirectory);
+                writeIndent(f, depth);
+                //fprintf(f, "</%s>\r\n", el.name);
+                f.Write(string.Format("</{0}>\r\n",el.name));      
+            }
+            else
+            {
+                //fprintf(f, " />\r\n");
+                f.Write(" />\r\n");
+            }
+
+            if (el.siblings.Count > 0)
+            {
+                dumpElement(f, el.siblings[0], depth, outputDirectory);
+            }
+        }
+
+        private static void dumpElement(FileInfo f, RCOElement el, UInt32 depth = 0, string outputDirectory = "")
+        {
+            writeIndent(f, depth);
+            string text = File.ReadAllText(f.FullName);
+            File.WriteAllText(f.FullName,text + "\n" + "<" + el.name);
+
+
+            foreach (RCOAttribute it in el.attributes)
+            {
+                //ORIGINAL LINE: RCOAttribute &attr = it;
+                RCOAttribute attr = it;
+                if (attr.type == ATTRIBUTE_TYPE.Float)
+                {
+                    text = File.ReadAllText(f.FullName);
+                    File.WriteAllText(f.FullName, text + string.Format(" {0}=\"{1}\"", attr.name, attr.f.ToString()));
+                    //f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.f.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.STRING)
+                {
+                    text = File.ReadAllText(f.FullName);
+                    File.WriteAllText(f.FullName, text + string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
+                    //f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.INTEGER)
+                {
+                    text = File.ReadAllText(f.FullName);
+                    File.WriteAllText(f.FullName, text + string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
+                    //f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.i.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.ID_STR_LPB)
+                {
+                    text = File.ReadAllText(f.FullName);
+                    File.WriteAllText(f.FullName, text + string.Format(" {0}=\"{1}\"", attr.name, attr.idstr.ToString()));
+                    //f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.idstr.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.ID_STR)
+                {
+                    text = File.ReadAllText(f.FullName);
+                    File.WriteAllText(f.FullName, text + string.Format(" {0}=\"{1}\"", attr.name, attr.idstr.ToString()));
+                    //f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.idstr.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.DATA)
+                {
+                    // Handle locale XML files
+                    if (attr.fileext == ".xml")
+                    {
+                        byte[] buffercopy = new byte[attr.filelen];
+                        Array.Copy(attr.file, buffercopy, attr.filelen);
+                        RCOFile tmprco = new RCOFile(buffercopy, attr.filelen);
+
+
+
+                        dumpElement(f, tmprco.RootElement, 0, outputDirectory);
+
+
+
+                        buffercopy = null;
+                    }
+                    else if (attr.fileext == ".pslayout")
+                    {
+                        byte[] buffercopy = new byte[(attr.filelen)];
+                        //C++ TO C# CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in C#:
+                        //memcpy(buffercopy, attr.file, attr.filelen);
+
+                        Array.Copy(attr.file, buffercopy, attr.filelen);
+
+                        //LayoutFile layout = new LayoutFile(buffercopy);
+
+
+                        // string output_filename = outputDirectory + "/" + attr.toString() + ".xml";
+                        //FILE outfile = fopen(output_filename, "wb");
+
+                        //if (outfile != null)
+                        //{
+                        // layout.write(outfile);
+                        //  fclose(outfile);
+                        //}
+
+
+                    }
+                    // Handle anything else (textures, sounds, etc)
+                    else
+                    {
+                        string output_filename = outputDirectory + "/" + attr.name.ToString();
+                        File.WriteAllBytes(outputDirectory, attr.file);
+                        text = File.ReadAllText(f.FullName);
+                        File.WriteAllText(f.FullName, text + string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
+                        //f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
+                    }
+                }
+            }
+
+            if (el.children.Count > 0)
+            {
+                //fprintf(f, ">\r\n");
+                //f.Write(">\r\n");
+                text = File.ReadAllText(f.FullName);
+                File.WriteAllText(f.FullName, text + ">\r\n");
+                
+                dumpElement(f, el.children[0], depth + 1, outputDirectory);
+                writeIndent(f, depth);
+                //fprintf(f, "</%s>\r\n", el.name);
+                //f.Write(string.Format("</{0}>\r\n", el.name));
+                text = File.ReadAllText(f.FullName);
+                File.WriteAllText(f.FullName, text + string.Format("</{0}>\r\n", el.name));
+            }
+            else
+            {
+                //fprintf(f, " />\r\n");
+                //f.Write(" />\r\n");
+                text = File.ReadAllText(f.FullName);
+                File.WriteAllText(f.FullName, text + " />\r\n");
+            }
+
+            if (el.siblings.Count > 0)
+            {
+                dumpElement(f, el.siblings[0], depth, outputDirectory);
+            }
+        }
+
+        private static void dumpElement(TextWriter f, RCOElement el, RCOFile rco, UInt32 depth = 0)
+        {
+            writeIndent(f, depth);
+
+
+            //fprintf(f, "<%s", el.name);
+            f.Write("<" + el.name);          
+            rco.Elements.Add(rco.Elements.Count, el);
+            foreach (RCOAttribute it in el.attributes)
+            {
+                //C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to references to variables:
+                //ORIGINAL LINE: RCOAttribute &attr = it;
+                RCOAttribute attr = it;
+                if (attr.type == ATTRIBUTE_TYPE.Float)
+                {
+                    //fprintf(f, " %s=\"%s\"", attr.name, attr.toString());
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.f.ToString().Replace(',','.')));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.STRING)
+                {
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.INTEGER)
+                {
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.i.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.ID_STR_LPB)
+                {
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.idstr.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.ID_STR)
+                {
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.idstr.ToString()));
+                }
+                if (attr.type == ATTRIBUTE_TYPE.DATA)
+                {
+                    // Handle locale XML files
+                    if (attr.fileext == ".xml")
+                    {
+                        byte[] buffercopy = new byte[attr.filelen];
+                        //C++ TO C# CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in C#:
+                        Array.Copy(attr.file, buffercopy, attr.filelen);
+                        //memcpy(buffercopy, attr.file, attr.filelen);
+                        RCOFile tmprco = new RCOFile(buffercopy, attr.filelen);
+
+
+
+                        dumpElement(f, tmprco.RootElement, rco, 0);
+
+
+
+                        buffercopy = null;
+                    }
+                    else if (attr.fileext == ".pslayout")
+                    {
+                        byte[] buffercopy = new byte[(attr.filelen)];
+                        //C++ TO C# CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in C#:
+                        //memcpy(buffercopy, attr.file, attr.filelen);
+
+                        Array.Copy(attr.file, buffercopy, attr.filelen);
+
+                        //LayoutFile layout = new LayoutFile(buffercopy);
+
+
+                        // string output_filename = outputDirectory + "/" + attr.toString() + ".xml";
+                        //FILE outfile = fopen(output_filename, "wb");
+
+                        //if (outfile != null)
+                        //{
+                        // layout.write(outfile);
+                        //  fclose(outfile);
+                        //}
+
+
+                    }
+                    // Handle anything else (textures, sounds, etc)
+                    else
+                    {
+                        //string output_filename = outputDirectory + "/" + attr.toString();
+                        //FILE outfile = fopen(output_filename, "wb");
+                        //if (outfile != null)
+                        //{
+                        //    fwrite(attr.file, sizeof(uint8_t), attr.filelen, outfile);
+                        //    fclose(outfile);
+                        //}
+                        //else
+                        //{
+                        //    Console.Write("ERROR: Couldn't open file for writing: {0}\n", output_filename);
+                        //}
+                        f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
+                    }
+                }
+            }
+
+            if (el.children.Count > 0)
+            {
+                //fprintf(f, ">\r\n");
+                f.Write(">\r\n");
+                dumpElement(f, el.children[0], rco, depth + 1);
+                writeIndent(f, depth);
+                //fprintf(f, "</%s>\r\n", el.name);
+                f.Write(string.Format("</{0}>\r\n", el.name));
+            }
+            else
+            {
+                //fprintf(f, " />\r\n");
+                f.Write(" />\r\n");
+            }
+
+            if (el.siblings.Count > 0)
+            {
+                dumpElement(f, el.siblings[0], rco, depth);
+            }
+        }
         /// <summary>
         /// Reads a RCO file into a RCOFile Container
         /// </summary>
@@ -2938,22 +4091,67 @@ namespace PS4_Tools
         /// <returns></returns>
         public static RCOFile ReadRco(string File)
         {
+            bool IsRCSF = false;//different type of rco file ?
+
+
             RCOFile rco = new RCOFile();
+            rco.Header = new RCOFileHeader();//we want to make a new header
+
+            rco.RootElement = new RCOElement();
+            rco.Elements = new Dictionary<int, RCOElement>();
+            rco.Files = new Dictionary<string, RCOFileData>();
+            rco.StringTable = new Dictionary<string, RCOElement>();
             rco.FileTable = new FileTable();
+
 
             try
             {
                 // Reading Header
                 byte[] magic = new byte[4];
                 byte[] Tree_Table_Offset = new byte[4];
-                string outFile = "notDefined";
+                string outFile = "notDefined";//this was for the old stuff cfwProphet did 
                 using (BinaryReader br = new BinaryReader(new FileStream(File, FileMode.Open, FileAccess.Read)))
                 {
                     //Read the header with all needed offsets
                     rco.Header = ReadHeader(br);
                     //Tree Table
+
+                    //lets read the tree table
+
+
                     //Array reversed
                     //Start Offset 
+                    //load element 
+
+                    loadElement(rco.RootElement, (uint)rco.Header.Tree_Table_Offset, rco.Header, br, ref rco);
+
+                    
+                    //read the rco root element
+                    if(!string.IsNullOrEmpty(rco.RootElement.name))
+                    {
+                        //do the XML BUILDER
+                        string XMLDOC = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n";
+
+                        using (var ms = new MemoryStream())
+                        {
+                            TextWriter tw = new StreamWriter(ms);
+                            tw.Write(XMLDOC);
+                            //dumpElement(tw, rco.RootElement,0,"");
+                            dumpElement(tw, rco.RootElement, rco, 0);
+                            tw.Flush();
+                            ms.Position = 0;
+                            var bytes = ms.ToArray();
+                            //or save to disk using FileStream (fs)
+                            //ms.WriteTo(new FileStream("C://temp/index.xml",FileMode.OpenOrCreate,FileAccess.ReadWrite));
+                            //System.IO.File.WriteAllBytes("C://temp/index.xml", bytes);
+                        }
+                        
+
+                        //we also want to get the route item and create a folder view
+                    }
+
+                    return rco;
+                    //old method from CFWPROPHET BELOW
                     br.BaseStream.Position = (long)rco.Header.Tree_Table_Offset;//go to start of table
                     var treetable = br.ReadBytes((int)rco.Header.Tree_Table_Size);//read size
 
@@ -2983,6 +4181,49 @@ namespace PS4_Tools
                     br.BaseStream.Seek(count, SeekOrigin.Begin);
                     br.Read(zlib, 0, 2);
 
+                    //we want to go to the start of the tree table
+                    br.BaseStream.Position = (long)rco.Header.Tree_Table_Offset;//go to start of table
+                    //now we need to read the tree table
+
+                    Tree_Table _treetable = new Tree_Table();
+                    _treetable.Root_Element = br.ReadUInt32();
+                    _treetable.Attribute_Counter = br.ReadUInt32();
+                    _treetable.Parent = br.ReadUInt32();
+                    _treetable.Previous_Brother = br.ReadUInt32();
+                    _treetable.Next_Brother = br.ReadUInt32();
+                    _treetable.First_Child = br.ReadUInt32();
+                    _treetable.Last_Child = br.ReadUInt32();
+                    _treetable.String_Pointer = br.ReadUInt32();
+                    _treetable.Type = br.ReadUInt32();
+                    _treetable.Float_value = br.ReadUInt32();
+                    _treetable.empty_value = br.ReadBytes(0x04);
+
+                    rco.RCO_Tree_Table = new RCO_Tree_Table();
+                    rco.RCO_Tree_Table.Root_Element = _treetable.Root_Element;
+
+                    string rootelementname = "";
+                    getStringTableString(ref rootelementname, rco.Header, br, rco.RCO_Tree_Table.Root_Element);
+
+                    rco.RCO_Tree_Table.Attribute_Counter = _treetable.Attribute_Counter;
+                    rco.RCO_Tree_Table.Parent = _treetable.Parent;
+                    rco.RCO_Tree_Table.Previous_Brother = _treetable.Previous_Brother;
+                    rco.RCO_Tree_Table.Next_Brother = _treetable.Next_Brother;
+                    rco.RCO_Tree_Table.First_Child = _treetable.First_Child;
+                    rco.RCO_Tree_Table.Last_Child = _treetable.Last_Child;
+                    rco.RCO_Tree_Table.String_Pointer = _treetable.String_Pointer;
+
+
+
+                    rco.RCO_Tree_Table.Type = (ATTRIBUTE_TYPE)(_treetable.Type);
+                    rco.RCO_Tree_Table.Float_value = (uint)_treetable.Float_value;
+                    //string temp123  = System.Text.Encoding.UTF8.GetString(_treetable.Float_value);
+                    rco.RCO_Tree_Table.empty_value = _treetable.empty_value;
+
+                    string stringvalue = "";
+                    getStringTableString(ref stringvalue, rco.Header, br, rco.RCO_Tree_Table.String_Pointer);
+
+
+                    //now get the value from the system 
 
                     ////somehow we need to get the name of the file
                     //BinaryReader br2 = br;
@@ -3142,6 +4383,8 @@ namespace PS4_Tools
                             {
                                 //Console.Write("Found a PNG File will start to extract...");
                                 outFile = baseDir + countPNG + ".png";
+                                //get the png name from the string Table
+
                                 //System.IO.File.Create(outFile).Close();
 
                                 byte[] toWrite = new byte[16];
@@ -3362,6 +4605,7 @@ namespace PS4_Tools
                                     CXML cxml = new CXML();
                                     cxml.CXMLFile = outFile;
                                     cxml.FileBytes = memset.ToArray();
+                                    rco.FileTable.CXMLFiles.Add(cxml);
                                     bw.Close();
                                     memset.Close();
                                 }
@@ -3687,7 +4931,7 @@ namespace PS4_Tools
                             #endregion wavExtract
                             else
                             {
-                                //Console.WriteLine("\nFound a new File which i don't know what to do with !\nPlease contact the Developer @ www.playstationhax.it");
+                                Console.WriteLine("\nFound a new File which i don't know what to do with !\nPlease contact the Developer @ www.playstationhax.it");
                                 break;
                             }
                             if (dumped == end)
@@ -3857,11 +5101,19 @@ namespace PS4_Tools
             return rco;
         }
 
+        public static void DumpRco(RCOFile rco,string File)
+        {
+            System.IO.File.Create(File);
+            FileInfo f = new FileInfo(File);
+            dumpElement(f, rco.RootElement, 0);
+
+        }
+
         //stil working on the rco file archive type
 
         public struct RCOFileHeader
         {
-            public byte[] MAGIC;
+            public byte[] MAGIC; //header is RCOF
             public byte[] Version;
             public ulong Tree_Table_Offset;
             public ulong Tree_Table_Size;
@@ -3871,6 +5123,8 @@ namespace PS4_Tools
             public ulong ID_Intiger_Table_Size;
             public ulong String_Table_Offset;
             public ulong String_Table_Size;
+            public ulong Char_Table_Offset;
+            public ulong Char_Table_Size;
             public uint Overlapping;
             public uint empty; //???
             public ulong Styles_ID_Intiger_Table_Offset;
@@ -3911,39 +5165,208 @@ namespace PS4_Tools
 
         }
 
-        public struct Tree_Table
+        private struct Tree_Table
         {
-            public byte[] Root_Element; //size of 4 (offset within String Table in this case <resource>
-            public uint Attribute_Counter;
-            public uint Parent;
-            public uint Prevoius_Borhter;
-            public uint Next_Brother;
-            public uint First_Child;
-            public uint Last_Child;
-            public uint String_Pointer;
+            public uint Root_Element; //size of 4 (offset within String Table in this case <resource>
+            public uint Attribute_Counter;//size of 4 Attribute Counter
+            public uint Parent;//0x04 
+            public uint Previous_Brother;//0x04
+            public uint Next_Brother;//0x04
+            public uint First_Child;//0x04
+            public uint Last_Child;//0x04
+            public uint String_Pointer;//0x04
             public uint Type; //(2 == FLOAT)
-            public ulong Float_value;
-            public byte[] empty_value;
-            public uint String_Pointer2;
-            public uint Type_descriptor1;
-            //public uint Offset_
+            public ulong Float_value;//0x04
+            public byte[] empty_value;//empty //0x04
+            public uint String_Pointer2;//0x04 (in this case "type")
+            public uint Type_descriptor1; //0x04 Type descriptor (3 == String)
+            public uint Offset_StringTable; //0x04	Offset within String Table of String to read
+            public uint LenghtOfStringToRead;//0x04 Length of String to read (0x06 == "normal") [type="normal"]
+            public uint Next_Element;//0x04 Next Element (Offset within String Table, in this case it will be <stringtable>)
+            public uint Attribute_Count;//0x04
+            public uint Parent_Offset; //	0x04 Parent (Offset within XML Table, pointing to Root Element)
+            public uint Previous_Brother_1;//0x04 Previous Brother
+            public uint Next_Brother_1;//0x04 Previous Brother
+            public uint First_Child_1;//0x04 First Child
+            public uint Last_Child_1;//0x04
+            public uint String_Pointer_1;//0x04 String Pointer (in this case <local>)
+            public uint Attribute_Count_1;//0x04
+            public uint Parent_Offset_2; //	0x04 Parent (Offset within XML Table, pointing to Root Element)
+            public uint Previous_Brother_2;//0x04 Previous Brother
+            public uint Next_Brother_2;//0x04 Previous Brother
+            public uint First_Child_2;//0x04 First Child
+            public uint Last_Child_2;//0x04
+            public uint String_Pointer_2;//0x04 String Pointer (in this case origsize="")
+            public uint Attribute_identifier;//0x04 Attribute identifier (in this case 1 so a integer value)
+            public uint HexIntSize;//0x04 Hex integer size (1040 bytes when converted so origsize="1045")
+            public byte[] empty_value_1;//empty //0x04
+            public uint String_Pointer_3;//0x04 String Pointer (in this case src="")
+            public uint Attribute_identifier_1;//0x04 	Attribute identifier (in this case 8 so a file)
+            public uint Offset_File_Table;//0x04 Offset within File Table
+            public uint Size_File;//0x04 Size of file to read
+            public uint String_Pointer_4;//0x04 String Pointer (in this case compress="")
+            public uint Attribute_identifier_2;//0x04 	Attribute identifier (in this case 3 so a string)
+            public uint Offset_String_Table;//0x04 Offset of the string to read within String Table
+            public uint Size_String;//0x04 Size of the string to read (in this case will be 'on' so compress="on")
+            public uint String_Pointer_5;//0x04 String Pointer (in this case id="")
+            public uint Attribute_identifier_3;//0x04 	Attribute identifier (in this case 9 so a ID String with Loopback offset)
+            public uint Offset_ID_String_Table;//0x04 Offset of the id to read within ID String Table (in this case 'ja' so id="ja" and after the loopback src="/xmls/ja.xml")
+            public byte[] empty_value_2;//0x04
+        }
+
+        public struct RCO_Tree_Table
+        {
+            public uint Root_Element; //size of 4 (offset within String Table in this case <resource>
+            public uint Attribute_Counter;//size of 4 Attribute Counter
+            public uint Parent;//0x04 
+            public uint Previous_Brother;//0x04
+            public uint Next_Brother;//0x04
+            public uint First_Child;//0x04
+            public uint Last_Child;//0x04
+            public uint String_Pointer;//0x04
+            public ATTRIBUTE_TYPE Type; //(2 == FLOAT)
+            public ulong Float_value;//0x04
+            public byte[] empty_value;//empty //0x04
+        }
+
+        public enum ATTRIBUTE_TYPE
+        {
+            NONE,
+            INTEGER,
+            Float = 2,
+            STRING,
+            Char,
+            STYLE_ID,
+            INTEGER_ARRAY,
+            FLOAT_ARRAY,
+            DATA,
+            ID_STR_LPB, //loopback
+            ID_STR,
+            ID_INT_LPB, //loopback
+            ID_INT,
+        }
+        public struct rco_tree_table_element
+        {
+            public uint element_offset;
+            public uint attr_ct;
+            public uint parent;
+            public uint previous_sibling;
+            public uint next_sibling;
+            public uint first_child;
+            public uint last_child;
+        }
+
+        public class RCOFileData
+        {
+            private uint offset = new uint();
+            private byte[] filedata;
+            private string extension;
+        }
+
+        public class RCOAttribute
+        {
+            public string name;
+            public ATTRIBUTE_TYPE type;
+            public int i;
+            public float f;
+            public string s;
+            public string c = "";
+            public List<uint> ia = new List<uint>();
+            public List<float> fa = new List<float>();
+            public byte[] file;
+            public uint filelen = new uint();
+            public string fileext;
+            public string idstr;
+            public uint idint = new uint();
+
+            //         public string toString()
+            //         {
+            //             string buf = new string(Arrays.InitializeWithDefaultInstances<char>(256 + 1));
+
+            //             switch (type)
+            //             {
+            //                 case ATTRIBUTE_TYPE.char:
+            //return utf16_to_utf8(c);
+            //                     break;
+            //                 case ATTRIBUTE_TYPE.float:
+            //snprintf(buf, 256, "%.2f", f);
+            //                     break;
+            //                 case ATTRIBUTE_TYPE.INTEGER_ARRAY:
+            //                     {
+            //                         int off = 0;
+            //                         for (int i = 0; i < ia.Count - 1 && ia.Count > 0; i++)
+            //                         {
+            //                             snprintf(buf.Substring(off), 256 - off, "%d, ", ia[i]);
+            //                             off = buf.Length;
+            //                         }
+            //                         snprintf(buf.Substring(off), 256 - off, "%d", ia[ia.Count - 1]);
+            //                     }
+            //                     break;
+            //                 case ATTRIBUTE_TYPE.FLOAT_ARRAY:
+            //                     {
+            //                         int off = 0;
+            //                         for (int i = 0; i < fa.Count - 1 && fa.Count > 0; i++)
+            //                         {
+            //                             snprintf(buf.Substring(off), 256 - off, "%.2f, ", fa[i]);
+            //                             off = buf.Length;
+            //                         }
+            //                         snprintf(buf.Substring(off), 256 - off, "%.2f", fa[fa.Count - 1]);
+            //                     }
+            //                     break;
+            //                 case ATTRIBUTE_TYPE.ID_STR:
+            //                 case ATTRIBUTE_TYPE.ID_STR_LPB:
+            //                     snprintf(buf, 256, "%s", idstr);
+            //                     break;
+            //                 case ATTRIBUTE_TYPE.STRING:
+            //                 case ATTRIBUTE_TYPE.STYLE_ID:
+            //                     snprintf(buf, 256, "%s", s);
+            //                     break;
+            //                 case ATTRIBUTE_TYPE.INTEGER:
+            //                     snprintf(buf, 256, "%u", i);
+            //                     break;
+            //                 case ATTRIBUTE_TYPE.ID_INT:
+            //                     snprintf(buf, 256, "%x", idint);
+            //                     break;
+            //                 case ATTRIBUTE_TYPE.ID_INT_LPB:
+            //                     snprintf(buf, 256, "%x", idint);
+            //                     break;
+            //                 case ATTRIBUTE_TYPE.DATA:
+            //                     snprintf(buf, 256, "%s", s);
+            //                     break;
+            //                 default:
+            //                     Console.Write("UNSUPPORTED TYPE\n");
+            //                     break;
+            //             }
+
+            //             return buf;
+            //         }
+        }
+        public class RCOElement
+        {
+            public string name;
+            public List<RCOAttribute> attributes = new List<RCOAttribute>();
+            public List<RCOElement> siblings = new List<RCOElement>();
+            public List<RCOElement> children = new List<RCOElement>();
+            public bool isCompressed = false;
+            public uint originalSize = 0;
         }
 
         private static RCOFileHeader ReadHeader(BinaryReader br)
         {
             // Check Magic
-            //Console.Write("Checking Header....");
+            Console.Write("Checking Header....");
             RCOFileHeader rco = new RCOFileHeader();
             byte[] magic = br.ReadBytes(4);//just want the header not the version incase sony changes this down the line
 
 
-
-            if (!Util.Utils.CompareBytes(magic, rcoMagic))
+            //added support for both normal RCO files and RCSF files
+            if (!Util.Utils.CompareBytes(magic, rcoMagic) && !Util.Utils.CompareBytes(System.Text.Encoding.UTF8.GetBytes("RCSF"), rcoMagic))
             {
-                //Console.WriteLine("ERROR: That is not a valid NextGen RCO!\nExiting now...");
+                Console.WriteLine("ERROR: That is not a valid NextGen RCO!\nExiting now...");
                 //Environment.Exit(0);
                 throw new Exception("ERROR: That is not a valid NextGen RCO!");
             }
+
             rco.MAGIC = magic;//else we set the magic
 
             //read version information 
@@ -3979,8 +5402,67 @@ namespace PS4_Tools
             internal byte[] Offset;/*Offset information*/
 
             public RCOFileHeader Header;
-
+            public RCOElement RootElement;//create the root element
+            public Dictionary<int, RCOElement> Elements; //we want a list of all elements
+            public Dictionary<string, RCOFileData> Files;// we want a list of all the Files
+            public Dictionary<string, RCOElement> StringTable;//We want a list of the stringtable
             public FileTable FileTable;
+            public RCO_Tree_Table RCO_Tree_Table;
+            public string CreateXML()
+            {
+                if (!string.IsNullOrEmpty(RootElement.name))
+                {
+                    //do the XML BUILDER
+                    string XMLDOC = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n";
+
+                    using (var ms = new MemoryStream())
+                    {
+                        TextWriter tw = new StreamWriter(ms);
+                        tw.Write(XMLDOC);
+                        //dumpElement(tw, rco.RootElement,0,"");
+                        dumpElement(tw, RootElement, this, 0);
+                        tw.Flush();
+                        ms.Position = 0;
+                        var bytes = ms.ToArray();
+                        //or save to disk using FileStream (fs)
+                        //ms.WriteTo(new FileStream("C://temp/index.xml",FileMode.OpenOrCreate,FileAccess.ReadWrite));
+                        //System.IO.File.WriteAllBytes("C://temp/index.xml", bytes);
+                        return System.Text.Encoding.UTF8.GetString(bytes);
+                    }
+
+
+                    //we also want to get the route item and create a folder view
+                }
+                return "";
+            }
+
+            public RCOFile(byte[] file, uint length)
+            {
+                MAGIC = new byte[4];
+                Version = new byte[4];
+                Offset = new byte[4];
+                Header = new RCOFileHeader();
+                RootElement = new RCOElement();
+                Elements = new Dictionary<int, RCOElement>();
+                Files = new Dictionary<string, RCOFileData>();
+                StringTable = new Dictionary<string, RCOElement>();
+                FileTable = new FileTable();
+                RCO_Tree_Table = new RCO_Tree_Table();
+                using (BinaryReader br = new BinaryReader(new MemoryStream(file,0,(int)length)))
+                {
+                    Header = ReadHeader(br);
+                    if (Header.MAGIC == null)
+                        return;
+
+                   bool mRCOErrno = loadElement(RootElement, (uint)Header.Tree_Table_Offset,Header,br,ref this);
+
+                    if (mRCOErrno != true)
+                    {
+                        Console.Write("Error!\n");
+                    }
+                        //printf("Error!\n");
+                }
+            }
         }
 
         public class Wave
@@ -4518,11 +6000,11 @@ namespace PS4_Tools
                         XmlSerializer serializer = new XmlSerializer(typeof(Trophyconf));
                         using (TextReader reader = new StringReader(xml))
                         {
-                            rtn.trophyItemList[i].trophyconf=(Trophyconf)serializer.Deserialize(reader);
+                            rtn.trophyItemList[i].trophyconf = (Trophyconf)serializer.Deserialize(reader);
                         }
 
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
 
                     }
@@ -7113,7 +8595,7 @@ Where titleId = '" + TitleID + "'";
             private static byte[] pic_byte;
             private static byte[] trp_byte;
             private static byte[] snd_byte;
-           
+
             private static bool m_error;
             private static byte[] image_byte;
             public enum PKGType
@@ -7849,11 +9331,11 @@ Where titleId = '" + TitleID + "'";
                         {
                             trp_byte = entry[i].file_data;
                         }
-                        if(entry[i].CustomName == PS4PkgUtil.EntryId.SND0_AT9.ToString())
+                        if (entry[i].CustomName == PS4PkgUtil.EntryId.SND0_AT9.ToString())
                         {
                             snd_byte = entry[i].file_data;
                         }
-                        if(entry[i].CustomName == PS4PkgUtil.EntryId.PIC1_PNG.ToString())
+                        if (entry[i].CustomName == PS4PkgUtil.EntryId.PIC1_PNG.ToString())
                         {
                             pic_byte = entry[i].file_data;
                         }

@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\favicon %281%29.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PARAM.SFO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -55,10 +58,19 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettings.Designer.cs">
+      <DependentUpon>frmSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettings.resx">
+      <DependentUpon>frmSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -68,6 +80,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -87,6 +100,33 @@
       <Project>{095271bf-9f85-43d0-bf8e-782b18eaed6f}</Project>
       <Name>PS4_Tools</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\baseline_settings_black_48dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\baseline_source_black_48dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\baseline_save_alt_black_48dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon %281%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4792964578_646eb82c-dd39-4c30-ac99-d15bbb6b3b3d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4792964579_47acf5f4-4ab5-4869-9bb7-2b5561b24193.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4792965023_57b20776-4c77-425a-b91c-10608d18cbf3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4792957342_d427358e-b292-4c43-888e-52f944dc057c.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

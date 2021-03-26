@@ -34,3 +34,9 @@ C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Android Mono\PS4_PKG_Tool.csprojResolveAssemblyReference.cache
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Android Mono\PS4_PKG_Tool.exe
 C:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Android Mono\PS4_PKG_Tool.pdb
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Android Mono\PS4_PKG_Tool.csprojResolveAssemblyReference.cache
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Android Mono\PS4_PKG_Tool.Form1.resources
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Android Mono\PS4_PKG_Tool.Properties.Resources.resources
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Android Mono\PS4_PKG_Tool.csproj.GenerateResource.Cache
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Android Mono\PS4_PKG_Tool.exe
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_PKG_Tool\obj\Android Mono\PS4_PKG_Tool.pdb

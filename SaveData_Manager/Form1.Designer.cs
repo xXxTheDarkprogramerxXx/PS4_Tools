@@ -29,10 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.btnLoadDir = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.btnSettings = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.btnLoadDir = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -41,8 +43,8 @@
             this.cmstripgames = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.saveAllGamesToLocalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToLocalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showLocalItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.showLocalItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyLocalToUsbToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.cheatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,16 +63,6 @@
             this.cmstripgames.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnLoadDir
-            // 
-            this.btnLoadDir.Location = new System.Drawing.Point(947, 12);
-            this.btnLoadDir.Name = "btnLoadDir";
-            this.btnLoadDir.Size = new System.Drawing.Size(75, 23);
-            this.btnLoadDir.TabIndex = 0;
-            this.btnLoadDir.Text = "...";
-            this.btnLoadDir.UseVisualStyleBackColor = true;
-            this.btnLoadDir.Click += new System.EventHandler(this.button1_Click);
-            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -82,6 +74,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btnSettings);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Panel1.Controls.Add(this.textBox3);
             this.splitContainer1.Panel1.Controls.Add(this.btnLoadDir);
@@ -92,10 +85,21 @@
             this.splitContainer1.Size = new System.Drawing.Size(1034, 412);
             this.splitContainer1.TabIndex = 1;
             // 
+            // btnSettings
+            // 
+            this.btnSettings.BackgroundImage = global::SaveData_Manager.Properties.Resources.baseline_settings_black_48dp;
+            this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSettings.Location = new System.Drawing.Point(13, 12);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(43, 35);
+            this.btnSettings.TabIndex = 3;
+            this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 16);
+            this.label1.Location = new System.Drawing.Point(62, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(135, 17);
             this.label1.TabIndex = 2;
@@ -103,14 +107,27 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(151, 13);
+            this.textBox3.Enabled = false;
+            this.textBox3.Location = new System.Drawing.Point(203, 18);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(790, 22);
+            this.textBox3.Size = new System.Drawing.Size(738, 22);
             this.textBox3.TabIndex = 1;
+            // 
+            // btnLoadDir
+            // 
+            this.btnLoadDir.BackgroundImage = global::SaveData_Manager.Properties.Resources.baseline_source_black_48dp;
+            this.btnLoadDir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnLoadDir.Location = new System.Drawing.Point(947, 12);
+            this.btnLoadDir.Name = "btnLoadDir";
+            this.btnLoadDir.Size = new System.Drawing.Size(75, 36);
+            this.btnLoadDir.TabIndex = 0;
+            this.btnLoadDir.UseVisualStyleBackColor = true;
+            this.btnLoadDir.Click += new System.EventHandler(this.button1_Click);
             // 
             // splitContainer2
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
@@ -143,9 +160,12 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(313, 92);
             this.textBox2.TabIndex = 3;
+            this.textBox2.Text = "Made to be a free alternative to SaveWizard";
+            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Image = global::SaveData_Manager.Properties.Resources._4792965023_57b20776_4c77_425a_b91c_10608d18cbf3;
             this.pictureBox1.Location = new System.Drawing.Point(16, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(313, 134);
@@ -184,7 +204,7 @@
             this.toolStripSeparator2,
             this.cheatsToolStripMenuItem});
             this.cmstripgames.Name = "cmstripgames";
-            this.cmstripgames.Size = new System.Drawing.Size(240, 164);
+            this.cmstripgames.Size = new System.Drawing.Size(240, 136);
             // 
             // saveAllGamesToLocalToolStripMenuItem
             // 
@@ -200,17 +220,17 @@
             this.saveToLocalToolStripMenuItem.Text = "Save To Local";
             this.saveToLocalToolStripMenuItem.Click += new System.EventHandler(this.saveToLocalToolStripMenuItem_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(236, 6);
+            // 
             // showLocalItemsToolStripMenuItem
             // 
             this.showLocalItemsToolStripMenuItem.Name = "showLocalItemsToolStripMenuItem";
             this.showLocalItemsToolStripMenuItem.Size = new System.Drawing.Size(239, 24);
             this.showLocalItemsToolStripMenuItem.Text = "Show Local Items";
             this.showLocalItemsToolStripMenuItem.Click += new System.EventHandler(this.showLocalItemsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(236, 6);
             // 
             // copyLocalToUsbToolStripMenuItem
             // 
@@ -251,6 +271,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1034, 412);
             this.Controls.Add(this.splitContainer1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PS4 Save manager";
@@ -293,6 +314,7 @@
         private System.Windows.Forms.ToolStripMenuItem cheatsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openHexEditorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem patchMenuToolStripMenuItem;
+        private System.Windows.Forms.Button btnSettings;
     }
 }
 

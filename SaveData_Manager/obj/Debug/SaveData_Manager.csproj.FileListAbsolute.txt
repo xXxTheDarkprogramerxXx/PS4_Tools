@@ -72,3 +72,4 @@ D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\SaveData_Man
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\SaveData_Manager\obj\Debug\SaveData_Manager.exe
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\SaveData_Manager\obj\Debug\SaveData_Manager.pdb
 D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\SaveData_Manager\bin\Debug\System.Data.SQLite.dll
+D:\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\SaveData_Manager\obj\Debug\SaveData_Manager.frmSettings.resources

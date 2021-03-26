@@ -17,6 +17,7 @@ namespace RCOMage
         {
             InitializeComponent();
         }
+        PS4_Tools.RCO.RCOFile rcofile = new RCO.RCOFile();
 
         private void btnRCO_Click(object sender, EventArgs e)
         {
@@ -43,14 +44,30 @@ namespace RCOMage
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 //read RCO and Validate 
-                PS4_Tools.RCO.RCOFile rcofile = PS4_Tools.RCO.ReadRco(openFileDialog1.FileName);
+                txtRCOPath.Text = openFileDialog1.FileName;
+                rcofile = PS4_Tools.RCO.ReadRco(openFileDialog1.FileName);
                 listBox1.DataSource = rcofile.Header.ToList();
+
+                //from here we work with the elements
+                if (!string.IsNullOrEmpty(rcofile.RootElement.name))
+                {
+                   richTextBox1.Text = rcofile.CreateXML();
+                }
             }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             MessageBox.Show("This is an open source version of RCOMage v2 (ps4 and psv) this tool is not yet completed");
+        }
+
+        private void btnDump_Click(object sender, EventArgs e)
+        {
+            if(rcofile.Header.MAGIC.Length != 0)
+            {
+                //should be valid
+                PS4_Tools.RCO.DumpRco(rcofile, "C:\\temp\\index.xml");
+            }
         }
     }
 }
