@@ -1,6 +1,6 @@
 # PS4_Tools [![Build status](https://ci.appveyor.com/api/projects/status/ftuj48025au3q3cg?svg=true)](https://ci.appveyor.com/project/xXxTheDarkprogramerxXx/ps4-tools)
 ![](https://camo.githubusercontent.com/565ba7e05b2aa40973cb239eb7ee4bd387488e6b/68747470733a2f2f7878787468656461726b70726f6772616d65727878782e6769746875622e696f2f496d616765732f7073345f746f6f6c732e706e67)
-
+![GitHub all releases](https://img.shields.io/github/downloads/xXxTheDarkprogramerxXx/PS4_Tools/total?label=Total%20Downloads&style=for-the-badge)
 Collection Of Open Source PS4 Tools all in one Library 
 
 Supports Unity
