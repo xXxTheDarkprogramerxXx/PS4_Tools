@@ -27,6 +27,7 @@ PS4 Trophy Unlocker [Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools
 ## Project status
 ![GitHub all releases](https://img.shields.io/github/downloads/xXxTheDarkprogramerxXx/PS4_Tools/total?label=Total%20Downloads&style=for-the-badge)
 
+![GitHub repo size](https://img.shields.io/github/repo-size/xXxTheDarkprogramerxXx/PS4_Tools?style=for-the-badge)
 ## Example Applications
 ### Image Util [![Build status](https://ci.appveyor.com/api/projects/status/ftuj48025au3q3cg?svg=true)](https://ci.appveyor.com/project/xXxTheDarkprogramerxXx/ps4-tools)
 
