@@ -24,6 +24,7 @@ PS4 Save Manager [Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tr
 
 PS4 Trophy Unlocker [Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tree/master/TrophyUnlocker)
 
+## Project status
 ![GitHub all releases](https://img.shields.io/github/downloads/xXxTheDarkprogramerxXx/PS4_Tools/total?label=Total%20Downloads&style=for-the-badge)
 
 ## Example Applications
