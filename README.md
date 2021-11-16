@@ -18,7 +18,7 @@ PS4 PKG Tool- By pearlxcore [Github](https://github.com/pearlxcore/PS4-PKG-Tool)
 
 PS4 Explorer - By Lapy [Github](https://github.com/Lapy055/PS4-Xplorer)|[Twitter](https://twitter.com/Lapy05575948)
 
-PS4 Tools Homebrew (WIP)[Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/tag/HB_WIP)
+PS4 Tools Homebrew (1.3)[Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/tag/HB_V1.3)
 
 PS4 Save Manager [Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tree/master/SaveData_Manager)
 
