@@ -1,33 +1,40 @@
 # PS4_Tools [![Build status](https://ci.appveyor.com/api/projects/status/ftuj48025au3q3cg?svg=true)](https://ci.appveyor.com/project/xXxTheDarkprogramerxXx/ps4-tools)
 ![](https://camo.githubusercontent.com/565ba7e05b2aa40973cb239eb7ee4bd387488e6b/68747470733a2f2f7878787468656461726b70726f6772616d65727878782e6769746875622e696f2f496d616765732f7073345f746f6f6c732e706e67)
+
 Collection Of Open Source PS4 Tools all in one Library 
 
-Supports Unity
+Supports Unity 
+
+![](https://img.shields.io/static/v1?label=.net%203.5&message=Old%20School&color=informational&style=for-the-badge)
 
 ## Projects Currently Running PS4 Tools
 
-PS4 PS2 Classics Manager (Unreleased) [Github](https://github.com/xXxTheDarkprogramerxXx/PS2-Classics-Replacer)
+PS4 PS2 Classics Manager (Unreleased) [Github Source](https://github.com/xXxTheDarkprogramerxXx/PS2-Classics-Replacer)
 
-PS4 PS2 Classics GUI [Github](https://github.com/xXxTheDarkprogramerxXx/PS3Tools/tree/master/PS4%20PS2%20Classis%20GUI)
+PS4 PS2 Classics GUI [Github Source](https://github.com/xXxTheDarkprogramerxXx/PS3Tools/tree/master/PS4%20PS2%20Classis%20GUI)
 
-PS4 PKG Installer (PKG Store) [Github](https://github.com/xXxTheDarkprogramerxXx/Store-Remote-Tool)
+PS4 PKG Installer (PKG Store) [Github Source](https://github.com/xXxTheDarkprogramerxXx/Store-Remote-Tool)
 
-PS4 PKG Installer Andorid [Github](https://github.com/xXxTheDarkprogramerxXx/Store-Remote-Tool-Android)
+PS4 PKG Installer Andorid [Github Source](https://github.com/xXxTheDarkprogramerxXx/Store-Remote-Tool-Android)
 
-PS4 PKG Tool- By pearlxcore [Github](https://github.com/pearlxcore/PS4-PKG-Tool)
+PS4 PKG Tool- By pearlxcore [Github Source](https://github.com/pearlxcore/PS4-PKG-Tool)
 
-PS4 Explorer - By Lapy [Github](https://github.com/Lapy055/PS4-Xplorer)|[Twitter](https://twitter.com/Lapy05575948)
+PS4 Explorer - By Lapy [Github Source](https://github.com/Lapy055/PS4-Xplorer)|[Twitter](https://twitter.com/Lapy05575948)
 
-PS4 Tools Homebrew (1.3)[Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/tag/HB_V1.3)
+PS4 Tools Homebrew (1.3)[Github Release](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/tag/HB_V1.3)
 
-PS4 Save Manager [Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tree/master/SaveData_Manager)
+PS4 Save Manager [Github Source](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tree/master/SaveData_Manager)
 
-PS4 Trophy Unlocker [Github](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tree/master/TrophyUnlocker)
+PS4 Trophy Unlocker [Github Source](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/tree/master/TrophyUnlocker)
 
 ## Project status
 ![GitHub all releases](https://img.shields.io/github/downloads/xXxTheDarkprogramerxXx/PS4_Tools/total?label=Total%20Downloads&style=for-the-badge)
 
-![GitHub repo size](https://img.shields.io/github/repo-size/xXxTheDarkprogramerxXx/PS4_Tools?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/xXxTheDarkprogramerxXx/PS4_Tools?style=for-the-badge&label=Repo%20Size)
+
+[![https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/latest](https://img.shields.io/github/v/release/xXxTheDarkprogramerxXx/PS4_Tools?label=Latest%20Release&style=for-the-badge)](https://github.com/xXxTheDarkprogramerxXx/PS4_Tools/releases/latest)
+
+
 ## Example Applications
 ### Image Util [![Build status](https://ci.appveyor.com/api/projects/status/ftuj48025au3q3cg?svg=true)](https://ci.appveyor.com/project/xXxTheDarkprogramerxXx/ps4-tools)
 
