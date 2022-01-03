@@ -39,8 +39,12 @@ using Newtonsoft.Json;
 
 #region << Graphics >>
 
+#if !UNITY_EDITOR && !UNITY_PS4 && !PS4_UNITY
+
 using System.Drawing;
 using System.Drawing.Drawing2D;
+
+#endif
 
 #endregion << Graphics >>
 
@@ -2930,6 +2934,21 @@ namespace PS4_Tools
             }
         }
 
+        public static void CreateRco(RCOFile rco)
+        {
+            //lets write the file bit by bit here
+            using (Stream memoryStream = new FileStream("C:\\Temp\\Test.rco", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+
+                BinaryWriter br = new BinaryWriter(memoryStream);
+
+                br.Write(rco.Header.MAGIC);
+                br.Write(rco.Header.Version);
+                br.Write(rco.Header.Tree_Table_Offset);//this always starts at 0x50 for some reason
+                br.Write(rco.RCO_Tree_Table.StructToBytes().Length);
+            }
+        }
+
         private static string fileExtensionFromType(string type)
         {
             if (type == "texture/jpg")
@@ -3344,7 +3363,7 @@ namespace PS4_Tools
                 public ATTRIBUTE_TYPE angleY;
                 public ATTRIBUTE_TYPE angleZ;
 
-                
+
                 //public static int read(byte[] buf, Transform @out)
                 //{
                 //    buf += Util.readFloat32(new uint8_t(buf), ref @out.transX);
@@ -3361,7 +3380,7 @@ namespace PS4_Tools
 
                 //    return sizeof(float) * 9;
                 //}
-                
+
                 //public string writeXmlAttribute()
                 //{
                 //    std::stringstream str = new std::stringstream();
@@ -3666,7 +3685,7 @@ namespace PS4_Tools
             return true;
         }
 
-        private static bool loadElement(RCOElement el, uint offset, RCOFileHeader rcohead, BinaryReader br,ref RCOFile rco)
+        private static bool loadElement(RCOElement el, uint offset, RCOFileHeader rcohead, BinaryReader br, ref RCOFile rco)
         {
             bool err;
 
@@ -3692,18 +3711,18 @@ namespace PS4_Tools
             {
                 return err;
             }
-            
+
             err = loadAttributes(el, root_attr_offset, element.attr_ct, rcohead, br, true);
 
             if (err != true)
             {
                 return err;
             }
-            
+
             if (element.first_child != 0xFFFFFFFF)
             {
                 RCOElement first_child = new RCOElement();
-                err = loadElement(first_child, (uint)rcohead.Tree_Table_Offset + element.first_child, rcohead, br,ref rco);
+                err = loadElement(first_child, (uint)rcohead.Tree_Table_Offset + element.first_child, rcohead, br, ref rco);
                 if (err != true)
                 {
                     return err;
@@ -3721,7 +3740,7 @@ namespace PS4_Tools
                 }
                 el.siblings.Add(next_sibling);
             }
-            
+
             return err;
         }
 
@@ -3751,9 +3770,9 @@ namespace PS4_Tools
             }
         }
 
-        private static void dumpElement(TextWriter f, RCOElement el, UInt32 depth = 0, string outputDirectory = "" )
+        private static void dumpElement(TextWriter f, RCOElement el, UInt32 depth = 0, string outputDirectory = "")
         {
-            writeIndent(f, depth);  
+            writeIndent(f, depth);
             f.Write("<" + el.name);
 
             foreach (RCOAttribute it in el.attributes)
@@ -3764,7 +3783,7 @@ namespace PS4_Tools
                 {
                     f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.f.ToString()));
                 }
-                if(attr.type == ATTRIBUTE_TYPE.STRING)
+                if (attr.type == ATTRIBUTE_TYPE.STRING)
                 {
                     f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.s.ToString()));
                 }
@@ -3793,7 +3812,7 @@ namespace PS4_Tools
 
                         dumpElement(f, tmprco.RootElement, 0, outputDirectory);
 
-                        
+
 
                         buffercopy = null;
                     }
@@ -3808,13 +3827,13 @@ namespace PS4_Tools
                         //LayoutFile layout = new LayoutFile(buffercopy);
 
 
-                       // string output_filename = outputDirectory + "/" + attr.toString() + ".xml";
+                        // string output_filename = outputDirectory + "/" + attr.toString() + ".xml";
                         //FILE outfile = fopen(output_filename, "wb");
 
                         //if (outfile != null)
                         //{
-                           // layout.write(outfile);
-                          //  fclose(outfile);
+                        // layout.write(outfile);
+                        //  fclose(outfile);
                         //}
 
 
@@ -3836,7 +3855,7 @@ namespace PS4_Tools
                 dumpElement(f, el.children[0], depth + 1, outputDirectory);
                 writeIndent(f, depth);
                 //fprintf(f, "</%s>\r\n", el.name);
-                f.Write(string.Format("</{0}>\r\n",el.name));      
+                f.Write(string.Format("</{0}>\r\n", el.name));
             }
             else
             {
@@ -3854,7 +3873,7 @@ namespace PS4_Tools
         {
             writeIndent(f, depth);
             string text = File.ReadAllText(f.FullName);
-            File.WriteAllText(f.FullName,text + "\n" + "<" + el.name);
+            File.WriteAllText(f.FullName, text + "\n" + "<" + el.name);
 
 
             foreach (RCOAttribute it in el.attributes)
@@ -3948,7 +3967,7 @@ namespace PS4_Tools
                 //f.Write(">\r\n");
                 text = File.ReadAllText(f.FullName);
                 File.WriteAllText(f.FullName, text + ">\r\n");
-                
+
                 dumpElement(f, el.children[0], depth + 1, outputDirectory);
                 writeIndent(f, depth);
                 //fprintf(f, "</%s>\r\n", el.name);
@@ -3976,7 +3995,7 @@ namespace PS4_Tools
 
 
             //fprintf(f, "<%s", el.name);
-            f.Write("<" + el.name);          
+            f.Write("<" + el.name);
             rco.Elements.Add(rco.Elements.Count, el);
             foreach (RCOAttribute it in el.attributes)
             {
@@ -3986,7 +4005,7 @@ namespace PS4_Tools
                 if (attr.type == ATTRIBUTE_TYPE.Float)
                 {
                     //fprintf(f, " %s=\"%s\"", attr.name, attr.toString());
-                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.f.ToString().Replace(',','.')));
+                    f.Write(string.Format(" {0}=\"{1}\"", attr.name, attr.f.ToString().Replace(',', '.')));
                 }
                 if (attr.type == ATTRIBUTE_TYPE.STRING)
                 {
@@ -4115,7 +4134,7 @@ namespace PS4_Tools
                     //Read the header with all needed offsets
                     rco.Header = ReadHeader(br);
                     //Tree Table
-
+                    rco.RCO_Tree_Table = ReadTreeTable(br, rco);
                     //lets read the tree table
 
 
@@ -4125,9 +4144,9 @@ namespace PS4_Tools
 
                     loadElement(rco.RootElement, (uint)rco.Header.Tree_Table_Offset, rco.Header, br, ref rco);
 
-                    
+
                     //read the rco root element
-                    if(!string.IsNullOrEmpty(rco.RootElement.name))
+                    if (!string.IsNullOrEmpty(rco.RootElement.name))
                     {
                         //do the XML BUILDER
                         string XMLDOC = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n";
@@ -4145,7 +4164,7 @@ namespace PS4_Tools
                             //ms.WriteTo(new FileStream("C://temp/index.xml",FileMode.OpenOrCreate,FileAccess.ReadWrite));
                             //System.IO.File.WriteAllBytes("C://temp/index.xml", bytes);
                         }
-                        
+
 
                         //we also want to get the route item and create a folder view
                     }
@@ -5101,8 +5120,9 @@ namespace PS4_Tools
             return rco;
         }
 
-        public static void DumpRco(RCOFile rco,string File)
+        public static void DumpRco(RCOFile rco, string File)
         {
+
             System.IO.File.Create(File);
             FileInfo f = new FileInfo(File);
             dumpElement(f, rco.RootElement, 0);
@@ -5395,6 +5415,26 @@ namespace PS4_Tools
             return rco;
         }
 
+        private static RCO_Tree_Table ReadTreeTable(BinaryReader br, RCOFile rco)
+        {
+            br.BaseStream.Position = 0;//set to start again
+            RCO_Tree_Table treetable = new RCO_Tree_Table();
+
+            br.BaseStream.Position = 0x50;
+
+            treetable.Root_Element = br.ReadUInt32();//Root Element (Offset within String Table, in this case it will be <resource>)
+            treetable.Attribute_Counter = br.ReadUInt32();//Attribute Counter
+            treetable.Parent = br.ReadUInt32();//Parent
+            treetable.Previous_Brother = br.ReadUInt32();
+            treetable.Next_Brother = br.ReadUInt32();
+            loadElement(rco.RootElement, (uint)rco.Header.Tree_Table_Offset, rco.Header, br, ref rco);
+
+            //treetable.Root_Element =
+
+            return treetable;
+
+        }
+
         public struct RCOFile
         {
             internal byte[] MAGIC;/*Magic needs to be validated*/
@@ -5448,19 +5488,19 @@ namespace PS4_Tools
                 StringTable = new Dictionary<string, RCOElement>();
                 FileTable = new FileTable();
                 RCO_Tree_Table = new RCO_Tree_Table();
-                using (BinaryReader br = new BinaryReader(new MemoryStream(file,0,(int)length)))
+                using (BinaryReader br = new BinaryReader(new MemoryStream(file, 0, (int)length)))
                 {
                     Header = ReadHeader(br);
                     if (Header.MAGIC == null)
                         return;
 
-                   bool mRCOErrno = loadElement(RootElement, (uint)Header.Tree_Table_Offset,Header,br,ref this);
+                    bool mRCOErrno = loadElement(RootElement, (uint)Header.Tree_Table_Offset, Header, br, ref this);
 
                     if (mRCOErrno != true)
                     {
                         Console.Write("Error!\n");
                     }
-                        //printf("Error!\n");
+                    //printf("Error!\n");
                 }
             }
         }
@@ -6436,7 +6476,7 @@ namespace PS4_Tools
         /// This is made possible by kemalsanli
         /// Credit for the orginal python script goes to him
         /// </summary>
-        public static void TrophyTimeStampFix(string dbFileLocation = @"C:\Publish\Sony\trophy_local.db")
+        public static void TrophyTimeStampFix(string dbFileLocation = @"D:\Publish\Sony\trophy_local.db")
         {
             string dbFilename = dbFileLocation;
             //build the connection string
