@@ -140,7 +140,8 @@ namespace PS4_PKG_Viewer
                 label2.Text = PS4_PKG.PS4_Title;
                 dataGridView3.DataSource = null;
                 label3.Text = PS4_PKG.Content_ID;
-                lblExtraInfo.Text = "System Version : "+PS4_PKG.Firmware_Version + " (" + PS4_PKG.PKGState.ToString() + ")";
+                lblExtraInfo.Text = "System Version : " + PS4_PKG.Firmware_Version + " (" + PS4_PKG.PKGState.ToString() + ") " + PS4_PKG.Region;
+                this.Text = "PS4 PKG Viewer - PS4 Tools (" + PS4_PKG.PKG_Type.ToString() + ")";
                 DataTable dttemp = new DataTable();
                 dttemp.Columns.Add("PARAM");
                 dttemp.Columns.Add("VALUE");

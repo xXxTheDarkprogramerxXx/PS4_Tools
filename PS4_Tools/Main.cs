@@ -8801,6 +8801,9 @@ Where titleId = '" + TitleID + "'";
                     }
                 }
 
+
+                public string Region { get; set; }
+
             }
 
 
@@ -9245,7 +9248,7 @@ Where titleId = '" + TitleID + "'";
                     pkgreturn.Entires = entry;
                     string temp = Encoding.ASCII.GetString(data);
 
-                    binaryReader.BaseStream.Seek(0x077, SeekOrigin.Begin);
+                    binaryReader.BaseStream.Seek(4L, SeekOrigin.Begin);
                     ushort pkgtype = Util.Utils.ReadUInt16(binaryReader);//custom read offset 119 this will tll us if its debug or retail
 
                     //from the offset table we need to read the name
@@ -9426,8 +9429,46 @@ Where titleId = '" + TitleID + "'";
                         var item = trpreader.Load(trp_byte, nptitle);
                         pkgreturn.Trophy_File = item;
                     }
-                    pkgreturn.PKGState = (pkgtype == 6666) ? PKG_State.Fake : ((pkgtype == 7747) ? PKG_State.Officail_DP : PKG_State.Official);
+                    bool pkgofficail = false;
+                    pkgofficail = (pkgtype == 33536 | pkgtype == 33024);
 
+                    pkgreturn.PKGState = (pkgofficail == false) ? PKG_State.Fake : ((pkgtype == 7747) ? PKG_State.Officail_DP : PKG_State.Official);
+
+
+
+                    //Adding region detection here as well for lapy's tools
+                    switch (pkgreturn.Content_ID.ToUpper().Substring(0, 2))
+                    {
+                        case "UP":
+                            {
+                                pkgreturn.Region = "( US )";
+                                break;
+                            }
+                        case "EP":
+                        case "IP":
+                            {
+                                pkgreturn.Region = "( EU )";
+                                break;
+                            }
+                        case "JP":
+                            {
+                                pkgreturn.Region = "( JP )";
+                                break;
+                            }
+                        case "HP":
+                        case "AP":
+                            {
+                                pkgreturn.Region = "( AS )";
+                                break;
+                            }
+                        case "KP":
+                            {
+                                pkgreturn.Region = "( KO )";
+                                break;
+                            }
+                        default:
+                            break;
+                    }
                 }
                 m_loaded = true;
                 return pkgreturn;
